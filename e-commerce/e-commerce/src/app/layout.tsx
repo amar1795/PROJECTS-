@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google"
 import { cn } from "@/lib/utils"
-
+import { ThemeToggle } from "@/components/theme-toggle"
+import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 const fontSans = FontSans({
@@ -21,10 +22,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+     
       <body  className={cn(
           "min-h-screen bg-background font-sans antialiased",
           fontSans.variable
-        )}>{children}</body>
+        )}>
+           <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+            >{children}
+            </ThemeProvider>
+            </body>
+            
     </html>
   );
 }

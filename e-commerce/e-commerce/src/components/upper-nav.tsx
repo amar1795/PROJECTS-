@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Dropdown from "./Dropdown";
 import CategoriesDropdown from "./Categories-dropdown";
+import { ThemeToggle } from "./theme-toggle";
 
 
 const Uppernav = () => {
@@ -29,6 +30,9 @@ const Uppernav = () => {
           </div>
           Cart
           </button>
+          <div className=" px-5">
+          <ThemeToggle/>
+          </div>
             
     </div>
   )
