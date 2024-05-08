@@ -10,9 +10,12 @@ import { Button } from "./ui/button"
 
 const Dropdown = () => {
   return (
-    <Button>
-      <DropdownMenu>
-  <DropdownMenuTrigger>Hello user 
+    <DropdownMenu>
+  <DropdownMenuTrigger>
+        <Button>
+    <div className=" font-mono">
+  Hello user 
+  </div>
   <DropdownMenuContent>
     <DropdownMenuLabel>My Account</DropdownMenuLabel>
     <DropdownMenuSeparator />
@@ -21,10 +24,10 @@ const Dropdown = () => {
     <DropdownMenuItem>Team</DropdownMenuItem>
     <DropdownMenuItem>Subscription</DropdownMenuItem>
   </DropdownMenuContent>
+    </Button>
   </DropdownMenuTrigger>
 </DropdownMenu>
 
-    </Button>
   )
 }
 
