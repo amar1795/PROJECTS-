@@ -34,3 +34,27 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+To create an e-commerce website, you can consider adding the following types of pages:
+
+
+ecommerce store :
+
+Home Page: Showcase featured products, promotions, and categories.
+Product Listing Page: Display a list of products with filters and sorting options.
+Product Details Page: Provide detailed information about a specific product.
+Cart Page: Allow users to view and manage their shopping cart.
+Checkout Page: Guide users through the process of placing an order.
+User Account Page: Enable users to manage their profile, orders, and preferences.
+Search Results Page: Display search results based on user queries.
+Category Pages: Show products specific to a particular category.
+About Us Page: Share information about your company and its mission.
+Contact Us Page: Provide contact information and a form for users to reach out.
+404 page 
+order success page
+user settings page
+sign in page/sign up page
+login page
+password reset page
+forgot password page
