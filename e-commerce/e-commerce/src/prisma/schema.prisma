@@ -82,8 +82,10 @@ model Product {
   colorId     String @db.ObjectId    // Foreign Key to Color
   color       Color     @relation(fields: [colorId], references: [id])
   review     Review[]  @relation("ReviewToProduct")// Relation to Review model
-rating     Rating[]  @relation("RatingToProduct")// Relation to Rating model
-  images      Image[]   // Relation to Image model
+    rating     Rating[]  @relation("RatingToProduct")// Relation to Rating model
+  images      Image[]
+    // Relation to Image model
+    discount    Int?
   orderItems  OrderItem[]   // Relation to Order model
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -149,7 +151,7 @@ model DeliveryStatus {
   order       Order      @relation("deliverystatustoOrder",fields: [orderId], references: [id])
   status      String     // Status of the delivery (e.g., "Order Placed", "Shipped", etc.)
   updatedAt   DateTime   @updatedAt
-
+    
   @@index([orderId])
 }
 
@@ -184,7 +186,8 @@ model SizeValue {
   value     String
 sizeId    String @db.ObjectId
 size      Size       @relation("SizevalueToSize",fields: [sizeId], references: [id])
-
+createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   @@index([sizeId])
 }
 
