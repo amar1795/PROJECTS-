@@ -51,7 +51,7 @@ Search Results Page: Display search results based on user queries.
 Category Pages: Show products specific to a particular category.
 About Us Page: Share information about your company and its mission.
 Contact Us Page: Provide contact information and a form for users to reach out.
-404 page 
+404 page
 order success page
 user settings page
 sign in page/sign up page

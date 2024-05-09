@@ -4,8 +4,10 @@ export default function Home() {
   return (
    <main className=" h-screen ">
     <div className="">
-    <MainNav  className=" mt-5"/>
-
+    
+    <h1>
+      This is the homePage
+    </h1>
     </div>
    </main>
   );

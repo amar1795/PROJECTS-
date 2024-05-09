@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
+import { MainNav } from "@/components/main-nav";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -32,7 +33,8 @@ export default function RootLayout({
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
-            >{children}
+            ><MainNav  className=" mt-5"/>
+              {children}
             </ThemeProvider>
             </body>
             
