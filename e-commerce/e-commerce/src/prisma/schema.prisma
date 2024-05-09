@@ -75,10 +75,14 @@ model Product {
   price       Float
   isFeatured  Boolean   @default(false)
   isArchived  Boolean   @default(false)
+  brandId         String @db.ObjectId    // Foreign Key to Brand
+  brand           Brand     @relation("BrandToProduct", fields: [brandId], references: [id])
   sizeId      String @db.ObjectId    // Foreign Key to Size
   size        Size      @relation(fields: [sizeId], references: [id])
   colorId     String @db.ObjectId    // Foreign Key to Color
   color       Color     @relation(fields: [colorId], references: [id])
+  review     Review[]  @relation("ReviewToProduct")// Relation to Review model
+rating     Rating[]  @relation("RatingToProduct")// Relation to Rating model
   images      Image[]   // Relation to Image model
   orderItems  OrderItem[]   // Relation to Order model
   createdAt   DateTime  @default(now())
@@ -88,7 +92,41 @@ model Product {
   @@index([categoryId])
   @@index([sizeId])
   @@index([colorId])
+  @@index([brandId])
 }
+
+model Rating {
+    id         String   @id @default(auto()) @map("_id") @db.ObjectId
+    productId  String   @db.ObjectId  // Foreign Key to Product
+    product    Product  @relation("RatingToProduct", fields: [productId], references: [id])
+    rating     Int
+    comment    String
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+
+    @@index([productId])
+}
+
+model Review {
+    id         String   @id @default(auto()) @map("_id") @db.ObjectId
+    productId  String   @db.ObjectId  // Foreign Key to Product
+    product    Product  @relation("ReviewToProduct",fields: [productId], references: [id])
+    rating     Int
+    comment    String
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+
+    @@index([productId])
+}
+
+model Brand {
+    id        String  @id @default(auto()) @map("_id") @db.ObjectId
+    name      String
+    products  Product[] @relation("BrandToProduct")
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
 
 model Order {
   id              String @id @default(auto()) @map("_id") @db.ObjectId
@@ -132,12 +170,22 @@ model Size {
   storeId     String @db.ObjectId    // Foreign Key to Store
   store       Store     @relation("StoreToSize", fields: [storeId], references: [id])
   name        String
-  value       String
+  value        SizeValue[] @relation("SizevalueToSize")
   products    Product[] // Relation to Product model
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
   @@index([storeId])
+}
+
+model SizeValue {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  value     String
+sizeId    String @db.ObjectId
+size      Size       @relation("SizevalueToSize",fields: [sizeId], references: [id])
+
+  @@index([sizeId])
 }
 
 model Color {
