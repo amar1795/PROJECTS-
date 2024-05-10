@@ -58,3 +58,5 @@ sign in page/sign up page
 login page
 password reset page
 forgot password page
+
+name of the project is PurchasePal
