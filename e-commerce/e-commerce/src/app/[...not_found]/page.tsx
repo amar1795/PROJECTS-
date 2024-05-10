@@ -1,4 +1,5 @@
 "use client";
+
 import Image from 'next/image'
 import React from 'react'
 // import notfound from '../video/pulp-fiction-john-travolta-ezgif.com-video-to-gif-converter.gif'
@@ -8,7 +9,7 @@ import Link from 'next/link'
 
 const NotFound = () => {
     return (
-        <div style={{ width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div  style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <Link href="/">Return Home</Link>
             
             <Image src={notfound} alt='not-found'></Image>
