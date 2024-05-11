@@ -3,7 +3,7 @@ import useEmblaCarousel from 'embla-carousel-react'
 import Autoplay from 'embla-carousel-autoplay'
 import { EmblaOptionsType } from 'embla-carousel'
 import  EmblaCarousel  from './EmblaCarousel'
-import '../app/css/embla.css'
+import './embla.css'
 
 
 

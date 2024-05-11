@@ -8,7 +8,8 @@ import {
 } from "@/components/ui/carousel"
 import { Card, CardContent } from "@/components/ui/card"
 
-import Testcarousel from "@/components/carousel";
+import ProductCarousel from "@/components/product-carousel/carousel";
+import Testcarousel from "@/components/poster-carousel/carousel";
 
 export default function Home() {
   return (
@@ -24,6 +25,10 @@ export default function Home() {
       <Testcarousel/>
     </div>
 
+    </div>
+    <div>
+      <h1>This is product carousel</h1>
+      <ProductCarousel/>
     </div>
     </div>
    </main>
