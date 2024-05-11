@@ -14,7 +14,7 @@ import './productembla.css'
     const SLIDES = Array.from(Array(SLIDE_COUNT).keys())
   return (
     <div>
-        <EmblaCarousel slides={SLIDES} options={OPTIONS} />
+        <EmblaCarousel slides={SLIDES} options={OPTIONS}  />
     </div>
   )
 }
