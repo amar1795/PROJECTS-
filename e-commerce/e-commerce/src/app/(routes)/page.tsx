@@ -15,6 +15,7 @@ import { ThreeDCardDemo } from "@/components/3d card/3dCard";
 export default function Home() {
   return (
    <main className=" ">
+    {/* hscreen was causing the issue for the footer as hscreen sets the height of the current viewable screen hence the footer waas not going to the bottom */}
     <div className="">
     
     <h1>
