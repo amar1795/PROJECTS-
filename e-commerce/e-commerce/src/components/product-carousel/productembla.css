@@ -12,6 +12,8 @@
     overflow: hidden;
   }
   .Product_embla__container {
+    margin-top: 1.2rem;
+    margin-bottom: 1.2rem;
     max-width: 22rem;
     backface-visibility: hidden;
     display: flex;
@@ -20,8 +22,11 @@
   }
   .Product_embla__container,.embla__slide__number__product:hover {
     transform: scale(1.1);    
+    
   }
-  .Product_embla__container:hover .buynow {
+
+ 
+  .embla__slide__number__product:hover .buynow {
     display: flex;
     animation: fadeIn 0.3s ease-in-out;
     animation: rainbow 5s infinite;

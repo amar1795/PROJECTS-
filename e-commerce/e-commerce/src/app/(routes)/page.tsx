@@ -27,8 +27,16 @@ export default function Home() {
     </div>
 
     </div>
-    <div>
+    <div className=" my-12">
       <h1>This is product carousel</h1>
+      <ProductCarousel SlideCount={20}/>
+    </div>
+    <div className=" my-12">
+      <h1>This is Mens carousel</h1>
+      <ProductCarousel SlideCount={20}/>
+    </div>
+    <div className=" my-12 mb-4">
+      <h1>This is Womens carousel</h1>
       <ProductCarousel SlideCount={20}/>
     </div>
     </div>
