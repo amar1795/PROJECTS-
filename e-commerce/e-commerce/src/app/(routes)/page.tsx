@@ -10,6 +10,7 @@ import { Card, CardContent } from "@/components/ui/card"
 
 import ProductCarousel from "@/components/product-carousel/carousel";
 import Testcarousel from "@/components/poster-carousel/carousel";
+import { ThreeDCardDemo } from "@/components/3d card/3dCard";
 
 export default function Home() {
   return (
@@ -30,6 +31,10 @@ export default function Home() {
       <h1>This is product carousel</h1>
       <ProductCarousel SlideCount={20}/>
     </div>
+    </div>
+
+    <div>
+      {/* <ThreeDCardDemo/> */}
     </div>
    </main>
   );

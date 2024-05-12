@@ -1,8 +1,8 @@
 .ProductEmbla_product {
     max-width: 90rem;
     margin: auto;
-    --slide-height: 18rem;
-    --slide-spacing: 1rem;
+    --slide-height: 25rem;
+    --slide-spacing: 3rem;
     --slide-size: 100%;
     position: relative;
     /* background-color: red; */
@@ -12,12 +12,93 @@
     overflow: hidden;
   }
   .Product_embla__container {
-    max-width: 15rem;
+    max-width: 22rem;
     backface-visibility: hidden;
     display: flex;
     touch-action: pan-y pinch-zoom;
     margin-left: calc(var(--slide-spacing) * -1);
   }
+  .Product_embla__container,.embla__slide__number__product:hover {
+    transform: scale(1.1);    
+  }
+  .Product_embla__container:hover .buynow {
+    display: flex;
+    animation: fadeIn 0.3s ease-in-out;
+    animation: rainbow 5s infinite;
+    border: 2px solid;
+    animation-name: rainbow;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+  }
+
+
+  @keyframes rainbow {
+    0% {
+      color: red;
+    }
+    14% {
+      color: orange;
+    }
+    28% {
+      color: yellow;
+    }
+    42% {
+      color: green;
+    }
+    57% {
+      color: blue;
+    }
+    71% {
+      color: indigo;
+    }
+    85% {
+      color: violet;
+    }
+    100% {
+      color: red;
+    }
+  }
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .ProductImageCard{
+    position: relative;
+  }
+  .ProductImage{
+    position: absolute;
+    
+
+  }
+
+  .heartButton{
+    position: absolute;
+    right: 0;
+    padding-right: 1rem;
+    padding-top: 1.5rem;
+  }
+.ProductDetails{
+
+}
+.buynow{
+position: absolute;
+right: -2.5rem;
+top: 4.7rem;
+display: flex;
+align-items: center;
+border: 2px solid black;
+border-radius: 1rem;
+padding: 0.5rem;
+display: none;
+}
+
+
   .embla__slide_product {
     flex: 0 0 var(--slide-size);
     min-width: 0;
@@ -29,9 +110,18 @@
     font-size: 2rem;
     font-weight: 600;
     display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    /* display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center; */
+    position: relative;
     height: var(--slide-height);
+  }
+
+  .card_slider{
+    position: absolute;
+    bottom: 0;
   }
   /* .embla__controls {
     
