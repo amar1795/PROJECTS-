@@ -1,5 +1,6 @@
 import React from 'react'
 import Checkboxes from './checkboxes'
+import { SearchBox } from '../searchbox';
 
 interface Category {
     category: string;
@@ -8,13 +9,13 @@ interface Category {
 const Fcard: React.FC<{ category: Category }> = ({category}) => {
         return (
                 <div className='mt-4 pb-2 border-b'>
-                <div className='heading font-bold flex justify-between'>
+                <div className='heading font-bold flex flex-col'>
                     <div>
                         
                     {category.category} 
                     </div>
-                    <div className=' pr-8'>
-                        searchbox
+                    <div className=' py-2 w-[10rem]'>
+                      <SearchBox />
                     </div>
                 </div>
                 <div className='checkboxes'>
