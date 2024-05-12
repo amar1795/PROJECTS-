@@ -14,19 +14,19 @@ import { ThreeDCardDemo } from "@/components/3d card/3dCard";
 
 export default function Home() {
   return (
-   <main className=" h-screen ">
+   <main className=" ">
     <div className="">
     
     <h1>
       This is the homePage
     </h1>
-    <div className="">
+    
    
     <div>
       <Testcarousel/>
     </div>
 
-    </div>
+    
     <div className=" my-12">
       <h1>This is product carousel</h1>
       <ProductCarousel SlideCount={20}/>

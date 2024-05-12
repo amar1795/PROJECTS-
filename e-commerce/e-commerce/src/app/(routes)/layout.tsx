@@ -7,8 +7,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import "../globals.css";
 import { MainNav } from "@/components/main-nav";
 
-
 import { useRouter } from "next/router";
+import MainFooter from "@/components/footer";
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -42,7 +42,10 @@ export default function RootLayout({
               <MainNav  className=" mt-5"/>
               
               {children}
+              <MainFooter/>
             </ThemeProvider>
+            
+         
             </body>
             
             
