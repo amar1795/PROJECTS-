@@ -44,23 +44,23 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
   } = usePrevNextButtons(emblaApi, onNavButtonClick)
 
   return (
-    <section className="ProductEmbla">
-      <div className="embla__viewport " ref={emblaRef}>
+    <section className="ProductEmbla_product">
+      <div className="embla__viewport_product " ref={emblaRef}>
         <div className="Product_embla__container">
           {slides.map((index) => (
-            <div className="embla__slide " key={index}>
-              <div className="embla__slide__number  bg-red-700">{index + 1}</div>
+            <div className="embla__slide_product " key={index}>
+              <div className="embla__slide__number__product ">{index + 1}sd</div>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="embla__controls">
-        <div className="embla__buttons">
+      <div className="embla__controls_product">
+        <div className="embla__buttons_product">
           <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
           <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
         </div>
-
+        </div>
         {/* <div className="embla__dots">
           {scrollSnaps.map((_, index) => (
             <DotButton
@@ -72,7 +72,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
             />
           ))}
         </div> */}
-      </div>
+      
     </section>
   )
 }

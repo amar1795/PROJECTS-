@@ -28,7 +28,7 @@ export default function Home() {
     </div>
     <div>
       <h1>This is product carousel</h1>
-      <ProductCarousel/>
+      <ProductCarousel SlideCount={20}/>
     </div>
     </div>
    </main>
