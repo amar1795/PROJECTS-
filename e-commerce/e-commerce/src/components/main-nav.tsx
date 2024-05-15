@@ -68,7 +68,7 @@ export function MainNav({
       className={cn("flex items-center space-x-4 lg:space-x-6 ", className)}
       {...props}
     >
-      {routes.map((route) => (
+      {/* {routes.map((route) => (
         <Link
           key={route.href}
           href={route.href}
@@ -79,7 +79,7 @@ export function MainNav({
         >
           {route.label}
       </Link>
-      ))}
+      ))} */}
     </nav>
     </div>
     </>
