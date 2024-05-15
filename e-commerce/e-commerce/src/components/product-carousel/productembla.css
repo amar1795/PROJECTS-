@@ -20,9 +20,10 @@
     touch-action: pan-y pinch-zoom;
     margin-left: calc(var(--slide-spacing) * -1);
   }
-  .Product_embla__container,.embla__slide__number__product:hover {
+  .embla__slide__number__product:hover {
     transform: scale(1.1);    
-    
+    transition: transform 0.3s ease-in-out;
+
   }
 
  
@@ -138,11 +139,12 @@ display: none;
   } */
   .embla__controls_product{
  width: 100%;
-    background-color: blue;
+    
     
   }
   /* outer buttons */
   .embla__buttons_product {
+
     padding-left: 1rem;
     padding-right: 1.5rem;
     position: absolute;
@@ -173,7 +175,7 @@ display: none;
     border: 0;
     padding: 0;
     margin: 0;
-    box-shadow: inset 0 0 0 0.2rem var(--detail-medium-contrast);
+    box-shadow: inset 0 0 0 0.2rem rgba(var(--detail-medium-contrast-rgb-value), 0.5);
     width: 3.6rem;
     height: 3.6rem;
     z-index: 1;
@@ -182,6 +184,8 @@ display: none;
     display: flex;
     align-items: center;
     justify-content: center;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
   .embla__button_product:disabled {
     color: var(--detail-high-contrast);

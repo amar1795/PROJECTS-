@@ -81,11 +81,14 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
           ))}
         </div>
       </div>
-
+      {/* embla__buttons_product */}
       <div className="embla__controls_product">
-        <div className="embla__buttons_product">
+        <div className=" previous absolute top-52 left-5 h-full flex self-center">
           <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
-          <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
+          
+        </div>
+        <div className='next absolute top-52 right-5 '>
+        <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
         </div>
         </div>
         {/* <div className="embla__dots">
