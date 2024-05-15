@@ -12,7 +12,7 @@ import WishingListIcon from "./wishing-list-icon";
 
 const Uppernav = () => {
   return (
-    <div className=" flex justify-center items-center mt-5"> 
+    <div className=" flex justify-center items-center mt-10 w-full "> 
     <CategoriesDropdown/> 
           <input type="text"  placeholder="Search for products,brands and more" className=" bg-white text-black h-10 w-5/12 border-2 border-black rounded-sm  px-4 font-mono"  />
 

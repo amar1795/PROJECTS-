@@ -7,7 +7,7 @@ import React from 'react'
 import { DollarSign, Heart, Star } from 'lucide-react';
 import { SelectSeparator } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
-
+import StarChart from '@/components/star charts/starChart'
 const page = ({ params }: { params: { product: string } }) => {
     const [outOfStock,setoutOfStock] = React.useState(false)
     const completeUrl = window.location.href;
@@ -23,9 +23,9 @@ const page = ({ params }: { params: { product: string } }) => {
 
 
 return (
-    <div className=' '>
-        <div className="fixed top-0 left-0 right-0 bg-white">
-            <MainNav className="mt-5" />
+    <div className=' overflow-hidden'>
+        <div className="fixed top-0 left-0 right-0 bg-white z-10">
+            <MainNav />
         </div>
     
        <div className=' mt-[6rem]'>
@@ -34,7 +34,7 @@ return (
             <BreadcrumbWithCustomSeparator items={breadcrumbsData} />
         </div>
 
-        <div className="bg-green-700 h-[130vh] flex">
+        <div className="bg-green-700 h-[auto] flex pb-5">
 
             <div className=' bg-yellow-400 flex-1 '>
                 product image
@@ -92,15 +92,72 @@ return (
                 </div>
                 <div className=' border-b-2 border-gray-300 mt-5'>
                 </div>
-                <div>
+                <div className=' h-[30rem] bg-red-600 mt-10'>
                 100% Original Products and product details page
+
+                </div>
+
+                <div className=' h-[30rem] bg-green-600 mt-10'>
+                    <div className=' text-white h-auto flex flex-col '>
+                      <div className=' flex mt-5 pl-8'>
+                        <div>
+                        <h1 > RATINGS  </h1>
+                        </div>
+                      <div className=' px-5'>
+                            <Star fill='aqua' stroke='0.5'/>
+                      </div>
+                      </div>
+
+                        <div className=' flex mt-6'>
+                            <div className='left flex-1 border-r-2 border-gray-600 pl-8 pr-4 '>
+                                <div className=''>
+                                <div className='top flex mt-5 mb-2'>
+                                <p className=' text-[5rem] leading-none m-0 p-0 font-thin '>3.6 </p>
+                                <div className=' self-center ml-5'>
+                                    <Star fill='aqua' size={38} stroke='0.5'/>
+                                </div>
+                                </div>
+                                <div className='Bottom'>
+                                    789  Verified Buyers
+
+                                </div>
+                                </div>
+                                
+                                
+                            </div>
+                            <div className=' text-black w-[5rem] pl-5  flex flex-col justify-between'>
+                                <p className=' flex w-5' >5 <div className=' self-center pl-2 ' ><Star stroke='2' fill='aqua' size={15}/></div></p>
+                                <p className=' flex w-5' >4 <div className=' self-center pl-2 ' ><Star stroke='2' fill='yellow' size={15}/></div></p>
+                                <p className=' flex w-5' >3 <div className=' self-center pl-2 ' ><Star stroke='2' fill='green' size={15}/></div></p>
+                                <p className=' flex w-5' >2 <div className=' self-center pl-2 ' ><Star stroke='2' fill='orange' size={15}/></div></p>
+                                <p className=' flex w-5' >1 <div className=' self-center pl-2 ' ><Star stroke='2' fill='red' size={15}/></div></p>
+                                
+                            </div>
+
+                            <div className='right flex-1 pl-[14rem]  z-0'>
+                                <div className='  rotate-90 w-[5.5rem] h-[2rem] '>
+                                    <StarChart/>
+                                </div>
+                             </div>
+                             <div className=' text-black w-[5rem]   flex flex-col justify-between'>
+                                <p className=' flex w-5 pl-0' >322 </p>
+                                <p className=' flex w-5' >21 </p>
+                                <p className=' flex w-5' >15 </p>
+                                <p className=' flex w-5' >75 </p>
+                                <p className=' flex w-5' >51 </p>
+                                
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
 
                 </div>
                </div>
             </div>
 
         </div>
-        <div className=' bg-blue-500 h-[5rem]'>
+        <div className='  bg-blue-500 h-[5rem]'>
             Related products 
         </div>
         
