@@ -52,3 +52,7 @@ export default function RootLayout({
     </html>
   );
 }
+
+// Navigating across multiple root layouts will cause a full page load (as opposed to a client-side navigation). For example, navigating from /cart that uses app/(shop)/layout.js to /blog that uses app/(marketing)/layout.js will cause a full page load. This only applies to multiple root layouts.
+
+// options would be to use react router to avoid page reloads or to use a single root layout for the entire app.

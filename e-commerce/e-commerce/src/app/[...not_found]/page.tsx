@@ -10,7 +10,9 @@ import Link from 'next/link'
 const NotFound = () => {
     return (
         <div  style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            <Link href="/">Return Home</Link>
+            <Link href="/" >
+                Return Home
+            </Link>
             
             <Image src={notfound} alt='not-found'></Image>
         </div>

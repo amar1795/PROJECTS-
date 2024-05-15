@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/breadcrumb"
 import React from "react"
 
-export type ItemType = { href: string, label: string };
+export type ItemType = { id:number,href: string, label: string };
 
 export function BreadcrumbWithCustomSeparator({items}: {items: ItemType[]}) {
 
@@ -21,7 +21,7 @@ export function BreadcrumbWithCustomSeparator({items}: {items: ItemType[]}) {
           <React.Fragment key={index}>
             <BreadcrumbItem>
               <BreadcrumbLink>
-                <Link href={item.href}>{item.label}</Link>
+                <Link key={item.id} href={item.href}>{item.label}</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             {index < items.length - 1 && <BreadcrumbSeparator />}

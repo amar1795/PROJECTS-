@@ -14,6 +14,7 @@ import { SelectDemo } from "@/components/select";
 import { Separator } from "@/components/ui/separator"
 import fcard from "@/components/filters-category/filterCard";
 import Fcard from "@/components/filters-category/filterCard";
+import { PaginationComponent } from "@/components/pagination";
 
 
 const fontSans = FontSans({
@@ -60,8 +61,9 @@ export default function RootLayout({
       
 
     const breadcrumbsData = [
-        { href: "/", label: "Home" },
-        { href: "/men", label: "Men" }
+        {id:1, href: "/", label: "Home" },
+        {id:2, href: "men", label: "Men" },
+        {id:3, href: "women", label: "women" }
       ];
     
   return (
@@ -101,7 +103,11 @@ export default function RootLayout({
 
              <div className=" flex-grow">
              {children}
+             <div className=" h-[4rem] ">
+              <PaginationComponent/>
              </div>
+             </div>
+            
              </div>
               <MainFooter/>
             </ThemeProvider>
