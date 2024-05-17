@@ -4,10 +4,11 @@ import { BreadcrumbWithCustomSeparator } from '@/components/breadcrumb'
 import MainFooter from '@/components/footer'
 import { MainNav } from '@/components/main-nav'
 import React from 'react'
-import { DollarSign, Heart, Star } from 'lucide-react';
+import { DollarSign, Heart, Star, StarIcon, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { SelectSeparator } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import StarChart from '@/components/star charts/starChart'
+import Image from 'next/image'
 const page = ({ params }: { params: { product: string } }) => {
     const [outOfStock,setoutOfStock] = React.useState(false)
     const completeUrl = window.location.href;
@@ -16,16 +17,16 @@ const page = ({ params }: { params: { product: string } }) => {
     console.log("this is the Previous segment:", previousSegment);
 
     const breadcrumbsData = [
-        {id:1, href: "/", label: "Categories" },
-        {id:2, href: previousSegment, label: previousSegment },
+        {id:1, href: "/", label: "Home" },
+        {id:2, href: `/categories/${previousSegment}`, label: previousSegment },
         {id:3, href: params.product, label: params.product }
       ];
 
 
 return (
     <div className=' overflow-hidden'>
-        <div className="fixed top-0 left-0 right-0 bg-white z-10">
-            <MainNav />
+        <div className="fixed top-0 left-0 right-0  z-10">
+            <MainNav  />
         </div>
     
        <div className=' mt-[6rem]'>
@@ -34,12 +35,14 @@ return (
             <BreadcrumbWithCustomSeparator items={breadcrumbsData} />
         </div>
 
-        <div className="bg-green-700 h-[auto] flex pb-5">
+        <div className="bg-green-700 h-auto flex pb-5">
 
-            <div className=' bg-yellow-400 flex-1 '>
-                product image
+            <div className=' bg-yellow-400 flex-1 h-auto'>
+               <div>
+                 product image
+               </div>
             </div>
-            <div className=' bg-pink-500 flex-1'>
+            <div className=' bg-pink-500 flex-1 h-[115rem] '>
                <div className=' px-4'>
                 <h1 className=' text-[2rem] font-bold'>COMPANY NAME</h1>
                 <h2 className=' text-[1.2rem]'>PRODUCT HEADING</h2>
@@ -96,9 +99,10 @@ return (
                 100% Original Products and product details page
 
                 </div>
-
+                <div className=' border-b-2 border-gray-300 mt-5'>
+                </div>
                 <div className=' h-[30rem] bg-green-600 mt-10'>
-                    <div className=' text-white h-auto flex flex-col '>
+                    <div className=' text-white h-[15rem] flex flex-col '>
                       <div className=' flex mt-5 pl-8'>
                         <div>
                         <h1 > RATINGS  </h1>
@@ -152,7 +156,91 @@ return (
                         </div>
                     </div>
 
+                    <div className=' border-b-2 border-gray-300 mt-5'>
                 </div>
+                        <div  className='reviews bg-violet-700 h-[15rem]  '>
+                             <div className=' cxphotos bg-pink-600 h-[12rem] px-4 pt-4'>
+                               <div>
+                                 <h1 className=' text-[1.2rem] font-semibold'>CUSTOMER PHOTOS(1299)</h1>
+                               </div>
+                               <div className=' flex mt-4'>
+                                <Image src=''alt='test image' width={100} height={100} className=' bg-green-600 mr-3'/>
+                                <Image src=''alt='test image' width={100} height={100} className=' bg-green-600 mr-3'/>
+                                <Image src=''alt='test image' width={100} height={100} className=' bg-green-600 mr-3'/>
+                                <Image src=''alt='test image' width={100} height={100} className=' bg-green-600 mr-3'/>
+                                
+                               </div>
+                             </div>
+                             <div className=' border-b-2 border-gray-300 '>
+                                </div>
+                             <div className=' cxreviews bg-yellow-500 h-[20rem]  px-4 pt-4'>
+                             <div>
+                                 <h1 className=' text-[1.2rem] font-semibold'>CUSTOMER PHOTOS(500)</h1>
+                                 {/* review component */}
+                                 <div className=' flex '>
+                                    <div className=' bg-red-600 w-[3rem] '>
+                                        <div className=' flex justify-between px-2 pt-1'>
+
+                                            <div>
+                                                5
+                                            </div>
+                                            <div className=' self-center'>
+                                                <StarIcon size={20} stroke='' fill='white' />
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <div className='  w-full flex flex-col'>
+                                        <p className=' bg-green-300 h-auto px-2 py-2'>
+                                            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Perspiciatis similique numquam aperiam tempore debitis culpa, unde laboriosam cumque iusto, inventore magnam quod? Exercitationem atque ad dolorum voluptatum pariatur vero enim?
+                                        </p>
+
+                                        <div className=' px-2 py-2 ImageComponent'>
+                                        <Image src=''alt='test image' width={100} height={100} className=' bg-green-600 mr-3'/>
+                                        </div>
+                                        <div className=' bg-yellow-800 h-[3rem] flex justify-between px-2 py-2 ' >
+                                            
+                                               <div className=' bg-white flex self-center py-1 px-4  text-gray-400  '>
+                                                <p className='border-gray-500 border-r-2 pr-2 '>
+                                                  John Doe
+                                                </p>
+       
+                                                <p className=' pl-2 '>17 May 2024 </p>
+
+
+                                               
+                                            </div>
+                                            <div><div className=' bg-white flex px-2 py-1 w-[8rem] h-full self-center justify-between '>
+                                            <div className=' flex '>
+                                            <button><div className=' self-center'>
+                                                        <ThumbsUp size={20} /></div></button>
+                                                        <p className=' pl-1  text-[12px] mt-1  text-gray-400'>
+                                                            209
+                                                        </p>
+                                            </div>
+
+                                                        <div className=' flex'>
+                                                        <button><div className=' self-center'><ThumbsDown size={20}/> </div></button> 
+                                                        <p className=' pl-1  text-[12px] mt-1  text-gray-400'>
+                                                            50
+                                                        </p>
+                                                        </div>
+
+                                                        </div> 
+                                                        </div>
+                                        </div>
+                                    </div>
+
+                                 </div>
+                               </div>
+                             </div>
+                        </div>
+
+
+                    
+
+                </div>
+               
                </div>
             </div>
 
