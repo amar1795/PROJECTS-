@@ -12,7 +12,8 @@ import WishingListIcon from "./wishing-list-icon";
 
 const Uppernav = () => {
   return (
-    <div className=" flex justify-center items-center mt-10 w-full "> 
+    <div className=" flex justify-center items-center mt-7 w-full h-10 px-[1.9rem]"> 
+      <div className="w-full h-[9rem] bg-white bg-opacity-[80px] backdrop-blur-lg border border-white/30 flex justify-center items-center">
     <CategoriesDropdown/> 
           <input type="text"  placeholder="Search for products,brands and more" className=" bg-white text-black h-10 w-5/12 border-2 border-black rounded-sm  px-4 font-mono"  />
 
@@ -40,7 +41,7 @@ const Uppernav = () => {
           <div className=" px-5 ml-5">
           <ThemeToggle/>
           </div>
-            
+          </div>
     </div>
   )
 }

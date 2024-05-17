@@ -29,13 +29,13 @@ return (
             <MainNav  />
         </div>
     
-       <div className=' mt-[6rem]'>
+       <div className=' mt-[8rem]'>
        <div >
             <div className='mt-5 mb-5'>
             <BreadcrumbWithCustomSeparator items={breadcrumbsData} />
         </div>
 
-        <div className="bg-green-700 h-auto flex pb-5">
+        <div className="bg-green-700 h-auto flex ">
 
             <div className=' bg-yellow-400 flex-1 h-auto'>
                <div>
@@ -175,7 +175,7 @@ return (
                                 </div>
                              <div className=' cxreviews bg-yellow-500 h-[20rem]  px-4 pt-4'>
                              <div>
-                                 <h1 className=' text-[1.2rem] font-semibold'>CUSTOMER PHOTOS(500)</h1>
+                                 <h1 className=' text-[1.2rem] font-semibold'>CUSTOMER REVIEWS(50)</h1>
                                  {/* review component */}
                                  <div className=' flex '>
                                     <div className=' bg-red-600 w-[3rem] '>

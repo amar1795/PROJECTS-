@@ -61,8 +61,14 @@ const Page = ({ params }: { params: { categories: string } }) => {
       ];
 
     return (
-        <div>
-           <MainNav className=" mt-5" />
+      <div className=' overflow-hidden '>
+           <div className="fixed top-0 left-0 right-0  z-10">
+            <MainNav  />
+          </div>
+
+          <div className=' mt-[8rem]'>
+         
+         
 
             <BreadcrumbWithCustomSeparator items={breadcrumbsData} />
             <div className='filter flex justify-between w-full px-5 mt-5  overflow-hidden relative'>
@@ -95,8 +101,9 @@ const Page = ({ params }: { params: { categories: string } }) => {
             </div>
 
             <MainFooter />
-        
-        </div>
+            </div>
+           </div>
+       
 
     );
 };

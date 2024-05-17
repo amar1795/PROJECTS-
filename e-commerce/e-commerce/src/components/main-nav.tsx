@@ -60,7 +60,7 @@ export function MainNav({
   return (
     <>
   
-    <div className=" h-12">
+    <div >
     <Uppernav/>
     </div>
     <div className="flex justify-center items-center">
