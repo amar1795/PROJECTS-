@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import StarChart from '@/components/star charts/starChart'
 import ProductCard from '@/components/product card/productCard'
 import Image from 'next/image'
+import PhotoViewer from '@/components/photo viewer/photoViewer'
 
 const page = ({ params }: { params: { product: string } }) => {
     const [outOfStock,setoutOfStock] = React.useState(false)
@@ -17,7 +18,15 @@ const page = ({ params }: { params: { product: string } }) => {
     const segments = completeUrl.split('/');
     const previousSegment = segments[segments.length - 2];
     console.log("this is the Previous segment:", previousSegment);
-
+    const images = [
+        'https://images.pexels.com/photos/23541799/pexels-photo-23541799/free-photo-of-shine-bright.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+        'https://images.pexels.com/photos/17395579/pexels-photo-17395579/free-photo-of-shiny-water-at-sunset.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+        'https://images.pexels.com/photos/20632751/pexels-photo-20632751/free-photo-of-a-cup-of-tea-and-dates-on-a-white-cloth.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+        'https://images.pexels.com/photos/19602378/pexels-photo-19602378/free-photo-of-hands-holding-pizzas.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', 
+        'https://images.pexels.com/photos/23541799/pexels-photo-23541799/free-photo-of-shine-bright.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+        'https://images.pexels.com/photos/20582544/pexels-photo-20582544/free-photo-of-waves.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+        'https://images.pexels.com/photos/24023467/pexels-photo-24023467/free-photo-of-a-wedding-reception-in-a-greenhouse-with-chandeliers.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+      ];
     const breadcrumbsData = [
         {id:1, href: "/", label: "Home" },
         {id:2, href: `/categories/${previousSegment}`, label: previousSegment },
@@ -41,7 +50,12 @@ return (
 
             <div className=' bg-yellow-400 flex-1 h-auto'>
                <div>
-                 product image
+               <div className='' >
+            
+               <PhotoViewer images={images}  />
+        
+           </div>
+           
                </div>
             </div>
             <div className=' bg-pink-500 flex-1 h-[115rem] '>
@@ -253,11 +267,12 @@ return (
             </h1>
 
            <div className=' flex  flex-wrap pl-3'>
-           <div className=' pr-10 py-4'>
-            <ProductCard />
-            </div><div className=' pr-10 py-4'>
-            <ProductCard />
-            </div>
+            <div className=' pr-10 py-4'>
+                <ProductCard />
+                </div>
+                <div className=' pr-10 py-4'>
+                <ProductCard />
+                </div>
            
            
             

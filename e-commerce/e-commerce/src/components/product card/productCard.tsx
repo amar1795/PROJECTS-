@@ -16,7 +16,7 @@ const ProductCard = () => {
 
                   </div>
                 </div>
-                <div className=' text-sm flex justify-between '>
+                <div className=' text-sm flex justify-between bg-opacity-20 backdrop-blur-lg border border-white/30'>
                   <div className=' bg-gray-200 w-12  '>
                   <div className=' flex justify-between px-2 pt-1'>
 
