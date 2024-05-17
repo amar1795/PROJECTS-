@@ -8,7 +8,9 @@ import { DollarSign, Heart, Star, StarIcon, ThumbsDown, ThumbsUp } from 'lucide-
 import { SelectSeparator } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import StarChart from '@/components/star charts/starChart'
+import ProductCard from '@/components/product card/productCard'
 import Image from 'next/image'
+
 const page = ({ params }: { params: { product: string } }) => {
     const [outOfStock,setoutOfStock] = React.useState(false)
     const completeUrl = window.location.href;
@@ -245,8 +247,20 @@ return (
             </div>
 
         </div>
-        <div className='  bg-blue-500 h-[5rem]'>
+        <div className='  bg-blue-500 min-h-[30rem] px-5'>
+            <h1 className=' pt-4 pb-4'>
             Related products 
+            </h1>
+
+           <div className=' flex  flex-wrap pl-3'>
+           <div className=' pr-10 py-4'>
+            <ProductCard />
+            </div><div className=' pr-10 py-4'>
+            <ProductCard />
+            
+
+           </div>
+            
         </div>
         
         <MainFooter />
