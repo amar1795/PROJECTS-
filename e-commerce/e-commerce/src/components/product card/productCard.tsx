@@ -45,22 +45,22 @@ const ProductCard = () => {
                   </div>
                 </div>
                 <div className='ProductDetails  '>
-                <div className='card_slider px-4 pb-5 bg-slate-400 w-full text-[1.5rem] relative flex-wrap flex'>
-                    <div className='left flex-auto'>
-                      <div className=''>Company name</div>
-                      <div className=' font-extralight text-lg'>product name</div>
-                      <div>Price</div>
-                    </div>
-                    <div  className='right flex-1'>
-                      <button className='buynow '>
-                        <div>
-                        <ShoppingCart size={20}/> 
-                        </div>
-                        <div className=' text-sm px-3'>
-                        Buy Now</div>
-                        </button>
-                    </div>
-                </div>
+                <div className="card_slider px-4 pb-5 w-full text-[1.5rem] relative flex-wrap flex bg-white bg-opacity-20 backdrop-blur-lg border border-white/30">
+  <div className="left flex-auto">
+    <div>Company name</div>
+    <div className="font-extralight text-lg">product name</div>
+    <div>Price</div>
+  </div>
+  <div className="right flex-1">
+    <button className="buynow flex items-center">
+      <div>
+        <ShoppingCart size={20} />
+      </div>
+      <div className="text-sm px-3">Buy Now</div>
+    </button>
+  </div>
+</div>
+
                 </div>
                   
                 {/* <ThreeDCardDemo/> */}

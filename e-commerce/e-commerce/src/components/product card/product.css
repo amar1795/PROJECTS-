@@ -117,6 +117,7 @@ display: none;
     flex-direction: column;
     overflow: hidden;
     width: 15rem;
+    border: 2px solid black;
     /* display: flex;
     align-items: center;
     justify-content: center; */
