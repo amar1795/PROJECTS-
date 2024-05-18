@@ -1,0 +1,29 @@
+button {
+  position: relative;
+  overflow: hidden;
+}
+
+button .absolute {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  transform: translateX(-100%);
+  transition: transform 0.2s ease-in-out;
+}
+
+button:hover .absolute {
+  transform: translateX(0);
+}
+
+button span {
+  position: relative;
+  z-index: 10;
+  transition: color 0.5s ease-in-out;
+}
+
+button:hover span {
+  color: black;
+}

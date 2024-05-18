@@ -44,7 +44,10 @@ ecommerce store :
 Home Page: Showcase featured products, promotions, and categories.
 Product Listing Page: Display a list of products with filters and sorting options.
 Product Details Page: Provide detailed information about a specific product.
+
+<!-- pending pages -->
 Cart Page: Allow users to view and manage their shopping cart.
+
 Checkout Page: Guide users through the process of placing an order.
 User Account Page: Enable users to manage their profile, orders, and preferences.
 Search Results Page: Display search results based on user queries.

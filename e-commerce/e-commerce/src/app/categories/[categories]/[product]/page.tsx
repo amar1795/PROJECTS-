@@ -14,10 +14,10 @@ import PhotoViewer from '@/components/photo viewer/photoViewer'
 
 const page = ({ params }: { params: { product: string } }) => {
     const [outOfStock,setoutOfStock] = React.useState(false)
-    const completeUrl = window.location.href;
+    const completeUrl = typeof window !== 'undefined' ? window.location.href : '';
     const segments = completeUrl.split('/');
     const previousSegment = segments[segments.length - 2];
-    console.log("this is the Previous segment:", previousSegment);
+    // console.log("this is the Previous segment:", previousSegment);
     const images = [
         'https://images.pexels.com/photos/23541799/pexels-photo-23541799/free-photo-of-shine-bright.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
         'https://images.pexels.com/photos/17395579/pexels-photo-17395579/free-photo-of-shiny-water-at-sunset.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
