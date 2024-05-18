@@ -5,8 +5,8 @@ import "./product.css"
 const ProductCard = () => {
   return (
     <div >
-       <div className="embla__slide_product ">
-              <div className="embla__slide__number__product  ">
+       <div className="embla__slide_product  ">
+              <div className="embla__slide__number__product">
                 <div className='ProductImageCard min-h-[15rem] over'>
                   <div className='ProductImage bg-red-400 h-full w-full'>
                          <button className=' heartButton'>
@@ -16,7 +16,7 @@ const ProductCard = () => {
 
                   </div>
                 </div>
-                <div className=' text-sm flex justify-between bg-opacity-20 backdrop-blur-lg border border-white/30'>
+                <div className=' text-sm flex justify-between bg-opacity-20 backdrop-blur-lg border border-white/30 '>
                   <div className=' bg-gray-200 w-12  '>
                   <div className=' flex justify-between px-2 pt-1'>
 
@@ -44,7 +44,7 @@ const ProductCard = () => {
                     </div>
                   </div>
                 </div>
-                <div className='ProductDetails  '>
+                <div className='ProductDetails '>
                 <div className="card_slider px-4 pb-5 w-full text-[1.5rem] relative flex-wrap flex bg-white bg-opacity-20 backdrop-blur-lg border border-white/30">
   <div className="left flex-auto">
     <div>Company name</div>

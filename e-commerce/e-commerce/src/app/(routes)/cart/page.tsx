@@ -6,15 +6,31 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div className='  border-2 border-black rounded-lg '>
-      <div className=' bg-orange-600 h-[8rem]'>
-        Your Bag
+    <div className='  border-2 border-black rounded-lg overflow-hidden '>
+      <div className=' bg-orange-600  px-5'>
+        <div>
+            <h1 className=' text-[4rem] leading-none'>SHOPPING CART</h1>
+            <h3 className=' text-[2rem] leading-none'> TOTAL ITEMS (4)</h3>
+            <div>
+            <div className=' flex self-center py-2'>
+                            <div className=' self-center pr-2'>
+                            <DollarSign size={25} /> 
+                            </div>
+                            <h1  className=' text-[2rem] self-center leading-none'>
+                            9.99
+                            </h1>
+                        </div>
+            </div>
+
+        </div>
       </div>
       <div className=' bg-green-500 flex justify-around px-40 py-4'>
        <div>
             <div className=' px-4 py-4 mt-2 mb-2 w-[40rem] flex-1 border-2 border-black'>
                 <CheckoutProductCard />  
-                </div> <div className=' px-4 py-4 mt-4 mb-4 w-[40rem] flex-1 border-2 border-black'>
+                </div> 
+                
+                <div className=' px-4 py-4 mt-4 mb-4 w-[40rem] flex-1 border-2 border-black'>
                 <CheckoutProductCard />  
                 </div>
        </div>
@@ -89,10 +105,7 @@ const page = () => {
                     <div className=' pr-10 py-4'>
                         <ProductCard />
                         </div>
-                        <div className=' pr-10 py-4'>
-                        <ProductCard />
-                        </div>
-
+                       
                 </div>
                     
                 </div>
