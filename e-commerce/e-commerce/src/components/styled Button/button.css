@@ -1,9 +1,9 @@
-button {
+#special-button {
   position: relative;
   overflow: hidden;
 }
 
-button .absolute {
+#special-button .absolute {
   position: absolute;
   top: 0;
   left: 0;
@@ -14,16 +14,16 @@ button .absolute {
   transition: transform 0.2s ease-in-out;
 }
 
-button:hover .absolute {
+#special-button:hover .absolute {
   transform: translateX(0);
 }
 
-button span {
+#special-button span {
   position: relative;
   z-index: 10;
   transition: color 0.5s ease-in-out;
 }
 
-button:hover span {
+#special-button:hover span {
   color: black;
 }

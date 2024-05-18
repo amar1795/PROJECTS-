@@ -10,13 +10,15 @@ const page = () => {
       <div className=' bg-orange-600 h-[8rem]'>
         Your Bag
       </div>
-      <div className=' bg-green-500 flex justify-between px-10 py-4'>
+      <div className=' bg-green-500 flex justify-around px-40 py-4'>
        <div>
-            <div className=' px-4 py-4 w-[40rem] flex-1 border-2 border-black'>
+            <div className=' px-4 py-4 mt-2 mb-2 w-[40rem] flex-1 border-2 border-black'>
+                <CheckoutProductCard />  
+                </div> <div className=' px-4 py-4 mt-4 mb-4 w-[40rem] flex-1 border-2 border-black'>
                 <CheckoutProductCard />  
                 </div>
        </div>
-       <div className=' w-[18rem]  border-2 border-black '>
+       <div className=' w-[18rem]  border-2 border-black h-[20rem]'>
 
        <div className='  h-full bg-opacity-20 backdrop-blur-lg border border-white/30 bg-white'>
        <div className=' px-4 py-4 '>
