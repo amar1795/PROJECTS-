@@ -44,21 +44,20 @@ ecommerce store :
 Home Page: Showcase featured products, promotions, and categories.
 Product Listing Page: Display a list of products with filters and sorting options.
 Product Details Page: Provide detailed information about a specific product.
-
-<!-- pending pages -->
 Cart Page: Allow users to view and manage their shopping cart.
-
 Checkout Page: Guide users through the process of placing an order.
+Category Pages: Show products specific to a particular category.
+<!-- pending pages -->
+
 User Account Page: Enable users to manage their profile, orders, and preferences.
 Search Results Page: Display search results based on user queries.
-Category Pages: Show products specific to a particular category.
 About Us Page: Share information about your company and its mission.
 Contact Us Page: Provide contact information and a form for users to reach out.
 404 page
 order success page
 user settings page
-sign in page/sign up page
-login page
+login in page/sign up page
+
 password reset page
 forgot password page
 

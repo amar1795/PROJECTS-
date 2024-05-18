@@ -1,6 +1,8 @@
 import React from 'react';
+import Image from 'next/image';
 
 const MainFooter = () => {
+  
   type SiteData = {
     [key: string]: string[];
   };
@@ -26,6 +28,22 @@ const MainFooter = () => {
             ))}
           </div>
         ))}
+      </div>
+      <div className=' grid grid-cols-3 px-8 pt-4 bg-slate-950 '>
+        <div className=''>
+       <p>&copy;PurchasePal {new Date().getFullYear()}.All rights reserved</p>
+        </div>
+        <button>
+          Privacy Policy | Terms of Conditions
+        </button>
+        <div  className=' flex justify-end'>
+          <Image src="/1.jpg" width={30} height={20} alt="Logo" className=' rounded-md mr-2' />
+          <Image src="/2.jpg" width={30} height={20} alt="Logo" className=' rounded-md mr-2' />
+          <Image src="/3.jpg" width={30} height={20} alt="Logo" className=' rounded-md mr-2' />
+          <Image src="/4.png" width={30} height={20} alt="Logo" className=' rounded-md mr-2' />
+          <Image src="/5.jpg" width={30} height={20} alt="Logo" className=' rounded-md mr-2' />
+        </div>
+
       </div>
     </div>
   );
