@@ -1,5 +1,6 @@
 "use client"
 import StepProgress from "@/components/StepProgress";
+import ConfettiComponent from "@/components/confetti";
 import SummaryCard from "@/components/summary product card/SummaryCard";
 import { CircleCheck, CircleCheckBig, DollarSign } from "lucide-react";
 import React from "react";
@@ -7,8 +8,9 @@ import React from "react";
 
 const page = () => {
   return (
-    <div className="">
+    <div className=" overflow-hidden">
       <div className=" flex ">
+        <ConfettiComponent/>
         <div className=" bg-green-400 flex-1">
           <div className=" flex flex-col  justify-center ">
             <div className=" flex flex-col items-center mt-[10rem]">
