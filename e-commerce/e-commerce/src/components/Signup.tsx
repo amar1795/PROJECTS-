@@ -1,6 +1,8 @@
 import React from 'react'
-
-const Signup = ({toggleView }) => {
+interface SignupProps {
+  toggleView: () => void;
+}
+const Signup:React.FC<SignupProps> = ({toggleView }) => {
   return (
     <div>
        <div className=" mt-8">

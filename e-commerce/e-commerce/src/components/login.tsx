@@ -1,8 +1,10 @@
 import Image from 'next/image'
 import React from 'react'
 import { CustomModal } from './Custommodal'
-
-const Login = ({toggleView}) => {
+interface LoginProps {
+  toggleView: () => void;
+}
+const Login:React.FC<LoginProps> = ({toggleView}) => {
   return (
     <div>
       <div className=" mt-8">
