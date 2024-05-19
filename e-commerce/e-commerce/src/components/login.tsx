@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import React from 'react'
+import { CustomModal } from './Custommodal'
 
 const Login = () => {
   return (
@@ -28,8 +29,10 @@ const Login = () => {
               </div>
             </form>
             <div className=" mt-4 flex justify-center ">
-              <p>Forgot your Password ?</p>
-              <button className=" px-4"> Click Here </button>
+              <p className=' self-center pr-4 text-1xl font-bold'>Forgot your Password ?</p>
+               <div className=' h-[4rem]'>
+               <CustomModal buttonName='click here'/>
+               </div>
             </div>
             <div className=' text-center'>
               <p className=" mx-[5rem] mt-4">

@@ -1,16 +1,17 @@
 "use client";
 import StepProgress from "@/components/StepProgress";
 import ConfettiComponent from "@/components/confetti";
+import { CustomModal, Modal } from "@/components/Custommodal";
 import SummaryCard from "@/components/summary product card/SummaryCard";
 import { CircleCheck, CircleCheckBig, DollarSign } from "lucide-react";
 import React from "react";
 
 const page = () => {
   return (
-    <div className=" overflow-hidden">
+    <div className=" overflow-hidden border-2 border-black">
       <div className=" flex ">
         <ConfettiComponent />
-        <div className=" bg-green-400 flex-1">
+        <div className=" bg-violet-500 flex-1 border-2 border-black">
           <div className=" flex flex-col  justify-center ">
             <div className=" flex flex-col items-center mt-[10rem]">
               <CircleCheck size={140} />
@@ -55,7 +56,7 @@ const page = () => {
             
             </div>
             <div className="">
-            <h1 className="w-80  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 uppercase text-2xl bg-green-500 font-bold">
+            <h1 className="w-80  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 uppercase text-2xl bg-yellow-400 font-bold">
                     Order Items(3)
                   </h1>
             </div>
@@ -74,7 +75,7 @@ const page = () => {
           </div>
         </div>
 
-        <div className=" bg-teal-500 w-[30rem]">
+        <div className=" bg-pink-500 w-[30rem] border-2 border-black">
           <div className=" px-8">
             <div className=" h-[7rem] flex justify-between pt-4 border-b-2 border-black">
               <div className="">
@@ -83,7 +84,7 @@ const page = () => {
               </div>
               <div>
                 <div className=" h-[4rem] ">
-                  <button className="w-auto  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-green-500">
+                  <button className="w-auto  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2  bg-yellow-400">
                     <h1 className=" font-bold">View or Manage orders</h1>
                   </button>
                 </div>
@@ -119,12 +120,16 @@ const page = () => {
             <div>
               <div>
                 <div className=" mb-5 mt-8">
-                  <h1 className="w-80  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 uppercase text-2xl bg-green-500 font-bold">
+                  <h1 className="w-80  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 uppercase text-2xl  bg-yellow-400 font-bold">
                     Order Summary(3)
                   </h1>
                   {/* <div className=" py-1 mt-2 mb-2 w-auto flex-1 ">
                     <SummaryCard />
                   </div> */}
+                  <div>
+                    Click here to open Modal 
+                    <CustomModal />
+                  </div>
                   <div className=" border-b-2 border-black">
                     <div className=" flex justify-between">
                       <span className=" self-center">Sub Total</span>

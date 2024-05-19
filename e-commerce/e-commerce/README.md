@@ -49,13 +49,13 @@ Checkout Page: Guide users through the process of placing an order.
 Category Pages: Show products specific to a particular category.
 login in page/sign up page
 Search Results Page: Display search results based on user queries.
+order success page
 <!-- pending pages -->
 
 User Account Page: Enable users to manage their profile, orders, and preferences.
 About Us Page: Share information about your company and its mission.
 Contact Us Page: Provide contact information and a form for users to reach out.
 404 page
-order success page
 user settings page
 password reset page
 forgot password page
