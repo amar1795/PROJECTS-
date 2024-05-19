@@ -19,6 +19,13 @@ const page = () => {
           </div>
          
           <div className=" flex">
+          <div className="h-[4rem]">
+              <Link href="/orders">
+                <button className=" mr-12 p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-400">
+                  <h1 className="font-bold">Go to Order's History Page</h1>
+                </button>
+              </Link>
+            </div>
             <div className="h-[4rem]">
               <Link href="/">
                 <button className=" mr-12 p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-green-600">

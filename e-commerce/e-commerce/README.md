@@ -52,11 +52,12 @@ Search Results Page: Display search results based on user queries.
 order success page
 forgot password page
 password reset page
+User Account/settings Page: Enable users to manage their profile, orders, and preferences.
 <!-- pending pages -->
 
-User Account/settings Page: Enable users to manage their profile, orders, and preferences.
 About Us Page: Share information about your company and its mission.
 Contact Us Page: Provide contact information and a form for users to reach out.
 404 page
 manage orders page
+
 name of the project is PurchasePal
