@@ -2,7 +2,7 @@ import Image from 'next/image'
 import React from 'react'
 import { CustomModal } from './Custommodal'
 
-const Login = () => {
+const Login = ({toggleView}) => {
   return (
     <div>
       <div className=" mt-8">
@@ -36,7 +36,7 @@ const Login = () => {
             </div>
             <div className=' text-center'>
               <p className=" mx-[5rem] mt-4">
-                Don't have an account ? <button className=" font-bold text-2xl">Sign Up</button>
+                Don't have an account ? <button onClick={toggleView} className=" font-bold text-2xl">Sign Up</button>
               </p>
             </div>
             <div className=" flex justify-center mt-4">

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Signup = () => {
+const Signup = ({toggleView }) => {
   return (
     <div>
        <div className=" mt-8">
@@ -35,7 +35,7 @@ const Signup = () => {
                   className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
                 />
                 <input
-                  type="text"
+                  type="password"
                   placeholder="Confirm Password"
                   className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
                 />
@@ -51,7 +51,7 @@ const Signup = () => {
            
             <div className=" text-center">
               <p className=" mx-[5rem] mt-4">
-                Already have an Account ? <button className=" font-bold text-2xl">Login </button>
+                Already have an Account ? <button className=" font-bold text-2xl" onClick={toggleView}>Login </button>
               </p>
             </div>
             

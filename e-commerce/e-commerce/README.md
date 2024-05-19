@@ -50,6 +50,7 @@ Category Pages: Show products specific to a particular category.
 login in page/sign up page
 Search Results Page: Display search results based on user queries.
 order success page
+forgot password page
 <!-- pending pages -->
 
 User Account Page: Enable users to manage their profile, orders, and preferences.
@@ -58,6 +59,5 @@ Contact Us Page: Provide contact information and a form for users to reach out.
 404 page
 user settings page
 password reset page
-forgot password page
 
 name of the project is PurchasePal

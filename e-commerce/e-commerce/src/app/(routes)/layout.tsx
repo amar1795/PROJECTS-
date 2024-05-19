@@ -9,6 +9,7 @@ import { MainNav } from "@/components/main-nav";
 
 import { useRouter } from "next/router";
 import MainFooter from "@/components/footer";
+import { Toaster } from "@/components/ui/toaster";
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -47,6 +48,8 @@ export default function RootLayout({
               
           
               {children}
+              <Toaster />
+
               <MainFooter/>
               </div>
         </div>

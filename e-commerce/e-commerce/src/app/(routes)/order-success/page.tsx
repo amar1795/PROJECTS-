@@ -1,7 +1,6 @@
 "use client";
 import StepProgress from "@/components/StepProgress";
 import ConfettiComponent from "@/components/confetti";
-import { CustomModal, Modal } from "@/components/Custommodal";
 import SummaryCard from "@/components/summary product card/SummaryCard";
 import { CircleCheck, CircleCheckBig, DollarSign } from "lucide-react";
 import React from "react";
@@ -126,10 +125,7 @@ const page = () => {
                   {/* <div className=" py-1 mt-2 mb-2 w-auto flex-1 ">
                     <SummaryCard />
                   </div> */}
-                  <div>
-                    Click here to open Modal 
-                    <CustomModal />
-                  </div>
+                 
                   <div className=" border-b-2 border-black">
                     <div className=" flex justify-between">
                       <span className=" self-center">Sub Total</span>
