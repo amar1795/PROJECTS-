@@ -1,16 +1,15 @@
-"use client"
+"use client";
 import StepProgress from "@/components/StepProgress";
 import ConfettiComponent from "@/components/confetti";
 import SummaryCard from "@/components/summary product card/SummaryCard";
 import { CircleCheck, CircleCheckBig, DollarSign } from "lucide-react";
 import React from "react";
 
-
 const page = () => {
   return (
     <div className=" overflow-hidden">
       <div className=" flex ">
-        <ConfettiComponent/>
+        <ConfettiComponent />
         <div className=" bg-green-400 flex-1">
           <div className=" flex flex-col  justify-center ">
             <div className=" flex flex-col items-center mt-[10rem]">
@@ -26,7 +25,7 @@ const page = () => {
                 your email
               </h1>
             </div>
-            <div className=" px-8 mt-8">
+            <div className=" px-8 mt-8 ">
               <div className=" bg-white h-[15rem]">
                 <div className=" px-8 py-5 ">
                   <div className=" w-full h-[8rem]  mt-8 ">
@@ -39,12 +38,39 @@ const page = () => {
                       Expected delivery Date :
                     </span>
                     <span className=" font-bold mr-6"> 20 June 2024</span>
-                    <a href="#" style={{ color: 'blue', textDecoration: 'underline' }}>Track your Order</a>
-
+                    <a
+                      href="#"
+                      style={{ color: "blue", textDecoration: "underline" }}
+                    >
+                      Track your Order
+                    </a>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+          <div className=" px-8 mt-8  pb-5">
+            <div className=" border-b-2 border-black">
+
+            
+            </div>
+            <div className="">
+            <h1 className="w-80  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 uppercase text-2xl bg-green-500 font-bold">
+                    Order Items(3)
+                  </h1>
+            </div>
+            <div className=" flex flex-wrap justify-around pt-4">
+            <div className=" py-1 mt-2 mb-2 w-[25rem] mr-3  ">
+                    <SummaryCard />
+            </div> <div className=" py-1 mt-2 mb-2 w-[25rem] mr-3  ">
+                    <SummaryCard />
+            </div> <div className=" py-1 mt-2 mb-2 w-[25rem] mr-3  ">
+                    <SummaryCard />
+            </div> <div className=" py-1 mt-2 mb-2 w-[25rem] mr-3  ">
+                    <SummaryCard />
+            </div> 
+            </div>
+           
           </div>
         </div>
 
@@ -94,7 +120,7 @@ const page = () => {
               <div>
                 <div className=" mb-5 mt-8">
                   <h1 className="w-80  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 uppercase text-2xl bg-green-500 font-bold">
-                  Order Summary(3)
+                    Order Summary(3)
                   </h1>
                   {/* <div className=" py-1 mt-2 mb-2 w-auto flex-1 ">
                     <SummaryCard />
