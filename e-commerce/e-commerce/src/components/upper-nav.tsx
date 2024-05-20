@@ -7,7 +7,7 @@ import { FaShoppingBag } from "react-icons/fa";
 import Link from "next/link";
 import ShoppingCart from "./shopping-cart";
 import WishingListIcon from "./wishing-list-icon";
-import { Heart, Moon, MoonIcon, SunIcon } from "lucide-react";
+import { Heart, HomeIcon, Moon, MoonIcon, SunIcon } from "lucide-react";
 import CustomButton from "./CustomButton";
 import CustomInput from "./CustomInput";
 import CustomThemeToggle from "./DarkModeButton/CustomThemeToggle";
@@ -22,13 +22,22 @@ const Uppernav = () => {
           <CustomButton buttonName="All" />
         </div>
 
-        <div className=" mr-12">
+        <div className=" mr-5">
           <CustomInput  />
         </div>
-
+        <Link href="/">
+          <div className=" mr-4">
+            <button className=" p-2 border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-pink-500">
+              <HomeIcon size={25} />
+            </button>
+          </div>
+        </Link>
         <div className="mx-2 ">
           <CustomButton buttonName="Hello User" />
         </div>
+
+        
+
 
         <Link href="/cart">
           <div className=" mr-4">

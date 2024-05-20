@@ -1,3 +1,4 @@
+"use client"
 import CheckoutProductCard from "@/components/checkout product card/checkoutProductCard";
 import ProductCard from "@/components/product card/productCard";
 import StyledButton from "@/components/styled Button/StyledButton";
@@ -95,9 +96,9 @@ const page = () => {
       </div>
       <div className=" bg-teal-600 min-h-[37rem] ">
         <div className="px-5">
-        <div className=" pt-10 mb-8 ">
+              <div className=" pt-10 mb-8 ">
                 <h3 className="w-[20rem] text-[2rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
-                 Related Product
+                  Related Product
                 </h3>
               </div>
 

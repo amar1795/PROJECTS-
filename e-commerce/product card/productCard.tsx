@@ -5,19 +5,16 @@ import "./product.css";
 const ProductCard = () => {
   return (
     <div>
-      <div className="sembla__slide_product pl-[3rem] ">
-        <div className="sembla__slide__number__product flex flex-col relative h-[25rem] w-[18rem]  border-2 border-black border-b-8 border-r-4
-        transition-transform duration-300 ease-in-out hover:scale-110">
-          {/* top part */}
-          <div className="ProductImageCard min-h-[15rem] relative ">
-            <div className="ProductImage bg-red-400 h-full w-full absolute">
+      <div className="embla__slide_product  ">
+        <div className="embla__slide__number__product">
+          <div className="ProductImageCard min-h-[15rem] over">
+            <div className="ProductImage bg-red-400 h-full w-full">
               <button className=" heartButton">
                 <Heart size={25} />
               </button>
             </div>
           </div>
-         {/* middle part */}
-         <div className=" text-sm flex justify-between bg-opacity-20 backdrop-blur-lg border border-white/30 ">
+          <div className=" text-sm flex justify-between bg-opacity-20 backdrop-blur-lg border border-white/30 ">
             <div className=" bg-gray-200 w-12  ">
               <div className=" flex justify-between px-2 pt-1">
                 <span>5</span>
@@ -40,16 +37,15 @@ const ProductCard = () => {
               </div>
             </div>
           </div>
-         {/* Bottom part */}
-         <div className="ProductDetails  ">
-            <div className="card_slider px-2 pb-5 w-full text-[1.5rem]   flex justify-between bg-white bg-opacity-20 backdrop-blur-lg border border-white/30  ">
-              <div className="left w-[9rem]  pt-1">
-                <h1 className=" text-[19px] font-bold">Company name</h1>
-                <p className="font-extralight text-lg">product name</p>
-                <p>Price</p>
+          <div className="ProductDetails ">
+            <div className="card_slider px-4 pb-5 w-full text-[1.5rem] relative flex-wrap flex bg-white bg-opacity-20 backdrop-blur-lg border border-white/30">
+              <div className="left flex-auto">
+                <div>Company name</div>
+                <div className="font-extralight text-lg">product name</div>
+                <div>Price</div>
               </div>
-              <div className="right self-center ">
-                <button className="nbutton items-center border-2 border-black p-2   justify-between hidden ">
+              <div className="right flex-1">
+                <button className="buynow flex items-center">
                   <div>
                     <ShoppingCart size={20} />
                   </div>

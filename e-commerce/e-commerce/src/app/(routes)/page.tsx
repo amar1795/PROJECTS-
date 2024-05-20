@@ -53,7 +53,7 @@ export default function Home() {
                     Kids Collection
                   </h1>
                 </div>
-      <ProductCarousel SlideCount={20}/>
+      <ProductCarousel SlideCount={5}/>
     </div>
     </div>
     </div>
