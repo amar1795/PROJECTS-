@@ -11,8 +11,10 @@ import { Heart, Moon, MoonIcon, SunIcon } from "lucide-react";
 import CustomButton from "./CustomButton";
 import CustomInput from "./CustomInput";
 import CustomThemeToggle from "./DarkModeButton/CustomThemeToggle";
+import { useTheme } from "next-themes"
 
 const Uppernav = () => {
+
   return (
     <div className=" flex justify-center items-center mt-7 w-full h-10 px-[1.9rem]">
       <div className="w-full h-[9rem] bg-white bg-opacity-[80px] backdrop-blur-lg border border-white/30 flex justify-center items-center">
@@ -21,7 +23,7 @@ const Uppernav = () => {
         </div>
 
         <div className=" mr-12">
-          <CustomInput />
+          <CustomInput  />
         </div>
 
         <div className="mx-2 ">
@@ -45,16 +47,8 @@ const Uppernav = () => {
         </Link>
 
         <div className=" px-5 ml-5">
-          {/* <ThemeToggle /> */}
           <CustomThemeToggle />
-          {/* <div className=" relative">
-            <button className="  w-[6rem] p-2 border-2 border-black text-black flex self-center justify-between border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500">
-              <MoonIcon size={25} fill="black" />
-              <SunIcon size={25} fill="black"/>
-
-            </button>
-              <div className=" absolute top-[1.5px] left-[2px]  bg-pink-500 h-[2.6rem] w-[2.8rem]"></div>
-          </div> */}
+          
         </div>
       </div>
     </div>

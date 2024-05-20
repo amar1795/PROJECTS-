@@ -22,7 +22,7 @@ const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     <div className="">
       <input
         type="text"
-        className="w-[40rem] p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 "
+        className={`w-[40rem]  outline-none bg-white text-black p-2 border-2 border-black   flex self-center justify-center border-b-8 border-r-4 `}
         placeholder="Search for products,brands and more"
         value={inputValue}
         onChange={handleInputChange}

@@ -40,7 +40,7 @@ const handleClickOutside = (event: MouseEvent) => {
         <h1 className="font-bold">{buttonName}</h1>
       </button>
       {isOpen && (
-        <div className="absolute mt-2 w-[10rem] bg-white border border-black z-10">
+        <div className="absolute mt-2 w-[10rem] bg-white border border-black  text-black z-10">
           <ul>
             <li onClick={() => handleOptionClick('Option 1')} className="p-2 hover:bg-gray-200 cursor-pointer">Option 1</li>
             <li onClick={() => handleOptionClick('Option 2')} className="p-2 hover:bg-gray-200 cursor-pointer">Option 2</li>
