@@ -78,6 +78,8 @@
       --detail-high-contrast: rgb(101, 101, 101);
       --detail-high-contrast-rgb-value: 101, 101, 101;
     }
+    
+    
   }
 
   @layer base {
@@ -86,6 +88,8 @@
     }
     body {
       @apply bg-background text-foreground;
+      transition: background-color 0.3s ease, color 0.3s ease;
+
     }
   }
 
