@@ -27,9 +27,9 @@ const page = () => {
             </p>
 
             <div className=" mt-5">
-              <div className=" w-[20rem]">
+              <div className=" w-[20rem] ">
                 <h2 className=" text-4xl font-bold uppercase  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
-                  <h1 className=" font-bold">Our Mission </h1>
+                 Our Mission
                 </h2>
               </div>
 
@@ -72,7 +72,7 @@ const page = () => {
             <div>
               <div className=" w-[20rem]">
                 <h2 className=" text-4xl font-bold uppercase  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
-                  <h1 className=" font-bold">Our Vision </h1>
+                Our Vision
                 </h2>
               </div>
               <p className=" text-lg  mt-4">
@@ -86,7 +86,7 @@ const page = () => {
 
               <div className=" w-[34rem]">
                 <h2 className=" text-4xl font-bold uppercase  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
-                  <h1 className=" font-bold">Why Choose Purchase Pal? </h1>
+                Why Choose Purchase Pal?
                 </h2>
               </div>
               
@@ -116,9 +116,9 @@ const page = () => {
             </div>
 
             <div>
-            <div className=" w-[20rem]">
+            <div className=" w-[20rem] h-[5rem]">
                 <h2 className=" text-4xl font-bold uppercase  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
-                  <h1 className=" font-bold">Our Community </h1>
+                Our Community 
                 </h2>
               </div>
               <p className=" text-lg  mt-4">
