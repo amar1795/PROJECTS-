@@ -4,7 +4,7 @@ import React from 'react'
 const CheckoutProductCard = () => {
   return (
     <div>
-       <div className=' border-2 border-black  rounded-xl overflow-hidden'>
+       <div className=' border-2 border-black border-b-8 border-r-4  overflow-hidden'>
                 <div className=' overflow-hidden flex justify-between bg-opacity-20 backdrop-blur-lg border border-white/30 bg-white '>
 
                     
