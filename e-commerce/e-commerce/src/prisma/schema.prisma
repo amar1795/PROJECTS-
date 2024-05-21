@@ -8,15 +8,87 @@ datasource db {
   relationMode = "prisma"
 }
 
+//  authentication models
+enum UserRole {
+  ADMIN
+  USER
+}
+
+// @db.ObjectId is optional as the prisma client will automatically convert the id to ObjectId anyways 
+
 model User {
   id        String  @id @default(uuid()) @map("_id")
-  name      String
-  email     String  @unique
-  password  String
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          UserRole @default(USER)
+  accounts      Account[]
   stores    Store[] @relation("StoreToUser") 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  isTwoFactorEnabled Boolean @default(false)
+  twoFactorConfirmation TwoFactorConfirmation?
 }
+
+// a user can have multiple accounts (e.g., Google, Facebook,credentials etc.)
+model Account {
+  id                 String  @id @default(uuid()) @map("_id") 
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.String
+  access_token       String?  @db.String
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.String
+  session_state      String?
+  userId             String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model VerificationToken {
+  id String  @id @default(uuid()) @map("_id")
+  email String
+  token String @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model PasswordResetToken {
+  id String  @id @default(uuid()) @map("_id")
+  email String
+  token String @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model TwoFactorToken {
+  id String  @id @default(uuid()) @map("_id")
+  email String
+  token String @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model TwoFactorConfirmation {
+  id String  @id @default(uuid()) @map("_id")
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
+}
+
+//  authentication models
+
+
+
 
 
 model Store {
