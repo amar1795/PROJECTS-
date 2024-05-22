@@ -60,3 +60,6 @@ About Us Page: Share information about your company and its mission.
 Contact Us Page: Provide contact information and a form for users to reach out.
 
 name of the project is PurchasePal
+
+embla  carousel sliding fix 
+https://codesandbox.io/p/sandbox/imgs082401-4qsfl?file=%2Fsrc%2Fjs%2FEmblaCarousel.js
