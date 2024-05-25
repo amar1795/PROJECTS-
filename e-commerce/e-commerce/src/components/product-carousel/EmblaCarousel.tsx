@@ -12,6 +12,7 @@ import { ShoppingCart } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
 import { ThreeDCardDemo } from "../3d card/3dCard";
+import Link from "next/link";
 
 type PropType = {
   slides: number[];
@@ -54,23 +55,27 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
             <div className="embla__slide_product " key={index}>
               <div className="embla__slide__number__product  ">
                 <div className="ProductImageCard h-60 over ">
+                <Link href={`categories/men/sdgsg`}>
                   <div className="ProductImage bg-red-400 h-full w-full">
                     <button className=" heartButton">
                       <Heart size={40} />
                     </button>
                   </div>
+                  </Link>
                 </div>
                 <div className="ProductDetails">
                   <div className="card_slider px-4 pb-5">
                     <div className="">Company name</div>
                     <div className=" font-extralight text-lg">product name</div>
                     <div>Price</div>
+                    <Link href={`categories/men/sdgsg`}>
                     <button className="buynow ">
                       <div>
                         <ShoppingCart size={30} />
                       </div>
                       <div className=" text-sm px-3">Buy Now</div>
                     </button>
+                    </Link>
                   </div>
                 </div>
 

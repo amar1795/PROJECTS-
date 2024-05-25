@@ -8,7 +8,7 @@ import './productembla.css'
 
 
 
- const ProductCarousel=({SlideCount}:{SlideCount:number})=> {
+ const  ProductCarousel=({SlideCount}:{SlideCount:number})=> {
     const OPTIONS: EmblaOptionsType = { dragFree: true, loop: false }
     const SLIDE_COUNT = SlideCount
     const SLIDES = Array.from(Array(SLIDE_COUNT).keys())

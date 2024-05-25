@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const MainFooter = () => {
   
@@ -15,6 +16,26 @@ const MainFooter = () => {
     follows: ["Facebook", "Instagram", "Twitter", "Pinterest", "TikTok", "YouTube"]
   };
 
+  const getLink = (item: string) => {
+    switch (item) {
+      case 'About Us':
+        return '/about-us';
+      case 'Contact Us':
+        return '/contact-us';
+      case 'Wishlist':
+        return '/wishlist';
+      case 'Men':
+        return '/categories/men';
+      case 'Women':
+        return '/categories/women';
+      case 'Kids':
+        return '/categories/kids';
+      
+      default:
+        return '#';
+    }
+  };
+
   return (
     <div className="bg-black text-white py-8">
       <div className="container mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -22,9 +43,11 @@ const MainFooter = () => {
           <div key={key} className="flex flex-col">
             <h1 className="font-bold mb-2">{key.charAt(0).toUpperCase() + key.slice(1)}</h1>
             {siteData[key].map((item, index) => (
+               <Link href={getLink(item)} key={index} passHref>
               <button key={index} className="text-left mb-1 hover:text-gray-300 focus:outline-none">
                 {item}
               </button>
+              </Link>
             ))}
           </div>
         ))}
