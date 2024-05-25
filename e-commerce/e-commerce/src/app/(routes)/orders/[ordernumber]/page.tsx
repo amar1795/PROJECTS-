@@ -3,7 +3,9 @@ import React from 'react'
 const page = () => {
   return (
     <div>
-      This is individual order page
+     <div className=' min-h-[80vh]'>
+
+     </div>
     </div>
   )
 }
