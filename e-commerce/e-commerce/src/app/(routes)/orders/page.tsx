@@ -1,4 +1,4 @@
-import OrderSummaryComponent from "@/components/OrderSummaryComponent";
+import OrderSummaryComponent from "@/components/order summary component/OrderSummaryComponent";
 import { PaginationComponent } from "@/components/pagination";
 import React from "react";
 
