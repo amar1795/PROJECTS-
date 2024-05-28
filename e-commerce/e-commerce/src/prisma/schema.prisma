@@ -113,33 +113,72 @@ model Category {
 }
 
 model Product {
-  id         String      @id @default(auto()) @map("_id") @db.ObjectId
-  categoryId String      @db.ObjectId // Foreign Key to Category
-  category   Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  id         String        @id @default(auto()) @map("_id") @db.ObjectId
+  categoryId String        @db.ObjectId // Foreign Key to Category
+  category   Category      @relation("CategoryToProduct", fields: [categoryId], references: [id])
   name       String
   price      Float
-  isFeatured Boolean     @default(false)
-  isArchived Boolean     @default(false)
-  brandId    String      @db.ObjectId // Foreign Key to Brand
-  brand      Brand       @relation("BrandToProduct", fields: [brandId], references: [id])
-  sizeId     String      @db.ObjectId // Foreign Key to Size
-  size       Size        @relation(fields: [sizeId], references: [id])
-  colorId    String      @db.ObjectId // Foreign Key to Color
-  color      Color       @relation(fields: [colorId], references: [id])
-  review     Review[]    @relation("ReviewToProduct") // Relation to Review model
-  rating     Rating[]    @relation("RatingToProduct") // Relation to Rating model
-  images     Image[]
-  // Relation to Image model
+  brandId    String        @db.ObjectId // Foreign Key to Brand
+  brand      Brand         @relation("BrandToProduct", fields: [brandId], references: [id])
+  colorId    String        @db.ObjectId // Foreign Key to Color
+  productColors ProductColor[] // Relation to the ProductColor join model
+  reviews    Review[]      @relation("ReviewToProduct") // Relation to Review model
+  ratings    Rating[]      @relation("RatingToProduct") // Relation to Rating model
+  images     Image[]       // Relation to Image model
   discount   Int?
-  orderItems OrderItem[] // Relation to Order model
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  orderItems OrderItem[]   // Relation to Order model
+  size ProductSize[]    // Relation to ProductSize model`
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
 
   @@index([categoryId])
-  @@index([sizeId])
-  @@index([colorId])
   @@index([brandId])
+  @@index([colorId])
 }
+
+
+model Color {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  value     String
+  productColors ProductColor[] // Relation to the ProductColor join model
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+}
+
+model ProductColor {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  productId  String   @db.ObjectId
+  product    Product  @relation(fields: [productId], references: [id])
+  colorId    String   @db.ObjectId
+  color      Color    @relation(fields: [colorId], references: [id])
+
+  @@index([productId])
+  @@index([colorId])
+}
+
+model Size {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  products    ProductSize[]
+  values    String[]
+ category  String    // For example, "clothing" or "shoes"
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model ProductSize {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  productId String   @db.ObjectId
+  product   Product  @relation(fields: [productId], references: [id])
+  sizeId    String   @db.ObjectId
+  size      Size     @relation(fields: [sizeId], references: [id])
+
+  @@index([productId])
+  @@index([sizeId])
+}
+
 
 model Rating {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -181,26 +220,6 @@ model Brand {
   updatedAt DateTime  @updatedAt
 }
 
-model Size {
-  id        String      @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  values    String[] 
-  products  Product[] // Relation to Product model
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-
-}
-
-
-model Color {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  value     String
-  products  Product[] // Relation to Product model
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-}
 
 model Image {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
