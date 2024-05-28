@@ -120,7 +120,6 @@ model Product {
   price      Float
   brandId    String        @db.ObjectId // Foreign Key to Brand
   brand      Brand         @relation("BrandToProduct", fields: [brandId], references: [id])
-  colorId    String        @db.ObjectId // Foreign Key to Color
   productColors ProductColor[] // Relation to the ProductColor join model
   reviews    Review[]      @relation("ReviewToProduct") // Relation to Review model
   ratings    Rating[]      @relation("RatingToProduct") // Relation to Rating model
@@ -133,7 +132,6 @@ model Product {
 
   @@index([categoryId])
   @@index([brandId])
-  @@index([colorId])
 }
 
 
