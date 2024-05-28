@@ -1,11 +1,9 @@
 // pages/api/createDummyUsers.js
 import { faker } from '@faker-js/faker';
 import { prismadb } from "@/lib/db";
-import { NextApiRequest, NextApiResponse } from 'next';
 import { NextResponse } from 'next/server';
 
-// instead of this directly create  the server action file and run in the server rendered file it will created just checke in the about us page
-export  async function POST(req: Request, res: Response) { 
+export  async function dummyUserFunction() { 
         try {
             // Create 10 dummy users
             const dummyUsers = [];
@@ -30,10 +28,7 @@ export  async function POST(req: Request, res: Response) {
               dummyUsers.push(user);
             }
         
-            return NextResponse.json({ message: 'Dummy users created successfully', users: dummyUsers }, { status: 200 });
           } catch (error) {
-            console.error('Error creating dummy users:', error);
-            return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-          }
+            console.error('Error creating dummy users:', error);}
       }
   

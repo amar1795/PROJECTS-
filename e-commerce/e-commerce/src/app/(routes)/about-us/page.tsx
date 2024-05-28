@@ -1,6 +1,9 @@
+import { dummyUserFunction } from "@/actions/dummyUser";
 import React from "react";
 
 const page = () => {
+  // dummyUserFunction();
+  
   return (
     <div className=" bg-pink-500 border-2 border-black px-10 ">
       <div>
