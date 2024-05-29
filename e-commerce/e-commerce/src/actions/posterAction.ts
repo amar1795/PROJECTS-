@@ -37,12 +37,7 @@ export async function dummyPosterFunction() {
 
 export async function getAllPosters() {
     try {
-        const posters = await prismadb.poster.findMany({
-            select: {
-                label: true,
-                imageUrl: true
-            }
-        });
+        const posters = await prismadb.poster.findMany();
         console.log("successfully retrieved posters",posters);
         return posters;
     } catch (error) {
@@ -191,6 +186,56 @@ export async function CreateBrand() {
     }
 }
   
+
+export async function Createposter() {
+    try {
+        const colours = [];
+
+        const labels = [
+            { name: 'Men', PosterId: '6655b7713bc9ad76aabc9e88' },
+            { name: 'Women', PosterId: '6655b7713bc9ad76aabc9e89' },
+            { name: 'Kids', PosterId: '6655b7713bc9ad76aabc9e8a' },
+            { name: 'Furniture', PosterId: '6655b7713bc9ad76aabc9e8b' },
+            { name: 'Shoes', PosterId: '6655b7713bc9ad76aabc9e8c' },
+            
+        ];
+
+        for (const item of labels) {
+           const label= await prismadb.category.create({
+                data: {
+                    name: item.name,
+                    PosterId: item.PosterId
+                }
+            });
+            colours.push(label);
+        }
+
+        console.error("successfully created colours",colours);
+
+    }
+     catch (error) {
+        console.error('Error retrieving posters:', error);
+        throw error;
+    }
+}
+
+export async function fetchCategoriesWithPosters() {
+    try {
+      const categories = await prismadb.category.findMany({
+        include: {
+          Poster: {
+            select: {
+              label: true,
+              imageUrl: true,
+            },
+          },
+        },
+      });
+  
+      console.log("this is the linkedposterwith categories", categories);
+    } catch (error) {
+      console.error(error);
+    } 
+  }
       
 
-  

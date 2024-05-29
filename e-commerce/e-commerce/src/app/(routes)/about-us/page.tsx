@@ -1,14 +1,13 @@
 import { dummyUserFunction } from "@/actions/dummyUser";
-import { CreateBrand, CreateColour, CreateSize, dummyPosterFunction, getAllPosters } from "@/actions/posterAction";
+import { CreateBrand, CreateColour, CreateSize, Createposter, dummyPosterFunction, fetchCategoriesWithPosters, getAllPosters } from "@/actions/posterAction";
 import React from "react";
 
 const page = () => {
-  // dummyUserFunction();
-  // dummyPosterFunction();
-  // getAllPosters();
-  // CreateColour()
+ 
   // CreateSize()
-  CreateBrand()
+  // getAllPosters()
+  // Createposter()
+  fetchCategoriesWithPosters()
   return (
     <div className=" bg-pink-500 border-2 border-black px-10 ">
       <div>
