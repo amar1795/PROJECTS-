@@ -141,8 +141,56 @@ export async function CreateSize() {
     }
 }
 
-    
-          
+
+export async function CreateBrand() {
+    try {
+        const brands = [];
+        
+        const brandLabels = [
+            // Men's fashion brands
+            { name: 'Louis Vuitton' },
+            { name: 'Gucci' },
+            { name: 'Prada' },
+            { name: 'Hugo Boss' },
+            { name: 'Burberry' },
+            // Women's fashion brands
+            { name: 'Chanel' },
+            { name: 'Dior' },
+            { name: 'Versace' },
+            { name: 'Ralph Lauren' },
+            { name: 'Valentino' },
+            // Kids' fashion brands
+            { name: 'Carter’s' },
+            { name: 'OshKosh B’gosh' },
+            { name: 'Gap Kids' },
+            { name: 'Gymboree' },
+            { name: 'The Children’s Place' },
+            // Shoe brands
+            { name: 'Nike' },
+            { name: 'Adidas' },
+            { name: 'Puma' },
+            { name: 'Reebok' },
+            { name: 'New Balance' }
+        ];
+
+        for (const item of brandLabels) {
+            const brand = await prismadb.brand.create({
+                data: {
+                    name: item.name,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                }
+            });
+            brands.push(brand);
+        }
+
+        console.log("successfully created brands", brands);
+    } catch (error) {
+        console.error('Error creating brands:', error);
+        throw error;
+    }
+}
+  
       
 
   
