@@ -85,6 +85,62 @@ export async function CreateColour() {
     }
 }
 
+
+export async function CreateSize() {
+    try {
+        const sizes = [];
+        
+        const sizeLabels = [
+            { name: 'Extra Small', values: 'XS', category: 'women' },
+            { name: 'Small', values: 'S', category: 'women' },
+            { name: 'Medium', values: 'M', category: 'women' },
+            { name: 'Large', values: 'L', category: 'women' },
+            { name: 'Extra Large', values: 'XL', category: 'women' },
+            { name: 'Extra Extra Large', values: 'XXL', category: 'women' },
+            { name: 'Extra Small', values: 'XS', category: 'men' },
+            { name: 'Small', values: 'S', category: 'men' },
+            { name: 'Medium', values: 'M', category: 'men' },
+            { name: 'Large', values: 'L', category: 'men' },
+            { name: 'Extra Large', values: 'XL', category: 'men' },
+            { name: 'Extra Extra Large', values: 'XXL', category: 'men' },
+            { name: 'Extra Small', values: 'XS', category: 'kids' },
+            { name: 'Small', values: 'S', category: 'kids' },
+            { name: 'Medium', values: 'M', category: 'kids' },
+            { name: 'Large', values: 'L', category: 'kids' },
+            { name: 'Extra Large', values: 'XL', category: 'kids' },
+            { name: 'Extra Extra Large', values: 'XXL', category: 'kids' },
+            { name: 'UK Size 3', values: '3', category: 'shoes' },
+            { name: 'UK Size 4', values: '4', category: 'shoes' },
+            { name: 'UK Size 5', values: '5', category: 'shoes' },
+            { name: 'UK Size 6', values: '6', category: 'shoes' },
+            { name: 'UK Size 7', values: '7', category: 'shoes' },
+            { name: 'UK Size 8', values: '8', category: 'shoes' },
+            { name: 'UK Size 9', values: '9', category: 'shoes' },
+            { name: 'UK Size 10', values: '10', category: 'shoes' },
+            { name: 'UK Size 11', values: '11', category: 'shoes' },
+            { name: 'UK Size 12', values: '12', category: 'shoes' }
+        ];
+
+        for (const item of sizeLabels) {
+            const size = await prismadb.size.create({
+                data: {
+                    name: item.name,
+                    values: [item.values],
+                    category: item.category,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                }
+            });
+            sizes.push(size);
+        }
+
+        console.log("successfully created sizes", sizes);
+    } catch (error) {
+        console.error('Error creating sizes:', error);
+        throw error;
+    }
+}
+
     
           
       
