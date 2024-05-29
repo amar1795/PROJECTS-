@@ -16,6 +16,8 @@ const Page = ({ params }: { params: { categories: string } }) => {
         men: 'bg-red-500',
         women: 'bg-pink-500',
         kids: 'bg-green-500',
+        furniture: 'bg-green-500',
+        shoes: 'bg-green-500',
     };
 
     // Check if the entered category is valid

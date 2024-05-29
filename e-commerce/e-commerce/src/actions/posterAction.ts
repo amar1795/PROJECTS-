@@ -1,7 +1,9 @@
+"use server"
 // pages/api/createDummyUsers.js
 import { faker } from '@faker-js/faker';
 import { prismadb } from "@/lib/db";
 import { NextResponse } from 'next/server';
+
 
 export async function dummyPosterFunction() {
     try {
@@ -29,6 +31,23 @@ export async function dummyPosterFunction() {
 
     } catch (error) {
         console.error('Error creating dummy users:', error);
+    }
+}
+
+
+export async function getAllPosters() {
+    try {
+        const posters = await prismadb.poster.findMany({
+            select: {
+                label: true,
+                imageUrl: true
+            }
+        });
+        console.log("successfully retrieved posters",posters);
+        return posters;
+    } catch (error) {
+        console.error('Error retrieving posters:', error);
+        throw error;
     }
 }
           

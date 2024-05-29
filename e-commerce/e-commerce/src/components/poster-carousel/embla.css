@@ -1,13 +1,15 @@
 .embla {
     max-width: 90rem;
     margin: auto;
-    --slide-height: 25rem;
+    --slide-height: 30rem;
     --slide-spacing: 1rem;
     --slide-size: 100%;
   }
   .embla__viewport {
     overflow: hidden;
   }
+
+  
   .embla__container {
     backface-visibility: hidden;
     display: flex;

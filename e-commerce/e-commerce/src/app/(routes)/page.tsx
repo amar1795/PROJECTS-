@@ -1,4 +1,3 @@
-"use client"
 import {
   Carousel,
   CarouselContent,
@@ -12,7 +11,10 @@ import ProductCarousel from "@/components/product-carousel/carousel";
 import Testcarousel from "@/components/poster-carousel/carousel";
 import { ThreeDCardDemo } from "@/components/3d card/3dCard";
 
-export default function Home() {
+export default async function Home() {
+  
+ 
+
   return (
    <main className=" ">
     {/* hscreen was causing the issue for the footer as hscreen sets the height of the current viewable screen hence the footer waas not going to the bottom */}
@@ -23,10 +25,8 @@ export default function Home() {
                   </h1>
                 </div>
     
-    
-   
     <div>
-      <Testcarousel/>
+      <Testcarousel />
     </div>
 
     <div className="">
