@@ -7,13 +7,13 @@ const page = () => {
   // CreateSize()
   // getAllPosters()
   // Createposter()
-  fetchCategoriesWithPosters()
+  // fetchCategoriesWithPosters()
   return (
     <div className=" bg-pink-500 border-2 border-black px-10 ">
       <div>
         <div className=" ">
-          <h1 className=" text-[6rem] uppercase  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
-            <h1 className=" font-bold">About Us </h1>
+          <h1 className=" text-[6rem] uppercase  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 bg-yellow-500 font-bold">
+          About Us
           </h1>
         </div>
 
