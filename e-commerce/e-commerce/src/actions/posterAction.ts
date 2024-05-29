@@ -50,6 +50,42 @@ export async function getAllPosters() {
         throw error;
     }
 }
+
+
+
+export async function CreateColour() {
+    try {
+        const colours = [];
+
+        const labels = [
+            { name: 'Blue', value: '3a86ff' },
+            { name: 'Purple', value: '8338ec' },
+            { name: 'Red', value: 'ff006e' },
+            { name: 'Orange', value: 'fb5607' },
+            { name: 'Yellow', value: 'ffbe0b' },
+            { name: 'Black', value: '000000' }, 
+        ];
+
+        for (const item of labels) {
+           const label= await prismadb.color.create({
+                data: {
+                    name: item.name,
+                    value: item.value
+                }
+            });
+            colours.push(label);
+        }
+
+        console.error("successfully created colours",colours);
+
+    }
+     catch (error) {
+        console.error('Error retrieving posters:', error);
+        throw error;
+    }
+}
+
+    
           
       
 

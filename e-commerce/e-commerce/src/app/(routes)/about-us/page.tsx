@@ -1,12 +1,12 @@
 import { dummyUserFunction } from "@/actions/dummyUser";
-import { dummyPosterFunction, getAllPosters } from "@/actions/posterAction";
+import { CreateColour, dummyPosterFunction, getAllPosters } from "@/actions/posterAction";
 import React from "react";
 
 const page = () => {
   // dummyUserFunction();
   // dummyPosterFunction();
-  getAllPosters();
-  
+  // getAllPosters();
+  // CreateColour()
   return (
     <div className=" bg-pink-500 border-2 border-black px-10 ">
       <div>
