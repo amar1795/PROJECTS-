@@ -107,38 +107,46 @@ model Poster {
 }
 
 model Category {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  PosterId  String    @db.ObjectId // Foreign Key to Poster
-  Poster    Poster?   @relation(fields: [PosterId], references: [id])
-  name      String
-  products  Product[] @relation("CategoryToProduct")
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  PosterId String    @db.ObjectId // Foreign Key to Poster
+  Poster   Poster?   @relation(fields: [PosterId], references: [id])
+  name     String
+  products Product[] @relation("CategoryToProduct")
+  parentId String?   @db.ObjectId // Reference to the parent category's ID (if this category is a subcategory)
+  parent Category? @relation("CategoryParent", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction) // Self-referencing relation to the parent category
+  subcategories Category[] @relation("CategoryParent")
+  
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 
+  // Index for the parentId to optimize queries
+  @@index([parentId])
   @@index([PosterId])
 }
 
 // product models and product related models
 
 model Product {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
-  categoryId    String         @db.ObjectId // Foreign Key to Category
-  category      Category       @relation("CategoryToProduct", fields: [categoryId], references: [id])
-  name          String
-  price         Float
-  brandId       String         @db.ObjectId // Foreign Key to Brand
-  brand         Brand          @relation("BrandToProduct", fields: [brandId], references: [id])
-  productColors ProductColor[] // Relation to the ProductColor join model
-  ratings       Rating[]       @relation("RatingToProduct") // Relation to Rating model
-  images        Image[] // Relation to Image model
-  discount      Int?
-  orderItems    OrderItem[] // Relation to Order model
-  size          ProductSize[] // Relation to ProductSize model`
-  saveForLater  SaveForLater[] // Relation to SaveForLater model
-  wishlists     Wishlist[] // Relation to Wishlist model
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  cartItems     CartItem[]     @relation("ProductToCart") // Relation to CartItem model
+  id                 String         @id @default(auto()) @map("_id") @db.ObjectId
+  name               String
+  price              Float
+  brandId            String         @db.ObjectId // Foreign Key to Brand
+  discount           Int?
+  discountedPrice    Float?
+  brand              Brand          @relation("BrandToProduct", fields: [brandId], references: [id])
+  productColors      ProductColor[] // Relation to the ProductColor join model
+  ratings            Rating[]       @relation("RatingToProduct") // Relation to Rating model
+  images             Image[] // Relation to Image model
+  ProductDescription String
+  orderItems         OrderItem[] // Relation to Order model
+  size               ProductSize[] // Relation to ProductSize model`
+  saveForLater       SaveForLater[] // Relation to SaveForLater model
+  wishlists          Wishlist[] // Relation to Wishlist model
+  cartItems          CartItem[]     @relation("ProductToCart") // Relation to CartItem model
+  categoryId         String         @db.ObjectId
+  category           Category       @relation("CategoryToProduct", fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
 
   @@index([categoryId])
   @@index([brandId])
@@ -205,10 +213,10 @@ model Rating {
 }
 
 model ReviewImage {
-  id      String   @id @default(auto()) @map("_id") @db.ObjectId
-  url     String
-  RatingId String   @db.ObjectId // Foreign Key to Product
-  rating   Rating  @relation("RatingToImage",fields: [RatingId], references: [id], onDelete: Cascade)
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  url      String
+  RatingId String @db.ObjectId // Foreign Key to Product
+  rating   Rating @relation("RatingToImage", fields: [RatingId], references: [id], onDelete: Cascade)
 }
 
 model Brand {
