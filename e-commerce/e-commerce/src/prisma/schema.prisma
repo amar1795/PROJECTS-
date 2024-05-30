@@ -133,6 +133,7 @@ model Product {
   brandId            String         @db.ObjectId // Foreign Key to Brand
   discount           Int?
   discountedPrice    Float?
+  stock              Int            @default(0) // contains the number of items in stock
   brand              Brand          @relation("BrandToProduct", fields: [brandId], references: [id])
   productColors      ProductColor[] // Relation to the ProductColor join model
   ratings            Rating[]       @relation("RatingToProduct") // Relation to Rating model
