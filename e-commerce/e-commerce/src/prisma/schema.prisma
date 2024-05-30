@@ -29,6 +29,8 @@ model User {
   cart          Cart[]    @relation("UsertoCart") // Relation to Cart model
   rating                Rating[]               @relation("RatingToUser") // Relation to Rating model
   Review                Review[]               @relation("ReviewToUser") // Relation to Review model
+  saveForLaterItems SaveForLater[]  // Relation to SaveForLater model
+  wishlistItems    Wishlist[]      // Relation to Wishlist model
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
 
@@ -117,6 +119,8 @@ model Category {
   @@index([PosterId])
 }
 
+// product models and product related models
+
 model Product {
   id            String         @id @default(auto()) @map("_id") @db.ObjectId
   categoryId    String         @db.ObjectId // Foreign Key to Category
@@ -132,6 +136,8 @@ model Product {
   discount      Int?
   orderItems    OrderItem[] // Relation to Order model
   size          ProductSize[] // Relation to ProductSize model`
+  saveForLater  SaveForLater[] // Relation to SaveForLater model
+  wishlists     Wishlist[]    // Relation to Wishlist model
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   cartItems     CartItem[]     @relation("ProductToCart")// Relation to CartItem model
@@ -180,6 +186,8 @@ model ProductSize {
   @@index([sizeId])
 }
 
+// rating and reviews models
+
 model Rating {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   productId String   @db.ObjectId // Foreign Key to Product
@@ -226,6 +234,32 @@ model Image {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@index([productId])
+}
+
+// save for later and wishlist models
+
+model SaveForLater {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String  @db.ObjectId // Foreign Key to User
+  user      User    @relation(fields: [userId], references: [id])
+  productId String  @db.ObjectId // Foreign Key to Product
+  product   Product @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([productId])
+}
+
+model Wishlist {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String  @db.ObjectId // Foreign Key to User
+  user      User    @relation(fields: [userId], references: [id])
+  productId String  @db.ObjectId // Foreign Key to Product
+  product   Product @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@index([userId])
   @@index([productId])
 }
 
