@@ -17,20 +17,19 @@ enum UserRole {
 // @db.ObjectId is optional as the prisma client will automatically convert the id to ObjectId anyways 
 
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  role          UserRole  @default(USER)
-  accounts      Account[]
-  orders        Order[]   @relation("UsertoOrder") // Relation to Order model
-  cart          Cart[]    @relation("UsertoCart") // Relation to Cart model
+  id                    String                 @id @default(auto()) @map("_id") @db.ObjectId
+  name                  String?
+  email                 String?                @unique
+  emailVerified         DateTime?
+  image                 String?
+  password              String?
+  role                  UserRole               @default(USER)
+  accounts              Account[]
+  orders                Order[]                @relation("UsertoOrder") // Relation to Order model
+  cart                  Cart[]                 @relation("UsertoCart") // Relation to Cart model
   rating                Rating[]               @relation("RatingToUser") // Relation to Rating model
-  Review                Review[]               @relation("ReviewToUser") // Relation to Review model
-  saveForLaterItems SaveForLater[]  // Relation to SaveForLater model
-  wishlistItems    Wishlist[]      // Relation to Wishlist model
+  saveForLaterItems     SaveForLater[] // Relation to SaveForLater model
+  wishlistItems         Wishlist[] // Relation to Wishlist model
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
 
@@ -130,17 +129,17 @@ model Product {
   brandId       String         @db.ObjectId // Foreign Key to Brand
   brand         Brand          @relation("BrandToProduct", fields: [brandId], references: [id])
   productColors ProductColor[] // Relation to the ProductColor join model
-  reviews       Review[]       @relation("ReviewToProduct") // Relation to Review model
   ratings       Rating[]       @relation("RatingToProduct") // Relation to Rating model
   images        Image[] // Relation to Image model
   discount      Int?
   orderItems    OrderItem[] // Relation to Order model
   size          ProductSize[] // Relation to ProductSize model`
   saveForLater  SaveForLater[] // Relation to SaveForLater model
-  wishlists     Wishlist[]    // Relation to Wishlist model
+  wishlists     Wishlist[] // Relation to Wishlist model
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
-  cartItems     CartItem[]     @relation("ProductToCart")// Relation to CartItem model
+  cartItems     CartItem[]     @relation("ProductToCart") // Relation to CartItem model
+
   @@index([categoryId])
   @@index([brandId])
 }
@@ -189,13 +188,15 @@ model ProductSize {
 // rating and reviews models
 
 model Rating {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  productId String   @db.ObjectId // Foreign Key to Product
-  product   Product  @relation("RatingToProduct", fields: [productId], references: [id])
+  id        String        @id @default(auto()) @map("_id") @db.ObjectId
+  productId String        @db.ObjectId // Foreign Key to Product
+  product   Product       @relation("RatingToProduct", fields: [productId], references: [id])
   rating    Int
-  comment   String
-  userId    String   @db.ObjectId // Foreign Key to User  
-  user      User     @relation("RatingToUser", fields: [userId], references: [id])
+  review    String?
+  userId    String        @db.ObjectId // Foreign Key to User  
+  user      User          @relation("RatingToUser", fields: [userId], references: [id])
+  images    ReviewImage[] @relation("RatingToImage")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -203,19 +204,11 @@ model Rating {
   @@index([userId])
 }
 
-model Review {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  productId String   @db.ObjectId // Foreign Key to Product
-  product   Product  @relation("ReviewToProduct", fields: [productId], references: [id])
-  rating    Int
-  comment   String
-  userId    String   @db.ObjectId // Foreign Key to User  
-  user      User     @relation("ReviewToUser", fields: [userId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([productId])
-  @@index([userId])
+model ReviewImage {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  url     String
+  RatingId String   @db.ObjectId // Foreign Key to Product
+  rating   Rating  @relation("RatingToImage",fields: [RatingId], references: [id], onDelete: Cascade)
 }
 
 model Brand {
@@ -240,11 +233,11 @@ model Image {
 // save for later and wishlist models
 
 model SaveForLater {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String  @db.ObjectId // Foreign Key to User
-  user      User    @relation(fields: [userId], references: [id])
-  productId String  @db.ObjectId // Foreign Key to Product
-  product   Product @relation(fields: [productId], references: [id])
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId // Foreign Key to User
+  user      User     @relation(fields: [userId], references: [id])
+  productId String   @db.ObjectId // Foreign Key to Product
+  product   Product  @relation(fields: [productId], references: [id])
   createdAt DateTime @default(now())
 
   @@index([userId])
@@ -252,11 +245,11 @@ model SaveForLater {
 }
 
 model Wishlist {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String  @db.ObjectId // Foreign Key to User
-  user      User    @relation(fields: [userId], references: [id])
-  productId String  @db.ObjectId // Foreign Key to Product
-  product   Product @relation(fields: [productId], references: [id])
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId // Foreign Key to User
+  user      User     @relation(fields: [userId], references: [id])
+  productId String   @db.ObjectId // Foreign Key to Product
+  product   Product  @relation(fields: [productId], references: [id])
   createdAt DateTime @default(now())
 
   @@index([userId])
@@ -264,14 +257,13 @@ model Wishlist {
 }
 
 // cart Model
-
 model Cart {
-  id        String      @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String      @db.ObjectId // Foreign Key to User
-  user      User        @relation("UsertoCart",fields: [userId], references: [id])
-  cartItems CartItem[]  // Relation to CartItem model
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String     @db.ObjectId // Foreign Key to User
+  user      User       @relation("UsertoCart", fields: [userId], references: [id])
+  cartItems CartItem[] // Relation to CartItem model
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
   @@index([userId])
 }
