@@ -63,3 +63,9 @@ name of the project is PurchasePal
 
 embla  carousel sliding fix 
 https://codesandbox.io/p/sandbox/imgs082401-4qsfl?file=%2Fsrc%2Fjs%2FEmblaCarousel.js
+
+
+
+
+
+

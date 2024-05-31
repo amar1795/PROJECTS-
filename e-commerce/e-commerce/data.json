@@ -1,3 +1,758 @@
 [
   {"label":"test billboard","imageUrl":"https://res.cloudinary.com/dfveswqdm/image/upload/v1715147039/uwhnnvgpmlugowshupys.jpg"}
 ]
+
+
+
+[
+  {
+    id: '66570726617228492bfcb586',
+    name: 'Blue',
+    value: '3a86ff',
+    createdAt: 2024-05-29T10:44:54.003Z,
+    updatedAt: 2024-05-29T10:44:54.003Z
+  },
+  {
+    id: '66570726617228492bfcb587',
+    name: 'Purple',
+    value: '8338ec',
+    createdAt: 2024-05-29T10:44:54.126Z,
+    updatedAt: 2024-05-29T10:44:54.126Z
+  },
+  {
+    id: '66570726617228492bfcb588',
+    name: 'Red',
+    value: 'ff006e',
+    createdAt: 2024-05-29T10:44:54.213Z,
+    updatedAt: 2024-05-29T10:44:54.213Z
+  },
+  {
+    id: '66570726617228492bfcb589',
+    name: 'Orange',
+    value: 'fb5607',
+    createdAt: 2024-05-29T10:44:54.306Z,
+    updatedAt: 2024-05-29T10:44:54.306Z
+  },
+  {
+    id: '66570726617228492bfcb58a',
+    name: 'Yellow',
+    value: 'ffbe0b',
+    createdAt: 2024-05-29T10:44:54.392Z,
+    updatedAt: 2024-05-29T10:44:54.392Z
+  },
+  {
+    id: '66570726617228492bfcb58b',
+    name: 'Black',
+    value: '000000',
+    createdAt: 2024-05-29T10:44:54.478Z,
+    updatedAt: 2024-05-29T10:44:54.478Z
+  }
+] and color count is  6
+
+
+<!-- sizes -->
+
+successfully retrieved sizes = [
+  {
+    id: '6659fb7e14be77720636d418',
+    name: 'Extra Small',
+    values: 'XS',
+    category: 'women',
+    createdAt: 2024-05-31T16:31:58.079Z,
+    updatedAt: 2024-05-31T16:31:58.079Z
+  },
+  {
+    id: '6659fb7e14be77720636d419',
+    name: 'Small',
+    values: 'S',
+    category: 'women',
+    createdAt: 2024-05-31T16:31:58.339Z,
+    updatedAt: 2024-05-31T16:31:58.339Z
+  },
+  {
+    id: '6659fb7e14be77720636d41a',
+    name: 'Medium',
+    values: 'M',
+    category: 'women',
+    createdAt: 2024-05-31T16:31:58.599Z,
+    updatedAt: 2024-05-31T16:31:58.599Z
+  },
+  {
+    id: '6659fb7e14be77720636d41b',
+    name: 'Large',
+    values: 'L',
+    category: 'women',
+    createdAt: 2024-05-31T16:31:58.954Z,
+    updatedAt: 2024-05-31T16:31:58.954Z
+  },
+  {
+    id: '6659fb7f14be77720636d41c',
+    name: 'Extra Large',
+    values: 'XL',
+    category: 'women',
+    createdAt: 2024-05-31T16:31:59.197Z,
+    updatedAt: 2024-05-31T16:31:59.197Z
+  },
+  {
+    id: '6659fb7f14be77720636d41d',
+    name: 'Extra Extra Large',
+    values: 'XXL',
+    category: 'women',
+    createdAt: 2024-05-31T16:31:59.465Z,
+    updatedAt: 2024-05-31T16:31:59.465Z
+  },
+  {
+    id: '6659fb7f14be77720636d41e',
+    name: 'Extra Small',
+    values: 'XS',
+    category: 'men',
+    createdAt: 2024-05-31T16:31:59.623Z,
+    updatedAt: 2024-05-31T16:31:59.623Z
+  },
+  {
+    id: '6659fb7f14be77720636d41f',
+    name: 'Small',
+    values: 'S',
+    category: 'men',
+    createdAt: 2024-05-31T16:31:59.761Z,
+    updatedAt: 2024-05-31T16:31:59.761Z
+  },
+  {
+    id: '6659fb7f14be77720636d420',
+    name: 'Medium',
+    values: 'M',
+    category: 'men',
+    createdAt: 2024-05-31T16:31:59.948Z,
+    updatedAt: 2024-05-31T16:31:59.948Z
+  },
+  {
+    id: '6659fb8014be77720636d421',
+    name: 'Large',
+    values: 'L',
+    category: 'men',
+    createdAt: 2024-05-31T16:32:00.177Z,
+    updatedAt: 2024-05-31T16:32:00.177Z
+  },
+  {
+    id: '6659fb8014be77720636d422',
+    name: 'Extra Large',
+    values: 'XL',
+    category: 'men',
+    createdAt: 2024-05-31T16:32:00.359Z,
+    updatedAt: 2024-05-31T16:32:00.359Z
+  },
+  {
+    id: '6659fb8014be77720636d423',
+    name: 'Extra Extra Large',
+    values: 'XXL',
+    category: 'men',
+    createdAt: 2024-05-31T16:32:00.591Z,
+    updatedAt: 2024-05-31T16:32:00.591Z
+  },
+  {
+    id: '6659fb8014be77720636d424',
+    name: 'Extra Small',
+    values: 'XS',
+    category: 'kids',
+    createdAt: 2024-05-31T16:32:00.796Z,
+    updatedAt: 2024-05-31T16:32:00.796Z
+  },
+  {
+    id: '6659fb8114be77720636d425',
+    name: 'Small',
+    values: 'S',
+    category: 'kids',
+    createdAt: 2024-05-31T16:32:01.103Z,
+    updatedAt: 2024-05-31T16:32:01.103Z
+  },
+  {
+    id: '6659fb8114be77720636d426',
+    name: 'Medium',
+    values: 'M',
+    category: 'kids',
+    createdAt: 2024-05-31T16:32:01.411Z,
+    updatedAt: 2024-05-31T16:32:01.411Z
+  },
+  {
+    id: '6659fb8114be77720636d427',
+    name: 'Large',
+    values: 'L',
+    category: 'kids',
+    createdAt: 2024-05-31T16:32:01.616Z,
+    updatedAt: 2024-05-31T16:32:01.616Z
+  },
+  {
+    id: '6659fb8114be77720636d428',
+    name: 'Extra Large',
+    values: 'XL',
+    category: 'kids',
+    createdAt: 2024-05-31T16:32:01.820Z,
+    updatedAt: 2024-05-31T16:32:01.820Z
+  },
+  {
+    id: '6659fb8214be77720636d429',
+    name: 'Extra Extra Large',
+    values: 'XXL',
+    category: 'kids',
+    createdAt: 2024-05-31T16:32:02.230Z,
+    updatedAt: 2024-05-31T16:32:02.230Z
+  },
+  {
+    id: '6659fb8214be77720636d42a',
+    name: 'UK Size 3',
+    values: '3',
+    category: 'shoes',
+    createdAt: 2024-05-31T16:32:02.435Z,
+    updatedAt: 2024-05-31T16:32:02.435Z
+  },
+  {
+    id: '6659fb8214be77720636d42b',
+    name: 'UK Size 4',
+    values: '4',
+    category: 'shoes',
+    createdAt: 2024-05-31T16:32:02.742Z,
+    updatedAt: 2024-05-31T16:32:02.742Z
+  },
+  {
+    id: '6659fb8214be77720636d42c',
+    name: 'UK Size 5',
+    values: '5',
+    category: 'shoes',
+    createdAt: 2024-05-31T16:32:02.947Z,
+    updatedAt: 2024-05-31T16:32:02.947Z
+  },
+  {
+    id: '6659fb8314be77720636d42d',
+    name: 'UK Size 6',
+    values: '6',
+    category: 'shoes',
+    createdAt: 2024-05-31T16:32:03.254Z,
+    updatedAt: 2024-05-31T16:32:03.254Z
+  },
+  {
+    id: '6659fb8314be77720636d42e',
+    name: 'UK Size 7',
+    values: '7',
+    category: 'shoes',
+    createdAt: 2024-05-31T16:32:03.507Z,
+    updatedAt: 2024-05-31T16:32:03.507Z
+  },
+  {
+    id: '6659fb8314be77720636d42f',
+    name: 'UK Size 8',
+    values: '8',
+    category: 'shoes',
+    createdAt: 2024-05-31T16:32:03.709Z,
+    updatedAt: 2024-05-31T16:32:03.709Z
+  },
+  {
+    id: '6659fb8314be77720636d430',
+    name: 'UK Size 9',
+    values: '9',
+    category: 'shoes',
+    createdAt: 2024-05-31T16:32:03.971Z,
+    updatedAt: 2024-05-31T16:32:03.971Z
+  },
+  {
+    id: '6659fb8414be77720636d431',
+    name: 'UK Size 10',
+    values: '10',
+    category: 'shoes',
+    createdAt: 2024-05-31T16:32:04.176Z,
+    updatedAt: 2024-05-31T16:32:04.176Z
+  },
+  {
+    id: '6659fb8414be77720636d432',
+    name: 'UK Size 11',
+    values: '11',
+    category: 'shoes',
+    createdAt: 2024-05-31T16:32:04.483Z,
+    updatedAt: 2024-05-31T16:32:04.483Z
+  },
+  {
+    id: '6659fb8414be77720636d433',
+    name: 'UK Size 12',
+    values: '12',
+    category: 'shoes',
+    createdAt: 2024-05-31T16:32:04.764Z,
+    updatedAt: 2024-05-31T16:32:04.764Z
+  }
+] and size count is  28
+
+
+brands successfully created brands [
+  {
+    id: '665710fa617228492bfcb5c4',
+    name: 'Louis Vuitton',
+    createdAt: 2024-05-29T11:26:49.973Z,
+    updatedAt: 2024-05-29T11:26:49.973Z
+  },
+  {
+    id: '665710fa617228492bfcb5c5',
+    name: 'Gucci',
+    createdAt: 2024-05-29T11:26:50.253Z,
+    updatedAt: 2024-05-29T11:26:50.253Z
+  },
+  {
+    id: '665710fa617228492bfcb5c6',
+    name: 'Prada',
+    createdAt: 2024-05-29T11:26:50.597Z,
+    updatedAt: 2024-05-29T11:26:50.597Z
+  },
+  {
+    id: '665710fa617228492bfcb5c7',
+    name: 'Louis Vuitton',
+    createdAt: 2024-05-29T11:26:50.406Z,
+    updatedAt: 2024-05-29T11:26:50.406Z
+  },
+  {
+    id: '665710fa617228492bfcb5c8',
+    name: 'Hugo Boss',
+    createdAt: 2024-05-29T11:26:50.868Z,
+    updatedAt: 2024-05-29T11:26:50.868Z
+  },
+  {
+    id: '665710fb617228492bfcb5c9',
+    name: 'Burberry',
+    createdAt: 2024-05-29T11:26:51.147Z,
+    updatedAt: 2024-05-29T11:26:51.147Z
+  },
+  {
+    id: '665710fb617228492bfcb5ca',
+    name: 'Gucci',
+    createdAt: 2024-05-29T11:26:51.148Z,
+    updatedAt: 2024-05-29T11:26:51.148Z
+  },
+  {
+    id: '665710fb617228492bfcb5cc',
+    name: 'Chanel',
+    createdAt: 2024-05-29T11:26:51.483Z,
+    updatedAt: 2024-05-29T11:26:51.483Z
+  },
+  {
+    id: '665710fb617228492bfcb5cb',
+    name: 'Prada',
+    createdAt: 2024-05-29T11:26:51.482Z,
+    updatedAt: 2024-05-29T11:26:51.482Z
+  },
+  {
+    id: '665710fb617228492bfcb5cd',
+    name: 'Hugo Boss',
+    createdAt: 2024-05-29T11:26:51.689Z,
+    updatedAt: 2024-05-29T11:26:51.689Z
+  },
+  {
+    id: '665710fb617228492bfcb5ce',
+    name: 'Dior',
+    createdAt: 2024-05-29T11:26:51.690Z,
+    updatedAt: 2024-05-29T11:26:51.690Z
+  },
+  {
+    id: '665710fc617228492bfcb5cf',
+    name: 'Burberry',
+    createdAt: 2024-05-29T11:26:51.995Z,
+    updatedAt: 2024-05-29T11:26:51.995Z
+  },
+  {
+    id: '665710fc617228492bfcb5d0',
+    name: 'Versace',
+    createdAt: 2024-05-29T11:26:51.996Z,
+    updatedAt: 2024-05-29T11:26:51.996Z
+  },
+  {
+    id: '665710fc617228492bfcb5d1',
+    name: 'Ralph Lauren',
+    createdAt: 2024-05-29T11:26:52.303Z,
+    updatedAt: 2024-05-29T11:26:52.303Z
+  },
+  {
+    id: '665710fc617228492bfcb5d2',
+    name: 'Chanel',
+    createdAt: 2024-05-29T11:26:52.304Z,
+    updatedAt: 2024-05-29T11:26:52.304Z
+  },
+  {
+    id: '665710fc617228492bfcb5d4',
+    name: 'Valentino',
+    createdAt: 2024-05-29T11:26:52.425Z,
+    updatedAt: 2024-05-29T11:26:52.425Z
+  },
+  {
+    id: '665710fc617228492bfcb5d3',
+    name: 'Dior',
+    createdAt: 2024-05-29T11:26:52.423Z,
+    updatedAt: 2024-05-29T11:26:52.423Z
+  },
+  {
+    id: '665710fc617228492bfcb5d5',
+    name: 'Versace',
+    createdAt: 2024-05-29T11:26:52.605Z,
+    updatedAt: 2024-05-29T11:26:52.605Z
+  },
+  {
+    id: '665710fc617228492bfcb5d6',
+    name: 'Carter’s',
+    createdAt: 2024-05-29T11:26:52.607Z,
+    updatedAt: 2024-05-29T11:26:52.607Z
+  },
+  {
+    id: '665710fc617228492bfcb5d7',
+    name: 'OshKosh B’gosh',
+    createdAt: 2024-05-29T11:26:52.894Z,
+    updatedAt: 2024-05-29T11:26:52.894Z
+  },
+  {
+    id: '665710fc617228492bfcb5d8',
+    name: 'Ralph Lauren',
+    createdAt: 2024-05-29T11:26:52.895Z,
+    updatedAt: 2024-05-29T11:26:52.895Z
+  },
+  {
+    id: '665710fd617228492bfcb5d9',
+    name: 'Valentino',
+    createdAt: 2024-05-29T11:26:53.223Z,
+    updatedAt: 2024-05-29T11:26:53.223Z
+  },
+  {
+    id: '665710fd617228492bfcb5da',
+    name: 'Gap Kids',
+    createdAt: 2024-05-29T11:26:53.225Z,
+    updatedAt: 2024-05-29T11:26:53.225Z
+  },
+  {
+    id: '665710fd617228492bfcb5db',
+    name: 'Gymboree',
+    createdAt: 2024-05-29T11:26:53.531Z,
+    updatedAt: 2024-05-29T11:26:53.531Z
+  },
+  {
+    id: '665710fd617228492bfcb5dc',
+    name: 'Carter’s',
+    createdAt: 2024-05-29T11:26:53.532Z,
+    updatedAt: 2024-05-29T11:26:53.532Z
+  },
+  {
+    id: '665710fd617228492bfcb5dd',
+    name: 'The Children’s Place',
+    createdAt: 2024-05-29T11:26:53.838Z,
+    updatedAt: 2024-05-29T11:26:53.838Z
+  },
+  {
+    id: '665710fd617228492bfcb5de',
+    name: 'OshKosh B’gosh',
+    createdAt: 2024-05-29T11:26:53.839Z,
+    updatedAt: 2024-05-29T11:26:53.839Z
+  },
+  {
+    id: '665710fe617228492bfcb5df',
+    name: 'Gap Kids',
+    createdAt: 2024-05-29T11:26:54.089Z,
+    updatedAt: 2024-05-29T11:26:54.089Z
+  },
+  {
+    id: '665710fe617228492bfcb5e0',
+    name: 'Nike',
+    createdAt: 2024-05-29T11:26:54.091Z,
+    updatedAt: 2024-05-29T11:26:54.091Z
+  },
+  {
+    id: '665710fe617228492bfcb5e1',
+    name: 'Adidas',
+    createdAt: 2024-05-29T11:26:54.206Z,
+    updatedAt: 2024-05-29T11:26:54.206Z
+  },
+  {
+    id: '665710fe617228492bfcb5e2',
+    name: 'Gymboree',
+    createdAt: 2024-05-29T11:26:54.208Z,
+    updatedAt: 2024-05-29T11:26:54.208Z
+  },
+  {
+    id: '665710fe617228492bfcb5e3',
+    name: 'Puma',
+    createdAt: 2024-05-29T11:26:54.452Z,
+    updatedAt: 2024-05-29T11:26:54.452Z
+  },
+  {
+    id: '665710fe617228492bfcb5e4',
+    name: 'The Children’s Place',
+    createdAt: 2024-05-29T11:26:54.453Z,
+    updatedAt: 2024-05-29T11:26:54.453Z
+  },
+  {
+    id: '665710fe617228492bfcb5e5',
+    name: 'Nike',
+    createdAt: 2024-05-29T11:26:54.760Z,
+    updatedAt: 2024-05-29T11:26:54.760Z
+  },
+  {
+    id: '665710fe617228492bfcb5e6',
+    name: 'Reebok',
+    createdAt: 2024-05-29T11:26:54.762Z,
+    updatedAt: 2024-05-29T11:26:54.762Z
+  },
+  {
+    id: '665710fe617228492bfcb5e7',
+    name: 'Adidas',
+    createdAt: 2024-05-29T11:26:54.964Z,
+    updatedAt: 2024-05-29T11:26:54.964Z
+  },
+  {
+    id: '665710fe617228492bfcb5e8',
+    name: 'New Balance',
+    createdAt: 2024-05-29T11:26:54.966Z,
+    updatedAt: 2024-05-29T11:26:54.966Z
+  },
+  {
+    id: '665710ff617228492bfcb5e9',
+    name: 'Puma',
+    createdAt: 2024-05-29T11:26:55.097Z,
+    updatedAt: 2024-05-29T11:26:55.097Z
+  },
+  {
+    id: '665710ff617228492bfcb5ea',
+    name: 'Reebok',
+    createdAt: 2024-05-29T11:26:55.338Z,
+    updatedAt: 2024-05-29T11:26:55.338Z
+  },
+  {
+    id: '665710ff617228492bfcb5eb',
+    name: 'New Balance',
+    createdAt: 2024-05-29T11:26:55.681Z,
+    updatedAt: 2024-05-29T11:26:55.681Z
+  }
+]
+
+
+
+
+Retrieved dummy posters: [
+  {
+    id: '6655b7713bc9ad76aabc9e88',
+    label: 'Men',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1716810277/aszzwtofbgljr0nw1e2y.jpg',
+    createdAt: 2024-05-28T10:52:31.861Z,
+    updatedAt: 2024-05-28T10:52:31.861Z
+  },
+  {
+    id: '6655b7713bc9ad76aabc9e89',
+    label: 'Women',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1716976681/pexels-jmendezrf-1536619_zogas7.jpg',
+    createdAt: 2024-05-28T10:52:33.158Z,
+    updatedAt: 2024-05-28T10:52:33.158Z
+  },
+  {
+    id: '6655b7713bc9ad76aabc9e8a',
+    label: 'Kids',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1716976120/pexels-vika-glitter-392079-1620796_z32bz6.jpg',
+    createdAt: 2024-05-28T10:52:33.264Z,
+    updatedAt: 2024-05-28T10:52:33.264Z
+  },
+  {
+    id: '6655b7713bc9ad76aabc9e8b',
+    label: 'Furniture',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1716810809/nxhbadspinsfzfhddd31.jpg',
+    createdAt: 2024-05-28T10:52:33.369Z,
+    updatedAt: 2024-05-28T10:52:33.369Z
+  },
+  {
+    id: '6655b7713bc9ad76aabc9e8c',
+    label: 'Shoes',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1716976756/pexels-pixabay-267202_il2yvd.jpg',
+    createdAt: 2024-05-28T10:52:33.475Z,
+    updatedAt: 2024-05-28T10:52:33.475Z
+  },
+  {
+    id: '665a0ace14be77720636d439',
+    label: 'Men Category',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717176156/Mens%20category%20folder/mens_l23be6.jpg',
+    createdAt: 2024-05-31T17:37:18.185Z,
+    updatedAt: 2024-05-31T17:37:18.185Z
+  },
+  {
+    id: '665a0ace14be77720636d43a',
+    label: 'Belt',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717176135/Mens%20category%20folder/belt_vfzrlt.jpg',
+    createdAt: 2024-05-31T17:37:18.471Z,
+    updatedAt: 2024-05-31T17:37:18.471Z
+  },
+  {
+    id: '665a0ace14be77720636d43b',
+    label: 'Shoes',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717176160/Mens%20category%20folder/shoes_fmkkjh.jpg',
+    createdAt: 2024-05-31T17:37:18.983Z,
+    updatedAt: 2024-05-31T17:37:18.983Z
+  },
+  {
+    id: '665a0acf14be77720636d43c',
+    label: 'Formal Clothes',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717176146/Mens%20category%20folder/formal_asap5l.jpg',
+    createdAt: 2024-05-31T17:37:19.235Z,
+    updatedAt: 2024-05-31T17:37:19.235Z
+  },
+  {
+    id: '665a0acf14be77720636d43d',
+    label: 'Casual Clothes',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717176138/Mens%20category%20folder/casual_z0t3sz.jpg',
+    createdAt: 2024-05-31T17:37:19.435Z,
+    updatedAt: 2024-05-31T17:37:19.435Z
+  },
+  {
+    id: '665a0acf14be77720636d43e',
+    label: 'Blazers',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717176136/Mens%20category%20folder/blazzer_qff9vw.jpg',
+    createdAt: 2024-05-31T17:37:19.598Z,
+    updatedAt: 2024-05-31T17:37:19.598Z
+  },
+  {
+    id: '665a0acf14be77720636d43f',
+    label: 'Formal Shirts',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717176153/Mens%20category%20folder/formal_shirt_ayzyee.jpg',
+    createdAt: 2024-05-31T17:37:19.803Z,
+    updatedAt: 2024-05-31T17:37:19.803Z
+  },
+  {
+    id: '665a0ad014be77720636d440',
+    label: 'Formal Pants',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717176149/Mens%20category%20folder/formal_pant_igrhac.jpg',
+    createdAt: 2024-05-31T17:37:20.110Z,
+    updatedAt: 2024-05-31T17:37:20.110Z
+  },
+  {
+    id: '665a0ad014be77720636d441',
+    label: 'Casual Shorts',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717176141/Mens%20category%20folder/casual_pants_jjzbqx.jpg',
+    createdAt: 2024-05-31T17:37:20.523Z,
+    updatedAt: 2024-05-31T17:37:20.523Z
+  },
+  {
+    id: '665a0ad014be77720636d442',
+    label: 'Casual Shirts',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717176144/Mens%20category%20folder/casual_shirt_yeijrx.jpg',
+    createdAt: 2024-05-31T17:37:20.828Z,
+    updatedAt: 2024-05-31T17:37:20.828Z
+  }
+]
+
+this is the linkedposterwith categories [
+  {
+    id: '66576f053d54b155bceff987',
+    PosterId: '6655b7713bc9ad76aabc9e88',
+    name: 'Men',
+    parentId: null,
+    createdAt: 2024-05-29T18:08:05.828Z,
+    updatedAt: 2024-05-29T18:08:05.828Z
+  },
+  {
+    id: '66576f053d54b155bceff988',
+    PosterId: '6655b7713bc9ad76aabc9e89',
+    name: 'Women',
+    parentId: null,
+    createdAt: 2024-05-29T18:08:05.953Z,
+    updatedAt: 2024-05-29T18:08:05.953Z
+  },
+  {
+    id: '66576f063d54b155bceff989',
+    PosterId: '6655b7713bc9ad76aabc9e8a',
+    name: 'Kids',
+    parentId: null,
+    createdAt: 2024-05-29T18:08:06.043Z,
+    updatedAt: 2024-05-29T18:08:06.043Z
+  },
+  {
+    id: '66576f063d54b155bceff98a',
+    PosterId: '6655b7713bc9ad76aabc9e8b',
+    name: 'Furniture',
+    parentId: null,
+    createdAt: 2024-05-29T18:08:06.147Z,
+    updatedAt: 2024-05-29T18:08:06.147Z
+  },
+  {
+    id: '66576f063d54b155bceff98b',
+    PosterId: '6655b7713bc9ad76aabc9e8c',
+    name: 'Shoes',
+    parentId: null,
+    createdAt: 2024-05-29T18:08:06.237Z,
+    updatedAt: 2024-05-29T18:08:06.237Z
+  },
+  {
+    id: '665a0b9f14be77720636d443',
+    PosterId: '665a0ace14be77720636d439',
+    name: 'Men',
+    parentId: null,
+    createdAt: 2024-05-31T17:40:47.944Z,
+    updatedAt: 2024-05-31T17:40:47.944Z
+  },
+  {
+    id: '665a0ba014be77720636d444',
+    PosterId: '665a0ace14be77720636d43a',
+    name: 'Belt',
+    parentId: '665a0b9f14be77720636d443',
+    createdAt: 2024-05-31T17:40:48.339Z,
+    updatedAt: 2024-05-31T17:40:48.339Z
+  },
+  {
+    id: '665a0ba014be77720636d445',
+    PosterId: '665a0ace14be77720636d43b',
+    name: 'Shoes',
+    parentId: '665a0b9f14be77720636d443',
+    createdAt: 2024-05-31T17:40:48.696Z,
+    updatedAt: 2024-05-31T17:40:48.696Z
+  },
+  {
+    id: '665a0ba114be77720636d446',
+    PosterId: '665a0acf14be77720636d43c',
+    name: 'Formal Clothes',
+    parentId: '665a0b9f14be77720636d443',
+    createdAt: 2024-05-31T17:40:49.003Z,
+    updatedAt: 2024-05-31T17:40:49.003Z
+  },
+  {
+    id: '665a0ba114be77720636d447',
+    PosterId: '665a0acf14be77720636d43d',
+    name: 'Casual Clothes',
+    parentId: '665a0b9f14be77720636d443',
+    createdAt: 2024-05-31T17:40:49.498Z,
+    updatedAt: 2024-05-31T17:40:49.498Z
+  },
+  {
+    id: '665a0ba114be77720636d448',
+    PosterId: '665a0acf14be77720636d43e',
+    name: 'Blazers',
+    parentId: '665a0b9f14be77720636d443',
+    createdAt: 2024-05-31T17:40:49.663Z,
+    updatedAt: 2024-05-31T17:40:49.663Z
+  },
+  {
+    id: '665a0ba114be77720636d449',
+    PosterId: '665a0acf14be77720636d43f',
+    name: 'Formal Shirts',
+    parentId: '665a0ba114be77720636d446',
+    createdAt: 2024-05-31T17:40:49.925Z,
+    updatedAt: 2024-05-31T17:40:49.925Z
+  },
+  {
+    id: '665a0ba214be77720636d44a',
+    PosterId: '665a0ad014be77720636d440',
+    name: 'Formal Pants',
+    parentId: '665a0ba114be77720636d446',
+    createdAt: 2024-05-31T17:40:50.232Z,
+    updatedAt: 2024-05-31T17:40:50.232Z
+  },
+  {
+    id: '665a0ba214be77720636d44b',
+    PosterId: '665a0ad014be77720636d441',
+    name: 'Casual Shorts',
+    parentId: '665a0ba114be77720636d447',
+    createdAt: 2024-05-31T17:40:50.539Z,
+    updatedAt: 2024-05-31T17:40:50.539Z
+  },
+  {
+    id: '665a0ba214be77720636d44c',
+    PosterId: '665a0ad014be77720636d442',
+    name: 'Casual Shirts',
+    parentId: '665a0ba114be77720636d447',
+    createdAt: 2024-05-31T17:40:50.847Z,
+    updatedAt: 2024-05-31T17:40:50.847Z
+  }
+]
