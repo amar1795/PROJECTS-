@@ -178,7 +178,7 @@ model Size {
   id        String        @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   products  ProductSize[]
-  values    String[]
+  values    String
   category  String // For example, "clothing" or "shoes"
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
