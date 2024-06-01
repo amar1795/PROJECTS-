@@ -1,5 +1,6 @@
+import { createProduct, createProductRating, createProductVarient } from "@/actions/createProduct";
 import { dummyUserFunction } from "@/actions/dummyUser";
-import { CreateBrand, CreateCategories, CreateColour, CreateSize, Createposter, deleteSize, dummyPosterFunction, fetchCategoriesWithPosters, getAllColorsWithCount, getAllDummyPosters, getAllPosters, getAllSizes, getBrand, getallCategory } from "@/actions/posterAction";
+import { CreateBrand, CreateCategories, CreateColour, CreateSize, Createposter, deleteSize, deleteduplicatebrandnames, dummyPosterFunction, fetchCategoriesWithPosters, getAllColorsWithCount, getAllDummyPosters, getAllPosters, getAllSizes, getAllUsers, getBrand, getallCategory } from "@/actions/posterAction";
 import React from "react";
 
 const page = () => {
@@ -15,7 +16,13 @@ const page = () => {
   // CreateCategories()
   // dummyPosterFunction()
   // getAllDummyPosters()
-  getallCategory()
+  // getallCategory()
+  // deleteduplicatebrandnames()
+  // CreateBrand()
+  // createProduct()
+  // createProductVarient()
+  // getAllUsers()
+  // createProductRating()
   return (
     <div className=" bg-pink-500 border-2 border-black px-10 ">
       <div>

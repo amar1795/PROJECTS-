@@ -3,6 +3,7 @@
 import { faker } from '@faker-js/faker';
 import { prismadb } from "@/lib/db";
 import { NextResponse } from 'next/server';
+import { count } from 'console';
 
 
 export async function dummyPosterFunction() {
@@ -47,6 +48,20 @@ export async function getAllDummyPosters() {
         console.error("Error retrieving dummy posters:", error);
         throw error;
     }
+}
+
+export async function getAllUsers() {
+  try {
+    const users = await prismadb.user.findMany();
+    const count = await prismadb.user.count();
+    console.log("successfully retrieved users",users, "and user count is ",count);
+    return users;
+    
+  } catch (error) {
+    console.error('Error retrieving users:', error);
+    throw error;
+    
+  }
 }
 
 
@@ -116,41 +131,26 @@ export async function CreateSize() {
         const sizes = [];
         
         const sizeLabels = [
-            { name: 'Extra Small', values: 'XS', category: 'women' },
-            { name: 'Small', values: 'S', category: 'women' },
-            { name: 'Medium', values: 'M', category: 'women' },
-            { name: 'Large', values: 'L', category: 'women' },
-            { name: 'Extra Large', values: 'XL', category: 'women' },
-            { name: 'Extra Extra Large', values: 'XXL', category: 'women' },
-            { name: 'Extra Small', values: 'XS', category: 'men' },
-            { name: 'Small', values: 'S', category: 'men' },
-            { name: 'Medium', values: 'M', category: 'men' },
-            { name: 'Large', values: 'L', category: 'men' },
-            { name: 'Extra Large', values: 'XL', category: 'men' },
-            { name: 'Extra Extra Large', values: 'XXL', category: 'men' },
-            { name: 'Extra Small', values: 'XS', category: 'kids' },
-            { name: 'Small', values: 'S', category: 'kids' },
-            { name: 'Medium', values: 'M', category: 'kids' },
-            { name: 'Large', values: 'L', category: 'kids' },
-            { name: 'Extra Large', values: 'XL', category: 'kids' },
-            { name: 'Extra Extra Large', values: 'XXL', category: 'kids' },
-            { name: 'UK Size 3', values: '3', category: 'shoes' },
-            { name: 'UK Size 4', values: '4', category: 'shoes' },
-            { name: 'UK Size 5', values: '5', category: 'shoes' },
-            { name: 'UK Size 6', values: '6', category: 'shoes' },
-            { name: 'UK Size 7', values: '7', category: 'shoes' },
-            { name: 'UK Size 8', values: '8', category: 'shoes' },
-            { name: 'UK Size 9', values: '9', category: 'shoes' },
-            { name: 'UK Size 10', values: '10', category: 'shoes' },
-            { name: 'UK Size 11', values: '11', category: 'shoes' },
-            { name: 'UK Size 12', values: '12', category: 'shoes' }
+           
+          
+        
+            { name: 'UK Size 3', value: '3', category: 'shoes' },
+            { name: 'UK Size 4', value: '4', category: 'shoes' },
+            { name: 'UK Size 5', value: '5', category: 'shoes' },
+            { name: 'UK Size 6', value: '6', category: 'shoes' },
+            { name: 'UK Size 7', value: '7', category: 'shoes' },
+            { name: 'UK Size 8', value: '8', category: 'shoes' },
+            { name: 'UK Size 9', value: '9', category: 'shoes' },
+            { name: 'UK Size 10', value: '10', category: 'shoes' },
+            { name: 'UK Size 11', value: '11', category: 'shoes' },
+            { name: 'UK Size 12', value: '12', category: 'shoes' }
         ];
 
         for (const item of sizeLabels) {
             const size = await prismadb.size.create({
                 data: {
                     name: item.name,
-                    values: item.values,
+                    value: item.value,
                     category: item.category,
                     createdAt: new Date(),
                     updatedAt: new Date()
@@ -314,7 +314,22 @@ export async function fetchCategoriesWithPosters() {
       } catch (error) {
         console.error("Error deleting sizes:", error);
     } 
+  }     
+  export async function deleteduplicatebrandnames() {
+    try {
+        // Delete all sizes
+        await prismadb.brand.deleteMany();
+    
+        console.log("All sizes deleted successfully.");
+      } catch (error) {
+        console.error("Error deleting sizes:", error);
+    } 
   }
+
+
+
+
+
  export async function CreateCategories() {
     try {
         // Delete all sizes
