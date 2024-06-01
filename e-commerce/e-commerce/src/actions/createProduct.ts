@@ -55,76 +55,39 @@ export async function createProductVarient() {
               { 
                 
                 productId: "665ac95e5788e185779d7ce0", 
-                colorId: "66570726617228492bfcb588", 
+                colorId: "66570726617228492bfcb587", 
                 sizeId: "665aca6e5788e185779d7ce6", 
                 stock: 10 
               },
               { 
+                
                 productId: "665ac95e5788e185779d7ce0", 
-                colorId: "66570726617228492bfcb588", 
+                colorId: "66570726617228492bfcb587", 
                 sizeId: "665aca6e5788e185779d7ce7", 
-                stock: 5 
-              },
-              { 
-                productId: "665ac95e5788e185779d7ce0", 
-                colorId: "66570726617228492bfcb588", 
-                sizeId: "665aca6e5788e185779d7ce8", 
-                stock: 0 
-              },
-              { 
-                productId: "665ac95e5788e185779d7ce0", 
-                colorId: "66570726617228492bfcb58a", 
-                sizeId: "665aca6e5788e185779d7ce6", 
-                stock: 8 
-              },
-              { 
-                productId: "665ac95e5788e185779d7ce0", 
-                colorId: "66570726617228492bfcb58a", 
-                sizeId: "665aca6e5788e185779d7ce7", 
-                stock: 0 
-              },
-              { 
-                productId: "665ac95e5788e185779d7ce0", 
-                colorId: "66570726617228492bfcb58a", 
-                sizeId: "665aca6e5788e185779d7ce8", 
                 stock: 12 
               },
               { 
+                
                 productId: "665ac95e5788e185779d7ce0", 
-                colorId: "66570726617228492bfcb58b", 
-                sizeId: "665aca6e5788e185779d7ce6", 
+                colorId: "66570726617228492bfcb587", 
+                sizeId: "665aca6e5788e185779d7ce8", 
                 stock: 15 
               },
               { 
+                
                 productId: "665ac95e5788e185779d7ce0", 
-                colorId: "66570726617228492bfcb58b", 
-                sizeId: "665aca6e5788e185779d7ce7", 
-                stock: 7 
+                colorId: "66570726617228492bfcb587", 
+                sizeId: "665aca6e5788e185779d7ce9", 
+                stock: 17 
               },
               { 
+                
                 productId: "665ac95e5788e185779d7ce0", 
-                colorId: "66570726617228492bfcb58b", 
-                sizeId: "665aca6e5788e185779d7ce8", 
-                stock: 0 
-              },
-              { 
-                productId: "665ac95e5788e185779d7ce0", 
-                colorId: "66570726617228492bfcb586", 
-                sizeId: "665aca6e5788e185779d7ce6", 
+                colorId: "66570726617228492bfcb587", 
+                sizeId: "665aca6e5788e185779d7cea", 
                 stock: 10 
               },
-              { 
-                productId: "665ac95e5788e185779d7ce0", 
-                colorId: "66570726617228492bfcb586", 
-                sizeId: "665aca6e5788e185779d7ce7", 
-                stock: 5 
-              },
-              { 
-                productId: "665ac95e5788e185779d7ce0", 
-                colorId: "66570726617228492bfcb586", 
-                sizeId: "665aca6e5788e185779d7ce8", 
-                stock: 0 
-              },
+                            
             ],
           });
           
@@ -304,3 +267,166 @@ await prismadb.rating.create({
         
     }
 }
+
+export async function fetchProduct() {
+    const product = await prismadb.product.findUnique({
+        where: {
+          id: "665ac95e5788e185779d7ce0",
+        },
+        include: {
+            category: true, // Include the category
+            brand: true, // Include the brand
+            images: true, // Include the images
+            
+          productVariants: {
+            include: {
+              color: true,
+              size: true,
+            },
+          },
+         
+        },
+      });
+      console.log("Product:", product);
+      product?.productVariants.forEach(variant => {
+        // Accessing color and size properties directly
+        const color = variant.color.name; // Assuming 'name' is the property containing the color name
+        const size = variant.size.name; // Assuming 'name' is the property containing the size name
+      
+        console.log("Color:", color);
+        console.log("Size:", size);});
+
+        const category = await prismadb.category.findUnique({
+            where: {
+              id: product?.categoryId,
+            },
+          });
+        
+          // Access category name
+          const categoryName = category?.name;
+        
+          console.log("Category:", categoryName);    
+}
+
+export async function fetchAllReviews() {
+    
+    try {
+        // Fetch reviews for the product
+        const reviews = await prismadb.rating.findMany({
+          where: {
+            productId: "665ac95e5788e185779d7ce0",
+            review: {
+                not: null, // Filter out reviews that are null
+              },
+          },
+        });
+    
+        // Initialize an object to store counts for each rating
+        const ratingCounts = {
+          1: 0,
+          2: 0,
+          3: 0,
+          4: 0,
+          5: 0,
+        };
+    
+        // Loop through reviews and increment counts for each rating
+        reviews.forEach(review => {
+          ratingCounts[review.rating]++;
+        });
+    
+        // Log the rating counts
+        console.log("Rating Counts:", ratingCounts);
+    
+        // Log the reviews
+        console.log("Reviews:");
+        reviews.forEach(review => {
+          console.log(`Rating: ${review.rating}, Review: ${review.review}`);
+        });
+      } catch (error) {
+        console.error("Error fetching product reviews:", error);
+      }
+}
+
+export async function fetchProductanotherversion() {
+    // Fetch the product with its category, brand, images, and product variants
+    const product = await prismadb.product.findUnique({
+      where: {
+        id: "665ac95e5788e185779d7ce0",
+      },
+      include: {
+        category: true, // Include the category
+        brand: true, // Include the brand
+        images: true, // Include the images
+        productVariants: {
+          include: {
+            color: true,
+            size: true,
+          },
+        },
+        ratings: true, // Include the ratings
+      },
+    });
+  
+    if (!product) {
+      console.log("Product not found");
+      return;
+    }
+  
+    // Format the productVariants to include color and size names directly
+    const formattedProductVariants = product.productVariants.map((variant) => ({
+      id: variant.id,
+      color: variant.color.name, // Assuming 'name' is the property containing the color name
+      size: variant.size.name, // Assuming 'name' is the property containing the size name
+      stock: variant.stock,
+      createdAt: variant.createdAt,
+      updatedAt: variant.updatedAt,
+    }));
+  
+    // Format the ratings
+    const ratingsCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    const reviews = [];
+  
+    product.ratings.forEach((rating) => {
+      if (rating.review) {
+        reviews.push({
+          rating: rating.rating,
+          review: rating.review,
+        });
+      }
+      ratingsCount[rating.rating] = (ratingsCount[rating.rating] || 0) + 1;
+    });
+  
+    // Organize the final product data
+    const organizedProduct = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      discount: product.discount,
+      discountedPrice: product.discountedPrice,
+      description: product.description,
+      category: {
+        id: product.category.id,
+        name: product.category.name,
+      },
+      brand: {
+        id: product.brand.id,
+        name: product.brand.name,
+      },
+      images: product.images.map(image => ({
+        id: image.id,
+        url: image.url,
+      })),
+      productVariants: formattedProductVariants,
+      ratings: {
+        count: ratingsCount,
+        reviews: reviews,
+      },
+      createdAt: product.createdAt,
+      updatedAt: product.updatedAt,
+    };
+  
+    console.dir(organizedProduct, { depth: null });
+    return organizedProduct;
+  }
+  
