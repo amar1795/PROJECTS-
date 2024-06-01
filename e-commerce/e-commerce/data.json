@@ -488,6 +488,13 @@ successfully retrieved 40 users [
 
 [
   {
+  id: '665af3c03220eba7c7eab93e',
+  name: 'White',
+  value: 'FFFFFF',
+  createdAt: 2024-06-01T10:11:12.061Z,
+  updatedAt: 2024-06-01T10:11:12.061Z
+},
+  {
     id: '66570726617228492bfcb586',
     name: 'Blue',
     value: '3a86ff',

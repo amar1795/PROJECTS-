@@ -83,12 +83,8 @@ export async function CreateColour() {
         const colours = [];
 
         const labels = [
-            { name: 'Blue', value: '3a86ff' },
-            { name: 'Purple', value: '8338ec' },
-            { name: 'Red', value: 'ff006e' },
-            { name: 'Orange', value: 'fb5607' },
-            { name: 'Yellow', value: 'ffbe0b' },
-            { name: 'Black', value: '000000' }, 
+            { name: 'White', value: 'FFFFFF' },
+           
         ];
 
         for (const item of labels) {

@@ -3,11 +3,27 @@
 import { faker } from "@faker-js/faker";
 import { prismadb } from "@/lib/db";
 import { NextResponse } from "next/server";
-
-export async function createProduct() {
+interface ProductParams {
+    productName: string;
+    productPrice: number;
+    productDiscountPercentage: number;
+    productDescription: string;
+    productImages: string[];
+    productCategoryId: string;
+    productBrandId: string;
+}
+export async function createProduct({
+    productName,
+    productPrice,
+    productDiscountPercentage,
+    productDescription,
+    productImages,
+    productCategoryId,
+    productBrandId
+}: ProductParams) {
   try {
-    const price = 3550.00; // Original price of the product
-const discountPercentage = 10; // Discount percentage (e.g., 10% off)
+    const price = productPrice; // Original price of the product
+const discountPercentage = productDiscountPercentage; // Discount percentage (e.g., 10% off)
 
 // Calculate the discount amount
 const discountAmount = (price * discountPercentage) / 100;
@@ -16,30 +32,18 @@ const discountAmount = (price * discountPercentage) / 100;
 const discountedPrice = price - discountAmount;
     const formalShirt = await prismadb.product.create({
       data: {
-        name: "Preimium Office Formal Shirt",
+        name: productName,
         price: price,
         discount: discountPercentage, // Discount amount in currency (e.g., $10 off)
         discountedPrice:discountedPrice, // Discounted price after applying the discount
-        brandId: "665ac7545788e185779d7ccc", // Replace with the actual Brand ID
-        description: "High-quality formal shirt perfect for office wear.",
-        categoryId: "665a0ba114be77720636d449", // Replace with actual Formal Shirts Category ID
+        brandId: productBrandId, // Replace with the actual Brand ID
+        description: productDescription,
+        categoryId:productCategoryId, // Replace with actual Formal Shirts Category ID
         images: {
-          create: [
-            {
-              url: "https://res.cloudinary.com/dfveswqdm/image/upload/v1717062515/formal%20men%20shirts/81Y0Jfm_xdL._SX569__um3x0d.jpg",
-            },
-            {
-              url: "https://res.cloudinary.com/dfveswqdm/image/upload/v1717062517/formal%20men%20shirts/91Mb_F802qL._SX569__rdhupz.jpg",
-            },
-            {
-              url: "https://res.cloudinary.com/dfveswqdm/image/upload/v1717062518/formal%20men%20shirts/91Rvg8DnupL._SX569__loaowj.jpg",
-            },
-            {
-              url: "https://res.cloudinary.com/dfveswqdm/image/upload/v1717062511/formal%20men%20shirts/71BSvy2hEdL._SX569__wpowon.jpg",
-            },
-            // Add more image URLs if necessary
-          ],
-        },
+            create: productImages.map(image => ({
+              url: image
+            }))
+          },
       },
     });
     console.log("Product created:", formalShirt);
@@ -54,37 +58,79 @@ export async function createProductVarient() {
             data: [
               { 
                 
-                productId: "665ac95e5788e185779d7ce0", 
-                colorId: "66570726617228492bfcb587", 
+                productId: "665af50e3220eba7c7eab944", 
+                colorId: "66570726617228492bfcb586", 
                 sizeId: "665aca6e5788e185779d7ce6", 
                 stock: 10 
               },
               { 
                 
-                productId: "665ac95e5788e185779d7ce0", 
-                colorId: "66570726617228492bfcb587", 
+                productId: "665af50e3220eba7c7eab944", 
+                colorId: "66570726617228492bfcb586", 
                 sizeId: "665aca6e5788e185779d7ce7", 
                 stock: 12 
               },
               { 
                 
-                productId: "665ac95e5788e185779d7ce0", 
-                colorId: "66570726617228492bfcb587", 
+                productId: "665af50e3220eba7c7eab944", 
+                colorId: "66570726617228492bfcb586", 
                 sizeId: "665aca6e5788e185779d7ce8", 
                 stock: 15 
               },
               { 
                 
-                productId: "665ac95e5788e185779d7ce0", 
-                colorId: "66570726617228492bfcb587", 
-                sizeId: "665aca6e5788e185779d7ce9", 
+                productId: "665af50e3220eba7c7eab944", 
+                colorId: "66570726617228492bfcb588", 
+                sizeId: "665aca6e5788e185779d7ce6", 
                 stock: 17 
               },
               { 
                 
-                productId: "665ac95e5788e185779d7ce0", 
-                colorId: "66570726617228492bfcb587", 
-                sizeId: "665aca6e5788e185779d7cea", 
+                productId: "665af50e3220eba7c7eab944", 
+                colorId: "66570726617228492bfcb588", 
+                sizeId: "665aca6e5788e185779d7ce7", 
+                stock: 10 
+              },{ 
+                
+                productId: "665af50e3220eba7c7eab944", 
+                colorId: "66570726617228492bfcb588", 
+                sizeId: "665aca6e5788e185779d7ce8", 
+                stock: 10 
+              },{ 
+                
+                productId: "665af50e3220eba7c7eab944", 
+                colorId: "66570726617228492bfcb589", 
+                sizeId: "665aca6e5788e185779d7ce6", 
+                stock: 10 
+              },{ 
+                
+                productId: "665af50e3220eba7c7eab944", 
+                colorId: "66570726617228492bfcb589", 
+                sizeId: "665aca6e5788e185779d7ce7", 
+                stock: 10 
+              },{ 
+                
+                productId: "665af50e3220eba7c7eab944", 
+                colorId: "66570726617228492bfcb589", 
+                sizeId: "665aca6e5788e185779d7ce8", 
+                stock: 10 
+              },{ 
+                
+                productId: "665af50e3220eba7c7eab944", 
+                colorId: "66570726617228492bfcb58a", 
+                sizeId: "665aca6e5788e185779d7ce6", 
+                stock: 10 
+              },{ 
+                
+                productId: "665af50e3220eba7c7eab944", 
+                colorId: "66570726617228492bfcb58a", 
+                sizeId: "665aca6e5788e185779d7ce7", 
+                stock: 10 
+              },{ 
+                
+                productId: "665af50e3220eba7c7eab944", 
+                colorId: "66570726617228492bfcb58a", 
+                sizeId: "665aca6e5788e185779d7ce8", 
                 stock: 10 
               },
                             
@@ -100,11 +146,11 @@ export async function createProductVarient() {
 export async function createProductRating() {
     try {
         
-        const productId = "665ac95e5788e185779d7ce0"; // Replace with the actual product ID
+        const productId = "665af50e3220eba7c7eab944"; // Replace with the actual product ID
 const userId = "6655adcc05f2665c9bc85c1a"; // Replace with the actual User ID
 
 // Create 75 five-star ratings without reviews
-for (let i = 0; i < 75; i++) {
+for (let i = 0; i < 90; i++) {
   await prismadb.rating.create({
     data: {
       productId: productId,
@@ -115,7 +161,7 @@ for (let i = 0; i < 75; i++) {
 }
 
 // Create 15 four-star ratings without reviews
-for (let i = 0; i < 15; i++) {
+for (let i = 0; i < 85; i++) {
   await prismadb.rating.create({
     data: {
       productId: productId,
@@ -126,7 +172,7 @@ for (let i = 0; i < 15; i++) {
 }
 
 // Create 5 three-star ratings without reviews
-for (let i = 0; i < 5; i++) {
+for (let i = 0; i < 15; i++) {
   await prismadb.rating.create({
     data: {
       productId: productId,
@@ -137,7 +183,7 @@ for (let i = 0; i < 5; i++) {
 }
 
 // Create 4 two-star ratings without reviews
-for (let i = 0; i < 4; i++) {
+for (let i = 0; i < 14; i++) {
   await prismadb.rating.create({
     data: {
       productId: productId,
@@ -163,7 +209,7 @@ await prismadb.rating.create({
 export async function createProductReview() {
     try {
         
-        const productId = "665ac95e5788e185779d7ce0"; // Replace with the actual product ID
+        const productId = "665af50e3220eba7c7eab944"; // Replace with the actual product ID
 const userId = "6655adcc05f2665c9bc85c1a";
         // Define arrays of different reviews for each star rating
 const fiveStarReviews = [
@@ -198,10 +244,16 @@ const twoStarReviews = [
   "Would not recommend. Better off spending a bit more for better quality.",
 ];
 
-const oneStarReview = "Worst purchase ever. Shirt fell apart after one wash.";
-
+const oneStarReview = [
+    "Absolutely terrible! The shirt arrived with holes in it.",
+    "Complete waste of money. The fabric feels like sandpaper.",
+    "Zero stars if I could! The color faded after just one wash.",
+    "Horrible quality. It shrunk two sizes after washing.",
+    "I wouldn't even use this shirt as a rag. It's that bad.",
+    "Avoid at all costs! The stitching unraveled after wearing it once.",
+  ];
 // Create 75 five-star ratings with random reviews
-for (let i = 0; i < 75; i++) {
+for (let i = 0; i < 55; i++) {
   const randomReview = fiveStarReviews[Math.floor(Math.random() * fiveStarReviews.length)];
   await prismadb.rating.create({
     data: {
@@ -214,7 +266,7 @@ for (let i = 0; i < 75; i++) {
 }
 
 // Create 15 four-star ratings with random reviews
-for (let i = 0; i < 15; i++) {
+for (let i = 0; i < 45; i++) {
   const randomReview = fourStarReviews[Math.floor(Math.random() * fourStarReviews.length)];
   await prismadb.rating.create({
     data: {
@@ -227,7 +279,7 @@ for (let i = 0; i < 15; i++) {
 }
 
 // Create 5 three-star ratings with random reviews
-for (let i = 0; i < 5; i++) {
+for (let i = 0; i < 15; i++) {
   const randomReview = threeStarReviews[Math.floor(Math.random() * threeStarReviews.length)];
   await prismadb.rating.create({
     data: {
@@ -240,7 +292,7 @@ for (let i = 0; i < 5; i++) {
 }
 
 // Create 4 two-star ratings with random reviews
-for (let i = 0; i < 4; i++) {
+for (let i = 0; i < 10; i++) {
   const randomReview = twoStarReviews[Math.floor(Math.random() * twoStarReviews.length)];
   await prismadb.rating.create({
     data: {
@@ -253,18 +305,22 @@ for (let i = 0; i < 4; i++) {
 }
 
 // Create 1 one-star rating with fixed review
-await prismadb.rating.create({
-  data: {
-    productId: productId,
-    rating: 1,
-    review: oneStarReview,
-    userId: userId, // Replace userId with the actual User ID
-  },
-});
+for (let i = 0; i < 20; i++) {
+    const randomReview = twoStarReviews[Math.floor(Math.random() * oneStarReview.length)];
+    await prismadb.rating.create({
+      data: {
+        productId: productId,
+        rating: 1,
+        review: randomReview,
+        userId: userId, // Replace userId with the actual User ID
+      },
+    });
+  }
+        
+  console.log("Product reviews created");
 
-        
     } catch (error) {
-        
+        console.error("Error creating product reviews:", error);
     }
 }
 
@@ -348,11 +404,11 @@ export async function fetchAllReviews() {
       }
 }
 
-export async function fetchProductanotherversion() {
+export async function fetchProductAllData() {
     // Fetch the product with its category, brand, images, and product variants
     const product = await prismadb.product.findUnique({
       where: {
-        id: "665ac95e5788e185779d7ce0",
+        id: "665af50e3220eba7c7eab944",
       },
       include: {
         category: true, // Include the category
@@ -428,5 +484,5 @@ export async function fetchProductanotherversion() {
   
     console.dir(organizedProduct, { depth: null });
     return organizedProduct;
-  }
+}
   
