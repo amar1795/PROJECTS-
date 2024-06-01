@@ -1,4 +1,4 @@
-import { createProduct, createProductRating, createProductVarient } from "@/actions/createProduct";
+import { createProduct, createProductRating, createProductReview, createProductVarient } from "@/actions/createProduct";
 import { dummyUserFunction } from "@/actions/dummyUser";
 import { CreateBrand, CreateCategories, CreateColour, CreateSize, Createposter, deleteSize, deleteduplicatebrandnames, dummyPosterFunction, fetchCategoriesWithPosters, getAllColorsWithCount, getAllDummyPosters, getAllPosters, getAllSizes, getAllUsers, getBrand, getallCategory } from "@/actions/posterAction";
 import React from "react";
@@ -23,6 +23,7 @@ const page = () => {
   // createProductVarient()
   // getAllUsers()
   // createProductRating()
+  // createProductReview()
   return (
     <div className=" bg-pink-500 border-2 border-black px-10 ">
       <div>

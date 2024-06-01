@@ -197,3 +197,110 @@ await prismadb.rating.create({
         
     }
 }
+export async function createProductReview() {
+    try {
+        
+        const productId = "665ac95e5788e185779d7ce0"; // Replace with the actual product ID
+const userId = "6655adcc05f2665c9bc85c1a";
+        // Define arrays of different reviews for each star rating
+const fiveStarReviews = [
+  "This product exceeded my expectations! Amazing quality and fit.",
+  "Absolutely love this shirt! Great fabric and comfortable to wear.",
+  "Excellent purchase! Exactly what I was looking for.",
+  "Highly recommend this shirt. It looks even better in person!",
+  "Couldn't be happier with my purchase. Will definitely buy again.",
+];
+
+const fourStarReviews = [
+  "Overall satisfied with the product, although the sizing runs a bit large.",
+  "Good quality shirt, but the color is slightly different from the picture.",
+  "Nice design and comfortable to wear, but the fabric is thinner than expected.",
+  "Decent shirt for the price, but the stitching could be better.",
+  "Happy with the purchase, but delivery took longer than anticipated.",
+];
+
+const threeStarReviews = [
+  "Average shirt. Not exceptional, but not terrible either.",
+  "Expected better quality for the price. It's just okay.",
+  "The shirt arrived with a small stain, which was disappointing.",
+  "Meh. Nothing special about this shirt.",
+  "The fit is okay, but the material feels cheap.",
+];
+
+const twoStarReviews = [
+  "Not impressed. Shirt started to fade after just a few washes.",
+  "Poor quality. Seams started coming apart after wearing it twice.",
+  "Disappointed with the sizing. It runs much smaller than expected.",
+  "Shirt arrived damaged. Looks like it was poorly packaged.",
+  "Would not recommend. Better off spending a bit more for better quality.",
+];
+
+const oneStarReview = "Worst purchase ever. Shirt fell apart after one wash.";
+
+// Create 75 five-star ratings with random reviews
+for (let i = 0; i < 75; i++) {
+  const randomReview = fiveStarReviews[Math.floor(Math.random() * fiveStarReviews.length)];
+  await prismadb.rating.create({
+    data: {
+      productId: productId,
+      rating: 5,
+      review: randomReview,
+      userId: userId, // Replace userId with the actual User ID
+    },
+  });
+}
+
+// Create 15 four-star ratings with random reviews
+for (let i = 0; i < 15; i++) {
+  const randomReview = fourStarReviews[Math.floor(Math.random() * fourStarReviews.length)];
+  await prismadb.rating.create({
+    data: {
+      productId: productId,
+      rating: 4,
+      review: randomReview,
+      userId: userId, // Replace userId with the actual User ID
+    },
+  });
+}
+
+// Create 5 three-star ratings with random reviews
+for (let i = 0; i < 5; i++) {
+  const randomReview = threeStarReviews[Math.floor(Math.random() * threeStarReviews.length)];
+  await prismadb.rating.create({
+    data: {
+      productId: productId,
+      rating: 3,
+      review: randomReview,
+      userId: userId, // Replace userId with the actual User ID
+    },
+  });
+}
+
+// Create 4 two-star ratings with random reviews
+for (let i = 0; i < 4; i++) {
+  const randomReview = twoStarReviews[Math.floor(Math.random() * twoStarReviews.length)];
+  await prismadb.rating.create({
+    data: {
+      productId: productId,
+      rating: 2,
+      review: randomReview,
+      userId: userId, // Replace userId with the actual User ID
+    },
+  });
+}
+
+// Create 1 one-star rating with fixed review
+await prismadb.rating.create({
+  data: {
+    productId: productId,
+    rating: 1,
+    review: oneStarReview,
+    userId: userId, // Replace userId with the actual User ID
+  },
+});
+
+        
+    } catch (error) {
+        
+    }
+}
