@@ -267,9 +267,9 @@ export async function Createposter() {
         const colours = [];
 
         const labels = [
-            { label: 'Formal Shoes Poster', imageurl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717063879/men%20formal%20shoes/613eE6rOzIL._SY695__sqxzff.jpg'},
-            { label: 'Casual Shoes Poster', imageurl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717064199/men%20casual%20shoes/618nLT5fkPL._SY695__aeh2xn.jpg' },
-            { label: 'Sandals Poster', imageurl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717064440/mens%20sandals/71ROtdsVW8L._SX695__jzxw1k.jpg'},                   
+            { label: 'boys ', imageurl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717430575/pexels-vika-glitter-392079-1094084_faglod.jpg'},
+            { label: 'girls ', imageurl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717430593/pexels-olia-danilevich-4982526_ahvkqs.jpg' },
+            
         ];
 
         for (const item of labels) {
@@ -348,50 +348,56 @@ export async function fetchCategoriesWithPosters() {
     try {
       await prismadb.category.create({
         data: {
-          name: "ballerinas",
-          parentId: "665d9bf1fa508b3a39463169",
-          PosterId: "665d96107547073cf15bf543", // Replace with actual Poster ID
+          name: "kids clogs",
+          parentId: "665deeca46b36eef0288e427",
         },
       });await prismadb.category.create({
         data: {
-          name: "clogs",
-          parentId: "665d9bf1fa508b3a39463169",
-          PosterId: "665d96107547073cf15bf543", // Replace with actual Poster ID
+          name: "kids flips flops",
+          parentId: "665deeca46b36eef0288e427",
         },
       });await prismadb.category.create({
         data: {
-          name: "flats",
-          parentId: "665d9bf1fa508b3a39463169",
-          PosterId: "665d96107547073cf15bf543", // Replace with actual Poster ID
+          name: "kids sandals",
+          parentId: "665deeca46b36eef0288e427",
         },
       });await prismadb.category.create({
         data: {
-          name: "Heels",
-          parentId: "665d9bf1fa508b3a39463169",
-          PosterId: "665d96107547073cf15bf543", // Replace with actual Poster ID
+          name: "kids school shoes",
+          parentId: "665deeca46b36eef0288e427",
         },
       });await prismadb.category.create({
         data: {
-          name: "slippers",
-          parentId: "665d9bf1fa508b3a39463169",
-          PosterId: "665d96107547073cf15bf543", // Replace with actual Poster ID
+          name: "kids sneakers",
+          parentId: "665deeca46b36eef0288e427",
         },
       });await prismadb.category.create({
         data: {
-          name: "sneakers",
-          parentId: "665d9bf1fa508b3a39463169",
-          PosterId: "665d96107547073cf15bf543", // Replace with actual Poster ID
+          name: "kids sports shoes",
+          parentId: "665deeca46b36eef0288e427",
         },
-      });
-      
- 
+      })
   
 console.log("successfully created categories");
       } catch (error) {
         console.error("Error deleting sizes:", error);
     } 
   }
-     
+    
+  
+  export async function UpdateCategory() {
+    const updatedCategory = await prismadb.category.update({
+      where: {
+        id: "665deeca46b36eef0288e427",
+      },
+      data: {
+        PosterId: "6655b7713bc9ad76aabc9e8c",
+      },
+    });
+  
+    console.log("Updated category:", updatedCategory);
+  }
+  
   
 export async function test() {
  

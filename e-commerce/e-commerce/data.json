@@ -951,10 +951,24 @@ Retrieved dummy posters: [
     imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717401135/Women/tops/pexels-ono-kosuki-6000143_v7rosq.jpg',
     createdAt: 2024-06-03T10:29:47.421Z,
     updatedAt: 2024-06-03T10:29:47.421Z
+  },
+  {
+    id: '665de97562075d484b0229dc',
+    label: 'boys ',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717430575/pexels-vika-glitter-392079-1094084_faglod.jpg',
+    createdAt: 2024-06-03T16:04:05.530Z,
+    updatedAt: 2024-06-03T16:04:05.530Z
+  },
+  {
+    id: '665de97562075d484b0229dd',
+    label: 'girls ',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717430593/pexels-olia-danilevich-4982526_ahvkqs.jpg',
+    createdAt: 2024-06-03T16:04:05.678Z,
+    updatedAt: 2024-06-03T16:04:05.678Z
   }
 ]
 
-this is the linkedposterwith categories [
+[
   {
     id: '66576f053d54b155bceff987',
     PosterId: '6655b7713bc9ad76aabc9e88',
@@ -1218,6 +1232,142 @@ this is the linkedposterwith categories [
     parentId: '665d9bf1fa508b3a39463169',
     createdAt: 2024-06-03T10:35:38.828Z,
     updatedAt: 2024-06-03T10:35:38.828Z
+  },
+  {
+    id: '665de7eb62075d484b0229db',
+    PosterId: null,
+    name: 'Kids Category',
+    parentId: null,
+    createdAt: 2024-06-03T15:57:31.522Z,
+    updatedAt: 2024-06-03T15:57:31.522Z
+  },
+  {
+    id: '665deeca46b36eef0288e423',
+    PosterId: '665de97562075d484b0229dc',
+    name: 'boys',
+    parentId: '665de7eb62075d484b0229db',
+    createdAt: 2024-06-03T16:26:49.060Z,
+    updatedAt: 2024-06-03T16:26:49.060Z
+  },
+  {
+    id: '665deeca46b36eef0288e424',
+    PosterId: '665d96107547073cf15bf543',
+    name: 'girls',
+    parentId: '665de7eb62075d484b0229db',
+    createdAt: 2024-06-03T16:26:50.450Z,
+    updatedAt: 2024-06-03T16:26:50.450Z
+  },
+  {
+    id: '665deeca46b36eef0288e425',
+    PosterId: null,
+    name: 'infants',
+    parentId: '665de7eb62075d484b0229db',
+    createdAt: 2024-06-03T16:26:50.526Z,
+    updatedAt: 2024-06-03T16:26:50.526Z
+  },
+  {
+    id: '665deeca46b36eef0288e426',
+    PosterId: null,
+    name: 'bags',
+    parentId: '665de7eb62075d484b0229db',
+    createdAt: 2024-06-03T16:26:50.600Z,
+    updatedAt: 2024-06-03T16:26:50.600Z
+  },
+  {
+    id: '665deeca46b36eef0288e427',
+    PosterId: '6655b7713bc9ad76aabc9e8c',
+    name: 'shoes',
+    parentId: '665de7eb62075d484b0229db',
+    createdAt: 2024-06-03T16:26:50.677Z,
+    updatedAt: 2024-06-03T16:38:13.257Z
+  },
+  {
+    id: '665deeca46b36eef0288e428',
+    PosterId: null,
+    name: 'sunglasses',
+    parentId: '665de7eb62075d484b0229db',
+    createdAt: 2024-06-03T16:26:50.753Z,
+    updatedAt: 2024-06-03T16:26:50.753Z
+  },
+  {
+    id: '665df25d46b36eef0288e42c',
+    PosterId: null,
+    name: 'boys jeans',
+    parentId: '665deeca46b36eef0288e423',
+    createdAt: 2024-06-03T16:42:05.499Z,
+    updatedAt: 2024-06-03T16:42:05.499Z
+  },
+  {
+    id: '665df25d46b36eef0288e42d',
+    PosterId: null,
+    name: 'boys shirts',
+    parentId: '665deeca46b36eef0288e423',
+    createdAt: 2024-06-03T16:42:05.596Z,
+    updatedAt: 2024-06-03T16:42:05.596Z
+  },
+  {
+    id: '665df25d46b36eef0288e42e',
+    PosterId: null,
+    name: 'dress and jumpsuits',
+    parentId: '665deeca46b36eef0288e424',
+    createdAt: 2024-06-03T16:42:05.687Z,
+    updatedAt: 2024-06-03T16:42:05.687Z
+  },
+  {
+    id: '665df25d46b36eef0288e42f',
+    PosterId: null,
+    name: 'ethnic wear',
+    parentId: '665deeca46b36eef0288e424',
+    createdAt: 2024-06-03T16:42:05.767Z,
+    updatedAt: 2024-06-03T16:42:05.767Z
+  },
+  {
+    id: '665df2e146b36eef0288e431',
+    PosterId: null,
+    name: 'kids clogs',
+    parentId: '665deeca46b36eef0288e427',
+    createdAt: 2024-06-03T16:44:17.980Z,
+    updatedAt: 2024-06-03T16:44:17.980Z
+  },
+  {
+    id: '665df2e246b36eef0288e432',
+    PosterId: null,
+    name: 'kids flips flops',
+    parentId: '665deeca46b36eef0288e427',
+    createdAt: 2024-06-03T16:44:18.074Z,
+    updatedAt: 2024-06-03T16:44:18.074Z
+  },
+  {
+    id: '665df2e246b36eef0288e433',
+    PosterId: null,
+    name: 'kids sandals',
+    parentId: '665deeca46b36eef0288e427',
+    createdAt: 2024-06-03T16:44:18.153Z,
+    updatedAt: 2024-06-03T16:44:18.153Z
+  },
+  {
+    id: '665df2e246b36eef0288e434',
+    PosterId: null,
+    name: 'kids school shoes',
+    parentId: '665deeca46b36eef0288e427',
+    createdAt: 2024-06-03T16:44:18.232Z,
+    updatedAt: 2024-06-03T16:44:18.232Z
+  },
+  {
+    id: '665df2e246b36eef0288e435',
+    PosterId: null,
+    name: 'kids sneakers',
+    parentId: '665deeca46b36eef0288e427',
+    createdAt: 2024-06-03T16:44:18.310Z,
+    updatedAt: 2024-06-03T16:44:18.310Z
+  },
+  {
+    id: '665df2e246b36eef0288e436',
+    PosterId: null,
+    name: 'kids sports shoes',
+    parentId: '665deeca46b36eef0288e427',
+    createdAt: 2024-06-03T16:44:18.387Z,
+    updatedAt: 2024-06-03T16:44:18.387Z
   }
 ]
 

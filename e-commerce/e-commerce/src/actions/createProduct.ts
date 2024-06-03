@@ -67,81 +67,82 @@ const discountedPrice = price - discountAmount;
 
 export async function createProductVarient() {
     try {
+      const productID = "665af50e3220eba7c7eab944"; // Replace with the actual product ID
         const formalShirtVariants = await prismadb.productVariant.createMany({
             data: [
               { 
                 
-                productId: "665af50e3220eba7c7eab944", 
+                productId: productID, 
                 colorId: "66570726617228492bfcb586", 
                 sizeId: "665aca6e5788e185779d7ce6", 
                 stock: 10 
               },
               { 
                 
-                productId: "665af50e3220eba7c7eab944", 
+                productId: productID, 
                 colorId: "66570726617228492bfcb586", 
                 sizeId: "665aca6e5788e185779d7ce7", 
                 stock: 12 
               },
               { 
                 
-                productId: "665af50e3220eba7c7eab944", 
+                productId:productID, 
                 colorId: "66570726617228492bfcb586", 
                 sizeId: "665aca6e5788e185779d7ce8", 
                 stock: 15 
               },
               { 
                 
-                productId: "665af50e3220eba7c7eab944", 
+                productId: productID, 
                 colorId: "66570726617228492bfcb588", 
                 sizeId: "665aca6e5788e185779d7ce6", 
                 stock: 17 
               },
               { 
                 
-                productId: "665af50e3220eba7c7eab944", 
+                productId: productID, 
                 colorId: "66570726617228492bfcb588", 
                 sizeId: "665aca6e5788e185779d7ce7", 
                 stock: 10 
               },{ 
                 
-                productId: "665af50e3220eba7c7eab944", 
+                productId: productID, 
                 colorId: "66570726617228492bfcb588", 
                 sizeId: "665aca6e5788e185779d7ce8", 
                 stock: 10 
               },{ 
                 
-                productId: "665af50e3220eba7c7eab944", 
+                productId: productID, 
                 colorId: "66570726617228492bfcb589", 
                 sizeId: "665aca6e5788e185779d7ce6", 
                 stock: 10 
               },{ 
                 
-                productId: "665af50e3220eba7c7eab944", 
+                productId: productID, 
                 colorId: "66570726617228492bfcb589", 
                 sizeId: "665aca6e5788e185779d7ce7", 
                 stock: 10 
               },{ 
                 
-                productId: "665af50e3220eba7c7eab944", 
+                productId: productID, 
                 colorId: "66570726617228492bfcb589", 
                 sizeId: "665aca6e5788e185779d7ce8", 
                 stock: 10 
               },{ 
                 
-                productId: "665af50e3220eba7c7eab944", 
+                productId: productID, 
                 colorId: "66570726617228492bfcb58a", 
                 sizeId: "665aca6e5788e185779d7ce6", 
                 stock: 10 
               },{ 
                 
-                productId: "665af50e3220eba7c7eab944", 
+                productId:productID, 
                 colorId: "66570726617228492bfcb58a", 
                 sizeId: "665aca6e5788e185779d7ce7", 
                 stock: 10 
               },{ 
                 
-                productId: "665af50e3220eba7c7eab944", 
+                productId: productID, 
                 colorId: "66570726617228492bfcb58a", 
                 sizeId: "665aca6e5788e185779d7ce8", 
                 stock: 10 
@@ -219,10 +220,10 @@ await prismadb.rating.create({
         
     }
 }
-export async function createProductReview() {
+export async function createProductReview(productID: string) {
     try {
         
-        const productId = "665af50e3220eba7c7eab944"; // Replace with the actual product ID
+        const productId = productID; // Replace with the actual product ID
 const userId = "6655adcc05f2665c9bc85c1a";
         // Define arrays of different reviews for each star rating
 const fiveStarReviews = [
