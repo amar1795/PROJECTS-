@@ -28,21 +28,20 @@ export async function fetchImagesByProductId(productId: string) {
   }
 }
 
-export async function dummyPosterFunction() {
+export async function createdummyPosterFunction() {
     try {
         const dummyUsers = [];
 
-        const labels = [
-            { label: 'Men Category', imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717176156/Mens%20category%20folder/mens_l23be6.jpg' },
-            { label: 'Belt', imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717176135/Mens%20category%20folder/belt_vfzrlt.jpg' },
-            { label: 'Shoes', imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717176160/Mens%20category%20folder/shoes_fmkkjh.jpg' },
-            { label: 'Formal Clothes', imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717176146/Mens%20category%20folder/formal_asap5l.jpg' },
-            { label: 'Casual Clothes', imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717176138/Mens%20category%20folder/casual_z0t3sz.jpg' },
-            { label: 'Blazers', imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717176136/Mens%20category%20folder/blazzer_qff9vw.jpg' },
-            { label: 'Formal Shirts', imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717176153/Mens%20category%20folder/formal_shirt_ayzyee.jpg' },
-            { label: 'Formal Pants', imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717176149/Mens%20category%20folder/formal_pant_igrhac.jpg' },
-            { label: 'Casual Shorts', imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717176141/Mens%20category%20folder/casual_pants_jjzbqx.jpg' },
-            { label: 'Casual Shirts', imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717176144/Mens%20category%20folder/casual_shirt_yeijrx.jpg' }
+        const labels = [         
+            { label: 'jeans', imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717401135/Women/tops/pexels-ono-kosuki-6000143_v7rosq.jpg' },
+            { label: 'jumpsuits', imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717401135/Women/tops/pexels-ono-kosuki-6000143_v7rosq.jpg' },
+            { label: 'jewellery', imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717401135/Women/tops/pexels-ono-kosuki-6000143_v7rosq.jpg' },
+            { label: 'Kurtis', imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717401135/Women/tops/pexels-ono-kosuki-6000143_v7rosq.jpg' },
+            { label: 'Sportswear', imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717401135/Women/tops/pexels-ono-kosuki-6000143_v7rosq.jpg' },
+            { label: 'Tops', imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717401135/Women/tops/pexels-ono-kosuki-6000143_v7rosq.jpg' },
+            { label: 'Watches', imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717401135/Women/tops/pexels-ono-kosuki-6000143_v7rosq.jpg' },
+           
+            
         ];
         for (const item of labels) {
            const label= await prismadb.poster.create({
@@ -347,35 +346,45 @@ export async function fetchCategoriesWithPosters() {
 
  export async function CreateCategories() {
     try {
-        // Delete all sizes
-       // Step 1: Create Categories
-
-  // 3. Create Shoes Category (Subcategory of Men)
-  
-  // 4. Create Formal Clothes Category (Subcategory of Men)
-  const CasualShoes = await prismadb.category.create({
-    data: {
-      name: "Formal Shoes",
-      parentId: "665a0ba014be77720636d445",
-      PosterId: "665b0b953220eba7c7eabae3", // Replace with actual Poster ID
-    },
-  });
-  const formalShoes = await prismadb.category.create({
-    data: {
-      name: "Casual Shoes",
-      parentId: "665a0ba014be77720636d445",
-      PosterId: "665b0b953220eba7c7eabae4", // Replace with actual Poster ID
-    },
-  });
-  const Sandals = await prismadb.category.create({
-    data: {
-      name: "Sandals",
-      parentId: "665a0ba014be77720636d445",
-      PosterId: "665b0b953220eba7c7eabae5", // Replace with actual Poster ID
-    },
-  });
-  
-  // 5. Create Casual Clothes Category (Subcategory of Men)
+      await prismadb.category.create({
+        data: {
+          name: "ballerinas",
+          parentId: "665d9bf1fa508b3a39463169",
+          PosterId: "665d96107547073cf15bf543", // Replace with actual Poster ID
+        },
+      });await prismadb.category.create({
+        data: {
+          name: "clogs",
+          parentId: "665d9bf1fa508b3a39463169",
+          PosterId: "665d96107547073cf15bf543", // Replace with actual Poster ID
+        },
+      });await prismadb.category.create({
+        data: {
+          name: "flats",
+          parentId: "665d9bf1fa508b3a39463169",
+          PosterId: "665d96107547073cf15bf543", // Replace with actual Poster ID
+        },
+      });await prismadb.category.create({
+        data: {
+          name: "Heels",
+          parentId: "665d9bf1fa508b3a39463169",
+          PosterId: "665d96107547073cf15bf543", // Replace with actual Poster ID
+        },
+      });await prismadb.category.create({
+        data: {
+          name: "slippers",
+          parentId: "665d9bf1fa508b3a39463169",
+          PosterId: "665d96107547073cf15bf543", // Replace with actual Poster ID
+        },
+      });await prismadb.category.create({
+        data: {
+          name: "sneakers",
+          parentId: "665d9bf1fa508b3a39463169",
+          PosterId: "665d96107547073cf15bf543", // Replace with actual Poster ID
+        },
+      });
+      
+ 
   
 console.log("successfully created categories");
       } catch (error) {
@@ -384,6 +393,10 @@ console.log("successfully created categories");
   }
      
   
+export async function test() {
+ 
+ 
+}
 
   
 

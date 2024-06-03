@@ -903,6 +903,55 @@ Retrieved dummy posters: [
     createdAt: 2024-05-31T17:37:20.828Z,
     updatedAt: 2024-05-31T17:37:20.828Z
   }
+  {
+    id: '665d9b1a8b083ea953cac81f',
+    label: 'jeans',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717401135/Women/tops/pexels-ono-kosuki-6000143_v7rosq.jpg',
+    createdAt: 2024-06-03T10:29:46.804Z,
+    updatedAt: 2024-06-03T10:29:46.804Z
+  },
+  {
+    id: '665d9b1b8b083ea953cac820',
+    label: 'jumpsuits',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717401135/Women/tops/pexels-ono-kosuki-6000143_v7rosq.jpg',
+    createdAt: 2024-06-03T10:29:47.045Z,
+    updatedAt: 2024-06-03T10:29:47.045Z
+  },
+  {
+    id: '665d9b1b8b083ea953cac821',
+    label: 'jewellery',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717401135/Women/tops/pexels-ono-kosuki-6000143_v7rosq.jpg',
+    createdAt: 2024-06-03T10:29:47.118Z,
+    updatedAt: 2024-06-03T10:29:47.118Z
+  },
+  {
+    id: '665d9b1b8b083ea953cac822',
+    label: 'Kurtis',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717401135/Women/tops/pexels-ono-kosuki-6000143_v7rosq.jpg',
+    createdAt: 2024-06-03T10:29:47.194Z,
+    updatedAt: 2024-06-03T10:29:47.194Z
+  },
+  {
+    id: '665d9b1b8b083ea953cac823',
+    label: 'Sportswear',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717401135/Women/tops/pexels-ono-kosuki-6000143_v7rosq.jpg',
+    createdAt: 2024-06-03T10:29:47.267Z,
+    updatedAt: 2024-06-03T10:29:47.267Z
+  },
+  {
+    id: '665d9b1b8b083ea953cac824',
+    label: 'Tops',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717401135/Women/tops/pexels-ono-kosuki-6000143_v7rosq.jpg',
+    createdAt: 2024-06-03T10:29:47.340Z,
+    updatedAt: 2024-06-03T10:29:47.340Z
+  },
+  {
+    id: '665d9b1b8b083ea953cac825',
+    label: 'Watches',
+    imageUrl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717401135/Women/tops/pexels-ono-kosuki-6000143_v7rosq.jpg',
+    createdAt: 2024-06-03T10:29:47.421Z,
+    updatedAt: 2024-06-03T10:29:47.421Z
+  }
 ]
 
 this is the linkedposterwith categories [
@@ -1049,8 +1098,129 @@ this is the linkedposterwith categories [
     parentId: '665a0ba014be77720636d445',
     createdAt: 2024-06-01T11:53:42.024Z,
     updatedAt: 2024-06-01T11:53:42.024Z
+  },
+  {
+    id: '665d97977547073cf15bf546',
+    PosterId: '6655b7713bc9ad76aabc9e89',
+    name: 'Womens',
+    parentId: null,
+    createdAt: 2024-06-03T10:14:47.415Z,
+    updatedAt: 2024-06-03T10:14:47.415Z
+  },
+  {
+    id: '665d9bf1fa508b3a39463162',
+    PosterId: '665d9b1a8b083ea953cac81f',
+    name: 'jeans',
+    parentId: '665d97977547073cf15bf546',
+    createdAt: 2024-06-03T10:33:21.047Z,
+    updatedAt: 2024-06-03T10:33:21.047Z
+  },
+  {
+    id: '665d9bf1fa508b3a39463163',
+    PosterId: '665d9b1b8b083ea953cac820',
+    name: 'jumpsuits',
+    parentId: '665d97977547073cf15bf546',
+    createdAt: 2024-06-03T10:33:21.344Z,
+    updatedAt: 2024-06-03T10:33:21.344Z
+  },
+  {
+    id: '665d9bf1fa508b3a39463164',
+    PosterId: '665d9b1b8b083ea953cac821',
+    name: 'jewellery',
+    parentId: '665d97977547073cf15bf546',
+    createdAt: 2024-06-03T10:33:21.432Z,
+    updatedAt: 2024-06-03T10:33:21.432Z
+  },
+  {
+    id: '665d9bf1fa508b3a39463165',
+    PosterId: '665d9b1b8b083ea953cac822',
+    name: 'kurtis',
+    parentId: '665d97977547073cf15bf546',
+    createdAt: 2024-06-03T10:33:21.520Z,
+    updatedAt: 2024-06-03T10:33:21.520Z
+  },
+  {
+    id: '665d9bf1fa508b3a39463166',
+    PosterId: '665d9b1b8b083ea953cac823',
+    name: 'sportswears',
+    parentId: '665d97977547073cf15bf546',
+    createdAt: 2024-06-03T10:33:21.607Z,
+    updatedAt: 2024-06-03T10:33:21.607Z
+  },
+  {
+    id: '665d9bf1fa508b3a39463167',
+    PosterId: '665d9b1b8b083ea953cac824',
+    name: 'tops',
+    parentId: '665d97977547073cf15bf546',
+    createdAt: 2024-06-03T10:33:21.695Z,
+    updatedAt: 2024-06-03T10:33:21.695Z
+  },
+  {
+    id: '665d9bf1fa508b3a39463168',
+    PosterId: '665d9b1b8b083ea953cac825',
+    name: 'watches',
+    parentId: '665d97977547073cf15bf546',
+    createdAt: 2024-06-03T10:33:21.782Z,
+    updatedAt: 2024-06-03T10:33:21.782Z
+  },
+  {
+    id: '665d9bf1fa508b3a39463169',
+    PosterId: '665d96107547073cf15bf543',
+    name: 'Womens Shoes',
+    parentId: '665d97977547073cf15bf546',
+    createdAt: 2024-06-03T10:33:21.869Z,
+    updatedAt: 2024-06-03T10:33:21.869Z
+  },
+  {
+    id: '665d9c7afa508b3a3946316a',
+    PosterId: '665d96107547073cf15bf543',
+    name: 'ballerinas',
+    parentId: '665d9bf1fa508b3a39463169',
+    createdAt: 2024-06-03T10:35:38.368Z,
+    updatedAt: 2024-06-03T10:35:38.368Z
+  },
+  {
+    id: '665d9c7afa508b3a3946316b',
+    PosterId: '665d96107547073cf15bf543',
+    name: 'clogs',
+    parentId: '665d9bf1fa508b3a39463169',
+    createdAt: 2024-06-03T10:35:38.475Z,
+    updatedAt: 2024-06-03T10:35:38.475Z
+  },
+  {
+    id: '665d9c7afa508b3a3946316c',
+    PosterId: '665d96107547073cf15bf543',
+    name: 'flats',
+    parentId: '665d9bf1fa508b3a39463169',
+    createdAt: 2024-06-03T10:35:38.563Z,
+    updatedAt: 2024-06-03T10:35:38.563Z
+  },
+  {
+    id: '665d9c7afa508b3a3946316d',
+    PosterId: '665d96107547073cf15bf543',
+    name: 'Heels',
+    parentId: '665d9bf1fa508b3a39463169',
+    createdAt: 2024-06-03T10:35:38.655Z,
+    updatedAt: 2024-06-03T10:35:38.655Z
+  },
+  {
+    id: '665d9c7afa508b3a3946316e',
+    PosterId: '665d96107547073cf15bf543',
+    name: 'slippers',
+    parentId: '665d9bf1fa508b3a39463169',
+    createdAt: 2024-06-03T10:35:38.742Z,
+    updatedAt: 2024-06-03T10:35:38.742Z
+  },
+  {
+    id: '665d9c7afa508b3a3946316f',
+    PosterId: '665d96107547073cf15bf543',
+    name: 'sneakers',
+    parentId: '665d9bf1fa508b3a39463169',
+    createdAt: 2024-06-03T10:35:38.828Z,
+    updatedAt: 2024-06-03T10:35:38.828Z
   }
 ]
+
 
 
 

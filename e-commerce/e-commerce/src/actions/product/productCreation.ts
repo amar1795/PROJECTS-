@@ -10,19 +10,19 @@ interface ProductParams {
     productBrandId: string;
 }
 const productParams: ProductParams = {
-    productName: "Modern Fit Chambray Shirt: Sophisticated Casual Wear for the Contemporary Man",
-    productPrice: 2700.00,
-    productBrandId: "665ac7545788e185779d7cce",
-    productCategoryId: "665a0ba214be77720636d44c",
-    productDiscountPercentage: 15,
-    productDescription: "Elevate your casual style with our Modern Fit Chambray Shirt, designed for the contemporary man. This sophisticated shirt features a modern fit, a button-down collar, and a single chest pocket, offering a clean and polished look. The lightweight chambray fabric provides comfort and breathability, making it ideal for both casual and semi-formal occasions. Pair it with chinos or denim for a versatile, stylish ensemble.",
+    productName: "Active Performance Shorts: Lightweight Versatility for Active Lifestyles",
+    productPrice: 2150.00,
+    productBrandId: "665ac7545788e185779d7ccf",
+    productCategoryId: "665a0ba214be77720636d44b",
+    productDiscountPercentage: 55,
+    productDescription: "Stay active in style with our Active Performance Shorts, offering lightweight versatility for active lifestyles. These shorts feature moisture-wicking fabric and four-way stretch for maximum comfort and mobility during workouts or outdoor activities. The elastic waistband with drawstring closure ensures a secure fit, while the breathable mesh panels provide enhanced ventilation. Whether running, cycling, or hitting the gym, these performance shorts keep you cool and comfortable all day long.",
     productImages: [
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717061624/Men%20Shirts/71_vI95v4L._SY741__bolvnk.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717061624/Men%20Shirts/61Uf-CVdGYL._SY741__pul2bs.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717061623/Men%20Shirts/61PB3NlD7XL._SY741__dpynhs.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717061624/Men%20Shirts/61xCZ3kHKFL._SY741__uwe3nt.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717061622/Men%20Shirts/61_3s3sYTWL._SY741__nvgjwo.jpg",
-       
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717061940/Men%20shorts/51t9NeRp8DL._SX679__afxtg8.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717061941/Men%20shorts/51wz6KwTRZL._SX679__hs36e8.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717061944/Men%20shorts/61mBsUSEFRL._SX679__c7jenz.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717061943/Men%20shorts/61LdHDL5dFL._SX679__pcru0j.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717061943/Men%20shorts/61LdHDL5dFL._SX679__pcru0j.jpg",
+          
            
     ]
 };

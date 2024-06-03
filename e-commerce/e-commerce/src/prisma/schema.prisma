@@ -108,7 +108,7 @@ model Poster {
 
 model Category {
   id            String     @id @default(auto()) @map("_id") @db.ObjectId
-  PosterId      String     @db.ObjectId // Foreign Key to Poster
+  PosterId      String?     @db.ObjectId // Foreign Key to Poster
   Poster        Poster?    @relation(fields: [PosterId], references: [id])
   name          String      @unique
   products      Product[]  @relation("CategoryToProduct")
