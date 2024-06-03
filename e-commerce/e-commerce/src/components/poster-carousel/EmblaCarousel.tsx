@@ -68,7 +68,8 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
     <section className="embla ">
       <div className="embla__viewport  border-4 border-black" ref={emblaRef}>
         <div className="embla__container ">
-          {posterData.map((poster, index) => (
+          {posterData.filter((_, index) => [0, 1, 2, 4].includes(index))
+.map((poster, index) => (
            <div className="embla__slide  " key={index}>
            <Link href={`http://localhost:3000/categories/${poster.label.toLowerCase()}`}>
            <div className="embla__slide__number  ">

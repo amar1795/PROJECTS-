@@ -246,25 +246,22 @@ export async function Createposter() {
         const colours = [];
 
         const labels = [
-            { name: 'Men', PosterId: '6655b7713bc9ad76aabc9e88' },
-            { name: 'Women', PosterId: '6655b7713bc9ad76aabc9e89' },
-            { name: 'Kids', PosterId: '6655b7713bc9ad76aabc9e8a' },
-            { name: 'Furniture', PosterId: '6655b7713bc9ad76aabc9e8b' },
-            { name: 'Shoes', PosterId: '6655b7713bc9ad76aabc9e8c' },
-            
+            { label: 'Formal Shoes Poster', imageurl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717063879/men%20formal%20shoes/613eE6rOzIL._SY695__sqxzff.jpg'},
+            { label: 'Casual Shoes Poster', imageurl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717064199/men%20casual%20shoes/618nLT5fkPL._SY695__aeh2xn.jpg' },
+            { label: 'Sandals Poster', imageurl: 'https://res.cloudinary.com/dfveswqdm/image/upload/v1717064440/mens%20sandals/71ROtdsVW8L._SX695__jzxw1k.jpg'},                   
         ];
 
         for (const item of labels) {
-           const label= await prismadb.category.create({
+           const label= await prismadb.poster.create({
                 data: {
-                    name: item.name,
-                    PosterId: item.PosterId
+                  label: item.label,
+                  imageUrl: item.imageurl,
                 }
             });
             colours.push(label);
         }
 
-        console.error("successfully created colours",colours);
+        console.error("successfully created posters",colours);
 
     }
      catch (error) {
@@ -331,94 +328,33 @@ export async function fetchCategoriesWithPosters() {
         // Delete all sizes
        // Step 1: Create Categories
 
-// 1. Create Men Category
-const menCategory = await prismadb.category.create({
-    data: {
-      name: "Men",
-      PosterId: "665a0ace14be77720636d439", // Replace with actual Poster ID
-    },
-  });
-  
-  // 2. Create Belt Category (Subcategory of Men)
-  const beltCategory = await prismadb.category.create({
-    data: {
-      name: "Belt",
-      parentId: menCategory.id,
-      PosterId: "665a0ace14be77720636d43a", // Replace with actual Poster ID
-    },
-  });
-  
   // 3. Create Shoes Category (Subcategory of Men)
-  const shoesCategory = await prismadb.category.create({
-    data: {
-      name: "Shoes",
-      parentId: menCategory.id,
-      PosterId: "665a0ace14be77720636d43b", // Replace with actual Poster ID
-    },
-  });
   
   // 4. Create Formal Clothes Category (Subcategory of Men)
-  const formalClothesCategory = await prismadb.category.create({
+  const CasualShoes = await prismadb.category.create({
     data: {
-      name: "Formal Clothes",
-      parentId: menCategory.id,
-      PosterId: "665a0acf14be77720636d43c", // Replace with actual Poster ID
+      name: "Formal Shoes",
+      parentId: "665a0ba014be77720636d445",
+      PosterId: "665b0b953220eba7c7eabae3", // Replace with actual Poster ID
+    },
+  });
+  const formalShoes = await prismadb.category.create({
+    data: {
+      name: "Casual Shoes",
+      parentId: "665a0ba014be77720636d445",
+      PosterId: "665b0b953220eba7c7eabae4", // Replace with actual Poster ID
+    },
+  });
+  const Sandals = await prismadb.category.create({
+    data: {
+      name: "Sandals",
+      parentId: "665a0ba014be77720636d445",
+      PosterId: "665b0b953220eba7c7eabae5", // Replace with actual Poster ID
     },
   });
   
   // 5. Create Casual Clothes Category (Subcategory of Men)
-  const casualClothesCategory = await prismadb.category.create({
-    data: {
-      name: "Casual Clothes",
-      parentId: menCategory.id,
-      PosterId: "665a0acf14be77720636d43d", // Replace with actual Poster ID
-    },
-  });
   
-  // 6. Create Blazers Category (Subcategory of Men)
-  const blazersCategory = await prismadb.category.create({
-    data: {
-      name: "Blazers",
-      parentId: menCategory.id,
-      PosterId: "665a0acf14be77720636d43e", // Replace with actual Poster ID
-    },
-  });
-  
-  // 7. Create Formal Shirts Category (Subcategory of Formal Clothes)
-  const formalShirtsCategory = await prismadb.category.create({
-    data: {
-      name: "Formal Shirts",
-      parentId: formalClothesCategory.id,
-      PosterId: "665a0acf14be77720636d43f", // Replace with actual Poster ID
-    },
-  });
-  
-  // 8. Create Formal Pants Category (Subcategory of Formal Clothes)
-  const formalPantsCategory = await prismadb.category.create({
-    data: {
-      name: "Formal Pants",
-      parentId: formalClothesCategory.id,
-      PosterId: "665a0ad014be77720636d440", // Replace with actual Poster ID
-    },
-  });
-  
-  // 9. Create Casual Shorts Category (Subcategory of Casual Clothes)
-  const casualShortsCategory = await prismadb.category.create({
-    data: {
-      name: "Casual Shorts",
-      parentId: casualClothesCategory.id,
-      PosterId: "665a0ad014be77720636d441", // Replace with actual Poster ID
-    },
-  });
-  
-  // 10. Create Casual Shirts Category (Subcategory of Casual Clothes)
-  const casualShirtsCategory = await prismadb.category.create({
-    data: {
-      name: "Casual Shirts",
-      parentId: casualClothesCategory.id,
-      PosterId: "665a0ad014be77720636d442", // Replace with actual Poster ID
-    },
-});
 console.log("successfully created categories");
       } catch (error) {
         console.error("Error deleting sizes:", error);

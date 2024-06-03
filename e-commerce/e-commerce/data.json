@@ -941,7 +941,7 @@ this is the linkedposterwith categories [
   {
     id: '66576f063d54b155bceff98b',
     PosterId: '6655b7713bc9ad76aabc9e8c',
-    name: 'Shoes',
+    name: 'Shoe',
     parentId: null,
     createdAt: 2024-05-29T18:08:06.237Z,
     updatedAt: 2024-05-29T18:08:06.237Z
@@ -949,7 +949,7 @@ this is the linkedposterwith categories [
   {
     id: '665a0b9f14be77720636d443',
     PosterId: '665a0ace14be77720636d439',
-    name: 'Men',
+    name: 'Mens',
     parentId: null,
     createdAt: 2024-05-31T17:40:47.944Z,
     updatedAt: 2024-05-31T17:40:47.944Z
@@ -1025,7 +1025,32 @@ this is the linkedposterwith categories [
     parentId: '665a0ba114be77720636d447',
     createdAt: 2024-05-31T17:40:50.847Z,
     updatedAt: 2024-05-31T17:40:50.847Z
+  },
+  {
+    id: '665b0bc53220eba7c7eabae6',
+    PosterId: '665b0b953220eba7c7eabae3',
+    name: 'Formal Shoes',
+    parentId: '665a0ba014be77720636d445',
+    createdAt: 2024-06-01T11:53:41.840Z,
+    updatedAt: 2024-06-01T11:53:41.840Z
+  },
+  {
+    id: '665b0bc53220eba7c7eabae7',
+    PosterId: '665b0b953220eba7c7eabae4',
+    name: 'Casual Shoes',
+    parentId: '665a0ba014be77720636d445',
+    createdAt: 2024-06-01T11:53:41.941Z,
+    updatedAt: 2024-06-01T11:53:41.941Z
+  },
+  {
+    id: '665b0bc63220eba7c7eabae8',
+    PosterId: '665b0b953220eba7c7eabae5',
+    name: 'Sandals',
+    parentId: '665a0ba014be77720636d445',
+    createdAt: 2024-06-01T11:53:42.024Z,
+    updatedAt: 2024-06-01T11:53:42.024Z
   }
 ]
+
 
 

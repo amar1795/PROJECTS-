@@ -10,18 +10,19 @@ interface ProductParams {
     productBrandId: string;
 }
 const productParams: ProductParams = {
-    productName: "Metropolitan Chic Mens Formal Shirt",
-    productPrice: 7250.00,
-    productBrandId: "665ac7545788e185779d7ccf",
-    productCategoryId: "665a0ba114be77720636d449",
-    productDiscountPercentage: 15,
-    productDescription: "Add a modern twist to your formal wear with our Metropolitan Chic shirt. The striking checkered pattern sets you apart in a sea of solids, while the soft cotton blend ensures maximum comfort. Featuring a spread collar, French placket, and barrel cuffs, this shirt is both stylish and functional. Whether you're attending a business meeting or a dinner date, it’s the perfect choice for a smart, contemporary look.",
+    productName: " Premier Chelsea Boots: Effortless Style for the Modern Gentleman",
+    productPrice: 1200.00,
+    productBrandId: "665ac7555788e185779d7cdd",
+    productCategoryId: "665b0bc53220eba7c7eabae6",
+    productDiscountPercentage: 10,
+    productDescription: "Step up your footwear game with our Premier Chelsea Boots, the epitome of effortless style for the modern gentleman. Crafted from luxurious leather and featuring a sleek Chelsea boot silhouette, these shoes exude sophistication and versatility. Whether paired with tailored trousers or casual denim, these boots add a touch of refinement to any ensemble, making them a must-have addition to your formal footwear collection.",
     productImages: [
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717062509/formal%20men%20shirts/51UFaB6QWRL._SY741__odf0ii.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717062508/formal%20men%20shirts/51Ue-jSTByL._SY741__qd16gu.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717062271/formal%20men%20shirts/51nt-mODT0L._SY741__ehgbmj.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717062271/formal%20men%20shirts/51cjfaDYRSL._SY741__rr4foj.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717062315/formal%20men%20shirts/51Pme4pjlbL._SY741__luepoa.jpg"
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717063847/men%20formal%20shoes/61Fi43cx7FL._SY695__blqzl9.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717063844/men%20formal%20shoes/51z1OuzEleL._SY695__elo1al.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717063843/men%20formal%20shoes/51dwtNdY8HL._SY695__e4yqz2.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717063841/men%20formal%20shoes/51CHcDhQWqL._SY695__ldsm8o.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717063843/men%20formal%20shoes/51dwtNdY8HL._SY695__e4yqz2.jpg",
+       
     ]
 };
 
