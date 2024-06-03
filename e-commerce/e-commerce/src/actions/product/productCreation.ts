@@ -10,19 +10,20 @@ interface ProductParams {
     productBrandId: string;
 }
 const productParams: ProductParams = {
-    productName: " Premier Chelsea Boots: Effortless Style for the Modern Gentleman",
-    productPrice: 1200.00,
-    productBrandId: "665ac7555788e185779d7cdd",
-    productCategoryId: "665b0bc53220eba7c7eabae6",
-    productDiscountPercentage: 10,
-    productDescription: "Step up your footwear game with our Premier Chelsea Boots, the epitome of effortless style for the modern gentleman. Crafted from luxurious leather and featuring a sleek Chelsea boot silhouette, these shoes exude sophistication and versatility. Whether paired with tailored trousers or casual denim, these boots add a touch of refinement to any ensemble, making them a must-have addition to your formal footwear collection.",
+    productName: "Modern Fit Chambray Shirt: Sophisticated Casual Wear for the Contemporary Man",
+    productPrice: 2700.00,
+    productBrandId: "665ac7545788e185779d7cce",
+    productCategoryId: "665a0ba214be77720636d44c",
+    productDiscountPercentage: 15,
+    productDescription: "Elevate your casual style with our Modern Fit Chambray Shirt, designed for the contemporary man. This sophisticated shirt features a modern fit, a button-down collar, and a single chest pocket, offering a clean and polished look. The lightweight chambray fabric provides comfort and breathability, making it ideal for both casual and semi-formal occasions. Pair it with chinos or denim for a versatile, stylish ensemble.",
     productImages: [
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717063847/men%20formal%20shoes/61Fi43cx7FL._SY695__blqzl9.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717063844/men%20formal%20shoes/51z1OuzEleL._SY695__elo1al.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717063843/men%20formal%20shoes/51dwtNdY8HL._SY695__e4yqz2.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717063841/men%20formal%20shoes/51CHcDhQWqL._SY695__ldsm8o.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717063843/men%20formal%20shoes/51dwtNdY8HL._SY695__e4yqz2.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717061624/Men%20Shirts/71_vI95v4L._SY741__bolvnk.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717061624/Men%20Shirts/61Uf-CVdGYL._SY741__pul2bs.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717061623/Men%20Shirts/61PB3NlD7XL._SY741__dpynhs.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717061624/Men%20Shirts/61xCZ3kHKFL._SY741__uwe3nt.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717061622/Men%20Shirts/61_3s3sYTWL._SY741__nvgjwo.jpg",
        
+           
     ]
 };
 

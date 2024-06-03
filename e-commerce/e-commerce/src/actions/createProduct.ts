@@ -12,6 +12,19 @@ interface ProductParams {
     productCategoryId: string;
     productBrandId: string;
 }
+
+export async function deleteProduct(productId: string) {
+  try {
+    const deletedProduct = await prismadb.product.delete({
+      where: {
+        id: productId,
+      },
+    });
+    console.log("Product deleted:", deletedProduct);
+  } catch (error) {
+    console.error("Error deleting product:", error);
+  }
+}
 export async function createProduct({
     productName,
     productPrice,

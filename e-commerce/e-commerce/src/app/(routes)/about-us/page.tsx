@@ -1,6 +1,6 @@
-import { createProduct, createProductRating, createProductReview, createProductVarient, fetchAllReviews, fetchProduct, fetchProductAllData, fetchProductVarient, fetchProductanotherversion } from "@/actions/createProduct";
+import { createProduct, createProductRating, createProductReview, createProductVarient, deleteProduct, fetchAllReviews, fetchProduct, fetchProductAllData, fetchProductVarient, fetchProductanotherversion } from "@/actions/createProduct";
 import { dummyUserFunction } from "@/actions/dummyUser";
-import { CreateBrand, CreateCategories, CreateColour, CreateSize, Createposter, deleteSize, deleteduplicatebrandnames, dummyPosterFunction, fetchCategoriesWithPosters, getAllColorsWithCount, getAllDummyPosters, getAllPosters, getAllSizes, getAllUsers, getBrand, getallCategory } from "@/actions/posterAction";
+import { CreateBrand, CreateCategories, CreateColour, CreateSize, Createposter, deleteSize, deleteduplicatebrandnames, dummyPosterFunction, fetchCategoriesWithPosters, fetchImagesByProductId, getAllColorsWithCount, getAllDummyPosters, getAllPosters, getAllSizes, getAllUsers, getBrand, getallCategory } from "@/actions/posterAction";
 import { productCreationNew } from "@/actions/product/productCreation";
 import React from "react";
 
@@ -29,6 +29,9 @@ const page = () => {
   // fetchProductAllData()
   // fetchAllReviews()
   // productCreationNew()
+  // deleteProduct("665d667ab76a9c2e856b5fb8")
+  // fetchImagesByProductId("665d6679b76a9c2e856b5fb2")
+  
   return (
     <div className=" bg-pink-500 border-2 border-black px-10 ">
       <div>

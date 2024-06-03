@@ -6,6 +6,28 @@ import { NextResponse } from 'next/server';
 import { count } from 'console';
 
 
+
+export async function fetchImagesByProductId(productId: string) {
+  try {
+    const images = await prismadb.image.findMany({
+      where: {
+        productId: productId,
+      },
+      select: {
+        id: true,
+        url: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+    console.log("Images fetched:", images);
+    return images;
+  } catch (error) {
+    console.error("Error fetching images:", error);
+    throw error;
+  }
+}
+
 export async function dummyPosterFunction() {
     try {
         const dummyUsers = [];
