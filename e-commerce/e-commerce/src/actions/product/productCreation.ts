@@ -10,19 +10,20 @@ interface ProductParams {
     productBrandId: string;
 }
 const productParams: ProductParams = {
-    productName: "Sporty Utility yellow Jumpsuit: Functional Style and Comfort for Active Days",
-    productPrice: 6000.00,
-    productBrandId: "665ac7545788e185779d7cd3",
-    productCategoryId: "665d9bf1fa508b3a39463163",
-    productDiscountPercentage: 45,
-    productDescription: "Stay stylish and comfortable on active days with our Sporty Utility Jumpsuit, designed for functionality and modern style. This jumpsuit features a zip-front closure, adjustable waist, and multiple pockets for convenience. Made from durable, breathable fabric, it provides comfort and ease of movement. Ideal for running errands, travel, or casual outdoor activities, this jumpsuit pairs well with sneakers or casual footwear for a sporty, on-the-go look.",
+    productName: "Women's Tennis Sneakers: Supreme Comfort and Stability for Court Dominance",
+    productPrice: 15000.00,
+    productBrandId: "665ac7555788e185779d7cda",
+    productCategoryId: "665d9c7afa508b3a3946316f",
+    productDiscountPercentage: 65,
+    productDescription: "Step onto the court with confidence in our Women's Tennis Sneakers, meticulously crafted to provide supreme comfort and stability for your game. These sneakers feature a sleek and supportive design tailored for the unique needs of female tennis players. With a durable rubber outsole optimized for traction on hard courts, they offer exceptional grip and agility for quick movements and rapid direction changes. The cushioned midsole and padded collar ensure plush comfort and ankle support, reducing fatigue during long matches. Whether you're serving aces or chasing down volleys, these tennis sneakers empower you to unleash your full potential and dominate the game with style and grace",
     productImages: [
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717150052/Women/jumpsuits/51vyMrGe7TL._SY741__oxwine.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717150052/Women/jumpsuits/61r2Rwcn2mL._SY741__xuaq0e.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717150051/Women/jumpsuits/51V6F1p-9EL._SY741__m8dg8v.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717150051/Women/jumpsuits/51AWA5Rsp-L._SY741__jyt8sl.jpg",         
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717150054/Women/jumpsuits/71ft77gZO7L._SY741__lxn2al.jpg",         
-        
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717066610/Women/Women%20shoes/sneakers/51JYQ9RKwHL._SY695__ngpumc.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717066612/Women/Women%20shoes/sneakers/61i5mkDZlXL._SY695__rwmyxq.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717066615/Women/Women%20shoes/sneakers/61Pq1Krdv8L._SY695__g9sznw.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717066620/Women/Women%20shoes/sneakers/61SIgt3zYjL._SY695__ln1ltx.jpg",        
+               
+              
+                
     ]
 };
 
