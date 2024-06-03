@@ -10,20 +10,19 @@ interface ProductParams {
     productBrandId: string;
 }
 const productParams: ProductParams = {
-    productName: "Active Performance Shorts: Lightweight Versatility for Active Lifestyles",
-    productPrice: 2150.00,
-    productBrandId: "665ac7545788e185779d7ccf",
-    productCategoryId: "665a0ba214be77720636d44b",
-    productDiscountPercentage: 55,
-    productDescription: "Stay active in style with our Active Performance Shorts, offering lightweight versatility for active lifestyles. These shorts feature moisture-wicking fabric and four-way stretch for maximum comfort and mobility during workouts or outdoor activities. The elastic waistband with drawstring closure ensures a secure fit, while the breathable mesh panels provide enhanced ventilation. Whether running, cycling, or hitting the gym, these performance shorts keep you cool and comfortable all day long.",
+    productName: "Sporty Utility yellow Jumpsuit: Functional Style and Comfort for Active Days",
+    productPrice: 6000.00,
+    productBrandId: "665ac7545788e185779d7cd3",
+    productCategoryId: "665d9bf1fa508b3a39463163",
+    productDiscountPercentage: 45,
+    productDescription: "Stay stylish and comfortable on active days with our Sporty Utility Jumpsuit, designed for functionality and modern style. This jumpsuit features a zip-front closure, adjustable waist, and multiple pockets for convenience. Made from durable, breathable fabric, it provides comfort and ease of movement. Ideal for running errands, travel, or casual outdoor activities, this jumpsuit pairs well with sneakers or casual footwear for a sporty, on-the-go look.",
     productImages: [
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717061940/Men%20shorts/51t9NeRp8DL._SX679__afxtg8.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717061941/Men%20shorts/51wz6KwTRZL._SX679__hs36e8.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717061944/Men%20shorts/61mBsUSEFRL._SX679__c7jenz.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717061943/Men%20shorts/61LdHDL5dFL._SX679__pcru0j.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717061943/Men%20shorts/61LdHDL5dFL._SX679__pcru0j.jpg",
-          
-           
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717150052/Women/jumpsuits/51vyMrGe7TL._SY741__oxwine.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717150052/Women/jumpsuits/61r2Rwcn2mL._SY741__xuaq0e.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717150051/Women/jumpsuits/51V6F1p-9EL._SY741__m8dg8v.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717150051/Women/jumpsuits/51AWA5Rsp-L._SY741__jyt8sl.jpg",         
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717150054/Women/jumpsuits/71ft77gZO7L._SY741__lxn2al.jpg",         
+        
     ]
 };
 

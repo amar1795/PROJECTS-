@@ -28,12 +28,12 @@ const page = () => {
   // fetchProduct()
   // fetchProductAllData()
   // fetchAllReviews()
-  // productCreationNew()
   // deleteProduct("665d667ab76a9c2e856b5fb8")
   // fetchImagesByProductId("665d6679b76a9c2e856b5fb2")
   // createdummyPosterFunction()
   // CreateCategories()
   // getallCategory()
+  // productCreationNew()
   
   return (
     <div className=" bg-pink-500 border-2 border-black px-10 ">
