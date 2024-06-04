@@ -101,7 +101,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                    </Link>
                  </div>
                  <div className="ProductDetails">
-                   <div className="card_slider px-4 pb-5">
+                   <div className="card_slider px-4 pb-5 ">
                      <div className="">Company name</div>
                      <div className=" font-extralight text-lg">product name</div>
                      <div>Price</div>

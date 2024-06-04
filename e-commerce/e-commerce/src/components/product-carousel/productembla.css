@@ -3,7 +3,7 @@
     
 
     margin: auto;
-    --slide-height: 25rem;
+    --slide-height: 30rem;
     --slide-spacing: 3rem;
     --slide-size: 100%;
     position: relative;
@@ -103,8 +103,8 @@
 
 .buynow{
 position: absolute;
-right: -2.5rem;
-top: 4.7rem;
+right: 1rem;
+top: 6rem;
 display: flex;
 align-items: center;
 border: 2px solid black;
