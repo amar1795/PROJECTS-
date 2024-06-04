@@ -348,37 +348,11 @@ export async function fetchCategoriesWithPosters() {
     try {
       await prismadb.category.create({
         data: {
-          name: "kids clogs",
-          parentId: "665deeca46b36eef0288e427",
+          name: "kids watches",
+          parentId: "665de7eb62075d484b0229db",
         },
-      });await prismadb.category.create({
-        data: {
-          name: "kids flips flops",
-          parentId: "665deeca46b36eef0288e427",
-        },
-      });await prismadb.category.create({
-        data: {
-          name: "kids sandals",
-          parentId: "665deeca46b36eef0288e427",
-        },
-      });await prismadb.category.create({
-        data: {
-          name: "kids school shoes",
-          parentId: "665deeca46b36eef0288e427",
-        },
-      });await prismadb.category.create({
-        data: {
-          name: "kids sneakers",
-          parentId: "665deeca46b36eef0288e427",
-        },
-      });await prismadb.category.create({
-        data: {
-          name: "kids sports shoes",
-          parentId: "665deeca46b36eef0288e427",
-        },
-      })
-  
-console.log("successfully created categories");
+      });
+    console.log("successfully created categories");
       } catch (error) {
         console.error("Error deleting sizes:", error);
     } 

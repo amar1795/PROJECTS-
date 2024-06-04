@@ -1290,6 +1290,14 @@ Retrieved dummy posters: [
     updatedAt: 2024-06-03T16:26:50.753Z
   },
   {
+    id: '665ebc387a973feb4e9cdc81',
+    PosterId: null,
+    name: 'kids watches',
+    parentId: '665de7eb62075d484b0229db',
+    createdAt: 2024-06-04T07:03:20.879Z,
+    updatedAt: 2024-06-04T07:03:20.879Z
+  },
+  {
     id: '665df25d46b36eef0288e42c',
     PosterId: null,
     name: 'boys jeans',

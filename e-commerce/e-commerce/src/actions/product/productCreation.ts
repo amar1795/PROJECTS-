@@ -11,20 +11,20 @@ interface ProductParams {
     productBrandId: string;
 }
 const productParams: ProductParams = {
-    productName: "Bootcut Jeans: Classic Fit with a Modern Twist",
-    productPrice: 2500.00,
-    productBrandId: "665ac7545788e185779d7cce",
-    productCategoryId: "665df25d46b36eef0288e42c",
-    productDiscountPercentage: 20,
-    productDescription: "Give your boy a classic yet contemporary look with our Bootcut Jeans. These jeans feature a slight flare at the bottom, perfect for wearing over boots or sneakers. The comfortable fit and sturdy denim fabric ensure durability and ease of wear. With a timeless design and modern twist, these bootcut jeans are versatile enough for both casual and dressy occasions.",
+    productName: "Sunshine Splash Kids' Orange Flip Flops: Brighten Their Day with Every Step",
+    productPrice: 3000.00,
+    productBrandId: "665ac7555788e185779d7cdc",
+    productCategoryId: "665df2e246b36eef0288e432",
+    productDiscountPercentage: 12,
+    productDescription: "Bring a burst of sunshine to your child's summer wardrobe with our Sunshine Splash Kids' Orange Flip Flops, perfect for adding a pop of color to their beach or poolside adventures. These vibrant orange flip flops feature a playful design that's sure to put a smile on their face. Made from lightweight and durable material, they offer comfort and support for active little feet. The textured footbed and non-slip sole provide traction and stability on wet surfaces, while the easy slip-on style makes them convenient for kids to wear. Whether they're splashing in the waves or building sandcastles on the shore, these orange flip flops will keep their feet happy and stylish all summer long.",
     productImages: [
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717150602/Kids/male%20kids/jeans/51F7hIxenXL._SX679__fj8a4i.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717150601/Kids/male%20kids/jeans/51eU4NK1hcL._SX679__bxuw1z.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717150598/Kids/male%20kids/jeans/41b7FdGiJJL._SX679__favo2r.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717150601/Kids/male%20kids/jeans/51eU4NK1hcL._SX679__bxuw1z.jpg",
-        
-                         
-    ]
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067060/Kids/Shoes/flip%20flops/71XI0CNWFkL._SY695__byvhxq.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067066/Kids/Shoes/flip%20flops/512gSJB4sBL._SY695__jdzqnc.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067011/Kids/Shoes/flip%20flops/61iLpOVh5KL._SY695__jf3c7r.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717066986/Kids/Shoes/flip%20flops/51YNUUnVkmL._SY695__k2opfu.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067014/Kids/Shoes/flip%20flops/61kiqXB0nxL._SY695__jdsknv.jpg",
+      
+          ]
 };
 
 export async function productCreationNew() {
