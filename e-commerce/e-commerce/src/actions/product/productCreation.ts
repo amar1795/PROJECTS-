@@ -11,18 +11,20 @@ interface ProductParams {
     productBrandId: string;
 }
 const productParams: ProductParams = {
-    productName: "Ocean Breeze Kids' Blue Crocs-Style Sandals: Dive into Comfort and Style",
-    productPrice: 9500.00,
-    productBrandId: "665ac7555788e185779d7cdb",
-    productCategoryId: "665df2e246b36eef0288e433",
+    productName: "SportStar Kids' Black School Shoes: Built for Tough Play and Everyday Wear",
+    productPrice: 7000.00,
+    productBrandId: "665ac7545788e185779d7ccf",
+    productCategoryId: "665df2e246b36eef0288e434",
     productDiscountPercentage: 35,
-    productDescription: "Dive into comfort and style with our Ocean Breeze Kids' Blue Crocs-Style Sandals, designed for young adventurers who love to make a splash. These vibrant blue sandals feature a Crocs-inspired design with rectangular perforations along the upper, adding a playful touch to their look. Made from lightweight and durable material, they offer all-day comfort and support for active little feet. The adjustable strap ensures a secure fit, while the textured footbed provides traction and stability on various surfaces. Whether they're exploring tide pools or playing in the backyard, these blue Crocs-like sandals will keep their feet happy and stylish on every adventure.",
+    productDescription: "Equip your child with the SportStar Kids' Black School Shoes, specifically designed for sports and rough play while maintaining a sleek school-ready look. These versatile black shoes combine the durability needed for active kids with the comfort required for long school days. Constructed from high-quality, rugged materials, they are built to withstand the demands of sports and playground activities. The reinforced toe cap and sturdy outsole provide extra protection and traction, ensuring stability on various surfaces. With a cushioned insole and breathable lining, these shoes offer all-day comfort and support. The secure lace-up or Velcro closure ensures a snug fit, making them the perfect choice for kids who need both toughness and versatility in their school footwear.",
     productImages: [
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067102/Kids/Shoes/sandals/51OhRzDUlLL._SY695__wwzgli.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067106/Kids/Shoes/sandals/51TRTbR1-6L._SY695__rz1bbq.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067111/Kids/Shoes/sandals/61DoprqdwnL._SY695__air4zy.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067097/Kids/Shoes/sandals/51JRkKyn7RL._SY695__lkldut.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067100/Kids/Shoes/sandals/51mi_CjhkXL._SY695__bnxjun.jpg", ]
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717068088/Kids/Shoes/school%20shoes/61rJeA8knwL._SY695__v43iyw.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717068071/Kids/Shoes/school%20shoes/61EInMRCg8L._SY695__otj4vm.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717068060/Kids/Shoes/school%20shoes/51RX59DqxoL._SY695__zwqkyh.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717068053/Kids/Shoes/school%20shoes/51GKXw07rHL._SY695__ahuyo5.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717068053/Kids/Shoes/school%20shoes/51GKXw07rHL._SY695__ahuyo5.jpg",
+
+         ]
 };
 
 export async function productCreationNew() {
