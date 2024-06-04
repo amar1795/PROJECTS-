@@ -11,18 +11,21 @@ interface ProductParams {
     productBrandId: string;
 }
 const productParams: ProductParams = {
-    productName: "SportStar Kids' Black School Shoes: Built for Tough Play and Everyday Wear",
-    productPrice: 7000.00,
+    productName: "GlidePro Kids' Black Skating Sneakers: Style Meets Performance",
+    productPrice: 4500.00,
     productBrandId: "665ac7545788e185779d7ccf",
-    productCategoryId: "665df2e246b36eef0288e434",
-    productDiscountPercentage: 35,
-    productDescription: "Equip your child with the SportStar Kids' Black School Shoes, specifically designed for sports and rough play while maintaining a sleek school-ready look. These versatile black shoes combine the durability needed for active kids with the comfort required for long school days. Constructed from high-quality, rugged materials, they are built to withstand the demands of sports and playground activities. The reinforced toe cap and sturdy outsole provide extra protection and traction, ensuring stability on various surfaces. With a cushioned insole and breathable lining, these shoes offer all-day comfort and support. The secure lace-up or Velcro closure ensures a snug fit, making them the perfect choice for kids who need both toughness and versatility in their school footwear.",
+    productCategoryId: "665df2e246b36eef0288e435",
+    productDiscountPercentage: 15,
+    productDescription: "Elevate your child's style and performance with our GlidePro Kids' Black Skating Sneakers, perfect for both skating and everyday fashion. These sleek black sneakers feature a stylish design that complements any outfit, making them ideal for kids who love to skate and look trendy. Crafted from high-quality, durable materials, they provide the necessary support and flexibility for skating, while the reinforced toe cap and sturdy outsole offer excellent protection and grip on various surfaces. The cushioned insole ensures all-day comfort, whether they're at the skate park or hanging out with friends. With a secure lace-up closure, these sneakers provide a snug and adjustable fit, making them the perfect choice for kids who need both functionality and fashion in their footwear.",
+
     productImages: [
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717068088/Kids/Shoes/school%20shoes/61rJeA8knwL._SY695__v43iyw.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717068071/Kids/Shoes/school%20shoes/61EInMRCg8L._SY695__otj4vm.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717068060/Kids/Shoes/school%20shoes/51RX59DqxoL._SY695__zwqkyh.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717068053/Kids/Shoes/school%20shoes/51GKXw07rHL._SY695__ahuyo5.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717068053/Kids/Shoes/school%20shoes/51GKXw07rHL._SY695__ahuyo5.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067318/Kids/Shoes/sneakers/617zBq7mtbL._SY695__hlujso.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067294/Kids/Shoes/sneakers/71Tf5On2KKL._SY695__grvjxa.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067261/Kids/Shoes/sneakers/61vP01idCTL._SY695__hywesz.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067247/Kids/Shoes/sneakers/61r0GIzvYcL._SY695__g64hjb.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067231/Kids/Shoes/sneakers/51NjecHp7rL._SY695__pfttcx.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067222/Kids/Shoes/sneakers/51DKgisn5XL._SY695__wyht1e.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067219/Kids/Shoes/sneakers/51AgTBc9zcL._SY695__la5isz.jpg",
 
          ]
 };
