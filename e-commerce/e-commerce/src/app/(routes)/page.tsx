@@ -15,6 +15,8 @@ import { getProductsByCategory } from "@/actions/createProduct";
 export default async function Home() {
   
   const mensCollectionData =await getProductsByCategory("665a0b9f14be77720636d443")
+  const womensCollection =await getProductsByCategory("665d97977547073cf15bf546")
+  const kidsCollection =await getProductsByCategory("665de7eb62075d484b0229db")
 
 
   return (
@@ -47,7 +49,7 @@ export default async function Home() {
                     Womens Collection
                   </h1>
                 </div>
-      <ProductCarousel SlideCount={20}/>
+      <ProductCarousel SlideCount={20} cardData={womensCollection}/>
     </div>
     <div className=" my-12 mb-4">
     <div className=" h-[4rem] mb-[2rem]">
@@ -55,7 +57,7 @@ export default async function Home() {
                     Kids Collection
                   </h1>
                 </div>
-      <ProductCarousel SlideCount={5}/>
+      <ProductCarousel SlideCount={20} cardData={kidsCollection}/>
     </div>
     </div>
     </div>

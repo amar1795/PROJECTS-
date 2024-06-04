@@ -1,5 +1,5 @@
 "use client"
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { EmblaOptionsType, EmblaCarouselType } from "embla-carousel";
 import { DotButton, useDotButton } from "./EmblaCarouselDotButton";
 import {
@@ -14,6 +14,7 @@ import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
 import { ThreeDCardDemo } from "../3d card/3dCard";
 import Link from "next/link";
+import { useTheme } from "next-themes";
 
 
 type Brand = {
@@ -50,6 +51,17 @@ type PropType = {
 };
 
 const EmblaCarousel: React.FC<PropType> = (props) => {
+  const { theme,setTheme } = useTheme()
+  // need to implement the theme toggle by myself
+//   useEffect(() => {
+//     let theme = localStorage.getItem('theme') || 'light';
+//     setTheme(theme);
+// }, []);
+
+// if (!theme) {
+//     return; // `theme` is null in the first render
+// }
+  console.log("this is the current theme", theme)
   const { slides, options,products } = props;
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
 
@@ -82,6 +94,9 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
     // Format the price with the Indian Rupee symbol
     return '₹' + price.toLocaleString('en-IN');
   };
+
+  
+    
   return (
     <section className="ProductEmbla_product">
       <div className="embla__viewport_product " ref={emblaRef}>
@@ -90,7 +105,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
           !products ?<>
           {slides.map((index) => (
              <div className="embla__slide_product " key={index}>
-               <div className="embla__slide__number__product  ">
+               <div className="embla__slide__number__product   ">
                  <div className="ProductImageCard h-60 over ">
                  <Link href={`categories/men/sdgsg`}>
                    <div className="ProductImage bg-red-400 h-full w-full">
@@ -129,21 +144,21 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
     <div className="ProductImageCard h-60 over">
       <Link href={`categories/men/${product.id}`}>
         <div className="ProductImage bg-red-400 h-full w-full">
-        <button className="heartButton hover:text-red-500">
-        <Heart size={40} className=" hover:fill-red-500" />
+        <button className={`heartButton hover:text-red-500` }>
+        <Heart size={40} className={` hover:fill-red-500 text-black`} />
 </button>
           {/* Adding alt text to the product image */}
-          <img src={product.images[0].url} alt={product.images[0].altText || "Product Image"} />
+          <img src={product.images[0]?.url} alt={product.images[0].altText || "Product Image"} />
         </div>
       </Link>
     </div>
     <div className="ProductDetails ">
-      <div className="card_slider px-4 pb-5 bg-white">
+    <div className={`card_slider px-4 pb-5 ${theme === 'dark' ? 'bg-black text-white':  'bg-white text-black' }`}>
         {/* Rendering the brand name */}
         <div>{product.brand.name}</div>
         {/* Rendering the product name */}
         <div className="font-extralight text-lg">
-        {product.name.length > 36 ? product.name.slice(0, 36) + '...' : product.name}
+        {product.name.length > 36 ? product.name.slice(0, 30) + '...' : product.name}
         </div>
         {/* Rendering the product price */}
         <div>{formatPrice(product.price)}</div>
