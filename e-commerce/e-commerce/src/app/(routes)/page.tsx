@@ -10,10 +10,12 @@ import { Card, CardContent } from "@/components/ui/card"
 import ProductCarousel from "@/components/product-carousel/carousel";
 import Testcarousel from "@/components/poster-carousel/carousel";
 import { ThreeDCardDemo } from "@/components/3d card/3dCard";
+import { getProductsByCategory } from "@/actions/createProduct";
 
 export default async function Home() {
   
- 
+  const mensCollectionData =await getProductsByCategory("665a0b9f14be77720636d443")
+
 
   return (
    <main className=" ">
@@ -37,7 +39,7 @@ export default async function Home() {
                     Mens Collection
                   </h1>
                 </div>
-      <ProductCarousel SlideCount={20}/>
+      <ProductCarousel SlideCount={20} cardData={mensCollectionData} />
     </div>
     <div className=" my-12">
     <div className=" h-[4rem] mb-[2rem]">

@@ -1,4 +1,4 @@
-import { createProduct, createProductRating, createProductReview, createProductVarient, deleteProduct, fetchAllReviews, fetchProduct, fetchProductAllData, fetchProductVarient, fetchProductanotherversion } from "@/actions/createProduct";
+import { createProduct, createProductRating, createProductReview, createProductVarient, deleteProduct, fetchAllProduct, fetchAllReviews, fetchProduct, fetchProductAllData, fetchProductVarient, fetchProductanotherversion, fetchProductsByCategory, fethChildrenCategories, getProductsByCategory } from "@/actions/createProduct";
 import { dummyUserFunction } from "@/actions/dummyUser";
 import { CreateBrand, CreateCategories, CreateColour, CreateSize, Createposter, UpdateCategory, createdummyPosterFunction, deleteSize, deleteduplicatebrandnames, dummyPosterFunction, fetchCategoriesWithPosters, fetchImagesByProductId, getAllColorsWithCount, getAllDummyPosters, getAllPosters, getAllSizes, getAllUsers, getBrand, getallCategory } from "@/actions/posterAction";
 import { productCreationNew } from "@/actions/product/productCreation";
@@ -35,7 +35,10 @@ const page = () => {
   // getallCategory()
   // productCreationNew()
   // UpdateCategory()
-  
+  // fetchAllProduct()
+  // fetchProductAllData()
+  // fetchProductsByCategory("665a0b9f14be77720636d443")
+  // getProductsByCategory("665a0b9f14be77720636d443")
   return (
     <div className=" bg-pink-500 border-2 border-black px-10 ">
       <div>

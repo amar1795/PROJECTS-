@@ -1382,3 +1382,25 @@ Retrieved dummy posters: [
 
 
 
+[
+  boys jeans :[[
+    { id: '665e032046b36eef0288e437' },
+    { id: '665e038a46b36eef0288e43d' },
+    { id: '665e040a46b36eef0288e441' },
+    { id: '665e045a46b36eef0288e447' },
+    { id: '665e04a946b36eef0288e44d' }
+  ] Product Count: 5
+,boys shirts :[
+  [
+    { id: '665ea8087a973feb4e9cdba5' },
+    { id: '665ea85d7a973feb4e9cdbac' },
+    { id: '665ea8ae7a973feb4e9cdbb1' },
+    { id: '665ea9377a973feb4e9cdbb7' },
+    { id: '665ea98a7a973feb4e9cdbbc' }
+  ] Product Count: 5
+]
+  ]
+  
+]
+
+

@@ -3,6 +3,8 @@
 import { faker } from "@faker-js/faker";
 import { prismadb } from "@/lib/db";
 import { NextResponse } from "next/server";
+import fs from 'fs';
+
 interface ProductParams {
     productName: string;
     productPrice: number;
@@ -378,6 +380,106 @@ export async function fetchProduct() {
           console.log("Category:", categoryName);    
 }
 
+export async function fetchAllProduct() {
+  const product = await prismadb.product.findMany();
+  const productCount = product.length;
+
+        // console.log("This is the product Category:", product);   
+        try {
+        //   // Convert products to JSON string
+        //   const productsJSON = JSON.stringify(product, null, 2);
+          
+        //   // Write JSON string to a file named products.json
+        //   fs.writeFileSync('products.json', productsJSON);
+          
+          console.log('Products saved to products.json',productCount);
+        } catch (error) {
+          console.error('Error saving products:', error);
+        } 
+}
+
+// fethces only the items per specific category
+export async function fetchProductsByCategory(category: string) {
+  const products = await prismadb.product.findMany({
+    where: {
+      categoryId: category,
+    },
+    // include: {
+    //   category: true,
+    //   brand: true,
+    //   images: true,
+    //   productVariants: {
+    //     include: {
+    //       color: true,
+    //       size: true,
+    //     },
+    //   },
+    //   ratings: true,
+      
+    // },
+    select: {
+      id: true,
+     
+    }
+    
+  });
+  const productCount = products.length;
+  console.log("Products:", products,"Product Count:",productCount);
+  return products;
+}
+
+
+export async function fethChildrenCategories(categoryId: string) {
+  const childrenCategories = await prismadb.category.findMany({
+    where: {
+      parentId: categoryId,
+    },
+  });
+  console.log("Children Categories:", childrenCategories);
+}
+
+// gives all the products of a specific category and its nested subcategories
+export async function getProductsByCategory(categoryId: string) {
+  // Fetch the category and its nested children categories
+  const categories = await prismadb.category.findMany({
+    where: {
+      OR: [
+        { id: categoryId },
+        { parentId: categoryId }
+      ]
+    },
+    select: {
+      id: true,
+      subcategories: {
+        select: {
+          id: true
+        }
+      }
+    }
+  });
+
+  // Extract all category IDs (including subcategories)
+  const categoryIds = categories.flatMap(category => 
+    [category.id, ...category.subcategories.map(subcategory => subcategory.id)]
+  );
+
+  // Fetch products under the extracted category IDs
+  const products = await prismadb.product.findMany({
+    where: {
+      categoryId: {
+        in: categoryIds
+      }
+    },
+    include: {
+      brand: true, // Include brand details
+      images: true, // Include product images
+      // Include any other relations you need
+    }
+  });
+  const productCount = products.length;
+  console.log("These are the Products:", products,"Product Count:",productCount);
+  return products;
+}
 export async function fetchAllReviews() {
     
     try {
