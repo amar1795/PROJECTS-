@@ -11,19 +11,19 @@ interface ProductParams {
     productBrandId: string;
 }
 const productParams: ProductParams = {
-    productName: "Sunshine Splash Kids' Orange Flip Flops: Brighten Their Day with Every Step",
-    productPrice: 3000.00,
+    productName: " Peppa Paradise Kids' Flip Flops: Splash into Fun with Peppa Pig",
+    productPrice: 8000.00,
     productBrandId: "665ac7555788e185779d7cdc",
     productCategoryId: "665df2e246b36eef0288e432",
-    productDiscountPercentage: 12,
-    productDescription: "Bring a burst of sunshine to your child's summer wardrobe with our Sunshine Splash Kids' Orange Flip Flops, perfect for adding a pop of color to their beach or poolside adventures. These vibrant orange flip flops feature a playful design that's sure to put a smile on their face. Made from lightweight and durable material, they offer comfort and support for active little feet. The textured footbed and non-slip sole provide traction and stability on wet surfaces, while the easy slip-on style makes them convenient for kids to wear. Whether they're splashing in the waves or building sandcastles on the shore, these orange flip flops will keep their feet happy and stylish all summer long.",
+    productDiscountPercentage: 22,
+    productDescription: "Let your little one splash into fun with our Peppa Paradise Kids' Flip Flops, featuring adorable Peppa Pig prints that are sure to bring a smile to their face. These cute flip flops showcase colorful graphics of Peppa and her friends, adding a playful touch to their summer style. Made from lightweight and durable material, they offer comfort and support for all-day wear. The textured footbed and non-slip sole provide traction and stability on wet surfaces, while the easy slip-on style makes them convenient for kids to wear. Whether they're playing at the beach or lounging by the pool, these Peppa Pig flip flops will keep their feet happy and stylish all summer long.",
     productImages: [
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067060/Kids/Shoes/flip%20flops/71XI0CNWFkL._SY695__byvhxq.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067066/Kids/Shoes/flip%20flops/512gSJB4sBL._SY695__jdzqnc.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067011/Kids/Shoes/flip%20flops/61iLpOVh5KL._SY695__jf3c7r.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717066986/Kids/Shoes/flip%20flops/51YNUUnVkmL._SY695__k2opfu.jpg",
-        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067014/Kids/Shoes/flip%20flops/61kiqXB0nxL._SY695__jdsknv.jpg",
-      
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067048/Kids/Shoes/flip%20flops/71RV8sA0ENL._SY695__pakioo.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067036/Kids/Shoes/flip%20flops/71cipHN864L._SY695__sbvjc1.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067052/Kids/Shoes/flip%20flops/71UAU-7r7kL._SY695__r6vvkm.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067045/Kids/Shoes/flip%20flops/71nsWDY7RRL._SY695__q531cq.jpg",
+        "https://res.cloudinary.com/dfveswqdm/image/upload/v1717067023/Kids/Shoes/flip%20flops/61sAsaIrHZL._SY695__xbd4c8.jpg",
+
           ]
 };
 
