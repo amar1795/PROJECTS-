@@ -32,6 +32,10 @@ import { fetchProductAllData, getProductsByCategory } from "@/actions/createProd
 //   };
 // }
 
+export type relatedProduct = {
+  id: string;
+  name: string;
+};
 
 export type updatedDataResponse = {
   id: string;
@@ -78,19 +82,20 @@ const page = ({ params }: { params: { product: string } }) => {
   const [outOfStock, setoutOfStock] = React.useState(false);
 
   const [data, setData] = React.useState<updatedDataResponse | null>(null);  
-  const [relatedProducts, setRelatedProducts] = React.useState<updatedDataResponse[] | null>(null);
+  const [relatedProducts, setRelatedProducts] = React.useState<relatedProduct[] | null>(null);
   React.useEffect(() => {
     const updateData = async () => {
         const updatedData: updatedDataResponse | undefined = await fetchProductAllData(params.product);
         console.log("this is the response:", updatedData);
         setData(updatedData || null);
         const relatedProducts = await getProductsByCategory(updatedData?.category?.parentId)
-        console.log("these are the related products:", relatedProducts);
+        setRelatedProducts(relatedProducts)
+        // console.log("these are the related products:", relatedProducts);
     };
 
     updateData();
 }, [params]);
-
+  console.log("these are the related product:", relatedProducts);
   const completeUrl = typeof window !== "undefined" ? window.location.href : "";
   const segments = completeUrl.split("/");
   const previousSegment = segments[segments.length - 2];
@@ -140,7 +145,7 @@ const page = ({ params }: { params: { product: string } }) => {
             </div>
           </div>
           <div>
-            <CategoriesRelatedProduct />
+            <CategoriesRelatedProduct relatedProduct={relatedProducts} />
           </div>
           <MainFooter />
         </div>

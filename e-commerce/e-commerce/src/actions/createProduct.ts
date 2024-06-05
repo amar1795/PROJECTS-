@@ -458,6 +458,7 @@ export async function getProductsByCategory(categoryId: string) {
     }
   });
 
+  
   // Extract all category IDs (including subcategories)
   const categoryIds = categories.flatMap(category => 
     [category.id, ...category.subcategories.map(subcategory => subcategory.id)]
@@ -473,13 +474,59 @@ export async function getProductsByCategory(categoryId: string) {
     include: {
       brand: true, // Include brand details
       images: true, // Include product images
+      ratings: {
+        include: {
+          images: true, // Include review images
+        },
+      },
       // Include any other relations you need
     }
   });
-  const productCount = products.length;
-  console.log("These are the Products:", products,"Product Count:",productCount);
-  return products;
+  const formattedProducts = products.map(product => {
+    const ratingsCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    const reviews = [];
+    let totalRatings = 0;
+    let totalRatingValue = 0;
+
+    product.ratings.forEach(rating => {
+      const reviewWithImages = {
+        rating: rating.rating,
+        review: rating.review,
+        images: rating.images.map(image => ({
+          id: image.id,
+          url: image.url,
+        })),
+      };
+      if (rating.review) {
+        reviews.push(reviewWithImages);
+      }
+      ratingsCount[rating.rating] = (ratingsCount[rating.rating] || 0) + 1;
+      totalRatingValue += rating.rating; // Sum the star counts weighted by their star value
+      totalRatings += 1;
+    });
+
+    const totalReviews = reviews.length;
+    const averageRating = totalRatings > 0 ? totalRatingValue / totalRatings : 0;
+
+    return {
+      ...product,
+      ratings: {
+        count: ratingsCount,
+        reviews: reviews,
+        totalReviews: totalReviews,
+        totalRatings: totalRatings,
+        averageRating: averageRating,
+      },
+    };
+  });
+
+  const productCount = formattedProducts.length;
+  console.log("These are the Products:", formattedProducts, "Product Count:", productCount);
+  return formattedProducts;
 }
+
+
+
 export async function fetchAllReviews() {
     
     try {
@@ -643,7 +690,7 @@ const productId = productdata; // Replace with the actual product ID
       // relatedProducts: relatedProducts, // Add related products to the organizedProduct
     };
   
-    console.dir(organizedProduct, { depth: null });
+    // console.dir(organizedProduct, { depth: null });
     return organizedProduct;
 }
   

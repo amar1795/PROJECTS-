@@ -33,7 +33,7 @@ const CategoriesRight: React.FC<CategoriesRightProps>  = ({ data }) => {
                     <div className="star_rating flex justify-between w-[14rem] border border-black mt-5 h-[2rem]">
                       <div className="star flex self-center border-r border-black pr-4">
                         <div className=" pl-2">
-                          {data?.ratings?.averageRating}
+                          {data?.ratings?.averageRating.toFixed(1)}
                         </div>
                         <div className=" pl-2 self-center">
                           <Star fill="black" size={18} />
