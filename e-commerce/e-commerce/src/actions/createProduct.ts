@@ -520,11 +520,12 @@ export async function fetchAllReviews() {
       }
 }
 
-export async function fetchProductAllData() {
-    // Fetch the product with its category, brand, images, and product variants
+export async function fetchProductAllData(productdata:string) {
+const productId = productdata; // Replace with the actual product ID
+  // Fetch the product with its category, brand, images, and product variants
     const product = await prismadb.product.findUnique({
       where: {
-        id: "665af50e3220eba7c7eab944",
+        id: productId,
       },
       include: {
         category: true, // Include the category
@@ -536,7 +537,11 @@ export async function fetchProductAllData() {
             size: true,
           },
         },
-        ratings: true, // Include the ratings
+        ratings: {
+          include: {
+            images: true, // Assuming `reviewImages` is the relation name for review images
+          },
+      },
       },
     });
   
@@ -558,17 +563,30 @@ export async function fetchProductAllData() {
     // Format the ratings
     const ratingsCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
     const reviews = [];
-  
+    let totalRatings = 0;
+    let totalRatingValue = 0;
+
     product.ratings.forEach((rating) => {
+      const reviewWithImages = {
+        rating: rating.rating,
+        review: rating.review,
+        images: rating.images.map(image => ({
+            id: image.id,
+            url: image.url,
+        })),
+    };
       if (rating.review) {
-        reviews.push({
-          rating: rating.rating,
-          review: rating.review,
-        });
+        reviews.push(reviewWithImages);
       }
       ratingsCount[rating.rating] = (ratingsCount[rating.rating] || 0) + 1;
+      totalRatingValue += rating.rating; // Sum the star counts weighted by their star value
+
+      totalRatings += 1;
+
     });
-  
+    const totalReviews = reviews.length;
+    const averageRating = totalRatings > 0 ? totalRatingValue / totalRatings : 0;
+
     // Organize the final product data
     const organizedProduct = {
       id: product.id,
@@ -593,6 +611,9 @@ export async function fetchProductAllData() {
       ratings: {
         count: ratingsCount,
         reviews: reviews,
+        totalReviews: totalReviews, // Add totalReviews to the ratings object
+            totalRatings: totalRatings, // Add totalRatings to the ratings object
+            averageRating: averageRating, // Add averageRating to the ratings object
       },
       createdAt: product.createdAt,
       updatedAt: product.updatedAt,

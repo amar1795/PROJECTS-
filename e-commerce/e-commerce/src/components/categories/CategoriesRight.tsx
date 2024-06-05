@@ -5,14 +5,34 @@ import { Button } from "@/components/ui/button";
 import StarChart from '../star charts/starChart';
 import Image from 'next/image';
 
-const CategoriesRight = () => {
+
+type ratingsProps={
+  count: { [key: string]: number },
+  reviews: { rating: number, review: string }[],
+}
+
+type props={
+brand?:string,
+category:string,
+description:string,
+discount:number,
+discountedPrice:number,
+price:number,
+rating:ratingsProps,
+}
+
+const CategoriesRight = ({props}:props) => {
+  // const {brand,category,description,discount,discountedPrice,price,rating}=props
+  const {brand}=props
+  // console.log("this is the props:",props?.brand)
     const [outOfStock, setoutOfStock] = React.useState(false);
+    
 
   return (
     <div>
        <div className=" bg-pink-500  ">
               <div className=" px-4">
-                <h1 className=" text-[2rem] font-bold">COMPANY NAME</h1>
+                <h1 className=" text-[2rem] font-bold">Product Brand</h1>
                 <h2 className=" text-[1.2rem]">PRODUCT HEADING</h2>
                 <div className="star_rating flex justify-between w-[12rem] border border-black mt-5 h-[2rem]">
                   <div className="star flex self-center border-r border-black pr-4">

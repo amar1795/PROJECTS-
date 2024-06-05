@@ -12,13 +12,13 @@ const PhotoViewer = ({ images}: PhotoViewerProps) => {
   return (
     <div>
 
-    <PhotoProvider  maskOpacity={0.5}>
+    <PhotoProvider  maskOpacity={0.8}>
       <div className="foo flex flex-wrap">
-        {images.map((item, index) => (
-          <PhotoView key={index} src={item} >
+        {images?.map((item, index) => (
+          <PhotoView key={index} src={item?.url} >
             <div className='border-2 border-black overflow-hidden'>
 
-            <img src={item} alt="" className=' h-[30rem] w-[22rem] object-cover  px-2 py-6 transform transition-transform duration-300 hover:scale-110 '  />
+            <img src={item?.url} alt="" className=' h-[30rem] w-[22rem] object-cover  px-2 py-6 transform transition-transform duration-300 hover:scale-110 '  />
             </div>
           </PhotoView>
         ))}
