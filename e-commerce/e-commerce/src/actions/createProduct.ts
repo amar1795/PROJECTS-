@@ -638,6 +638,114 @@ export async function getProductsByCategory(categoryId: string) {
 }
 
 
+// gives all the products of a specific category and its nested subcategories using filter and pagination
+export async function getProductsByCategoryfiltered(categoryId: string, page:number = 1, pageSize:number = 9) {
+  // Fetch the category and its nested children categories
+  const categories = await prismadb.category.findMany({
+    where: {
+      OR: [
+        { id: categoryId },
+        { parentId: categoryId }
+      ]
+    },
+    select: {
+      id: true,
+      subcategories: {
+        select: {
+          id: true
+        }
+      }
+    }
+  });
+
+  
+  // Extract all category IDs (including subcategories)
+  const categoryIds = categories.flatMap(category => 
+    [category.id, ...category.subcategories.map(subcategory => subcategory.id)]
+  );
+
+    // Calculate the skip value
+    const skip = (page - 1) * pageSize;
+
+  // Fetch products under the extracted category IDs
+  const products = await prismadb.product.findMany({
+    where: {
+      categoryId: {
+        in: categoryIds
+      }
+    },
+    include: {
+      brand: true, // Include brand details
+      images: true, // Include product images
+      ratings: {
+        include: {
+          images: true, // Include review images
+        },
+      },
+      // Include any other relations you need
+    },
+    skip: skip,
+    take: pageSize
+  });
+
+
+   // Fetch the total count of products for pagination
+   const totalProducts = await prismadb.product.count({
+    where: {
+      categoryId: {
+        in: categoryIds
+      }
+    }
+  });
+
+  const formattedProducts = products.map(product => {
+    const ratingsCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    const reviews = [];
+    let totalRatings = 0;
+    let totalRatingValue = 0;
+
+    product.ratings.forEach(rating => {
+      const reviewWithImages = {
+        rating: rating.rating,
+        review: rating.review,
+        images: rating.images.map(image => ({
+          id: image.id,
+          url: image.url,
+        })),
+      };
+      if (rating.review) {
+        reviews.push(reviewWithImages);
+      }
+      ratingsCount[rating.rating] = (ratingsCount[rating.rating] || 0) + 1;
+      totalRatingValue += rating.rating; // Sum the star counts weighted by their star value
+      totalRatings += 1;
+    });
+
+    const totalReviews = reviews.length;
+    const averageRating = totalRatings > 0 ? totalRatingValue / totalRatings : 0;
+
+    return {
+      ...product,
+      ratings: {
+        count: ratingsCount,
+        reviews: reviews,
+        totalReviews: totalReviews,
+        totalRatings: totalRatings,
+        averageRating: averageRating,
+      },
+    };
+  });
+
+  const productCount = formattedProducts.length;
+  console.log("These are the Products:", formattedProducts, "Product Count:", productCount);
+    return {
+    products: formattedProducts,
+    totalProducts: totalProducts,
+    currentPage: page,
+    totalPages: Math.ceil(totalProducts / pageSize),
+  };;
+}
+
 
 export async function fetchAllReviews() {
     

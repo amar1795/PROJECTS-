@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 import { redirect } from 'next/navigation'
 import { MainNav } from "@/components/main-nav";
@@ -10,12 +11,25 @@ import { Separator } from "@/components/ui/separator"
 import fcard from "@/components/filters-category/filterCard";
 import Fcard from "@/components/filters-category/filterCard";
 import { PaginationComponent } from "@/components/pagination";
-import { getProductsByCategory } from '@/actions/createProduct';
+import { getProductsByCategory, getProductsByCategoryfiltered } from '@/actions/createProduct';
 import CategoriesRelatedProduct from '@/components/categories/CategoriesRelatedProduct';
 
-const Page = async({ params }: { params: { categories: string } }) => {
+const Page = ({ params }: { params: { categories: string } }) => {
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [paginatedData, setPaginatedData] = React.useState({ products: [], totalPages: 0 });
 
-  const mensCollectionData =await getProductsByCategory("665a0b9f14be77720636d443")
+  React.useEffect(() => {
+    const fetchPaginatedData = async () => {
+      const data = await getProductsByCategoryfiltered("665a0b9f14be77720636d443", currentPage, 10);
+      setPaginatedData({ products: data.products, totalPages: data.totalPages });
+    };
+    fetchPaginatedData();
+  }, [currentPage]);
+
+  console.log("this is the paginated data", paginatedData)
+
+  // const mensCollectionData =await getProductsByCategory("665a0b9f14be77720636d443")
+  // const paginatedData =await getProductsByCategoryfiltered("665a0b9f14be77720636d443",1,10)
 
     const categoryColors: { [key: string]: string } = {
         men: 'bg-red-500',
@@ -32,7 +46,6 @@ const Page = async({ params }: { params: { categories: string } }) => {
         redirect(`/not-found`)         
        
     }
-
     const filterData = [
         {
           category: "Category",
@@ -102,12 +115,14 @@ const Page = async({ params }: { params: { categories: string } }) => {
                         <div>
                         This is the categories page for {params.categories}
                         </div>
-                        <CategoriesRelatedProduct relatedProduct={mensCollectionData}  />
+                        <CategoriesRelatedProduct relatedProduct={paginatedData.products}  />
 
                     </div>
                
                     <div className=" h-[4rem] ">
-                        <PaginationComponent />
+                        <PaginationComponent currentPage={currentPage} 
+                totalPages={paginatedData.totalPages} 
+                onPageChange={setCurrentPage}  />
                     </div>
                     </div>
             </div>
