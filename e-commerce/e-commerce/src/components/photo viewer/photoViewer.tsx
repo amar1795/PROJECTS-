@@ -9,6 +9,10 @@ type PhotoViewerProps = {
 
 const PhotoViewer = ({ images}: PhotoViewerProps) => {
     
+  if (!images) {
+    return <div>loading...</div>;
+  }
+  
   return (
     <div>
 
