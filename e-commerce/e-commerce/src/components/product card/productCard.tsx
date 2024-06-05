@@ -14,6 +14,8 @@ const formatPrice = (price: number): string => {
 };
 
 const ProductCard: React.FC<updatedDataResponse> = ({ product }) => {
+  console.log("this is the productID from product card", product.id);
+  
   return (
     <div>
       <div className="sembla__slide_product pl-[3rem] ">

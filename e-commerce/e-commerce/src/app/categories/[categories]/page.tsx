@@ -10,8 +10,13 @@ import { Separator } from "@/components/ui/separator"
 import fcard from "@/components/filters-category/filterCard";
 import Fcard from "@/components/filters-category/filterCard";
 import { PaginationComponent } from "@/components/pagination";
+import { getProductsByCategory } from '@/actions/createProduct';
+import CategoriesRelatedProduct from '@/components/categories/CategoriesRelatedProduct';
 
-const Page = ({ params }: { params: { categories: string } }) => {
+const Page = async({ params }: { params: { categories: string } }) => {
+
+  const mensCollectionData =await getProductsByCategory("665a0b9f14be77720636d443")
+
     const categoryColors: { [key: string]: string } = {
         men: 'bg-red-500',
         women: 'bg-pink-500',
@@ -63,6 +68,7 @@ const Page = ({ params }: { params: { categories: string } }) => {
       ];
 
     return (
+      
       <div className=' overflow-hidden '>
            <div className="fixed top-0 left-0 right-0  z-10">
             <MainNav  />
@@ -92,8 +98,12 @@ const Page = ({ params }: { params: { categories: string } }) => {
                 </div>
 
                 <div className=" flex-grow">
-                    <div className={`h-[90vh] ${categoryColors[params.categories]}`}>
+                    <div className={`min-h-[90vh] ${categoryColors[params.categories]}`}>
+                        <div>
                         This is the categories page for {params.categories}
+                        </div>
+                        <CategoriesRelatedProduct relatedProduct={mensCollectionData}  />
+
                     </div>
                
                     <div className=" h-[4rem] ">

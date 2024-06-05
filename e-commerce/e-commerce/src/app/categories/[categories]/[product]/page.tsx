@@ -89,14 +89,18 @@ const page = ({ params }: { params: { product: string } }) => {
         const updatedData: updatedDataResponse | undefined = await fetchProductAllData(params.product);
         console.log("this is the response:", updatedData);
         setData(updatedData || null);
-        const relatedProducts = await getProductsByCategoryOriginal(updatedData?.category?.parentId)
-        setRelatedProducts(relatedProducts)
+        // const relatedProducts = await getProductsByCategoryOriginal(updatedData?.category?.parentId)
+        const relatedProducts = await getProductsByCategory(updatedData?.category?.id)
+        setRelatedProducts(relatedProducts);
         setParentCategory(updatedData?.category?.parentName || "");
         // console.log("these are the related products:", relatedProducts);
     };
 
     updateData();
 }, [params]);
+
+const ProductId=data?.id;
+console.log("this is the product id:", ProductId);
   console.log("these are the related product:", relatedProducts);
   const completeUrl = typeof window !== "undefined" ? window.location.href : "";
   const segments = completeUrl.split("/");
@@ -147,7 +151,11 @@ const page = ({ params }: { params: { product: string } }) => {
             </div>
           </div>
           <div>
-            <CategoriesRelatedProduct relatedProduct={relatedProducts}  />
+            <div className="bg-blue-500">
+            <h1 className=" pt-4 pb-4 text-[2rem]">Related products</h1>
+
+            </div>
+            <CategoriesRelatedProduct relatedProduct={relatedProducts} ProductId={ProductId} />
           </div>
           <MainFooter />
         </div>

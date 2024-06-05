@@ -42,7 +42,7 @@ type Product = {
     const SLIDES = Array.from(Array(SLIDE_COUNT).keys())
   return (
     <div>
-        <EmblaCarousel slides={SLIDES} options={OPTIONS} products={cardData} category={category} />
+        <EmblaCarousel slides={SLIDES} options={OPTIONS} products={cardData}  />
     </div>
   )
 }
