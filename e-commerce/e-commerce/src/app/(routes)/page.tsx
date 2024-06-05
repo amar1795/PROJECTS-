@@ -41,7 +41,7 @@ export default async function Home() {
                     Mens Collection
                   </h1>
                 </div>
-      <ProductCarousel SlideCount={20} cardData={mensCollectionData} />
+      <ProductCarousel SlideCount={20} cardData={mensCollectionData} category="men" />
     </div>
     <div className=" my-12">
     <div className=" h-[4rem] mb-[2rem]">
@@ -49,7 +49,7 @@ export default async function Home() {
                     Womens Collection
                   </h1>
                 </div>
-      <ProductCarousel SlideCount={20} cardData={womensCollection}/>
+      <ProductCarousel SlideCount={20} cardData={womensCollection} category="women"/>
     </div>
     <div className=" my-12 mb-4">
     <div className=" h-[4rem] mb-[2rem]">
@@ -57,7 +57,7 @@ export default async function Home() {
                     Kids Collection
                   </h1>
                 </div>
-      <ProductCarousel SlideCount={20} cardData={kidsCollection}/>
+      <ProductCarousel SlideCount={20} cardData={kidsCollection} category="kids"/>
     </div>
     </div>
     </div>

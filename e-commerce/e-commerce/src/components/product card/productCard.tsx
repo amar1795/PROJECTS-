@@ -6,6 +6,7 @@ import {
   relatedProduct,
   updatedDataResponse,
 } from "@/app/categories/[categories]/[product]/page";
+import Link from "next/link";
 
 const formatPrice = (price: number): string => {
   // Format the price with the Indian Rupee symbol
@@ -22,6 +23,7 @@ const ProductCard: React.FC<updatedDataResponse> = ({ product }) => {
         >
           {/* top part */}
           <button>
+          <Link href={`${product.id}`}>
           <div className="ProductImageCard min-h-[19rem] relative ">
             <button className={`heartButton z-10 hover:text-red-500`}>
               <Heart
@@ -39,6 +41,8 @@ const ProductCard: React.FC<updatedDataResponse> = ({ product }) => {
               />
             </div>
           </div>
+          </Link>
+
           </button>
           {/* middle part */}
           <div className=" text-sm flex justify-between bg-opacity-20 backdrop-blur-lg border border-white/30 ">

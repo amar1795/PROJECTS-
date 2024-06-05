@@ -48,6 +48,7 @@ type PropType = {
   slides: number[];
   options?: EmblaOptionsType;
   products: Product[];
+  category: string;
 };
 
 const EmblaCarousel: React.FC<PropType> = (props) => {
@@ -62,7 +63,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
 //     return; // `theme` is null in the first render
 // }
   console.log("this is the current theme", theme)
-  const { slides, options,products } = props;
+  const { slides, options,products,category } = props;
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
 
   const onNavButtonClick = useCallback((emblaApi: EmblaCarouselType) => {
@@ -120,7 +121,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                      <div className="">Company name</div>
                      <div className=" font-extralight text-lg">product name</div>
                      <div>Price</div>
-                     <Link href={`categories/men/sdgsg`}>
+                     <Link href={`categories/${category}/sdgsg`}>
                      <button className="buynow ">
                        <div>
                          <ShoppingCart size={30} />
@@ -142,7 +143,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
   <div className="embla__slide__number__product">
     {/* Rendering the product image */}
     <div className="ProductImageCard h-60 over">
-      <Link href={`categories/men/${product.id}`}>
+      <Link href={`categories/${category}/${product.id}`}>
         <div className="ProductImage bg-red-400 h-full w-full">
         <button className={`heartButton hover:text-red-500` }>
         <Heart size={40} className={` hover:fill-red-500 text-black`} />

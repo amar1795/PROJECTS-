@@ -20,7 +20,7 @@ import Image from "next/image";
 import PhotoViewer from "@/components/photo viewer/photoViewer";
 import CategoriesRight from "@/components/categories/CategoriesRight";
 import CategoriesRelatedProduct from "@/components/categories/CategoriesRelatedProduct";
-import { fetchProductAllData, getProductsByCategory } from "@/actions/createProduct";
+import { fetchProductAllData, getProductsByCategory, getProductsByCategoryOriginal } from "@/actions/createProduct";
 
 //meta data generation
 // export async function generateMetadata({ params }: { params: { product: string}}) {
@@ -83,13 +83,15 @@ const page = ({ params }: { params: { product: string } }) => {
 
   const [data, setData] = React.useState<updatedDataResponse | null>(null);  
   const [relatedProducts, setRelatedProducts] = React.useState<relatedProduct[] | null>(null);
+  const [parentCategory, setParentCategory] = React.useState<string>("");
   React.useEffect(() => {
     const updateData = async () => {
         const updatedData: updatedDataResponse | undefined = await fetchProductAllData(params.product);
         console.log("this is the response:", updatedData);
         setData(updatedData || null);
-        const relatedProducts = await getProductsByCategory(updatedData?.category?.parentId)
+        const relatedProducts = await getProductsByCategoryOriginal(updatedData?.category?.parentId)
         setRelatedProducts(relatedProducts)
+        setParentCategory(updatedData?.category?.parentName || "");
         // console.log("these are the related products:", relatedProducts);
     };
 
@@ -139,13 +141,13 @@ const page = ({ params }: { params: { product: string } }) => {
               {/* right component */}
               {/* brand:string */}
 
-               <CategoriesRight data={data}/> 
+               <CategoriesRight data={data} /> 
                {/* <h1 className=" text-[2rem]">{data?.brand.name}</h1>  */}
               
             </div>
           </div>
           <div>
-            <CategoriesRelatedProduct relatedProduct={relatedProducts} />
+            <CategoriesRelatedProduct relatedProduct={relatedProducts}  />
           </div>
           <MainFooter />
         </div>
