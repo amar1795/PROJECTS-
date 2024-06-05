@@ -15,6 +15,7 @@ const CategoriesRight: React.FC<CategoriesRightProps>  = ({ data }) => {
   if (!data) {
     return <div>Loading...</div>;
   }
+// brand cannot be destructured from data issue arised because the data  was null , so i added a check to see if data is null or not and display the loading message if it is null
 
   const { brand, price, discountedPrice, description } = data;
 
