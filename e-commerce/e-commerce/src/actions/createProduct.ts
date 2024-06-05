@@ -528,7 +528,11 @@ const productId = productdata; // Replace with the actual product ID
         id: productId,
       },
       include: {
-        category: true, // Include the category
+        category: {
+          include: {
+            parent: true, // Include the parent category
+          },
+        },  // Include the category
         brand: true, // Include the brand
         images: true, // Include the images
         productVariants: {
@@ -549,7 +553,22 @@ const productId = productdata; // Replace with the actual product ID
       console.log("Product not found");
       return;
     }
-  
+    const parentCategory = product.category.parent; // Access the parent category
+
+  // Fetch related products based on the parent category
+    // const relatedProducts = await prismadb.product.findMany({
+    //   where: {
+    //     categoryId: parentCategory.id,
+    //     NOT: {
+    //       id: productId,
+    //     },
+    //   },
+    //   include: {
+    //     brand: true, // Include brand details
+    //     images: true, // Include product images
+    //     // Include any other relations you need
+    //   },
+    // });
     // Format the productVariants to include color and size names directly
     const formattedProductVariants = product.productVariants.map((variant) => ({
       id: variant.id,
@@ -598,6 +617,8 @@ const productId = productdata; // Replace with the actual product ID
       category: {
         id: product.category.id,
         name: product.category.name,
+        parentId: parentCategory.id, // Include parent category ID
+      parentName: parentCategory.name, // Include parent category name
       },
       brand: {
         id: product.brand.id,
@@ -617,6 +638,9 @@ const productId = productdata; // Replace with the actual product ID
       },
       createdAt: product.createdAt,
       updatedAt: product.updatedAt,
+      // parentCategoryId: parentCategory.id, // Add parent category ID to the organizedProduct
+      // parentCategoryName: parentCategory.name, // Add parent category name to the organizedProduct
+      // relatedProducts: relatedProducts, // Add related products to the organizedProduct
     };
   
     console.dir(organizedProduct, { depth: null });

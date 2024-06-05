@@ -23,8 +23,7 @@ const productParams: ProductParams = {
         "https://res.cloudinary.com/dfveswqdm/image/upload/v1717068177/Kids/Shoes/sports%20shoes/51a1aALntxL._SY695__paz4yi.jpg",
         "https://res.cloudinary.com/dfveswqdm/image/upload/v1717068192/Kids/Shoes/sports%20shoes/61L2yEhmNxL._SY695__apok8x.jpg",
         "https://res.cloudinary.com/dfveswqdm/image/upload/v1717068192/Kids/Shoes/sports%20shoes/61L2yEhmNxL._SY695__apok8x.jpg",
-        
-        
+
          ]
 };
 

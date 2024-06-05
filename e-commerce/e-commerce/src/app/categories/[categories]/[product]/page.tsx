@@ -20,7 +20,18 @@ import Image from "next/image";
 import PhotoViewer from "@/components/photo viewer/photoViewer";
 import CategoriesRight from "@/components/categories/CategoriesRight";
 import CategoriesRelatedProduct from "@/components/categories/CategoriesRelatedProduct";
-import { fetchProductAllData } from "@/actions/createProduct";
+import { fetchProductAllData, getProductsByCategory } from "@/actions/createProduct";
+
+//meta data generation
+// export async function generateMetadata({ params }: { params: { product: string}}) {
+
+//   const post = await await fetchProductAllData(params.product)
+//   return {
+//     title: post?.name,
+//     description: post?.description,
+//   };
+// }
+
 
 export type updatedDataResponse = {
   id: string;
@@ -62,16 +73,19 @@ export type updatedDataResponse = {
   updatedAt: string;
 };
 
+
 const page = ({ params }: { params: { product: string } }) => {
   const [outOfStock, setoutOfStock] = React.useState(false);
 
   const [data, setData] = React.useState<updatedDataResponse | null>(null);  
-
+  const [relatedProducts, setRelatedProducts] = React.useState<updatedDataResponse[] | null>(null);
   React.useEffect(() => {
     const updateData = async () => {
         const updatedData: updatedDataResponse | undefined = await fetchProductAllData(params.product);
         console.log("this is the response:", updatedData);
         setData(updatedData || null);
+        const relatedProducts = await getProductsByCategory(updatedData?.category?.parentId)
+        console.log("these are the related products:", relatedProducts);
     };
 
     updateData();
