@@ -11,38 +11,38 @@ import Link from "next/link";
 
 const formatPrice = (price: number): string => {
   // Format the price with the Indian Rupee symbol
-  return '₹' + price.toLocaleString('en-IN');
+  return '₹' + price?.toLocaleString('en-IN');
 };
 
 // Function to remove spaces from a string
 const removeSpaces = (name: string): string => {
-  return name.replace(/\s+/g, '');
+  return name?.replace(/\s+/g, '');
 };
 
 const ProductCard: React.FC<updatedDataResponse> = ({ product }) => {
-  console.log("this is the productID from product card", product.category.name);
+  console.log("this is the productID from product card", product?.category?.name);
   
  const completeUrl = typeof window !== "undefined" ? window.location.href : "";
  console.log("this is the complete url", completeUrl);
 
  const segments = completeUrl.split("/");
 
- const matchingSegmentIndex = segments.findIndex(segment => removeSpaces(segment) === removeSpaces(product.category.name));
-  console.log("this is the product category name", product.category.name);
+ const matchingSegmentIndex = segments.findIndex(segment => removeSpaces(segment) === removeSpaces(product?.category?.name));
+  console.log("this is the product category name", product?.category?.name);
  // If a matching segment is found, construct the new URL
  let newUrl = completeUrl;
  if (matchingSegmentIndex !== -1) {
    // Remove the segments from the matching segment index onwards
    const newSegments = segments.slice(0, matchingSegmentIndex);
    // Add the product category name and ID to the new segments
-   newSegments.push(removeSpaces(product.category.name), product.id);
+   newSegments.push(removeSpaces(product?.category?.name), product?.id);
    // Join the new segments to form the new URL
    newUrl = newSegments.join('/');
  }
  else
  {
  // If no matching segment is found, append the product category name and ID to the end of the URL
- newUrl = `${completeUrl}/${removeSpaces(product.category.name)}/${product.id}`;
+ newUrl = `${completeUrl}/${removeSpaces(product?.category?.name)}/${product?.id}`;
  }
 
 
@@ -109,9 +109,9 @@ const ProductCard: React.FC<updatedDataResponse> = ({ product }) => {
                 </h1>
                 <p className="font-extralight text-[0.9rem]">
                   {" "}
-                  {product.name.length > 36
-                    ? product.name.slice(0, 25) + "..."
-                    : product.name}
+                  {product?.name.length > 36
+                    ? product?.name.slice(0, 25) + "..."
+                    : product?.name}
                 </p>
                 <div className=" flex ">
                 <h1 className=" text-[1.4rem] font-bold" style={{ textDecoration: 'line-through' }}>{product?.price}</h1>

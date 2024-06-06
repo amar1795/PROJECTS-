@@ -15,8 +15,10 @@ import { getProductsByCategory, getProductsByCategoryFiltered, getProductsByCate
 import CategoriesRelatedProduct from '@/components/categories/CategoriesRelatedProduct';
 
 const Page = ({ params }: { params: { categories: string } }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [paginatedData, setPaginatedData] = useState({ products: [], totalPages: 0 });
+  const [currentPage, setCurrentPage] = useState(() => {
+    const storedPage = localStorage.getItem('currentPage');
+    return storedPage ? parseInt(storedPage, 10) : 1;
+  });  const [paginatedData, setPaginatedData] = useState({ products: [], totalPages: 0 });
   const [categoryName, setSelectedCategory] = useState("");
   const [parentCategoryName, setparentCategoryName] = useState(params.categories);
   const [brandName, setBrandName] = useState('');
@@ -25,6 +27,22 @@ const Page = ({ params }: { params: { categories: string } }) => {
   const [minDiscountPercentage, setMinDiscountPercentage] = useState(0);
   const [maxDiscountPercentage, setMaxDiscountPercentage] = useState(100);
   const [filterData, setFilterData] = useState([]);
+
+console.log("this is the current page",currentPage)
+  // Load current page from local storage on component mount
+  useEffect(() => {
+    const storedPage = localStorage.getItem('currentPage');
+    if (storedPage) {
+      setCurrentPage(parseInt(storedPage, 10));
+    }
+  }, []);
+
+// Save current page to local storage whenever it changes
+useEffect(() => {
+  localStorage.setItem('currentPage', currentPage.toString());
+}, [currentPage]);
+
+
 
   useEffect(() => {
     const fetchPaginatedData = async () => {

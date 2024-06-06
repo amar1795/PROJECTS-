@@ -29,6 +29,7 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
   const [maxDiscountPercentage, setMaxDiscountPercentage] = useState(100);
   const [filterData, setFilterData] = useState([]);
 console.log("this is the parent category name",parentCategoryName)
+
   useEffect(() => {
     const fetchPaginatedData = async () => {
       const data = await getProductsByCategoryFiltered(
