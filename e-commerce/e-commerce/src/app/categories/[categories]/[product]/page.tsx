@@ -84,6 +84,7 @@ const page = ({ params }: { params: { product: string } }) => {
   const [data, setData] = React.useState<updatedDataResponse | null>(null);  
   const [relatedProducts, setRelatedProducts] = React.useState<relatedProduct[] | null>(null);
   const [parentCategory, setParentCategory] = React.useState<string>("");
+  
   React.useEffect(() => {
     const updateData = async () => {
         const updatedData: updatedDataResponse | undefined = await fetchProductAllData(params.product);

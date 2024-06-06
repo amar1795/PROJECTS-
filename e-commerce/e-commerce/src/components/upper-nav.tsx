@@ -16,7 +16,7 @@ import { useTheme } from "next-themes"
 const Uppernav = () => {
 
   return (
-    <div className=" flex justify-center items-center mt-7 w-full h-10 px-[1.9rem]">
+    <div className=" flex justify-center items-center mt-7 w-full h-10 px-[1.9rem] z-50">
       <div className="w-full h-[9rem] bg-white bg-opacity-[80px] backdrop-blur-lg border border-white/30 flex justify-center items-center">
         <div className=" mr-5">
           <CustomButton buttonName="All" />
