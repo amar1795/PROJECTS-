@@ -18,7 +18,7 @@ export default async function Home() {
   const womensCollection =await getProductsByCategory("665d97977547073cf15bf546")
   const kidsCollection =await getProductsByCategory("665de7eb62075d484b0229db")
 
-
+console.log("this is the menscollection",mensCollectionData[0].brand)
   return (
    <main className=" ">
     {/* hscreen was causing the issue for the footer as hscreen sets the height of the current viewable screen hence the footer waas not going to the bottom */}

@@ -21,7 +21,7 @@ const Page = ({ params }: { params: { categories: string } }) => {
   const [parentCategoryName, setparentCategoryName] = useState(params.categories);
   const [brandName, setBrandName] = useState('');
   const [minDiscountedPrice, setMinDiscountedPrice] = useState(0);
-  const [maxDiscountedPrice, setMaxDiscountedPrice] = useState(50000);
+  const [maxDiscountedPrice, setMaxDiscountedPrice] = useState(100000);
   const [minDiscountPercentage, setMinDiscountPercentage] = useState(0);
   const [maxDiscountPercentage, setMaxDiscountPercentage] = useState(100);
   const [filterData, setFilterData] = useState([]);

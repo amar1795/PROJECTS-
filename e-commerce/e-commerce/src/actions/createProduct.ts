@@ -576,7 +576,7 @@ export async function getProductsByCategory(categoryId: string) {
   const categoryIds = categories.flatMap(category => 
     [category.id, ...category.subcategories.map(subcategory => subcategory.id)]
   );
-  console.log("Category Ids:", categoryIds);
+  // console.log("Category Ids:", categoryIds);
 
   // Fetch products under the extracted category IDs
   const products = await prismadb.product.findMany({
@@ -593,6 +593,7 @@ export async function getProductsByCategory(categoryId: string) {
           images: true, // Include review images
         },
       },
+      category: true,
       // Include any other relations you need
     }
   });
@@ -761,7 +762,6 @@ export async function getProductsByCategoryFiltered(
 ) {
 
 // First, retrieve the categoryId based on the parentCategoryName
-  
 const parentCategory = await prismadb.category.findFirst({
   where: {
     name: parentCategoryName
@@ -797,6 +797,15 @@ if (parentCategory) {
       }
     }
   });
+
+// Filter out categories with the provided parent category ID
+const filteredCategories = categories.filter(category => category?.id != parentCategory?.id);
+console.log("Filtered Categories:", filteredCategories);
+
+  const uniqueCategories = Array.from(new Set(filteredCategories.map(category => category.name.toLowerCase())));
+  
+  console.log("Unique Categories:", uniqueCategories);
+  
 
   let selectedCategory;
 
@@ -921,10 +930,9 @@ console.log('Total Products:', productCount);
     }
   });
 
-  console.log("Total Products:", totalProducts);
-  const uniqueCategories = Array.from(new Set(products.map(product => product?.category?.name)));
-  console.log("Unique Categories:", uniqueCategories);
+  console.log("Total Products Count:", totalProducts);
   
+
 
   const uniqueBrands = Array.from(new Set(products.map(product => product.brand.name)));
   console.log("Unique Brands:", uniqueBrands);

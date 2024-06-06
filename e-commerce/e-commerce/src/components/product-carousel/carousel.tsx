@@ -19,6 +19,13 @@ type Image = {
   altText?: string;
 };
 
+type Category = {
+  id:string;
+  name:string;
+  parentId:string;
+  parentName:string;
+}
+
 type Product = {
   id: string;
   name: string;
@@ -28,6 +35,7 @@ type Product = {
   discountedPrice: number | null;
   description: string;
   categoryId: string;
+  category: Category;
   createdAt: Date;
   updatedAt: Date;
   brand: Brand;
@@ -35,14 +43,14 @@ type Product = {
 };
 
 
- const  ProductCarousel=async({SlideCount,cardData}:{SlideCount:number,cardData:Product[],category:string})=> {
 
+const  ProductCarousel=async({SlideCount,cardData,category}:{SlideCount:number,cardData:Product[],category:string})=> {
     const OPTIONS: EmblaOptionsType = { dragFree: true, loop: false }
     const SLIDE_COUNT = SlideCount
     const SLIDES = Array.from(Array(SLIDE_COUNT).keys())
   return (
     <div>
-        <EmblaCarousel slides={SLIDES} options={OPTIONS} products={cardData}  />
+        <EmblaCarousel slides={SLIDES} options={OPTIONS} products={cardData} category={category}  />
     </div>
   )
 }

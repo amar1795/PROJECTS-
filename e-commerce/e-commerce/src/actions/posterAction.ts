@@ -89,7 +89,7 @@ export async function getAllUsers() {
 export async function getAllPosters() {
     try {
         const posters = await prismadb.poster.findMany();
-        console.log("successfully retrieved posters",posters);
+        // console.log("successfully retrieved posters",posters);
         return posters;
     } catch (error) {
         console.error('Error retrieving posters:', error);
