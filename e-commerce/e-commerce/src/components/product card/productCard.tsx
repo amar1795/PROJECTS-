@@ -1,3 +1,4 @@
+
 import { Heart, Minus, Plus, ShoppingCart, StarIcon } from "lucide-react";
 import React from "react";
 import "./product.css";
@@ -13,9 +14,38 @@ const formatPrice = (price: number): string => {
   return '₹' + price.toLocaleString('en-IN');
 };
 
+// Function to remove spaces from a string
+const removeSpaces = (name: string): string => {
+  return name.replace(/\s+/g, '');
+};
+
 const ProductCard: React.FC<updatedDataResponse> = ({ product }) => {
-  console.log("this is the productID from product card", product.id);
+  console.log("this is the productID from product card", product.category.name);
   
+ const completeUrl = typeof window !== "undefined" ? window.location.href : "";
+ console.log("this is the complete url", completeUrl);
+
+ const segments = completeUrl.split("/");
+
+ const matchingSegmentIndex = segments.findIndex(segment => removeSpaces(segment) === removeSpaces(product.category.name));
+  console.log("this is the product category name", product.category.name);
+ // If a matching segment is found, construct the new URL
+ let newUrl = completeUrl;
+ if (matchingSegmentIndex !== -1) {
+   // Remove the segments from the matching segment index onwards
+   const newSegments = segments.slice(0, matchingSegmentIndex);
+   // Add the product category name and ID to the new segments
+   newSegments.push(removeSpaces(product.category.name), product.id);
+   // Join the new segments to form the new URL
+   newUrl = newSegments.join('/');
+ }
+ else
+ {
+ // If no matching segment is found, append the product category name and ID to the end of the URL
+ newUrl = `${completeUrl}/${removeSpaces(product.category.name)}/${product.id}`;
+ }
+
+
   return (
     <div>
       <div className="sembla__slide_product pl-[3rem] ">
@@ -25,7 +55,7 @@ const ProductCard: React.FC<updatedDataResponse> = ({ product }) => {
         >
           {/* top part */}
           <button>
-          <Link href={`${product.id}`}>
+          <Link href={newUrl}>
           <div className="ProductImageCard min-h-[19rem] relative ">
             <button className={`heartButton z-10 hover:text-red-500`}>
               <Heart

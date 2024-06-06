@@ -41,7 +41,7 @@ console.log("this is the menscollection",mensCollectionData[0].brand)
                     Mens Collection
                   </h1>
                 </div>
-      <ProductCarousel SlideCount={20} cardData={mensCollectionData} category="men" />
+      <ProductCarousel SlideCount={20} cardData={mensCollectionData} category="Mens" />
     </div>
     <div className=" my-12">
     <div className=" h-[4rem] mb-[2rem]">
@@ -49,7 +49,7 @@ console.log("this is the menscollection",mensCollectionData[0].brand)
                     Womens Collection
                   </h1>
                 </div>
-      <ProductCarousel SlideCount={20} cardData={womensCollection} category="women"/>
+      <ProductCarousel SlideCount={20} cardData={womensCollection} category="Womens"/>
     </div>
     <div className=" my-12 mb-4">
     <div className=" h-[4rem] mb-[2rem]">
@@ -57,7 +57,7 @@ console.log("this is the menscollection",mensCollectionData[0].brand)
                     Kids Collection
                   </h1>
                 </div>
-      <ProductCarousel SlideCount={20} cardData={kidsCollection} category="kids"/>
+      <ProductCarousel SlideCount={20} cardData={kidsCollection} category="Kids"/>
     </div>
     </div>
     </div>

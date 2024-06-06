@@ -154,7 +154,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
   <div className="embla__slide__number__product">
     {/* Rendering the product image */}
     <div className="ProductImageCard h-60 over">
-      <Link href={`categories/${category}/${product?.category?.name}/${product.id}`}>
+      <Link href={`categories/${category}/${product.category.name.replace(/\s+/g, '')}/${product.id}`}>
       {/* console.log("this is the product id",product.id) */}
         <div className="ProductImage bg-red-400 h-full w-full">
         <button className={`heartButton hover:text-red-500` }>

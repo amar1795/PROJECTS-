@@ -565,7 +565,8 @@ export async function getProductsByCategory(categoryId: string) {
       id: true,
       subcategories: {
         select: {
-          id: true
+          id: true,
+          name: true,
         }
       }
     }
@@ -593,7 +594,11 @@ export async function getProductsByCategory(categoryId: string) {
           images: true, // Include review images
         },
       },
-      category: true,
+      category: {
+        include: {
+          parent: true, // Include the parent category
+        },
+      }, 
       // Include any other relations you need
     }
   });
@@ -631,6 +636,7 @@ export async function getProductsByCategory(categoryId: string) {
         totalReviews: totalReviews,
         totalRatings: totalRatings,
         averageRating: averageRating,
+        parentCategory: product?.category?.parent?.name,
       },
     };
   });
@@ -749,6 +755,7 @@ export async function getProductsByCategory(categoryId: string) {
 //   };;
 // }
 
+
 export async function getProductsByCategoryFiltered(
   parentCategoryName: string,
   categoryName: string,
@@ -760,11 +767,14 @@ export async function getProductsByCategoryFiltered(
   page: number = 1,
   pageSize: number = 9
 ) {
-
+// Function to format camel case or Pascal case strings to separate words
+const formatCategoryName = (name: string): string => {
+  return name.replace(/([a-z])([A-Z])/g, '$1 $2');
+};
 // First, retrieve the categoryId based on the parentCategoryName
 const parentCategory = await prismadb.category.findFirst({
   where: {
-    name: parentCategoryName
+    name: formatCategoryName(parentCategoryName)
   },
   select: {
     id: true

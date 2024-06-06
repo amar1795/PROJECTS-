@@ -106,6 +106,7 @@ console.log("this is the product id:", ProductId);
   const completeUrl = typeof window !== "undefined" ? window.location.href : "";
   const segments = completeUrl.split("/");
   const previousSegment = segments[segments.length - 2];
+  const previousSegment1 = segments[segments.length - 3];
   console.log("this is the Previous segment:", previousSegment);
   const images = [
     "https://images.pexels.com/photos/23541799/pexels-photo-23541799/free-photo-of-shine-bright.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
@@ -117,11 +118,12 @@ console.log("this is the product id:", ProductId);
     "https://images.pexels.com/photos/24023467/pexels-photo-24023467/free-photo-of-a-wedding-reception-in-a-greenhouse-with-chandeliers.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
   ];
 
-  const breadcrumbsData = [
-    { id: 1, href: "/", label: "Home" },
-    { id: 2, href: `/categories/${previousSegment}`, label: previousSegment },
-    { id: 3, href: params.product, label: params.product },
-  ];
+    const breadcrumbsData = [
+      { id: 1, href: "/", label: "Home" },
+      { id: 2, href: `/categories/${previousSegment1}`, label: previousSegment1 },
+      { id: 3, href: `/categories/${previousSegment1}/${previousSegment}`, label: previousSegment },
+      { id: 4, href: params.product, label: data?.name },
+    ];
 
   console.log("this is the data:", data);
 
