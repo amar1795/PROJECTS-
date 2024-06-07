@@ -8,6 +8,7 @@ interface CheckboxesProps {
     qty: number;
     min: number;
     max: number;
+    parentCategory: string;
     setSelectedCategoryName : (name: string) => void; 
     setBrandName : (name: string) => void;
     setMinDiscountedPrice : (price: number) => void;
@@ -35,7 +36,16 @@ const Checkboxes:React.FC<CheckboxesProps> = ({ label, value, qty,setSelectedCat
     if (parentCategory === "Brand") {
       setBrandName(newCheckedState ? label : "");
     } else if (parentCategory === "Category") {
-      setSelectedCategoryName(newCheckedState ? label : "");
+      // setSelectedCategoryName(newCheckedState ? label : "");
+      setSelectedCategoryName(prevCategories => {
+        if (newCheckedState) {
+          // Add the new category if checked
+          return [...prevCategories, label];
+        } else {
+          // Remove the category if unchecked
+          return prevCategories.filter(category => category !== label);
+        }
+      });
     } else if (parentCategory === "Discount") {
       // Assuming min and max are already defined in the component state
       if (newCheckedState) {
@@ -66,9 +76,7 @@ const Checkboxes:React.FC<CheckboxesProps> = ({ label, value, qty,setSelectedCat
             <Checkbox checked={isChecked} onClick={handleCheckboxClick} />
             </div>
             <h1 className=' uppercase'>
-            {label} (
-              <span className='text-gray-500'>1024</span>
-            )
+            {label} 
             </h1>
             </div>
            

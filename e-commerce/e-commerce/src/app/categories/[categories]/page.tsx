@@ -30,7 +30,7 @@ const Page = ({ params }: { params: { categories: string } }) => {
     totalProductsCount: 0,
     currentProductsCount: 0,
   });
-  const [categoryName, setSelectedCategoryName] = useState("");
+  const [categoryName, setSelectedCategoryName] = useState([]);
   console.log("this is the selected category name", categoryName);
   const [parentCategoryName, setparentCategoryName] = useState(
     params.categories
@@ -230,7 +230,7 @@ const { start, end } = calculateProductRange(currentPage);
                   <h1 className=" text-[4rem] leading-[7rem] ">
                     No Products found  Lmao 😂
                   </h1>
-                  <h1 className=" text-[4rem] leading-[7rem]  ">What you Searching ?</h1>
+                  <h1 className=" text-[4rem] leading-[7rem]  ">What you Filtering ?</h1>
                   <h1 className=" text-[4rem] leading-[7rem] ">
                    Search again Bruh...
                   </h1>

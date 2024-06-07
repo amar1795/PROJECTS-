@@ -23,8 +23,10 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
   const [paginatedData, setPaginatedData] = useState({
     products: [],
     totalPages: 0,
+    totalProductsCount: 0,
+    currentProductsCount: 0,
   });
-  const [categoryName, setSelectedCategory] = useState("");
+  const [categoryName, setSelectedCategoryName] = useState("");
   const [parentCategoryName, setparentCategoryName] = useState(
     params.subcategories
   );
@@ -52,6 +54,8 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
       setPaginatedData({
         products: data.products,
         totalPages: data.totalPages,
+        totalProductsCount: data.totalProducts,
+        currentProductsCount: data.products.length,
       });
 
       const newFilterData = [
@@ -153,6 +157,19 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
     { id: 3, href: "women", label: "women" },
   ];
 
+  
+// Define total number of products and products per page
+const totalProducts = paginatedData.totalProductsCount;
+const productsPerPage = 9;
+
+// Function to calculate start and end indexes of products to display
+const calculateProductRange = (currentPage) => {
+  const startIndex = (currentPage - 1) * productsPerPage;
+  const endIndex = Math.min(startIndex + productsPerPage - 1, totalProducts - 1);
+  return { start: startIndex, end: endIndex };
+};
+const { start, end } = calculateProductRange(currentPage);
+
   return (
     <div className=" overflow-hidden ">
       <div className="fixed top-0 left-0 right-0  z-10">
@@ -176,8 +193,9 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
                 (category) => category !== null && category.options.length > 0
               ) // Filter out null categories and those without options
               .map((category, index) => (
-                <Fcard key={index} category={category}
-                
+                <Fcard key={index} 
+                category={category}
+                setSelectedCategoryName={setSelectedCategoryName}
                 setBrandName={setBrandName}
                 setMinDiscountedPrice={setMinDiscountedPrice}
                 setMaxDiscountedPrice={setMaxDiscountedPrice}
@@ -188,7 +206,7 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
 
           <div className=" flex-grow">
             <div className={`min-h-[90vh] `}>
-              <div>This is the categories page for {params.categories}</div>
+            <div>This is the categories page for {params.subcategories} and showing {`Displaying products ${start + 1} to ${end + 1} out of ${totalProducts} products`} </div>
               <CategoriesRelatedProduct
                 relatedProduct={paginatedData.products}
               />

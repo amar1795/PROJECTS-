@@ -749,191 +749,250 @@ export async function getProductsByCategory(categoryId: string) {
 //   };;
 // }
 
-export const  getProductsByCategoryFiltered=cache(async(
-  parentCategoryName: string,
-  categoryName: string,
-  brandName: string,
-  minDiscountedPrice: number,
-  maxDiscountedPrice: number,
-  minDiscountPercentage: number,
-  maxDiscountPercentage: number,
-  page: number = 1,
-  pageSize: number = 9
-) =>{
-  // Function to format camel case or Pascal case strings to separate words
-  const formatCategoryName = (name: string): string => {
-    return name.replace(/([a-z])([A-Z])/g, "$1 $2");
-  };
-  // First, retrieve the categoryId based on the parentCategoryName
-  const parentCategory = await prismadb.category.findFirst({
-    where: {
-      name: formatCategoryName(parentCategoryName),
-    },
-    select: {
-      id: true,
-    },
-  });
+export const getProductsByCategoryFiltered = cache(
+  async (
+    parentCategoryName: string,
+    categoryName: string[],
+    brandName: string,
+    minDiscountedPrice: number,
+    maxDiscountedPrice: number,
+    minDiscountPercentage: number,
+    maxDiscountPercentage: number,
+    page: number = 1,
+    pageSize: number = 9
+  ) => {
+    // Function to format camel case or Pascal case strings to separate words
+    const formatCategoryName = (name: string): string => {
+      return name.replace(/([a-z])([A-Z])/g, "$1 $2");
+    };
+    // First, retrieve the categoryId based on the parentCategoryName
+    const parentCategory = await prismadb.category.findFirst({
+      where: {
+        name: formatCategoryName(parentCategoryName),
+      },
+      select: {
+        id: true,
+      },
+    });
 
-  let categoryId;
-  // Check if the parentCategory exists
-  if (parentCategory) {
-    categoryId = parentCategory.id;
-  }
+    let categoryId;
+    // Check if the parentCategory exists
+    if (parentCategory) {
+      categoryId = parentCategory.id;
+    }
 
-  // Fetch all categories
-  const categories = await prismadb.category.findMany({
-    where: {
-      OR: [{ id: categoryId }, { parentId: categoryId }],
-    },
-    select: {
-      id: true,
-      name: true,
-      subcategories: {
-        select: {
-          id: true,
-          name: true,
-          parentId: true, // Include the parent category ID
+    // Fetch all categories
+    const categories = await prismadb.category.findMany({
+      where: {
+        OR: [{ id: categoryId }, { parentId: categoryId }],
+      },
+      select: {
+        id: true,
+        name: true,
+        subcategories: {
+          select: {
+            id: true,
+            name: true,
+            parentId: true, // Include the parent category ID
+          },
         },
       },
-    },
-  });
+    });
+    
 
-  // Filter out categories with the provided parent category ID
-  const filteredCategories = categories.filter(
-    (category) => category?.id != parentCategory?.id
-  );
-  console.log("Filtered Categories:", filteredCategories);
-
-  const uniqueCategories = Array.from(
-    new Set(filteredCategories.map((category) => category.name.toLowerCase()))
-  );
-
-  console.log("Unique Categories:", uniqueCategories);
-
-  let selectedCategory;
-
-  console.log("Fetched Categories:", categories);
-  if (categoryName == "null") {
-  } else {
-    // Find the category matching the provided name
-    selectedCategory = categories.find(
-      (cat) => cat.name.toLowerCase() === categoryName.toLowerCase()
+    // Filter out categories with the provided parent category ID
+    const filteredCategories = categories.filter(
+      (category) => category?.id != parentCategory?.id
     );
-    console.log("Selected Category:", selectedCategory);
-  }
+    console.log("Filtered Categories:", filteredCategories);
 
-  // if (!selectedCategory) {
-  //   return {
-  //     products: [],
-  //     totalProducts: 0,
-  //     currentPage: page,
-  //     totalPages: 0,
-  //     uniqueCategories: [],
-  //     uniqueBrands: [],
-  //     priceRanges: [],
-  //   };
-  // }
+    const uniqueCategories = Array.from(
+      new Set(filteredCategories.map((category) => category.name.toLowerCase()))
+    );
 
-  let categoryIds = [];
+    console.log("Unique Categories:", uniqueCategories);
 
-  if (selectedCategory) {
-    //   Extract all category IDs (including subcategories)
-    categoryIds = [
-      selectedCategory.id,
-      ...selectedCategory.subcategories.map((subcategory) => subcategory.id),
-    ];
-    console.log("Category Ids:", categoryIds);
-  } else {
-    // Extract all category IDs (including subcategories)
-    categoryIds = categories.flatMap((category) => [
-      category.id,
-      ...category.subcategories.map((subcategory) => subcategory.id),
-    ]);
-  }
+    let selectedCategory:string[] = [];
 
-  // Extract all category names (including subcategories)
-  // const categoryNames = [selectedCategory.name, ...selectedCategory.subcategories.map(subcategory => subcategory.name)];
-  // console.log("Category Names:", categoryNames);
+    console.log("Fetched Categories:", categories);
 
-  // Calculate the skip value
-  const skip = (page - 1) * pageSize;
+    // if (categoryName == "null") {
+    //   console.log("Selected Category:", selectedCategory);
 
-  // Fetch products under the extracted category IDs and apply filters
-  const products = await prismadb.product.findMany({
-    where: {
-      categoryId: {
-        in: categoryIds,
-      },
-      brand: {
-        name: {
-          contains: brandName,
-          mode: "insensitive",
+    // } else {
+    //   // Find the category matching the provided name
+    //   selectedCategory = categories.find(
+    //     (cat) => cat.name.toLowerCase() === categoryName.toLowerCase()
+    //   );
+    //   console.log("Selected Category:", selectedCategory);
+    // }
+
+    if (!categoryName || categoryName.length === 0) {
+      console.log("Selected Categories:", selectedCategory);
+    } else {
+      // Initialize selectedCategories with the existing selected category names
+      // selectedCategories = [...selectedCategory];
+
+      categoryName.forEach((categoryName) => {
+        // Find the category matching the provided name
+        const category = categories.find(
+          (cat) => cat.name.toLowerCase() === categoryName.toLowerCase()
+        );
+
+        if (category && !selectedCategory.includes(category.name)) {
+          selectedCategory.push(category.id);
+        }
+      });
+    }
+    console.log("Selected Categories:", selectedCategory);
+    // if (!selectedCategory) {
+    //   return {
+    //     products: [],
+    //     totalProducts: 0,
+    //     currentPage: page,
+    //     totalPages: 0,
+    //     uniqueCategories: [],
+    //     uniqueBrands: [],
+    //     priceRanges: [],
+    //   };
+    // }
+
+    let categoryIds = [];
+
+    if (selectedCategory !== null && selectedCategory.length > 0) {
+      //   Extract all category IDs inside the selected categories  (including subcategories)
+      // categoryIds = [
+      //   selectedCategory.id,
+      //   ...selectedCategory.subcategories.map((subcategory) => subcategory.id),
+      // ];
+      // Map over selectedCategory and add each individual category ID to categoryIds
+      selectedCategory.forEach((category) => {
+        
+        categoryIds.push(category);
+
+        categories.forEach((cat) => {
+          if(cat.id === category) {
+            cat.subcategories.forEach(subcategory => {
+              if(subcategory) {
+                categoryIds.push(subcategory.id);
+              }
+            });
+          }
+        }
+      )
+        // Map over subcategories and add their IDs to categoryIds
+        // if (categories.subcategories && category.subcategories.length > 0) {
+        //   categories.subcategories.forEach(subcategoryId => {
+        //     if (subcategoryId) { // Check if subcategoryId is not empty
+        //       categoryIds.push(subcategoryId);
+        //     }
+        //   });
+        // }
+      });
+      console.log("Category Ids inside the selected categories:", categoryIds);
+    } else {
+      // Extract all category IDs (including subcategories)
+      // categoryIds = categories.flatMap((category) => [
+      //   category.id,
+      //   ...category.subcategories.map((subcategory) => subcategory.id),
+      // ]);
+      categoryIds = categories.flatMap((category) => {
+        const ids = [category.id];
+        if (category.subcategories) {
+          ids.push(
+            ...category.subcategories
+              .filter((subcategory) => subcategory && subcategory.id)
+              .map((subcategory) => subcategory.id)
+          );
+        }
+        return ids;
+      });
+      console.log("Category Ids without the selected categories:", categoryIds);
+    }
+
+    // Extract all category names (including subcategories)
+    // const categoryNames = [selectedCategory.name, ...selectedCategory.subcategories.map(subcategory => subcategory.name)];
+    // console.log("Category Names:", categoryNames);
+
+    // Calculate the skip value
+    const skip = (page - 1) * pageSize;
+
+    // Fetch products under the extracted category IDs and apply filters
+    const products = await prismadb.product.findMany({
+      where: {
+        categoryId: {
+          in: categoryIds,
+        },
+        brand: {
+          name: {
+            contains: brandName,
+            mode: "insensitive",
+          },
+        },
+        discountedPrice: {
+          gte: minDiscountedPrice,
+          lte: maxDiscountedPrice,
+        },
+        discount: {
+          gte: minDiscountPercentage,
+          lte: maxDiscountPercentage,
         },
       },
-      discountedPrice: {
-        gte: minDiscountedPrice,
-        lte: maxDiscountedPrice,
+      include: {
+        brand: true, // Include brand details
+        images: true, // Include product images
+        ratings: {
+          include: {
+            images: true, // Include review images
+          },
+        },
+        category: true, // Include the category relation
+
+        // Include any other relations you need
       },
-      discount: {
-        gte: minDiscountPercentage,
-        lte: maxDiscountPercentage,
-      },
-    },
-    include: {
-      brand: true, // Include brand details
-      images: true, // Include product images
-      ratings: {
-        include: {
-          images: true, // Include review images
+      skip: skip,
+      take: pageSize,
+    });
+
+    // console.log('Fetched Products:', products);
+    // Count the number of fetched products
+    const productCount = products.length;
+    console.log("Total Products:", productCount);
+
+    // console.log("Fetched Products:", products);
+
+    // Fetch the total count of products for pagination
+    const totalProducts = await prismadb.product.count({
+      where: {
+        categoryId: {
+          in: categoryIds,
+        },
+        brand: {
+          name: {
+            contains: brandName,
+            mode: "insensitive",
+          },
+        },
+        discountedPrice: {
+          gte: minDiscountedPrice,
+          lte: maxDiscountedPrice,
+        },
+        discount: {
+          gte: minDiscountPercentage,
+          lte: maxDiscountPercentage,
         },
       },
-      category: true, // Include the category relation
+    });
 
-      // Include any other relations you need
-    },
-    skip: skip,
-    take: pageSize,
-  });
+    console.log("Total Products Count:", totalProducts);
 
-  console.log('Fetched Products:', products);
-  // Count the number of fetched products
-  const productCount = products.length;
-  console.log("Total Products:", productCount);
-
-  // console.log("Fetched Products:", products);
-
-  // Fetch the total count of products for pagination
-  const totalProducts = await prismadb.product.count({
-    where: {
-      categoryId: {
-        in: categoryIds,
-      },
-      brand: {
-        name: {
-          contains: brandName,
-          mode: "insensitive",
-        },
-      },
-      discountedPrice: {
-        gte: minDiscountedPrice,
-        lte: maxDiscountedPrice,
-      },
-      discount: {
-        gte: minDiscountPercentage,
-        lte: maxDiscountPercentage,
-      },
-    },
-  });
-
-  console.log("Total Products Count:", totalProducts);
-
-  const uniqueBrands = Array.from(
-    new Set(products.map((product) => product.brand.name))
-  );
-  console.log("Unique Brands:", uniqueBrands);
-  const prices = products
-    .map((product) => product.discountedPrice)
-    .filter((price) => price !== null);
+    const uniqueBrands = Array.from(
+      new Set(products.map((product) => product.brand.name))
+    );
+    console.log("Unique Brands:", uniqueBrands);
+    const prices = products
+      .map((product) => product.discountedPrice)
+      .filter((price) => price !== null);
 
     const priceRanges = [
       { label: "₹500 - ₹1500", value: "500to1500", min: 500, max: 1500 },
@@ -951,75 +1010,75 @@ export const  getProductsByCategoryFiltered=cache(async(
         max: Math.max(...prices),
       },
     ];
-    
-  const discounts = products
-    .map((product) => product.discount)
-    .filter((price) => price !== null);
 
+    const discounts = products
+      .map((product) => product.discount)
+      .filter((price) => price !== null);
 
-  const discountRanges = [
-    { label: "Below 10%", value: "below10", min: 0, max: 10 },
-    { label: "10% - 20%", value: "10to20", min: 10, max: 20 },
-    { label: "20% - 30%", value: "20to30", min: 20, max: 30 },
-    { label: "30% - 50%", value: "30to50", min: 30, max: 50 },
-    {
-      label: "Above 50%",
-      value: "above50",
-      min: 50,
-      max: Math.max(...discounts),
-    },
-  ];
+    const discountRanges = [
+      { label: "Below 10%", value: "below10", min: 0, max: 10 },
+      { label: "10% - 20%", value: "10to20", min: 10, max: 20 },
+      { label: "20% - 30%", value: "20to30", min: 20, max: 30 },
+      { label: "30% - 50%", value: "30to50", min: 30, max: 50 },
+      {
+        label: "Above 50%",
+        value: "above50",
+        min: 50,
+        max: Math.max(...discounts),
+      },
+    ];
 
-  const formattedProducts = products.map((product) => {
-    const ratingsCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-    const reviews = [];
-    let totalRatings = 0;
-    let totalRatingValue = 0;
+    const formattedProducts = products.map((product) => {
+      const ratingsCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+      const reviews = [];
+      let totalRatings = 0;
+      let totalRatingValue = 0;
 
-    product.ratings.forEach((rating) => {
-      const reviewWithImages = {
-        rating: rating.rating,
-        review: rating.review,
-        images: rating.images.map((image) => ({
-          id: image.id,
-          url: image.url,
-        })),
+      product.ratings.forEach((rating) => {
+        const reviewWithImages = {
+          rating: rating.rating,
+          review: rating.review,
+          images: rating.images.map((image) => ({
+            id: image.id,
+            url: image.url,
+          })),
+        };
+        if (rating.review) {
+          reviews.push(reviewWithImages);
+        }
+        ratingsCount[rating.rating] = (ratingsCount[rating.rating] || 0) + 1;
+        totalRatingValue += rating.rating; // Sum the star counts weighted by their star value
+        totalRatings += 1;
+      });
+
+      const totalReviews = reviews.length;
+      const averageRating =
+        totalRatings > 0 ? totalRatingValue / totalRatings : 0;
+
+      return {
+        ...product,
+        ratings: {
+          count: ratingsCount,
+          reviews: reviews,
+          totalReviews: totalReviews,
+          totalRatings: totalRatings,
+          averageRating: averageRating,
+        },
       };
-      if (rating.review) {
-        reviews.push(reviewWithImages);
-      }
-      ratingsCount[rating.rating] = (ratingsCount[rating.rating] || 0) + 1;
-      totalRatingValue += rating.rating; // Sum the star counts weighted by their star value
-      totalRatings += 1;
     });
 
-    const totalReviews = reviews.length;
-    const averageRating =
-      totalRatings > 0 ? totalRatingValue / totalRatings : 0;
-
     return {
-      ...product,
-      ratings: {
-        count: ratingsCount,
-        reviews: reviews,
-        totalReviews: totalReviews,
-        totalRatings: totalRatings,
-        averageRating: averageRating,
-      },
+      products: formattedProducts,
+      totalProducts: totalProducts,
+      currentPage: page,
+      totalPages: Math.ceil(totalProducts / pageSize),
+      uniqueCategories,
+      uniqueBrands,
+      priceRanges,
+      discountRanges,
     };
-  });
-
-  return {
-    products: formattedProducts,
-    totalProducts: totalProducts,
-    currentPage: page,
-    totalPages: Math.ceil(totalProducts / pageSize),
-    uniqueCategories,
-    uniqueBrands,
-    priceRanges,
-    discountRanges
-  };
-})
+  }
+);
 
 export async function fetchAllReviews() {
   try {

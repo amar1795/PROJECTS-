@@ -4,6 +4,7 @@ import { SearchBox } from "../searchbox";
 
 interface Category {
   category: string;
+  
   options: { label: string; value: string,min:number,max:number }[];
   setSelectedCategoryName: (name: string) => void;
     setBrandName: (name: string) => void;
@@ -15,8 +16,8 @@ interface Category {
 
 const Fcard: React.FC<{ category: Category }> = ({
   category,
-  setSelectedCategoryName,
   setBrandName,
+  setSelectedCategoryName,
   setMinDiscountedPrice,
   setMaxDiscountedPrice,
   setMinDiscountPercentage,
@@ -26,9 +27,9 @@ const Fcard: React.FC<{ category: Category }> = ({
     <div className="mt-4 pb-2 border-b">
       <div className="heading font-bold flex flex-col">
         <div>{category.category}</div>
-        <div className=" py-2 w-[10rem]">
+        {/* <div className=" py-2 w-[10rem]">
           <SearchBox />
-        </div>
+        </div> */}
       </div>
       <div className="checkboxes">
         {category.options.map((option, index) => (
