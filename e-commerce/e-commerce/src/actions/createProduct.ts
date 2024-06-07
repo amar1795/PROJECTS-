@@ -3,16 +3,17 @@
 import { faker } from "@faker-js/faker";
 import { prismadb } from "@/lib/db";
 import { NextResponse } from "next/server";
-import fs from 'fs';
+import fs from "fs";
+import { cache } from "react";
 
 interface ProductParams {
-    productName: string;
-    productPrice: number;
-    productDiscountPercentage: number;
-    productDescription: string;
-    productImages: string[];
-    productCategoryId: string;
-    productBrandId: string;
+  productName: string;
+  productPrice: number;
+  productDiscountPercentage: number;
+  productDescription: string;
+  productImages: string[];
+  productCategoryId: string;
+  productBrandId: string;
 }
 
 export async function deleteProduct(productId: string) {
@@ -28,37 +29,37 @@ export async function deleteProduct(productId: string) {
   }
 }
 export async function createProduct({
-    productName,
-    productPrice,
-    productDiscountPercentage,
-    productDescription,
-    productImages,
-    productCategoryId,
-    productBrandId
+  productName,
+  productPrice,
+  productDiscountPercentage,
+  productDescription,
+  productImages,
+  productCategoryId,
+  productBrandId,
 }: ProductParams) {
   try {
     const price = productPrice; // Original price of the product
-const discountPercentage = productDiscountPercentage; // Discount percentage (e.g., 10% off)
+    const discountPercentage = productDiscountPercentage; // Discount percentage (e.g., 10% off)
 
-// Calculate the discount amount
-const discountAmount = (price * discountPercentage) / 100;
+    // Calculate the discount amount
+    const discountAmount = (price * discountPercentage) / 100;
 
-// Calculate the discounted price
-const discountedPrice = price - discountAmount;
+    // Calculate the discounted price
+    const discountedPrice = price - discountAmount;
     const formalShirt = await prismadb.product.create({
       data: {
         name: productName,
         price: price,
         discount: discountPercentage, // Discount amount in currency (e.g., $10 off)
-        discountedPrice:discountedPrice, // Discounted price after applying the discount
+        discountedPrice: discountedPrice, // Discounted price after applying the discount
         brandId: productBrandId, // Replace with the actual Brand ID
         description: productDescription,
-        categoryId:productCategoryId, // Replace with actual Formal Shirts Category ID
+        categoryId: productCategoryId, // Replace with actual Formal Shirts Category ID
         images: {
-            create: productImages.map(image => ({
-              url: image
-            }))
-          },
+          create: productImages.map((image) => ({
+            url: image,
+          })),
+        },
       },
     });
     console.log("Product created:", formalShirt);
@@ -68,334 +69,327 @@ const discountedPrice = price - discountAmount;
 }
 
 export async function createProductVarient() {
-    try {
-      const productID = "665af50e3220eba7c7eab944"; // Replace with the actual product ID
-        const formalShirtVariants = await prismadb.productVariant.createMany({
-            data: [
-              { 
-                
-                productId: productID, 
-                colorId: "66570726617228492bfcb586", 
-                sizeId: "665aca6e5788e185779d7ce6", 
-                stock: 10 
-              },
-              { 
-                
-                productId: productID, 
-                colorId: "66570726617228492bfcb586", 
-                sizeId: "665aca6e5788e185779d7ce7", 
-                stock: 12 
-              },
-              { 
-                
-                productId:productID, 
-                colorId: "66570726617228492bfcb586", 
-                sizeId: "665aca6e5788e185779d7ce8", 
-                stock: 15 
-              },
-              { 
-                
-                productId: productID, 
-                colorId: "66570726617228492bfcb588", 
-                sizeId: "665aca6e5788e185779d7ce6", 
-                stock: 17 
-              },
-              { 
-                
-                productId: productID, 
-                colorId: "66570726617228492bfcb588", 
-                sizeId: "665aca6e5788e185779d7ce7", 
-                stock: 10 
-              },{ 
-                
-                productId: productID, 
-                colorId: "66570726617228492bfcb588", 
-                sizeId: "665aca6e5788e185779d7ce8", 
-                stock: 10 
-              },{ 
-                
-                productId: productID, 
-                colorId: "66570726617228492bfcb589", 
-                sizeId: "665aca6e5788e185779d7ce6", 
-                stock: 10 
-              },{ 
-                
-                productId: productID, 
-                colorId: "66570726617228492bfcb589", 
-                sizeId: "665aca6e5788e185779d7ce7", 
-                stock: 10 
-              },{ 
-                
-                productId: productID, 
-                colorId: "66570726617228492bfcb589", 
-                sizeId: "665aca6e5788e185779d7ce8", 
-                stock: 10 
-              },{ 
-                
-                productId: productID, 
-                colorId: "66570726617228492bfcb58a", 
-                sizeId: "665aca6e5788e185779d7ce6", 
-                stock: 10 
-              },{ 
-                
-                productId:productID, 
-                colorId: "66570726617228492bfcb58a", 
-                sizeId: "665aca6e5788e185779d7ce7", 
-                stock: 10 
-              },{ 
-                
-                productId: productID, 
-                colorId: "66570726617228492bfcb58a", 
-                sizeId: "665aca6e5788e185779d7ce8", 
-                stock: 10 
-              },
-                            
-            ],
-          });
-          
-          console.log("Product variants created:", formalShirtVariants);
-    } catch (error) {
-        console.error("Error creating product variant:", error);
-    }
+  try {
+    const productID = "665af50e3220eba7c7eab944"; // Replace with the actual product ID
+    const formalShirtVariants = await prismadb.productVariant.createMany({
+      data: [
+        {
+          productId: productID,
+          colorId: "66570726617228492bfcb586",
+          sizeId: "665aca6e5788e185779d7ce6",
+          stock: 10,
+        },
+        {
+          productId: productID,
+          colorId: "66570726617228492bfcb586",
+          sizeId: "665aca6e5788e185779d7ce7",
+          stock: 12,
+        },
+        {
+          productId: productID,
+          colorId: "66570726617228492bfcb586",
+          sizeId: "665aca6e5788e185779d7ce8",
+          stock: 15,
+        },
+        {
+          productId: productID,
+          colorId: "66570726617228492bfcb588",
+          sizeId: "665aca6e5788e185779d7ce6",
+          stock: 17,
+        },
+        {
+          productId: productID,
+          colorId: "66570726617228492bfcb588",
+          sizeId: "665aca6e5788e185779d7ce7",
+          stock: 10,
+        },
+        {
+          productId: productID,
+          colorId: "66570726617228492bfcb588",
+          sizeId: "665aca6e5788e185779d7ce8",
+          stock: 10,
+        },
+        {
+          productId: productID,
+          colorId: "66570726617228492bfcb589",
+          sizeId: "665aca6e5788e185779d7ce6",
+          stock: 10,
+        },
+        {
+          productId: productID,
+          colorId: "66570726617228492bfcb589",
+          sizeId: "665aca6e5788e185779d7ce7",
+          stock: 10,
+        },
+        {
+          productId: productID,
+          colorId: "66570726617228492bfcb589",
+          sizeId: "665aca6e5788e185779d7ce8",
+          stock: 10,
+        },
+        {
+          productId: productID,
+          colorId: "66570726617228492bfcb58a",
+          sizeId: "665aca6e5788e185779d7ce6",
+          stock: 10,
+        },
+        {
+          productId: productID,
+          colorId: "66570726617228492bfcb58a",
+          sizeId: "665aca6e5788e185779d7ce7",
+          stock: 10,
+        },
+        {
+          productId: productID,
+          colorId: "66570726617228492bfcb58a",
+          sizeId: "665aca6e5788e185779d7ce8",
+          stock: 10,
+        },
+      ],
+    });
+
+    console.log("Product variants created:", formalShirtVariants);
+  } catch (error) {
+    console.error("Error creating product variant:", error);
+  }
 }
 
 export async function createProductRating() {
-    try {
-        
-        const productId = "665af50e3220eba7c7eab944"; // Replace with the actual product ID
-const userId = "6655adcc05f2665c9bc85c1a"; // Replace with the actual User ID
+  try {
+    const productId = "665af50e3220eba7c7eab944"; // Replace with the actual product ID
+    const userId = "6655adcc05f2665c9bc85c1a"; // Replace with the actual User ID
 
-// Create 75 five-star ratings without reviews
-for (let i = 0; i < 90; i++) {
-  await prismadb.rating.create({
-    data: {
-      productId: productId,
-      rating: 5,
-      userId: userId,
-    },
-  });
-}
-
-// Create 15 four-star ratings without reviews
-for (let i = 0; i < 85; i++) {
-  await prismadb.rating.create({
-    data: {
-      productId: productId,
-      rating: 4,
-      userId: userId,
-    },
-  });
-}
-
-// Create 5 three-star ratings without reviews
-for (let i = 0; i < 15; i++) {
-  await prismadb.rating.create({
-    data: {
-      productId: productId,
-      rating: 3,
-      userId: userId,
-    },
-  });
-}
-
-// Create 4 two-star ratings without reviews
-for (let i = 0; i < 14; i++) {
-  await prismadb.rating.create({
-    data: {
-      productId: productId,
-      rating: 2,
-      userId: userId,
-    },
-  });
-}
-
-// Create 1 one-star rating without review
-await prismadb.rating.create({
-  data: {
-    productId: productId,
-    rating: 1,
-    userId: userId,
-  },
-});
-
-    } catch (error) {
-        
+    // Create 75 five-star ratings without reviews
+    for (let i = 0; i < 90; i++) {
+      await prismadb.rating.create({
+        data: {
+          productId: productId,
+          rating: 5,
+          userId: userId,
+        },
+      });
     }
-}
-export async function createProductReview(productID: string) {
-    try {
-        
-        const productId = productID; // Replace with the actual product ID
-const userId = "6655adcc05f2665c9bc85c1a";
-        // Define arrays of different reviews for each star rating
-const fiveStarReviews = [
-  "This product exceeded my expectations! Amazing quality and fit.",
-  "Absolutely love this shirt! Great fabric and comfortable to wear.",
-  "Excellent purchase! Exactly what I was looking for.",
-  "Highly recommend this shirt. It looks even better in person!",
-  "Couldn't be happier with my purchase. Will definitely buy again.",
-];
 
-const fourStarReviews = [
-  "Overall satisfied with the product, although the sizing runs a bit large.",
-  "Good quality shirt, but the color is slightly different from the picture.",
-  "Nice design and comfortable to wear, but the fabric is thinner than expected.",
-  "Decent shirt for the price, but the stitching could be better.",
-  "Happy with the purchase, but delivery took longer than anticipated.",
-];
+    // Create 15 four-star ratings without reviews
+    for (let i = 0; i < 85; i++) {
+      await prismadb.rating.create({
+        data: {
+          productId: productId,
+          rating: 4,
+          userId: userId,
+        },
+      });
+    }
 
-const threeStarReviews = [
-  "Average shirt. Not exceptional, but not terrible either.",
-  "Expected better quality for the price. It's just okay.",
-  "The shirt arrived with a small stain, which was disappointing.",
-  "Meh. Nothing special about this shirt.",
-  "The fit is okay, but the material feels cheap.",
-];
+    // Create 5 three-star ratings without reviews
+    for (let i = 0; i < 15; i++) {
+      await prismadb.rating.create({
+        data: {
+          productId: productId,
+          rating: 3,
+          userId: userId,
+        },
+      });
+    }
 
-const twoStarReviews = [
-  "Not impressed. Shirt started to fade after just a few washes.",
-  "Poor quality. Seams started coming apart after wearing it twice.",
-  "Disappointed with the sizing. It runs much smaller than expected.",
-  "Shirt arrived damaged. Looks like it was poorly packaged.",
-  "Would not recommend. Better off spending a bit more for better quality.",
-];
+    // Create 4 two-star ratings without reviews
+    for (let i = 0; i < 14; i++) {
+      await prismadb.rating.create({
+        data: {
+          productId: productId,
+          rating: 2,
+          userId: userId,
+        },
+      });
+    }
 
-const oneStarReview = [
-    "Absolutely terrible! The shirt arrived with holes in it.",
-    "Complete waste of money. The fabric feels like sandpaper.",
-    "Zero stars if I could! The color faded after just one wash.",
-    "Horrible quality. It shrunk two sizes after washing.",
-    "I wouldn't even use this shirt as a rag. It's that bad.",
-    "Avoid at all costs! The stitching unraveled after wearing it once.",
-  ];
-// Create 75 five-star ratings with random reviews
-for (let i = 0; i < 55; i++) {
-  const randomReview = fiveStarReviews[Math.floor(Math.random() * fiveStarReviews.length)];
-  await prismadb.rating.create({
-    data: {
-      productId: productId,
-      rating: 5,
-      review: randomReview,
-      userId: userId, // Replace userId with the actual User ID
-    },
-  });
-}
-
-// Create 15 four-star ratings with random reviews
-for (let i = 0; i < 45; i++) {
-  const randomReview = fourStarReviews[Math.floor(Math.random() * fourStarReviews.length)];
-  await prismadb.rating.create({
-    data: {
-      productId: productId,
-      rating: 4,
-      review: randomReview,
-      userId: userId, // Replace userId with the actual User ID
-    },
-  });
-}
-
-// Create 5 three-star ratings with random reviews
-for (let i = 0; i < 15; i++) {
-  const randomReview = threeStarReviews[Math.floor(Math.random() * threeStarReviews.length)];
-  await prismadb.rating.create({
-    data: {
-      productId: productId,
-      rating: 3,
-      review: randomReview,
-      userId: userId, // Replace userId with the actual User ID
-    },
-  });
-}
-
-// Create 4 two-star ratings with random reviews
-for (let i = 0; i < 10; i++) {
-  const randomReview = twoStarReviews[Math.floor(Math.random() * twoStarReviews.length)];
-  await prismadb.rating.create({
-    data: {
-      productId: productId,
-      rating: 2,
-      review: randomReview,
-      userId: userId, // Replace userId with the actual User ID
-    },
-  });
-}
-
-// Create 1 one-star rating with fixed review
-for (let i = 0; i < 20; i++) {
-    const randomReview = twoStarReviews[Math.floor(Math.random() * oneStarReview.length)];
+    // Create 1 one-star rating without review
     await prismadb.rating.create({
       data: {
         productId: productId,
         rating: 1,
-        review: randomReview,
-        userId: userId, // Replace userId with the actual User ID
+        userId: userId,
       },
     });
-  }
-        
-  console.log("Product reviews created");
+  } catch (error) {}
+}
+export async function createProductReview(productID: string) {
+  try {
+    const productId = productID; // Replace with the actual product ID
+    const userId = "6655adcc05f2665c9bc85c1a";
+    // Define arrays of different reviews for each star rating
+    const fiveStarReviews = [
+      "This product exceeded my expectations! Amazing quality and fit.",
+      "Absolutely love this shirt! Great fabric and comfortable to wear.",
+      "Excellent purchase! Exactly what I was looking for.",
+      "Highly recommend this shirt. It looks even better in person!",
+      "Couldn't be happier with my purchase. Will definitely buy again.",
+    ];
 
-    } catch (error) {
-        console.error("Error creating product reviews:", error);
+    const fourStarReviews = [
+      "Overall satisfied with the product, although the sizing runs a bit large.",
+      "Good quality shirt, but the color is slightly different from the picture.",
+      "Nice design and comfortable to wear, but the fabric is thinner than expected.",
+      "Decent shirt for the price, but the stitching could be better.",
+      "Happy with the purchase, but delivery took longer than anticipated.",
+    ];
+
+    const threeStarReviews = [
+      "Average shirt. Not exceptional, but not terrible either.",
+      "Expected better quality for the price. It's just okay.",
+      "The shirt arrived with a small stain, which was disappointing.",
+      "Meh. Nothing special about this shirt.",
+      "The fit is okay, but the material feels cheap.",
+    ];
+
+    const twoStarReviews = [
+      "Not impressed. Shirt started to fade after just a few washes.",
+      "Poor quality. Seams started coming apart after wearing it twice.",
+      "Disappointed with the sizing. It runs much smaller than expected.",
+      "Shirt arrived damaged. Looks like it was poorly packaged.",
+      "Would not recommend. Better off spending a bit more for better quality.",
+    ];
+
+    const oneStarReview = [
+      "Absolutely terrible! The shirt arrived with holes in it.",
+      "Complete waste of money. The fabric feels like sandpaper.",
+      "Zero stars if I could! The color faded after just one wash.",
+      "Horrible quality. It shrunk two sizes after washing.",
+      "I wouldn't even use this shirt as a rag. It's that bad.",
+      "Avoid at all costs! The stitching unraveled after wearing it once.",
+    ];
+    // Create 75 five-star ratings with random reviews
+    for (let i = 0; i < 55; i++) {
+      const randomReview =
+        fiveStarReviews[Math.floor(Math.random() * fiveStarReviews.length)];
+      await prismadb.rating.create({
+        data: {
+          productId: productId,
+          rating: 5,
+          review: randomReview,
+          userId: userId, // Replace userId with the actual User ID
+        },
+      });
     }
+
+    // Create 15 four-star ratings with random reviews
+    for (let i = 0; i < 45; i++) {
+      const randomReview =
+        fourStarReviews[Math.floor(Math.random() * fourStarReviews.length)];
+      await prismadb.rating.create({
+        data: {
+          productId: productId,
+          rating: 4,
+          review: randomReview,
+          userId: userId, // Replace userId with the actual User ID
+        },
+      });
+    }
+
+    // Create 5 three-star ratings with random reviews
+    for (let i = 0; i < 15; i++) {
+      const randomReview =
+        threeStarReviews[Math.floor(Math.random() * threeStarReviews.length)];
+      await prismadb.rating.create({
+        data: {
+          productId: productId,
+          rating: 3,
+          review: randomReview,
+          userId: userId, // Replace userId with the actual User ID
+        },
+      });
+    }
+
+    // Create 4 two-star ratings with random reviews
+    for (let i = 0; i < 10; i++) {
+      const randomReview =
+        twoStarReviews[Math.floor(Math.random() * twoStarReviews.length)];
+      await prismadb.rating.create({
+        data: {
+          productId: productId,
+          rating: 2,
+          review: randomReview,
+          userId: userId, // Replace userId with the actual User ID
+        },
+      });
+    }
+
+    // Create 1 one-star rating with fixed review
+    for (let i = 0; i < 20; i++) {
+      const randomReview =
+        twoStarReviews[Math.floor(Math.random() * oneStarReview.length)];
+      await prismadb.rating.create({
+        data: {
+          productId: productId,
+          rating: 1,
+          review: randomReview,
+          userId: userId, // Replace userId with the actual User ID
+        },
+      });
+    }
+
+    console.log("Product reviews created");
+  } catch (error) {
+    console.error("Error creating product reviews:", error);
+  }
 }
 
 export async function fetchProduct() {
-    const product = await prismadb.product.findUnique({
-        where: {
-          id: "665ac95e5788e185779d7ce0",
-        },
-        include: {
-            category: true, // Include the category
-            brand: true, // Include the brand
-            images: true, // Include the images
-            
-          productVariants: {
-            include: {
-              color: true,
-              size: true,
-            },
-          },
-         
-        },
-      });
-      console.log("Product:", product);
-      product?.productVariants.forEach(variant => {
-        // Accessing color and size properties directly
-        const color = variant.color.name; // Assuming 'name' is the property containing the color name
-        const size = variant.size.name; // Assuming 'name' is the property containing the size name
-      
-        console.log("Color:", color);
-        console.log("Size:", size);});
+  const product = await prismadb.product.findUnique({
+    where: {
+      id: "665ac95e5788e185779d7ce0",
+    },
+    include: {
+      category: true, // Include the category
+      brand: true, // Include the brand
+      images: true, // Include the images
 
-        const category = await prismadb.category.findUnique({
-            where: {
-              id: product?.categoryId,
-            },
-          });
-        
-          // Access category name
-          const categoryName = category?.name;
-        
-          console.log("Category:", categoryName);    
+      productVariants: {
+        include: {
+          color: true,
+          size: true,
+        },
+      },
+    },
+  });
+  console.log("Product:", product);
+  product?.productVariants.forEach((variant) => {
+    // Accessing color and size properties directly
+    const color = variant.color.name; // Assuming 'name' is the property containing the color name
+    const size = variant.size.name; // Assuming 'name' is the property containing the size name
+
+    console.log("Color:", color);
+    console.log("Size:", size);
+  });
+
+  const category = await prismadb.category.findUnique({
+    where: {
+      id: product?.categoryId,
+    },
+  });
+
+  // Access category name
+  const categoryName = category?.name;
+
+  console.log("Category:", categoryName);
 }
 
 export async function fetchAllProduct() {
   const product = await prismadb.product.findMany();
   const productCount = product.length;
 
-        // console.log("This is the product Category:", product);   
-        try {
-        //   // Convert products to JSON string
-        //   const productsJSON = JSON.stringify(product, null, 2);
-          
-        //   // Write JSON string to a file named products.json
-        //   fs.writeFileSync('products.json', productsJSON);
-          
-          console.log('Products saved to products.json',productCount);
-        } catch (error) {
-          console.error('Error saving products:', error);
-        } 
+  // console.log("This is the product Category:", product);
+  try {
+    //   // Convert products to JSON string
+    //   const productsJSON = JSON.stringify(product, null, 2);
+
+    //   // Write JSON string to a file named products.json
+    //   fs.writeFileSync('products.json', productsJSON);
+
+    console.log("Products saved to products.json", productCount);
+  } catch (error) {
+    console.error("Error saving products:", error);
+  }
 }
 
 // fethces only the items per specific category
@@ -415,19 +409,16 @@ export async function fetchProductsByCategory(category: string) {
     //     },
     //   },
     //   ratings: true,
-      
+
     // },
     select: {
       id: true,
-     
-    }
-    
+    },
   });
   const productCount = products.length;
-  console.log("Products:", products,"Product Count:",productCount);
+  console.log("Products:", products, "Product Count:", productCount);
   return products;
 }
-
 
 export async function fethChildrenCategories(categoryId: string) {
   const childrenCategories = await prismadb.category.findMany({
@@ -438,40 +429,35 @@ export async function fethChildrenCategories(categoryId: string) {
   console.log("Children Categories:", childrenCategories);
 }
 
-
 // gives all the products of a specific category and its nested subcategories
 export async function getProductsByCategoryOriginal(categoryId: string) {
   // Fetch the category and its nested children categories
   const categories = await prismadb.category.findMany({
     where: {
-      OR: [
-        { id: categoryId },
-        { parentId: categoryId }
-      ]
+      OR: [{ id: categoryId }, { parentId: categoryId }],
     },
     select: {
       id: true,
       subcategories: {
         select: {
-          id: true
-        }
-      }
-    }
+          id: true,
+        },
+      },
+    },
   });
 
-  
   // Extract all category IDs (including subcategories)
-  const categoryIds = categories.flatMap(category => 
-    [category.id, ...category.subcategories.map(subcategory => subcategory.id)]
-  );
+  const categoryIds = categories.flatMap((category) => [
+    category.id,
+    ...category.subcategories.map((subcategory) => subcategory.id),
+  ]);
 
-  
   // Fetch products under the extracted category IDs
   const products = await prismadb.product.findMany({
     where: {
       categoryId: {
-        in: categoryIds
-      }
+        in: categoryIds,
+      },
     },
     include: {
       brand: true, // Include brand details
@@ -482,19 +468,19 @@ export async function getProductsByCategoryOriginal(categoryId: string) {
         },
       },
       // Include any other relations you need
-    }
+    },
   });
-  const formattedProducts = products.map(product => {
+  const formattedProducts = products.map((product) => {
     const ratingsCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
     const reviews = [];
     let totalRatings = 0;
     let totalRatingValue = 0;
 
-    product.ratings.forEach(rating => {
+    product.ratings.forEach((rating) => {
       const reviewWithImages = {
         rating: rating.rating,
         review: rating.review,
-        images: rating.images.map(image => ({
+        images: rating.images.map((image) => ({
           id: image.id,
           url: image.url,
         })),
@@ -508,7 +494,8 @@ export async function getProductsByCategoryOriginal(categoryId: string) {
     });
 
     const totalReviews = reviews.length;
-    const averageRating = totalRatings > 0 ? totalRatingValue / totalRatings : 0;
+    const averageRating =
+      totalRatings > 0 ? totalRatingValue / totalRatings : 0;
 
     return {
       ...product,
@@ -527,8 +514,8 @@ export async function getProductsByCategoryOriginal(categoryId: string) {
   const relatedProducts = await prismadb.product.findMany({
     where: {
       categoryId: {
-        in: categoryIds
-      }
+        in: categoryIds,
+      },
     },
     include: {
       brand: true,
@@ -536,19 +523,26 @@ export async function getProductsByCategoryOriginal(categoryId: string) {
     },
     take: 10, // Limit to 10 related products
     orderBy: {
-      createdAt: 'desc', // Change this to a random order if desired
+      createdAt: "desc", // Change this to a random order if desired
     },
   });
 
- // Select 10 random related products
- const shuffledRelatedProducts = relatedProducts.sort(() => 0.5 - Math.random());
- const selectedRelatedProducts = shuffledRelatedProducts.slice(0, 10);
+  // Select 10 random related products
+  const shuffledRelatedProducts = relatedProducts.sort(
+    () => 0.5 - Math.random()
+  );
+  const selectedRelatedProducts = shuffledRelatedProducts.slice(0, 10);
 
- console.log("These are the Products:", formattedProducts, "Product Count:", productCount);
- console.log("Related Products:", selectedRelatedProducts);
+  console.log(
+    "These are the Products:",
+    formattedProducts,
+    "Product Count:",
+    productCount
+  );
+  console.log("Related Products:", selectedRelatedProducts);
 
   // return { products: formattedProducts, relatedProducts: relatedProducts };
-  return selectedRelatedProducts
+  return selectedRelatedProducts;
 }
 
 // gives all the products of a specific category and its nested subcategories
@@ -556,10 +550,7 @@ export async function getProductsByCategory(categoryId: string) {
   // Fetch the category and its nested children categories
   const categories = await prismadb.category.findMany({
     where: {
-      OR: [
-        { id: categoryId },
-        { parentId: categoryId }
-      ]
+      OR: [{ id: categoryId }, { parentId: categoryId }],
     },
     select: {
       id: true,
@@ -567,24 +558,24 @@ export async function getProductsByCategory(categoryId: string) {
         select: {
           id: true,
           name: true,
-        }
-      }
-    }
+        },
+      },
+    },
   });
 
-  
   // Extract all category IDs (including subcategories)
-  const categoryIds = categories.flatMap(category => 
-    [category.id, ...category.subcategories.map(subcategory => subcategory.id)]
-  );
+  const categoryIds = categories.flatMap((category) => [
+    category.id,
+    ...category.subcategories.map((subcategory) => subcategory.id),
+  ]);
   // console.log("Category Ids:", categoryIds);
 
   // Fetch products under the extracted category IDs
   const products = await prismadb.product.findMany({
     where: {
       categoryId: {
-        in: categoryIds
-      }
+        in: categoryIds,
+      },
     },
     include: {
       brand: true, // Include brand details
@@ -598,21 +589,21 @@ export async function getProductsByCategory(categoryId: string) {
         include: {
           parent: true, // Include the parent category
         },
-      }, 
+      },
       // Include any other relations you need
-    }
+    },
   });
-  const formattedProducts = products.map(product => {
+  const formattedProducts = products.map((product) => {
     const ratingsCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
     const reviews = [];
     let totalRatings = 0;
     let totalRatingValue = 0;
 
-    product.ratings.forEach(rating => {
+    product.ratings.forEach((rating) => {
       const reviewWithImages = {
         rating: rating.rating,
         review: rating.review,
-        images: rating.images.map(image => ({
+        images: rating.images.map((image) => ({
           id: image.id,
           url: image.url,
         })),
@@ -626,7 +617,8 @@ export async function getProductsByCategory(categoryId: string) {
     });
 
     const totalReviews = reviews.length;
-    const averageRating = totalRatings > 0 ? totalRatingValue / totalRatings : 0;
+    const averageRating =
+      totalRatings > 0 ? totalRatingValue / totalRatings : 0;
 
     return {
       ...product,
@@ -642,10 +634,14 @@ export async function getProductsByCategory(categoryId: string) {
   });
 
   const productCount = formattedProducts.length;
-  console.log("These are the Products:", formattedProducts, "Product Count:", productCount);
+  console.log(
+    "These are the Products:",
+    formattedProducts,
+    "Product Count:",
+    productCount
+  );
   return formattedProducts;
 }
-
 
 // gives all the products of a specific category and its nested subcategories using filter and pagination
 // export async function getProductsByCategoryfiltered(categoryId: string, page:number = 1, pageSize:number = 9) {
@@ -667,9 +663,8 @@ export async function getProductsByCategory(categoryId: string) {
 //     }
 //   });
 
-  
 //   // Extract all category IDs (including subcategories)
-//   const categoryIds = categories.flatMap(category => 
+//   const categoryIds = categories.flatMap(category =>
 //     [category.id, ...category.subcategories.map(subcategory => subcategory.id)]
 //   );
 
@@ -696,7 +691,6 @@ export async function getProductsByCategory(categoryId: string) {
 //     skip: skip,
 //     take: pageSize
 //   });
-
 
 //    // Fetch the total count of products for pagination
 //    const totalProducts = await prismadb.product.count({
@@ -755,8 +749,7 @@ export async function getProductsByCategory(categoryId: string) {
 //   };;
 // }
 
-
-export async function getProductsByCategoryFiltered(
+export const  getProductsByCategoryFiltered=cache(async(
   parentCategoryName: string,
   categoryName: string,
   brandName: string,
@@ -766,34 +759,31 @@ export async function getProductsByCategoryFiltered(
   maxDiscountPercentage: number,
   page: number = 1,
   pageSize: number = 9
-) {
-// Function to format camel case or Pascal case strings to separate words
-const formatCategoryName = (name: string): string => {
-  return name.replace(/([a-z])([A-Z])/g, '$1 $2');
-};
-// First, retrieve the categoryId based on the parentCategoryName
-const parentCategory = await prismadb.category.findFirst({
-  where: {
-    name: formatCategoryName(parentCategoryName)
-  },
-  select: {
-    id: true
-  }
-});
+) =>{
+  // Function to format camel case or Pascal case strings to separate words
+  const formatCategoryName = (name: string): string => {
+    return name.replace(/([a-z])([A-Z])/g, "$1 $2");
+  };
+  // First, retrieve the categoryId based on the parentCategoryName
+  const parentCategory = await prismadb.category.findFirst({
+    where: {
+      name: formatCategoryName(parentCategoryName),
+    },
+    select: {
+      id: true,
+    },
+  });
 
-let categoryId
-// Check if the parentCategory exists
-if (parentCategory) {
- categoryId = parentCategory.id;
-}
+  let categoryId;
+  // Check if the parentCategory exists
+  if (parentCategory) {
+    categoryId = parentCategory.id;
+  }
 
   // Fetch all categories
   const categories = await prismadb.category.findMany({
     where: {
-      OR: [
-        { id: categoryId },
-        { parentId: categoryId }
-      ]
+      OR: [{ id: categoryId }, { parentId: categoryId }],
     },
     select: {
       id: true,
@@ -802,37 +792,35 @@ if (parentCategory) {
         select: {
           id: true,
           name: true,
-          parentId: true // Include the parent category ID
-        }
-      }
-    }
+          parentId: true, // Include the parent category ID
+        },
+      },
+    },
   });
 
-// Filter out categories with the provided parent category ID
-const filteredCategories = categories.filter(category => category?.id != parentCategory?.id);
-console.log("Filtered Categories:", filteredCategories);
+  // Filter out categories with the provided parent category ID
+  const filteredCategories = categories.filter(
+    (category) => category?.id != parentCategory?.id
+  );
+  console.log("Filtered Categories:", filteredCategories);
 
-  const uniqueCategories = Array.from(new Set(filteredCategories.map(category => category.name.toLowerCase())));
-  
+  const uniqueCategories = Array.from(
+    new Set(filteredCategories.map((category) => category.name.toLowerCase()))
+  );
+
   console.log("Unique Categories:", uniqueCategories);
-  
 
   let selectedCategory;
 
   console.log("Fetched Categories:", categories);
-  if(categoryName=="null")
-    {
-  
-    }
-else
-{
-  
+  if (categoryName == "null") {
+  } else {
     // Find the category matching the provided name
-     selectedCategory = categories.find(cat => cat.name.toLowerCase() === categoryName.toLowerCase());
+    selectedCategory = categories.find(
+      (cat) => cat.name.toLowerCase() === categoryName.toLowerCase()
+    );
     console.log("Selected Category:", selectedCategory);
-
-}
-
+  }
 
   // if (!selectedCategory) {
   //   return {
@@ -848,27 +836,24 @@ else
 
   let categoryIds = [];
 
-  if(selectedCategory) {
-      
- //   Extract all category IDs (including subcategories)
-  categoryIds = [selectedCategory.id, ...selectedCategory.subcategories.map(subcategory => subcategory.id)];
- console.log("Category Ids:", categoryIds);
-
+  if (selectedCategory) {
+    //   Extract all category IDs (including subcategories)
+    categoryIds = [
+      selectedCategory.id,
+      ...selectedCategory.subcategories.map((subcategory) => subcategory.id),
+    ];
+    console.log("Category Ids:", categoryIds);
+  } else {
+    // Extract all category IDs (including subcategories)
+    categoryIds = categories.flatMap((category) => [
+      category.id,
+      ...category.subcategories.map((subcategory) => subcategory.id),
+    ]);
   }
-  else
-  {
-     // Extract all category IDs (including subcategories)
-     categoryIds = categories.flatMap(category => 
-      [category.id, ...category.subcategories.map(subcategory => subcategory.id)]
-    );
-  }
 
-  
-
-
-// Extract all category names (including subcategories)
-// const categoryNames = [selectedCategory.name, ...selectedCategory.subcategories.map(subcategory => subcategory.name)];
-// console.log("Category Names:", categoryNames);
+  // Extract all category names (including subcategories)
+  // const categoryNames = [selectedCategory.name, ...selectedCategory.subcategories.map(subcategory => subcategory.name)];
+  // console.log("Category Names:", categoryNames);
 
   // Calculate the skip value
   const skip = (page - 1) * pageSize;
@@ -877,22 +862,22 @@ else
   const products = await prismadb.product.findMany({
     where: {
       categoryId: {
-        in: categoryIds
+        in: categoryIds,
       },
       brand: {
         name: {
           contains: brandName,
-          mode: 'insensitive'
-        }
+          mode: "insensitive",
+        },
       },
       discountedPrice: {
         gte: minDiscountedPrice,
-        lte: maxDiscountedPrice
+        lte: maxDiscountedPrice,
       },
       discount: {
         gte: minDiscountPercentage,
-        lte: maxDiscountPercentage
-      }
+        lte: maxDiscountPercentage,
+      },
     },
     include: {
       brand: true, // Include brand details
@@ -902,18 +887,18 @@ else
           images: true, // Include review images
         },
       },
-      category: true // Include the category relation
+      category: true, // Include the category relation
 
       // Include any other relations you need
     },
     skip: skip,
-    take: pageSize
+    take: pageSize,
   });
 
-  // console.log('Fetched Products:', products);
+  console.log('Fetched Products:', products);
   // Count the number of fetched products
-const productCount = products.length;
-console.log('Total Products:', productCount);
+  const productCount = products.length;
+  console.log("Total Products:", productCount);
 
   // console.log("Fetched Products:", products);
 
@@ -921,51 +906,81 @@ console.log('Total Products:', productCount);
   const totalProducts = await prismadb.product.count({
     where: {
       categoryId: {
-        in: categoryIds
+        in: categoryIds,
       },
       brand: {
         name: {
           contains: brandName,
-          mode: 'insensitive'
-        }
+          mode: "insensitive",
+        },
       },
       discountedPrice: {
         gte: minDiscountedPrice,
-        lte: maxDiscountedPrice
+        lte: maxDiscountedPrice,
       },
       discount: {
         gte: minDiscountPercentage,
-        lte: maxDiscountPercentage
-      }
-    }
+        lte: maxDiscountPercentage,
+      },
+    },
   });
 
   console.log("Total Products Count:", totalProducts);
-  
 
-
-  const uniqueBrands = Array.from(new Set(products.map(product => product.brand.name)));
+  const uniqueBrands = Array.from(
+    new Set(products.map((product) => product.brand.name))
+  );
   console.log("Unique Brands:", uniqueBrands);
-  const prices = products.map(product => product.discountedPrice).filter(price => price !== null);
+  const prices = products
+    .map((product) => product.discountedPrice)
+    .filter((price) => price !== null);
 
-  const priceRanges = [
-    { label: 'Below $50', value: 'below50', min: 0, max: 50 },
-    { label: '$50 - $100', value: '50to100', min: 50, max: 100 },
-    { label: '$100 - $200', value: '100to200', min: 100, max: 200 },
-    { label: 'Above $200', value: 'above200', min: 200, max: Math.max(...prices) }
+    const priceRanges = [
+      { label: "₹500 - ₹1500", value: "500to1500", min: 500, max: 1500 },
+      { label: "₹1500 - ₹2500", value: "1500to2500", min: 1500, max: 2500 },
+      { label: "₹2500 - ₹3500", value: "2500to3500", min: 2500, max: 3500 },
+      { label: "₹3500 - ₹4500", value: "3500to4500", min: 3500, max: 4500 },
+      { label: "₹4500 - ₹5500", value: "4500to5500", min: 4500, max: 5500 },
+      { label: "₹5500 - ₹6500", value: "5500to6500", min: 5500, max: 6500 },
+      { label: "₹6500 - ₹7500", value: "6500to7500", min: 6500, max: 7500 },
+      { label: "₹7500 - ₹8000", value: "7500to8000", min: 7500, max: 8000 },
+      {
+        label: "Above ₹8000",
+        value: "above8000",
+        min: 8000,
+        max: Math.max(...prices),
+      },
+    ];
+    
+  const discounts = products
+    .map((product) => product.discount)
+    .filter((price) => price !== null);
+
+
+  const discountRanges = [
+    { label: "Below 10%", value: "below10", min: 0, max: 10 },
+    { label: "10% - 20%", value: "10to20", min: 10, max: 20 },
+    { label: "20% - 30%", value: "20to30", min: 20, max: 30 },
+    { label: "30% - 50%", value: "30to50", min: 30, max: 50 },
+    {
+      label: "Above 50%",
+      value: "above50",
+      min: 50,
+      max: Math.max(...discounts),
+    },
   ];
 
-  const formattedProducts = products.map(product => {
+  const formattedProducts = products.map((product) => {
     const ratingsCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
     const reviews = [];
     let totalRatings = 0;
     let totalRatingValue = 0;
 
-    product.ratings.forEach(rating => {
+    product.ratings.forEach((rating) => {
       const reviewWithImages = {
         rating: rating.rating,
         review: rating.review,
-        images: rating.images.map(image => ({
+        images: rating.images.map((image) => ({
           id: image.id,
           url: image.url,
         })),
@@ -979,7 +994,8 @@ console.log('Total Products:', productCount);
     });
 
     const totalReviews = reviews.length;
-    const averageRating = totalRatings > 0 ? totalRatingValue / totalRatings : 0;
+    const averageRating =
+      totalRatings > 0 ? totalRatingValue / totalRatings : 0;
 
     return {
       ...product,
@@ -1001,175 +1017,171 @@ console.log('Total Products:', productCount);
     uniqueCategories,
     uniqueBrands,
     priceRanges,
+    discountRanges
   };
-}
-
-
+})
 
 export async function fetchAllReviews() {
-    
-    try {
-        // Fetch reviews for the product
-        const reviews = await prismadb.rating.findMany({
-          where: {
-            productId: "665ac95e5788e185779d7ce0",
-            review: {
-                not: null, // Filter out reviews that are null
-              },
-          },
-        });
-    
-        // Initialize an object to store counts for each rating
-        const ratingCounts = {
-          1: 0,
-          2: 0,
-          3: 0,
-          4: 0,
-          5: 0,
-        };
-    
-        // Loop through reviews and increment counts for each rating
-        reviews.forEach(review => {
-          ratingCounts[review.rating]++;
-        });
-    
-        // Log the rating counts
-        console.log("Rating Counts:", ratingCounts);
-    
-        // Log the reviews
-        console.log("Reviews:");
-        reviews.forEach(review => {
-          console.log(`Rating: ${review.rating}, Review: ${review.review}`);
-        });
-      } catch (error) {
-        console.error("Error fetching product reviews:", error);
-      }
+  try {
+    // Fetch reviews for the product
+    const reviews = await prismadb.rating.findMany({
+      where: {
+        productId: "665ac95e5788e185779d7ce0",
+        review: {
+          not: null, // Filter out reviews that are null
+        },
+      },
+    });
+
+    // Initialize an object to store counts for each rating
+    const ratingCounts = {
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0,
+    };
+
+    // Loop through reviews and increment counts for each rating
+    reviews.forEach((review) => {
+      ratingCounts[review.rating]++;
+    });
+
+    // Log the rating counts
+    console.log("Rating Counts:", ratingCounts);
+
+    // Log the reviews
+    console.log("Reviews:");
+    reviews.forEach((review) => {
+      console.log(`Rating: ${review.rating}, Review: ${review.review}`);
+    });
+  } catch (error) {
+    console.error("Error fetching product reviews:", error);
+  }
 }
 
-export async function fetchProductAllData(productdata:string) {
-const productId = productdata; // Replace with the actual product ID
+export const fetchProductAllData = cache(async (productdata: string) => {
+  const productId = productdata; // Replace with the actual product ID
   // Fetch the product with its category, brand, images, and product variants
-    const product = await prismadb.product.findUnique({
-      where: {
-        id: productId,
-      },
-      include: {
-        category: {
-          include: {
-            parent: true, // Include the parent category
-          },
-        },  // Include the category
-        brand: true, // Include the brand
-        images: true, // Include the images
-        productVariants: {
-          include: {
-            color: true,
-            size: true,
-          },
+  const product = await prismadb.product.findUnique({
+    where: {
+      id: productId,
+    },
+    include: {
+      category: {
+        include: {
+          parent: true, // Include the parent category
         },
-        ratings: {
-          include: {
-            images: true, // Assuming `reviewImages` is the relation name for review images
-          },
+      }, // Include the category
+      brand: true, // Include the brand
+      images: true, // Include the images
+      productVariants: {
+        include: {
+          color: true,
+          size: true,
+        },
       },
+      ratings: {
+        include: {
+          images: true, // Assuming `reviewImages` is the relation name for review images
+        },
       },
-    });
-  
-    if (!product) {
-      console.log("Product not found");
-      return;
-    }
-    const parentCategory = product.category.parent; // Access the parent category
+    },
+  });
+
+  if (!product) {
+    console.log("Product not found");
+    return;
+  }
+  const parentCategory = product.category.parent; // Access the parent category
 
   // Fetch related products based on the parent category
-    // const relatedProducts = await prismadb.product.findMany({
-    //   where: {
-    //     categoryId: parentCategory.id,
-    //     NOT: {
-    //       id: productId,
-    //     },
-    //   },
-    //   include: {
-    //     brand: true, // Include brand details
-    //     images: true, // Include product images
-    //     // Include any other relations you need
-    //   },
-    // });
-    // Format the productVariants to include color and size names directly
-    const formattedProductVariants = product.productVariants.map((variant) => ({
-      id: variant.id,
-      color: variant.color.name, // Assuming 'name' is the property containing the color name
-      size: variant.size.name, // Assuming 'name' is the property containing the size name
-      stock: variant.stock,
-      createdAt: variant.createdAt,
-      updatedAt: variant.updatedAt,
-    }));
-  
-    // Format the ratings
-    const ratingsCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-    const reviews = [];
-    let totalRatings = 0;
-    let totalRatingValue = 0;
+  // const relatedProducts = await prismadb.product.findMany({
+  //   where: {
+  //     categoryId: parentCategory.id,
+  //     NOT: {
+  //       id: productId,
+  //     },
+  //   },
+  //   include: {
+  //     brand: true, // Include brand details
+  //     images: true, // Include product images
+  //     // Include any other relations you need
+  //   },
+  // });
+  // Format the productVariants to include color and size names directly
+  const formattedProductVariants = product.productVariants.map((variant) => ({
+    id: variant.id,
+    color: variant.color.name, // Assuming 'name' is the property containing the color name
+    size: variant.size.name, // Assuming 'name' is the property containing the size name
+    stock: variant.stock,
+    createdAt: variant.createdAt,
+    updatedAt: variant.updatedAt,
+  }));
 
-    product.ratings.forEach((rating) => {
-      const reviewWithImages = {
-        rating: rating.rating,
-        review: rating.review,
-        images: rating.images.map(image => ({
-            id: image.id,
-            url: image.url,
-        })),
-    };
-      if (rating.review) {
-        reviews.push(reviewWithImages);
-      }
-      ratingsCount[rating.rating] = (ratingsCount[rating.rating] || 0) + 1;
-      totalRatingValue += rating.rating; // Sum the star counts weighted by their star value
+  // Format the ratings
+  const ratingsCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+  const reviews = [];
+  let totalRatings = 0;
+  let totalRatingValue = 0;
 
-      totalRatings += 1;
-
-    });
-    const totalReviews = reviews.length;
-    const averageRating = totalRatings > 0 ? totalRatingValue / totalRatings : 0;
-
-    // Organize the final product data
-    const organizedProduct = {
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      discount: product.discount,
-      discountedPrice: product.discountedPrice,
-      description: product.description,
-      category: {
-        id: product.category.id,
-        name: product.category.name,
-        parentId: parentCategory.id, // Include parent category ID
-      parentName: parentCategory.name, // Include parent category name
-      },
-      brand: {
-        id: product.brand.id,
-        name: product.brand.name,
-      },
-      images: product.images.map(image => ({
+  product.ratings.forEach((rating) => {
+    const reviewWithImages = {
+      rating: rating.rating,
+      review: rating.review,
+      images: rating.images.map((image) => ({
         id: image.id,
         url: image.url,
       })),
-      productVariants: formattedProductVariants,
-      ratings: {
-        count: ratingsCount,
-        reviews: reviews,
-        totalReviews: totalReviews, // Add totalReviews to the ratings object
-            totalRatings: totalRatings, // Add totalRatings to the ratings object
-            averageRating: averageRating, // Add averageRating to the ratings object
-      },
-      createdAt: product.createdAt,
-      updatedAt: product.updatedAt,
-      // parentCategoryId: parentCategory.id, // Add parent category ID to the organizedProduct
-      // parentCategoryName: parentCategory.name, // Add parent category name to the organizedProduct
-      // relatedProducts: relatedProducts, // Add related products to the organizedProduct
     };
-  
-    // console.dir(organizedProduct, { depth: null });
-    return organizedProduct;
-}
-  
+    if (rating.review) {
+      reviews.push(reviewWithImages);
+    }
+    ratingsCount[rating.rating] = (ratingsCount[rating.rating] || 0) + 1;
+    totalRatingValue += rating.rating; // Sum the star counts weighted by their star value
+
+    totalRatings += 1;
+  });
+  const totalReviews = reviews.length;
+  const averageRating = totalRatings > 0 ? totalRatingValue / totalRatings : 0;
+
+  // Organize the final product data
+  const organizedProduct = {
+    id: product.id,
+    name: product.name,
+    price: product.price,
+    discount: product.discount,
+    discountedPrice: product.discountedPrice,
+    description: product.description,
+    category: {
+      id: product.category.id,
+      name: product.category.name,
+      parentId: parentCategory.id, // Include parent category ID
+      parentName: parentCategory.name, // Include parent category name
+    },
+    brand: {
+      id: product.brand.id,
+      name: product.brand.name,
+    },
+    images: product.images.map((image) => ({
+      id: image.id,
+      url: image.url,
+    })),
+    productVariants: formattedProductVariants,
+    ratings: {
+      count: ratingsCount,
+      reviews: reviews,
+      totalReviews: totalReviews, // Add totalReviews to the ratings object
+      totalRatings: totalRatings, // Add totalRatings to the ratings object
+      averageRating: averageRating, // Add averageRating to the ratings object
+    },
+    createdAt: product.createdAt,
+    updatedAt: product.updatedAt,
+    // parentCategoryId: parentCategory.id, // Add parent category ID to the organizedProduct
+    // parentCategoryName: parentCategory.name, // Add parent category name to the organizedProduct
+    // relatedProducts: relatedProducts, // Add related products to the organizedProduct
+  };
+
+  // console.dir(organizedProduct, { depth: null });
+  return organizedProduct;
+});

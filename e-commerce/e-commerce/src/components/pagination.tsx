@@ -86,8 +86,7 @@ const updateUrl = (page:number) => {
             </PaginationItem>
           </button>
         ))}
-         
-            
+                 
             {/* <PaginationItem>
               <PaginationEllipsis />
             </PaginationItem> */}
