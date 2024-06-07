@@ -176,7 +176,13 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
                 (category) => category !== null && category.options.length > 0
               ) // Filter out null categories and those without options
               .map((category, index) => (
-                <Fcard key={index} category={category} />
+                <Fcard key={index} category={category}
+                
+                setBrandName={setBrandName}
+                setMinDiscountedPrice={setMinDiscountedPrice}
+                setMaxDiscountedPrice={setMaxDiscountedPrice}
+                setMinDiscountPercentage={setMinDiscountPercentage}
+                setMaxDiscountPercentage={setMaxDiscountPercentage}/>
               ))}
           </div>
 

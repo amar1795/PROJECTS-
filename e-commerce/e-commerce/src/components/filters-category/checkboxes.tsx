@@ -6,8 +6,8 @@ interface CheckboxesProps {
     label: string;
     value: string;
     qty: number;
-    min: string;
-    max: string;
+    min: number;
+    max: number;
     setSelectedCategoryName : (name: string) => void; 
     setBrandName : (name: string) => void;
     setMinDiscountedPrice : (price: number) => void;
@@ -29,7 +29,7 @@ const Checkboxes:React.FC<CheckboxesProps> = ({ label, value, qty,setSelectedCat
   const [isChecked, setIsChecked] = useState(false);
 
   const handleCheckboxClick = () => {
-    alert(`${label} checkbox clicked. New checked state: ${!isChecked} and this is the parentcategory: ${parentCategory} and this is min: ${min} and this is max: ${max}`)
+    // alert(`${label} checkbox clicked. New checked state: ${!isChecked} and this is the parentcategory: ${parentCategory} and this is min: ${min} and this is max: ${max}`)
     const newCheckedState = !isChecked;
     setIsChecked(!isChecked);
     if (parentCategory === "Brand") {
@@ -42,8 +42,8 @@ const Checkboxes:React.FC<CheckboxesProps> = ({ label, value, qty,setSelectedCat
         setMinDiscountPercentage(min);
         setMaxDiscountPercentage(max);
       } else {
-        setMinDiscountPercentage("");
-        setMaxDiscountPercentage("");
+        setMinDiscountPercentage(0);
+        setMaxDiscountPercentage(100);
       }
     } else if (parentCategory === "Price") {
       // Assuming min and max are already defined in the component state
@@ -51,8 +51,8 @@ const Checkboxes:React.FC<CheckboxesProps> = ({ label, value, qty,setSelectedCat
         setMinDiscountedPrice(min);
         setMaxDiscountedPrice(max);
       } else {
-        setMinDiscountedPrice("");
-        setMaxDiscountedPrice("");
+        setMinDiscountedPrice(0);
+        setMaxDiscountedPrice(100000);
       }
     }
     console.log(`${label} checkbox clicked. New checked state: ${!isChecked}`);
