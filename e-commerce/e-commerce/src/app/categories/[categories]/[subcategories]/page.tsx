@@ -31,13 +31,13 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
     params.subcategories
   );
   const [brandName, setBrandName] = useState([]);
-  console.log("this is brand name", brandName)
+  // console.log("this is brand name", brandName)
   const [minDiscountedPrice, setMinDiscountedPrice] = useState(0);
   const [maxDiscountedPrice, setMaxDiscountedPrice] = useState(100000);
   const [minDiscountPercentage, setMinDiscountPercentage] = useState(0);
   const [maxDiscountPercentage, setMaxDiscountPercentage] = useState(100);
   const [filterData, setFilterData] = useState([]);
-  console.log("this is the parent category name", parentCategoryName);
+  // console.log("this is the parent category name", parentCategoryName);
 
   useEffect(() => {
     const fetchPaginatedData = async () => {

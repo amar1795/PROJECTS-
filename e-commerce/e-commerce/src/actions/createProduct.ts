@@ -833,10 +833,17 @@ export const getProductsByCategoryFiltered = cache(
       // selectedCategories = [...selectedCategory];
 
       categoryName.forEach((categoryName) => {
+
+        // const category
+        // = categories.find(
+        //   (cat) =>cat.name.toLowerCase() === categoryName.toLowerCase()|| cat.subcategories.map((subcategory) => subcategory.name.toLowerCase()).includes(categoryName.toLowerCase())
+        // );
+        
         // Find the category matching the provided name
         const category = categories.find(
           (cat) => cat.name.toLowerCase() === categoryName.toLowerCase()
         );
+        
 
         if (category && !selectedCategory.includes(category.name)) {
           selectedCategory.push(category.id);
@@ -1072,7 +1079,7 @@ export const getProductsByCategoryFiltered = cache(
         },
       };
     });
-
+      const fetchedCategories=categories
     return {
       products: formattedProducts,
       totalProducts: totalProducts,
@@ -1082,6 +1089,7 @@ export const getProductsByCategoryFiltered = cache(
       uniqueBrands,
       priceRanges,
       discountRanges,
+      fetchedCategories
     };
   }
 );

@@ -88,7 +88,7 @@ const page = ({ params }: { params: { product: string } }) => {
   React.useEffect(() => {
     const updateData = async () => {
         const updatedData: updatedDataResponse | undefined = await fetchProductAllData(params.product);
-        console.log("this is the response:", updatedData);
+        // console.log("this is the response:", updatedData);
         setData(updatedData || null);
         // const relatedProducts = await getProductsByCategoryOriginal(updatedData?.category?.parentId)
         const relatedProducts = await getProductsByCategory(updatedData?.category?.id)
@@ -101,13 +101,13 @@ const page = ({ params }: { params: { product: string } }) => {
 }, [params]);
 
 const ProductId=data?.id;
-console.log("this is the product id:", ProductId);
-  console.log("these are the related product:", relatedProducts);
+// console.log("this is the product id:", ProductId);
+//   console.log("these are the related product:", relatedProducts);
   const completeUrl = typeof window !== "undefined" ? window.location.href : "";
   const segments = completeUrl.split("/");
   const previousSegment = segments[segments.length - 2];
   const previousSegment1 = segments[segments.length - 3];
-  console.log("this is the Previous segment:", previousSegment);
+  // console.log("this is the Previous segment:", previousSegment);
   const images = [
     "https://images.pexels.com/photos/23541799/pexels-photo-23541799/free-photo-of-shine-bright.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     "https://images.pexels.com/photos/17395579/pexels-photo-17395579/free-photo-of-shiny-water-at-sunset.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
@@ -125,9 +125,9 @@ console.log("this is the product id:", ProductId);
       { id: 4, href: params.product, label: data?.name },
     ];
 
-  console.log("this is the data:", data);
+  // console.log("this is the data:", data);
 
-  console.log("this is the data i am searching:", data?.images);
+  // console.log("this is the data i am searching:", data?.images);
   return (
     <div className=" overflow-hidden">
       <div className="fixed top-0 left-0 right-0  z-10">
