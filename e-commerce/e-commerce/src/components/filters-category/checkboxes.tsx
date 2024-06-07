@@ -15,6 +15,7 @@ interface CheckboxesProps {
     setMaxDiscountedPrice : (price: number) => void;
     setMinDiscountPercentage : (percentage: number) => void;
     setMaxDiscountPercentage : (percentage: number) => void;
+    setBrandSelected : (selected: boolean) => void;
   }
 
 const Checkboxes:React.FC<CheckboxesProps> = ({ label, value, qty,setSelectedCategoryName,
@@ -25,7 +26,8 @@ const Checkboxes:React.FC<CheckboxesProps> = ({ label, value, qty,setSelectedCat
   setMinDiscountedPrice,
   setMaxDiscountedPrice,
   setMinDiscountPercentage,
-  setMaxDiscountPercentage
+  setMaxDiscountPercentage,
+  setBrandSelected
   }) => {
   const [isChecked, setIsChecked] = useState(false);
 
@@ -34,7 +36,20 @@ const Checkboxes:React.FC<CheckboxesProps> = ({ label, value, qty,setSelectedCat
     const newCheckedState = !isChecked;
     setIsChecked(!isChecked);
     if (parentCategory === "Brand") {
-      setBrandName(newCheckedState ? label : "");
+      setBrandName(prevBrands => {
+        if (newCheckedState) {
+          // Add the new brand if checked
+          setBrandSelected(true);
+          return [...prevBrands, label];
+        } else {
+          // Remove the brand if unchecked
+          const updatedBrands = prevBrands.filter(brand => brand !== label);
+          // Check if any brand is still selected
+          const anyBrandSelected = updatedBrands.length > 0;
+          setBrandSelected(anyBrandSelected);
+          return updatedBrands;
+        }
+      });
     } else if (parentCategory === "Category") {
       // setSelectedCategoryName(newCheckedState ? label : "");
       setSelectedCategoryName(prevCategories => {

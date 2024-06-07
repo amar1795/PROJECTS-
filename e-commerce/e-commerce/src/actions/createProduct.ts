@@ -753,7 +753,7 @@ export const getProductsByCategoryFiltered = cache(
   async (
     parentCategoryName: string,
     categoryName: string[],
-    brandName: string,
+    brandName: string[],
     minDiscountedPrice: number,
     maxDiscountedPrice: number,
     minDiscountPercentage: number,
@@ -798,7 +798,6 @@ export const getProductsByCategoryFiltered = cache(
         },
       },
     });
-    
 
     // Filter out categories with the provided parent category ID
     const filteredCategories = categories.filter(
@@ -812,7 +811,7 @@ export const getProductsByCategoryFiltered = cache(
 
     console.log("Unique Categories:", uniqueCategories);
 
-    let selectedCategory:string[] = [];
+    let selectedCategory: string[] = [];
 
     console.log("Fetched Categories:", categories);
 
@@ -867,19 +866,17 @@ export const getProductsByCategoryFiltered = cache(
       // ];
       // Map over selectedCategory and add each individual category ID to categoryIds
       selectedCategory.forEach((category) => {
-        
         categoryIds.push(category);
 
         categories.forEach((cat) => {
-          if(cat.id === category) {
-            cat.subcategories.forEach(subcategory => {
-              if(subcategory) {
+          if (cat.id === category) {
+            cat.subcategories.forEach((subcategory) => {
+              if (subcategory) {
                 categoryIds.push(subcategory.id);
               }
             });
           }
-        }
-      )
+        });
         // Map over subcategories and add their IDs to categoryIds
         // if (categories.subcategories && category.subcategories.length > 0) {
         //   categories.subcategories.forEach(subcategoryId => {
@@ -917,18 +914,23 @@ export const getProductsByCategoryFiltered = cache(
     // Calculate the skip value
     const skip = (page - 1) * pageSize;
 
+    console.log("Brand Name:", brandName);
+
     // Fetch products under the extracted category IDs and apply filters
     const products = await prismadb.product.findMany({
       where: {
         categoryId: {
           in: categoryIds,
         },
-        brand: {
-          name: {
-            contains: brandName,
-            mode: "insensitive",
+        // Only include the brand filter if brandName is not empty
+        ...(brandName.length > 0 && {
+          brand: {
+            name: {
+              in: brandName,
+              mode: "insensitive",
+            },
           },
-        },
+        }),
         discountedPrice: {
           gte: minDiscountedPrice,
           lte: maxDiscountedPrice,
@@ -967,12 +969,15 @@ export const getProductsByCategoryFiltered = cache(
         categoryId: {
           in: categoryIds,
         },
-        brand: {
-          name: {
-            contains: brandName,
-            mode: "insensitive",
+        // Only include the brand filter if brandName is not empty
+        ...(brandName.length > 0 && {
+          brand: {
+            name: {
+              in: brandName,
+              mode: "insensitive",
+            },
           },
-        },
+        }),
         discountedPrice: {
           gte: minDiscountedPrice,
           lte: maxDiscountedPrice,
@@ -990,6 +995,7 @@ export const getProductsByCategoryFiltered = cache(
       new Set(products.map((product) => product.brand.name))
     );
     console.log("Unique Brands:", uniqueBrands);
+
     const prices = products
       .map((product) => product.discountedPrice)
       .filter((price) => price !== null);

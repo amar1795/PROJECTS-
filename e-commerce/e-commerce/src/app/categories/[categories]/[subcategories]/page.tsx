@@ -30,7 +30,8 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
   const [parentCategoryName, setparentCategoryName] = useState(
     params.subcategories
   );
-  const [brandName, setBrandName] = useState("");
+  const [brandName, setBrandName] = useState([]);
+  console.log("this is brand name", brandName)
   const [minDiscountedPrice, setMinDiscountedPrice] = useState(0);
   const [maxDiscountedPrice, setMaxDiscountedPrice] = useState(100000);
   const [minDiscountPercentage, setMinDiscountPercentage] = useState(0);

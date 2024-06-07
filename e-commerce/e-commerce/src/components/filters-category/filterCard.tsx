@@ -12,6 +12,7 @@ interface Category {
     setMaxDiscountedPrice: (price: number) => void;
     setMinDiscountPercentage: (percentage: number) => void;
     setMaxDiscountPercentage: (percentage: number) => void;
+    setBrandSelected: (selected: boolean) => void;
 }
 
 const Fcard: React.FC<{ category: Category }> = ({
@@ -22,6 +23,7 @@ const Fcard: React.FC<{ category: Category }> = ({
   setMaxDiscountedPrice,
   setMinDiscountPercentage,
   setMaxDiscountPercentage,
+  setBrandSelected
 }) => {
   return (
     <div className="mt-4 pb-2 border-b">
@@ -34,6 +36,7 @@ const Fcard: React.FC<{ category: Category }> = ({
       <div className="checkboxes">
         {category.options.map((option, index) => (
           <Checkboxes
+          setBrandSelected={setBrandSelected}
           parentCategory={category.category}
             key={index}
             label={option.label}

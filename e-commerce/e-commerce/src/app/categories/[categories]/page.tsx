@@ -29,19 +29,23 @@ const Page = ({ params }: { params: { categories: string } }) => {
     totalPages: 0,
     totalProductsCount: 0,
     currentProductsCount: 0,
+    brands: [],
   });
   const [categoryName, setSelectedCategoryName] = useState([]);
   console.log("this is the selected category name", categoryName);
   const [parentCategoryName, setparentCategoryName] = useState(
     params.categories
   );
-  const [brandName, setBrandName] = useState("");
+  const [brandSelected, setBrandSelected] = useState(false);
+  const [brandName, setBrandName] = useState([]);
+  console.log("this is brand name", brandName)
+
   const [minDiscountedPrice, setMinDiscountedPrice] = useState(0);
   const [maxDiscountedPrice, setMaxDiscountedPrice] = useState(100000);
   const [minDiscountPercentage, setMinDiscountPercentage] = useState(0);
   const [maxDiscountPercentage, setMaxDiscountPercentage] = useState(100);
   const [filterData, setFilterData] = useState([]);
-
+  
   console.log("this is the current page", currentPage);
   // Load current page from local storage on component mount
   useEffect(() => {
@@ -74,22 +78,25 @@ const Page = ({ params }: { params: { categories: string } }) => {
         totalPages: data.totalPages,
         totalProductsCount: data.totalProducts,
         currentProductsCount: data.products.length,
+        brands: data.uniqueBrands,
       });
+
 
       const newFilterData = [
         {
           category: "Category",
-          options: data.uniqueCategories.map((category) => ({
+          options: data.uniqueCategories.filter(category => !["jewellery", "watches"].includes(category)) // Filter out categories with certain names
+          .map((category) => ({
             label: category,
             value: category,
           })),
         },
         {
           category: "Brand",
-          options: data.uniqueBrands.map((brand) => ({
+          options: !brandSelected ? data.uniqueBrands.map((brand) => ({
             label: brand,
             value: brand,
-          })),
+          })) : filterData.find(item => item.category === "Brand").options,
         },
         {
           category: "Price",
@@ -124,6 +131,11 @@ const Page = ({ params }: { params: { categories: string } }) => {
     maxDiscountPercentage,
   ]);
 
+  const fixedBrand=paginatedData.brands.map((brand) => ({
+            label: brand,
+            value: brand,}))
+  console.log("this is the fixed brand", fixedBrand);
+    
   // const mensCollectionData =await getProductsByCategory("665a0b9f14be77720636d443")
   // const paginatedData =await getProductsByCategoryfiltered("665a0b9f14be77720636d443",1,10)
 
@@ -212,6 +224,7 @@ const { start, end } = calculateProductRange(currentPage);
               <Fcard
                 key={index}
                 category={category}
+                setBrandSelected={setBrandSelected}
                 setSelectedCategoryName={setSelectedCategoryName}
                 setBrandName={setBrandName}
                 setMinDiscountedPrice={setMinDiscountedPrice}
