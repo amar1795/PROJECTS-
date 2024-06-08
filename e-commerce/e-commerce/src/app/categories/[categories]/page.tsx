@@ -37,9 +37,12 @@ const Page = ({ params }: { params: { categories: string } }) => {
   const [parentCategoryName, setparentCategoryName] = useState(
     params.categories
   );
+  // 'priceAsc', 'priceDesc', 'discountAsc', 'discountDesc', 'ratingsAsc', 'ratingsDesc'
   const [brandSelected, setBrandSelected] = useState(false);
   const [brandName, setBrandName] = useState([]);
+  const [sortBy, setSortBy] = useState("");
   // console.log("this is brand name", brandName)
+  console.log("this is the sort by", sortBy);
 
   const [minDiscountedPrice, setMinDiscountedPrice] = useState(0);
   const [maxDiscountedPrice, setMaxDiscountedPrice] = useState(100000);
@@ -72,13 +75,14 @@ const Page = ({ params }: { params: { categories: string } }) => {
         minDiscountPercentage,
         maxDiscountPercentage,
         currentPage,
-        9
+        9,
+        sortBy
       );
       setPaginatedData({
         products: data.products,
         totalPages: data.totalPages,
         totalProductsCount: data.totalProducts,
-        currentProductsCount: data.products.length,
+        currentProductsCount: data.products?.length,
         brands: data.uniqueBrands,
       });
 
@@ -151,6 +155,8 @@ const Page = ({ params }: { params: { categories: string } }) => {
     maxDiscountedPrice,
     minDiscountPercentage,
     maxDiscountPercentage,
+    sortBy,
+    
   ]);
 
   const fixedBrand=paginatedData.brands.map((brand) => ({
@@ -235,8 +241,7 @@ const { start, end } = calculateProductRange(currentPage);
         <div className="filter flex justify-between w-full px-5 mt-5  overflow-hidden relative">
           <div className=" self-center font-bold">FILTERS</div>
           <div className=" px-5 py-5 flex w-[19rem] justify-between ">
-            <h1 className=" self-center font-bold">SORT BY :</h1>
-            <SelectDemo />
+            <SelectDemo setSortBy={setSortBy} />
           </div>
         </div>
         <Separator />
@@ -260,7 +265,7 @@ const { start, end } = calculateProductRange(currentPage);
 
           <div className=" flex-grow">
             <div className={`min-h-[90vh] `}>
-              {paginatedData.products.length === 0 ? (
+              {paginatedData.products?.length === 0 ? (
                 <div className=" text-center self-center">
                   <h1 className=" text-[4rem] leading-[7rem] ">
                     No Products found  Lmao 😂

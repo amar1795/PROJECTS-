@@ -1,3 +1,4 @@
+
 import * as React from "react"
 
 import {
@@ -10,20 +11,32 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-export function SelectDemo() {
+// 'priceAsc', 'priceDesc', 'discountAsc', 'discountDesc', 'ratingsAsc', 'ratingsDesc'
+export function SelectDemo( {setSortBy}: {setSortBy: (value: string) => void} ) {
+  const handleChange = (value:string) => {
+    // console.log(event?.currentTarget);
+    // const selectedValue = event?.currentTarget?.value;
+    // setSortBy(selectedValue);
+    // alert("Selected value: " + selectedValue+" "+event?.currentTarget);
+    setSortBy(value);
+  };
   return (
-    <Select>
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select a fruit" />
+    
+    <Select  onValueChange={handleChange}>
+      <SelectTrigger className=" min-w-[50px] " >
+        <SelectValue  className=" " placeholder="SORT BY" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel> Fruits</SelectLabel>
-          <SelectItem value="apple">Apple</SelectItem>
-          <SelectItem value="banana">Banana</SelectItem>
-          <SelectItem value="blueberry">Blueberry</SelectItem>
-          <SelectItem value="grapes">Grapes</SelectItem>
-          <SelectItem value="pineapple">Pineapple</SelectItem>
+          {/* <SelectLabel> Fruits</SelectLabel> */}
+          <SelectItem value="priceDesc">PRICE : high to low </SelectItem>
+          <SelectItem value="priceAsc">PRICE :low to high</SelectItem>
+          <SelectItem value="ratingsDesc">RATINGS:high to low </SelectItem>
+          <SelectItem value="ratingsAsc">RATINGS:low to high </SelectItem>
+          <SelectItem value="discountDesc">DISCOUNT:high to low </SelectItem>
+          <SelectItem value="discountAsc">DISCOUNT:low to high </SelectItem>
+          <SelectItem value="SORT asc">SORT BY:ASCENDING</SelectItem>
+          <SelectItem value="SORT desc">SORT BY :DESCENDING</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>

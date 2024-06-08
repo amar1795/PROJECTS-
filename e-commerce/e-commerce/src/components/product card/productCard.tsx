@@ -117,7 +117,7 @@ const ProductCard: React.FC<updatedDataResponse> = ({ product }) => {
                 <h1 className=" text-[1.4rem] font-bold" style={{ textDecoration: 'line-through' }}>{product?.price}</h1>
                           <h1 className=" text-[1.2rem] font-bold ml-2" >
                             {formatPrice(product?.discountedPrice?.toFixed(2))}</h1>
-                          {/* <h1 className=" text-[1.2rem] font-bold ml-2" >({product?.discount}%OFF)</h1> */}
+                          <h1 className=" text-[1.2rem] font-bold ml-2" >({product?.discount}%OFF)</h1>
                         </div>
 
               </div>

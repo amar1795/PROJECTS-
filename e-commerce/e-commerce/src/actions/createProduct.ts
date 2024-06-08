@@ -759,7 +759,8 @@ export const getProductsByCategoryFiltered = cache(
     minDiscountPercentage: number,
     maxDiscountPercentage: number,
     page: number = 1,
-    pageSize: number = 9
+    pageSize: number = 9,
+    sortBy: string = "", // 'priceAsc', 'priceDesc', 'discountAsc', 'discountDesc', 'ratingsAsc', 'ratingsDesc'
   ) => {
     // Function to format camel case or Pascal case strings to separate words
     const formatCategoryName = (name: string): string => {
@@ -918,6 +919,58 @@ export const getProductsByCategoryFiltered = cache(
     // const categoryNames = [selectedCategory.name, ...selectedCategory.subcategories.map(subcategory => subcategory.name)];
     // console.log("Category Names:", categoryNames);
 
+
+          // Sorting function
+          const sortProducts = (products, sortBy) => {
+            products.sort((a, b) => {
+              let valueA, valueB;
+              let order = 'asc';
+              
+              // Determine sorting criteria and order
+              switch (sortBy) {
+                case 'priceAsc':
+                  valueA = a.discountedPrice;
+                  valueB = b.discountedPrice;
+                  order = 'asc';
+                  break;
+                case 'priceDesc':
+                  valueA = a.discountedPrice;
+                  valueB = b.discountedPrice;
+                  order = 'desc';
+                  break;
+                case 'discountAsc':
+                  valueA = a.discount;
+                  valueB = b.discount;
+                  order = 'asc';
+                  break;
+                case 'discountDesc':
+                  valueA = a.discount;
+                  valueB = b.discount;
+                  order = 'desc';
+                  break;
+                case 'ratingsAsc':
+                  valueA = a.ratings.averageRating;
+                  valueB = b.ratings.averageRating;
+                  order = 'asc';
+                  break;
+                case 'ratingsDesc':
+                  valueA = a.ratings.averageRating;
+                  valueB = b.ratings.averageRating;
+                  order = 'desc';
+                  break;
+                default:
+                  return 0;
+              }
+          
+              if (order === 'asc') {
+                return valueA - valueB;
+              } else if (order === 'desc') {
+                return valueB - valueA;
+              }
+              return 0;
+            });
+          };
+
     // Calculate the skip value
     const skip = (page - 1) * pageSize;
 
@@ -959,19 +1012,34 @@ export const getProductsByCategoryFiltered = cache(
 
         // Include any other relations you need
       },
-      skip: skip,
-      take: pageSize,
+      // skip: skip,
+      // take: pageSize,
     });
 
+
+            // Sort all products
+      
+    if (sortBy) {
+      sortProducts(products, sortBy);
+  }
+
+     // Calculate pagination
+     const totalProducts = products.length;
+     const totalPages = Math.ceil(totalProducts / pageSize);
+     const startIndex = (page - 1) * pageSize;
+     const endIndex = Math.min(startIndex + pageSize, totalProducts);
+ 
+     // Apply pagination
+     const allProducts = products.slice(startIndex, endIndex);
     // console.log('Fetched Products:', products);
     // Count the number of fetched products
-    const productCount = products.length;
+    const productCount = allProducts.length;
     console.log("Total Products:", productCount);
 
     // console.log("Fetched Products:", products);
 
     // Fetch the total count of products for pagination
-    const totalProducts = await prismadb.product.count({
+    const totalProductsCount = await prismadb.product.count({
       where: {
         categoryId: {
           in: categoryIds,
@@ -996,14 +1064,14 @@ export const getProductsByCategoryFiltered = cache(
       },
     });
 
-    console.log("Total Products Count:", totalProducts);
+    console.log("Total Products Count:", totalProductsCount);
 
     const uniqueBrands = Array.from(
-      new Set(products.map((product) => product.brand.name))
+      new Set(allProducts.map((product) => product.brand.name))
     );
     console.log("Unique Brands:", uniqueBrands);
 
-    const prices = products
+    const prices = allProducts
       .map((product) => product.discountedPrice)
       .filter((price) => price !== null);
 
@@ -1024,7 +1092,7 @@ export const getProductsByCategoryFiltered = cache(
       },
     ];
 
-    const discounts = products
+    const discounts = allProducts
       .map((product) => product.discount)
       .filter((price) => price !== null);
 
@@ -1041,7 +1109,7 @@ export const getProductsByCategoryFiltered = cache(
       },
     ];
 
-    const formattedProducts = products.map((product) => {
+    let formattedProducts = allProducts.map((product) => {
       const ratingsCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
       const reviews = [];
       let totalRatings = 0;
@@ -1079,12 +1147,16 @@ export const getProductsByCategoryFiltered = cache(
         },
       };
     });
+
       const fetchedCategories=categories
+
+
+
     return {
-      products: formattedProducts,
-      totalProducts: totalProducts,
+      products:formattedProducts ,
+      totalProducts: totalProductsCount,
       currentPage: page,
-      totalPages: Math.ceil(totalProducts / pageSize),
+      totalPages: totalPages,
       uniqueCategories,
       uniqueBrands,
       priceRanges,
@@ -1092,6 +1164,8 @@ export const getProductsByCategoryFiltered = cache(
       fetchedCategories
     };
   }
+
+  
 );
 
 export async function fetchAllReviews() {
