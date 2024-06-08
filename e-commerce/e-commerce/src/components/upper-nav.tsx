@@ -16,6 +16,10 @@ import userCustomButton from "./userCustomButton";
 import UserCustomButton from "./userCustomButton";
 
 const Uppernav = () => {
+  const completeUrl = typeof window !== "undefined" ? window.location.href : "";
+  const segments = completeUrl.split("/");
+  const previousSegment = segments[segments.length - 2];
+  const previousSegment1 = segments[segments.length - 3];
 
   return (
     <div className=" flex justify-center items-center mt-7 w-full h-10 px-[1.9rem] z-50">

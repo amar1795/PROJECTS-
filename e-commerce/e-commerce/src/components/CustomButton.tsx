@@ -1,11 +1,23 @@
+import Link from 'next/link';
 import React, { useState, useEffect, useRef } from 'react';
 
 interface CustomButtonProps {
   initialButtonName: string;
   initialOptions: string[];
+  
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({ initialButtonName, initialOptions }) => {
+  const completeUrl = typeof window !== "undefined" ? window.location.href : "";
+  const segments = completeUrl.split("/");
+  const previousSegment = segments[segments.length - 1];
+
+
+  // Check if the last character of previousSegment is '?' and remove it if true
+let sanitizedSegment = previousSegment.endsWith('?') 
+? previousSegment.slice(0, -1) 
+: previousSegment;
+
   const [isOpen, setIsOpen] = useState(false);
   const [buttonName, setButtonName] = useState(initialButtonName);
   const [options, setOptions] = useState(initialOptions);
@@ -45,19 +57,25 @@ const CustomButton: React.FC<CustomButtonProps> = ({ initialButtonName, initialO
         className="w-[10rem] p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500"
         onClick={handleButtonClick}
       >
-        <h1 className="font-bold">{buttonName}</h1>
+        <h1 className="font-bold">{sanitizedSegment}</h1>
       </button>
       {isOpen && (
         <div className="absolute mt-2 w-[10rem] bg-white border border-black text-black z-10">
           <ul>
             {options.map(option => (
-              <li
-                key={option}
-                onClick={() => handleOptionClick(option)}
-                className="p-2 hover:bg-gray-200 cursor-pointer flex justify-center"
-              >
-                {option}
-              </li>
+             
+          
+           <Link  href= {
+            `http://localhost:3000/categories/${option}` 
+          } >
+            <li
+            key={option}
+            onClick={() => handleOptionClick(option)}
+            className="p-2 hover:bg-gray-200 cursor-pointer flex justify-center"
+          >
+            {option}
+          </li>
+           </Link>
             ))}
           </ul>
         </div>

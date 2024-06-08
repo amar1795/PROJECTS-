@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-
+import { useSearchParams } from 'next/navigation';
 const UserCustomButton = ({buttonName}:{buttonName:string}) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);

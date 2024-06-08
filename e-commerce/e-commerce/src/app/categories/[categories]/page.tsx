@@ -34,9 +34,14 @@ const Page = ({ params }: { params: { categories: string } }) => {
   });
   const [categoryName, setSelectedCategoryName] = useState([]);
   console.log("this is the selected category name", categoryName);
+
+
   const [parentCategoryName, setparentCategoryName] = useState(
     params.categories
   );
+
+
+
   // 'priceAsc', 'priceDesc', 'discountAsc', 'discountDesc', 'ratingsAsc', 'ratingsDesc'
   const [brandSelected, setBrandSelected] = useState(false);
   const [brandName, setBrandName] = useState([]);
@@ -67,7 +72,7 @@ const Page = ({ params }: { params: { categories: string } }) => {
   useEffect(() => {
     const fetchPaginatedData = async () => {
       const data = await getProductsByCategoryFiltered(
-        parentCategoryName,
+        parentCategoryName === "Kids" ? "KidsCategory" : parentCategoryName,
         categoryName,
         brandName,
         minDiscountedPrice,
