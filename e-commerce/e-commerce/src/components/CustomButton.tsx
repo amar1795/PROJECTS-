@@ -10,11 +10,13 @@ interface CustomButtonProps {
 const CustomButton: React.FC<CustomButtonProps> = ({ initialButtonName, initialOptions }) => {
   const completeUrl = typeof window !== "undefined" ? window.location.href : "";
   const segments = completeUrl.split("/");
-  const previousSegment = segments[segments.length - 1];
-
-
+  // let previousSegment = segments[segments.length - 1];
+// Get the second segment from the path
+let previousSegment = segments.length >= 3 ? segments[4] : '';
+// Remove query string and hash from the segment
+previousSegment = previousSegment?.split(/[?#]/)[0];
   // Check if the last character of previousSegment is '?' and remove it if true
-let sanitizedSegment = previousSegment.endsWith('?') 
+let sanitizedSegment = previousSegment?.endsWith('?') 
 ? previousSegment.slice(0, -1) 
 : previousSegment;
 
@@ -57,8 +59,8 @@ let sanitizedSegment = previousSegment.endsWith('?')
         className="w-[10rem] p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500"
         onClick={handleButtonClick}
       >
-        <h1 className="font-bold">{sanitizedSegment}</h1>
-      </button>
+<h1 className="font-bold">{sanitizedSegment ? sanitizedSegment : "All"}</h1>
+</button>
       {isOpen && (
         <div className="absolute mt-2 w-[10rem] bg-white border border-black text-black z-10">
           <ul>

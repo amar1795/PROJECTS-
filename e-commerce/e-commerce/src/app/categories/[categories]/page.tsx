@@ -213,13 +213,19 @@ const Page = ({ params }: { params: { categories: string } }) => {
   //       ]
   //     }
   //   ];
-
   
+  const completeUrl = typeof window !== "undefined" ? window.location.href : "";
+  const segments = completeUrl.split("/");
+  const previousSegment = segments[segments.length - 1];
+  const previousSegment1 = segments[segments.length - 1];
+  // console.log("this is the Previous segment:", previousSegment);
   const breadcrumbsData = [
     { id: 1, href: "/", label: "Home" },
-    { id: 2, href: "men", label: "Men" },
-    { id: 3, href: "women", label: "women" },
+    { id: 2, href: `/categories/${previousSegment1}`, label: previousSegment1 },
+    // { id: 3, href: `/categories/${previousSegment1}/${previousSegment}`, label: previousSegment },
+    // { id: 4, href: params?.product, label: data?.name },
   ];
+
 
 // Define total number of products and products per page
 const totalProducts = paginatedData.totalProductsCount;
