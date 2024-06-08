@@ -1,18 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const CustomButton = ({buttonName}:{buttonName:string}) => {
+interface CustomButtonProps {
+  initialButtonName: string;
+  initialOptions: string[];
+}
+
+const CustomButton: React.FC<CustomButtonProps> = ({ initialButtonName, initialOptions }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const [buttonName, setButtonName] = useState(initialButtonName);
+  const [options, setOptions] = useState(initialOptions);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleButtonClick = () => {
     setIsOpen(!isOpen);
   };
 
-const handleClickOutside = (event: MouseEvent) => {
-    if (dropdownRef.current && !(dropdownRef.current as HTMLElement).contains(event.target as Node)) {
-        setIsOpen(false);
+  const handleClickOutside = (event: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      setIsOpen(false);
     }
-};
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -26,8 +33,9 @@ const handleClickOutside = (event: MouseEvent) => {
     };
   }, [isOpen]);
 
-  const handleOptionClick = (option:String) => {
-    console.log(`You clicked ${option}`);
+  const handleOptionClick = (option: string) => {
+    setButtonName(option);
+    setOptions(options.filter(opt => opt !== option).concat(buttonName));
     setIsOpen(false);
   };
 
@@ -40,11 +48,17 @@ const handleClickOutside = (event: MouseEvent) => {
         <h1 className="font-bold">{buttonName}</h1>
       </button>
       {isOpen && (
-        <div className="absolute mt-2 w-[10rem] bg-white border border-black  text-black z-10">
+        <div className="absolute mt-2 w-[10rem] bg-white border border-black text-black z-10">
           <ul>
-            <li onClick={() => handleOptionClick('Option 1')} className="p-2 hover:bg-gray-200 cursor-pointer">Option 1</li>
-            <li onClick={() => handleOptionClick('Option 2')} className="p-2 hover:bg-gray-200 cursor-pointer">Option 2</li>
-            <li onClick={() => handleOptionClick('Option 3')} className="p-2 hover:bg-gray-200 cursor-pointer">Option 3</li>
+            {options.map(option => (
+              <li
+                key={option}
+                onClick={() => handleOptionClick(option)}
+                className="p-2 hover:bg-gray-200 cursor-pointer flex justify-center"
+              >
+                {option}
+              </li>
+            ))}
           </ul>
         </div>
       )}

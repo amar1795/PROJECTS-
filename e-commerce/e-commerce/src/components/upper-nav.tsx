@@ -12,6 +12,8 @@ import CustomButton from "./CustomButton";
 import CustomInput from "./CustomInput";
 import CustomThemeToggle from "./DarkModeButton/CustomThemeToggle";
 import { useTheme } from "next-themes"
+import userCustomButton from "./userCustomButton";
+import UserCustomButton from "./userCustomButton";
 
 const Uppernav = () => {
 
@@ -19,7 +21,7 @@ const Uppernav = () => {
     <div className=" flex justify-center items-center mt-7 w-full h-10 px-[1.9rem] z-50">
       <div className="w-full h-[9rem] bg-white bg-opacity-[80px] backdrop-blur-lg border border-white/30 flex justify-center items-center">
         <div className=" mr-5">
-          <CustomButton buttonName="All" />
+          <CustomButton  initialButtonName="ALL" initialOptions={["Mens","Womens","Kids"]}/>
         </div>
 
         <div className=" mr-5">
@@ -33,7 +35,7 @@ const Uppernav = () => {
           </div>
         </Link>
         <div className="mx-2 ">
-          <CustomButton buttonName="Hello User" />
+          <UserCustomButton buttonName={"Hello User"}  />
         </div>
 
         
