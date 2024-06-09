@@ -20,15 +20,16 @@ import { register } from "@/actions/register";
 
 interface SignupProps {
   toggleView: () => void;
+  setIsSignup:(value:boolean)=>void
 }
-const Signup: React.FC<SignupProps> = ({ toggleView }) => {
+const Signup: React.FC<SignupProps> = ({ toggleView,setIsSignup }) => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
 console.log(error, success)
 
 
-const { register: registerField, handleSubmit, formState: { errors } }= useForm<z.infer<typeof RegisterSchema>>({
+const { register: registerField, handleSubmit, formState: { errors }, trigger  }= useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
       firstname: "",
@@ -37,6 +38,7 @@ const { register: registerField, handleSubmit, formState: { errors } }= useForm<
       password: "",
       confirmpassword: "",
     },
+    mode: "onBlur", // Validate on blur
   });
 
   const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
@@ -58,10 +60,11 @@ useEffect(() => {
     alert(error);
   }
   if (success) {
-    alert(success);
+    setIsSignup(false)
   }
 
-}, [error, success]);
+
+}, [error, success,setIsSignup]);
 
 
   return (
