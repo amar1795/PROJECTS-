@@ -12,8 +12,10 @@ import {
   Trash2,
 } from "lucide-react";
 import React from "react";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 const page = () => {
+  const user = useCurrentUser();
   return (
     <div className="  border-2 border-black overflow-hidden ">
       <div className=" bg-teal-600  px-5 py-5">
@@ -88,7 +90,18 @@ const page = () => {
               </div>
               <div></div>
               <div className="">
-                <StyledButton buttonName=" Proceed to Checkout" />
+                {
+                  !user ? (
+                    <div className=" flex justify-center">
+                      <StyledButton buttonName="Sign In" />
+                    </div>
+                  ) : (
+                    <div className=" flex justify-center">
+                      <StyledButton buttonName=" Proceed to Checkout" />
+                    </div>
+                  )
+                }
+                {/* <StyledButton buttonName=" Proceed to Checkout" /> */}
               </div>
             </div>
           </div>

@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import { v4 as uuidv4 } from "uuid";
 
-import { db } from "@/lib/db";
+import { prismadb } from "@/lib/db";
 
 
 export const generateTwoFactorToken = async (email: string) => {
@@ -13,7 +13,7 @@ export const generateTwoFactorToken = async (email: string) => {
 
    const getTwoFactorTokenByEmail = async (email: string) => {
     try {
-      const twoFactorToken = await db.twoFactorToken.findFirst({
+      const twoFactorToken = await prismadb.twoFactorToken.findFirst({
         where: { email }
       });
   
@@ -26,7 +26,7 @@ export const generateTwoFactorToken = async (email: string) => {
   const existingToken = await getTwoFactorTokenByEmail(email);
 
   if (existingToken) {
-    await db.twoFactorToken.delete({
+    await prismadb.twoFactorToken.delete({
       where: {
         id: existingToken.id,
       }
@@ -34,7 +34,7 @@ export const generateTwoFactorToken = async (email: string) => {
   }
 
   try {
-    const twoFactorToken = await db.twoFactorToken.create({
+    const twoFactorToken = await prismadb.twoFactorToken.create({
         data: {
           email,
           token,
@@ -57,7 +57,7 @@ export const generatePasswordResetToken = async (email: string) => {
 
      const getPasswordResetTokenByEmail = async (email: string) => {
         try {
-          const passwordResetToken = await db.passwordResetToken.findFirst({
+          const passwordResetToken = await prismadb.passwordResetToken.findFirst({
             where: { email }
           });
       
@@ -70,12 +70,12 @@ export const generatePasswordResetToken = async (email: string) => {
     const existingToken = await getPasswordResetTokenByEmail(email);
   
     if (existingToken) {
-      await db.passwordResetToken.delete({
+      await prismadb.passwordResetToken.delete({
         where: { id: existingToken.id }
       });
     }
   
-    const passwordResetToken = await db.passwordResetToken.create({
+    const passwordResetToken = await prismadb.passwordResetToken.create({
       data: {
         email,
         token,

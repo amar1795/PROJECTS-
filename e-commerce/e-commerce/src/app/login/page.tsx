@@ -1,7 +1,6 @@
 "use client"
 import Signup from "@/components/Signup";
 import Login from "@/components/login";
-
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 

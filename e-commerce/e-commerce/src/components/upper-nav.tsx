@@ -14,14 +14,18 @@ import CustomThemeToggle from "./DarkModeButton/CustomThemeToggle";
 import { useTheme } from "next-themes"
 import userCustomButton from "./userCustomButton";
 import UserCustomButton from "./userCustomButton";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 const Uppernav = () => {
   const completeUrl = typeof window !== "undefined" ? window.location.href : "";
   const segments = completeUrl.split("/");
   const previousSegment = segments[segments.length - 2];
   const previousSegment1 = segments[segments.length - 3];
+  const user = useCurrentUser();
+  console.log("this is the user", user)
 
   return (
+
     <div className=" flex justify-center items-center mt-7 w-full h-10 px-[1.9rem] z-50">
       <div className="w-full h-[9rem] bg-white bg-opacity-[80px] backdrop-blur-lg border border-white/30 flex justify-center items-center">
         <div className=" mr-5">
@@ -39,7 +43,7 @@ const Uppernav = () => {
           </div>
         </Link>
         <div className="mx-2 ">
-          <UserCustomButton buttonName={"Hello User"}  />
+        <UserCustomButton buttonName={user ? `Hello ${user.name.split(' ')[0]}` : 'Sign In'}  />
         </div>
 
         
@@ -53,13 +57,16 @@ const Uppernav = () => {
           </div>
         </Link>
 
-        <Link href="/wishlist">
-          <div className=" ">
-            <button className=" p-2 border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500">
-              <WishingListIcon />
-            </button>
-          </div>
-        </Link>
+{
+  user && ( <Link href="/wishlist">
+    <div className=" ">
+      <button className=" p-2 border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500">
+        <WishingListIcon />
+      </button>
+    </div>
+  </Link>)
+}
+       
 
         <div className=" px-5 ml-5">
           <CustomThemeToggle />
