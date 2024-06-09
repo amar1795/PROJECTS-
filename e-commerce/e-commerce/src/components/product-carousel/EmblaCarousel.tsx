@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useCallback, useEffect } from "react";
 import { EmblaOptionsType, EmblaCarouselType } from "embla-carousel";
 import { DotButton, useDotButton } from "./EmblaCarouselDotButton";
@@ -16,7 +16,6 @@ import { ThreeDCardDemo } from "../3d card/3dCard";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 
-
 type Brand = {
   id: string;
   name: string;
@@ -30,11 +29,11 @@ type Image = {
 };
 
 type Category = {
-  id:string;
-  name:string;
-  parentId:string;
-  parentName:string;
-}
+  id: string;
+  name: string;
+  parentId: string;
+  parentName: string;
+};
 
 type Product = {
   id: string;
@@ -52,7 +51,6 @@ type Product = {
   images: Image[];
 };
 
-
 type PropType = {
   slides: number[];
   options?: EmblaOptionsType;
@@ -61,20 +59,20 @@ type PropType = {
 };
 
 const EmblaCarousel: React.FC<PropType> = (props) => {
-  const { theme,setTheme } = useTheme()
+  const { theme, setTheme } = useTheme();
   // need to implement the theme toggle by myself
-//   useEffect(() => {
-//     let theme = localStorage.getItem('theme') || 'light';
-//     setTheme(theme);
-// }, []);
+  //   useEffect(() => {
+  //     let theme = localStorage.getItem('theme') || 'light';
+  //     setTheme(theme);
+  // }, []);
 
-// if (!theme) {
-//     return; // `theme` is null in the first render
-// }
+  // if (!theme) {
+  //     return; // `theme` is null in the first render
+  // }
   // console.log("this is the current theme", theme)
-  const { slides, options,products,category } = props;
+  const { slides, options, products, category } = props;
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
-  
+
   const onNavButtonClick = useCallback((emblaApi: EmblaCarouselType) => {
     const autoplay = emblaApi?.plugins()?.autoplay;
     if (!autoplay) return;
@@ -99,99 +97,144 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
     onNextButtonClick,
   } = usePrevNextButtons(emblaApi, onNavButtonClick);
 
-
   const formatPrice = (price: number): string => {
     // Format the price with the Indian Rupee symbol
-    return '₹' + price.toLocaleString('en-IN');
+    return "₹" + price.toLocaleString("en-IN");
   };
 
-  const subcategories="subcategories"
-  console.log("this is the parent Category Name",products[0]?.category?.parentName)
-  
-    
+  const subcategories = "subcategories";
+  console.log(
+    "this is the parent Category Name",
+    products[0]?.category?.parentName
+  );
+
   return (
     <section className="ProductEmbla_product">
       <div className="embla__viewport_product " ref={emblaRef}>
         <div className="Product_embla__container">
-        {
-          !products ?<>
-          {slides.map((index) => (
-             <div className="embla__slide_product " key={index}>
-               <div className="embla__slide__number__product   ">
-                 <div className="ProductImageCard h-60 over ">
-                 <Link href={`categories/men/sdgsg`}>
-                   <div className="ProductImage bg-red-400 h-full w-full">
-                     <button className=" heartButton">
-                       <Heart size={40} />
-                     </button>
-                   </div>
-                   </Link>
-                 </div>
-                 <div className="ProductDetails">
-                   <div className="card_slider px-4 pb-5 ">
-                     <div className="">Company name</div>
-                     <div className=" font-extralight text-lg">product name</div>
-                     <div>Price</div>
-                     <Link href={`categories/${category}/sdgsg`}>
-                     <button className="buynow ">
-                       <div>
-                         <ShoppingCart size={30} />
-                       </div>
-                       <div className=" text-sm px-3">Buy Now</div>
-                     </button>
-                     </Link>
-                   </div>
-                 </div>
- 
-                 {/* <ThreeDCardDemo/> */}
-               </div>
-             </div>
-           ))}
-          </>
-          :<>
-          {products.slice(0,7).map((product, index) => (
-<div className="embla__slide_product" key={product.id}>
-  <div className="embla__slide__number__product">
-    {/* Rendering the product image */}
-    <div className="ProductImageCard h-60 over">
-      <Link href={`categories/${category}/${product.category.name.replace(/\s+/g, '')}/${product.id}`}>
-      {/* console.log("this is the product id",product.id) */}
-        <div className="ProductImage bg-red-400 h-full w-full">
-        <button className={`heartButton hover:text-red-500` }>
-        <Heart size={40} className={` hover:fill-red-500 text-black`} />
-</button>
-          {/* Adding alt text to the product image */}
-          <img src={product.images[0]?.url} alt={product.images[0].altText || "Product Image"} />
-        </div>
-      </Link>
-    </div>
-    <div className="ProductDetails ">
-    <div className={`card_slider px-4 pb-5 ${theme === 'dark' ? 'bg-black text-white':  'bg-white text-black' }`}>
-        {/* Rendering the brand name */}
-        <div>{product.brand.name}</div>
-        {/* Rendering the product name */}
-        <div className="font-extralight text-lg">
-        {product.name.length > 36 ? product.name.slice(0, 30) + '...' : product.name}
-        </div>
-        {/* Rendering the product price */}
-        <div>{formatPrice(product.price)}</div>
-        <Link href={`categories/men/${product.id}`}>
-          <button className="buynow">
-            <div>
-              <ShoppingCart size={30} />
-            </div>
-            <div className="text-sm px-3">Buy Now</div>
-          </button>
-        </Link>
-      </div>
-    </div>
-  </div>
-</div>
-))}
-          </>
+          {!products ? (
+            <>
+              {slides.map((index) => (
+                <div className="embla__slide_product " key={index}>
+                  <div className="embla__slide__number__product   ">
+                    <div className="ProductImageCard h-60 over ">
+                      <Link href={`categories/men/sdgsg`}>
+                        <div className="ProductImage bg-red-400 h-full w-full">
+                          <button className=" heartButton">
+                            <Heart size={40} />
+                          </button>
+                        </div>
+                      </Link>
+                    </div>
+                    <div className="ProductDetails">
+                      <div className="card_slider px-4 pb-5 ">
+                        <div className="">Company name</div>
+                        <div className=" font-extralight text-lg">
+                          product name
+                        </div>
+                        <div>Price</div>
+                        <Link href={`categories/${category}/sdgsg`}>
+                          <button className="buynow ">
+                            <div>
+                              <ShoppingCart size={30} />
+                            </div>
+                            <div className=" text-sm px-3">Buy Now</div>
+                          </button>
+                        </Link>
+                      </div>
+                    </div>
 
-        } 
-            
+                    {/* <ThreeDCardDemo/> */}
+                  </div>
+                </div>
+              ))}
+            </>
+          ) : (
+            <>
+              {products.slice(0, 7).map((product, index) => (
+                <div>
+                  <div className="embla__slide_product" key={product.id}>
+                    {index !== 6 ? (
+                      <div className="embla__slide__number__product">
+                        {/* Rendering the product image */}
+                        <div className="ProductImageCard h-60 over">
+                          <Link
+                            href={`categories/${category}/${product.category.name.replace(
+                              /\s+/g,
+                              ""
+                            )}/${product.id}`}
+                          >
+                            {/* console.log("this is the product id",product.id) */}
+                            <div className="ProductImage bg-red-400 h-full w-full">
+                              <button
+                                className={`heartButton hover:text-red-500`}
+                              >
+                                <Heart
+                                  size={40}
+                                  className={` hover:fill-red-500 text-black`}
+                                />
+                              </button>
+                              {/* Adding alt text to the product image */}
+                              <img
+                                src={product.images[0]?.url}
+                                alt={
+                                  product.images[0].altText || "Product Image"
+                                }
+                              />
+                            </div>
+                          </Link>
+                        </div>
+                        <div className="ProductDetails ">
+                          <div
+                            className={`card_slider px-4 pb-5 ${
+                              theme === "dark"
+                                ? "bg-black text-white"
+                                : "bg-white text-black"
+                            }`}
+                          >
+                            {/* Rendering the brand name */}
+                            <div>{product.brand.name}</div>
+                            {/* Rendering the product name */}
+                            <div className="font-extralight text-lg">
+                              {product.name.length > 36
+                                ? product.name.slice(0, 30) + "..."
+                                : product.name}
+                            </div>
+                            {/* Rendering the product price */}
+                            <div>{formatPrice(product.price)}</div>
+                            <Link href={`categories/men/${product.id}`}>
+                              <button className="buynow">
+                                <div>
+                                  <ShoppingCart size={30} />
+                                </div>
+                                <div className="text-sm px-3">Buy Now</div>
+                              </button>
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <Link
+                        href={`http://localhost:3000/categories/${category}`}
+                      >
+                        <div className="embla__slide__number__product  bg-yellow-500">
+                          {/* Rendering the product image */}
+                          <div className=" flex flex-col justify-center  self-center h-full">
+                            <h1 className=" text-[3rem] italic pl-5">
+                              See More in {category} Categories
+                            </h1>
+                          </div>
+                        </div>
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              ))}
+              <div className=" lastCard">
+                <div className="embla__slide_product"></div>
+              </div>
+            </>
+          )}
         </div>
       </div>
       {/* embla__buttons_product */}
