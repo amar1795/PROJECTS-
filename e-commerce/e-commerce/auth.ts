@@ -1,53 +1,142 @@
-import NextAuth from 'next-auth';
-import { authConfig } from './auth.config';
-import Credentials from 'next-auth/providers/credentials';
-import { z } from 'zod';
-import { db } from "@/lib/db";
-import bcrypt from "bcryptjs";
+import NextAuth from "next-auth";
+import { UserRole } from "@prisma/client";
 
-export const LoginSchema = z.object({
-    email: z.string().email({
-      message: "Email is required",
-    }),
-    password: z.string().min(1, {
-      message: "Password is required",
-    }),
-    code: z.optional(z.string()),
-  });
-  
-  export const getUserByEmail = async (email: string) => {
-    try {
-      const user = await db.user.findUnique({ where: { email } });
-  
-      return user;
-    } catch {
-      return null;
-    }
-  };
+import { PrismaAdapter } from "@auth/prisma-adapter";
 
-export const { auth, signIn, signOut } = NextAuth({
-    ...authConfig,
-    providers: [
-        Credentials({
-            async authorize(credentials) {
-              
-              const validatedFields = LoginSchema.safeParse(credentials);
-              if (validatedFields.success) {
-                const { email, password } = validatedFields.data;
-                
-                const user = await getUserByEmail(email);
-                if (!user || !user.password) return null;
-      
-                const passwordsMatch = await bcrypt.compare(
-                  password,
-                  user.password,
-                );
-      
-                if (passwordsMatch) return user;
-              }
-      
-              return null;
-            }
-          })],
+import { prismadb } from "@/lib/db";
 
+import authConfig from "./auth.config";
+
+// import { getUserById } from "@/data/user";
+// import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
+// import { getAccountByUserId } from "./data/account";
+
+export const getTwoFactorConfirmationByUserId = async (
+  userId: string
+) => {
+  try {
+    const twoFactorConfirmation = await prismadb.twoFactorConfirmation.findUnique({
+      where: { userId }
+    });
+
+    return twoFactorConfirmation;
+  } catch {
+    return null;
+  }
+};
+
+export const getUserById = async (id: string) => {
+  try {
+    const user = await prismadb.user.findUnique({ where: { id } });
+
+    return user;
+  } catch {
+    return null;
+  }
+};
+
+export const getAccountByUserId = async (userId: string) => {
+  try {
+    const account = await prismadb.account.findFirst({
+      where: { userId }
+    });
+
+    return account;
+  } catch {
+    return null;
+  }
+};
+
+
+export const {
+  handlers: { GET, POST },
+  auth,
+  signIn,
+  signOut,
+  update,
+} = NextAuth({
+  pages: {
+    signIn: "/auth/login",
+    
+  },
+  events: {
+    async linkAccount({ user }) {
+      await prismadb.user.update({
+        where: { id: user.id },
+        data: { emailVerified: new Date() },
+      });
+    },
+  },
+  callbacks: {
+    async signIn({ user, account }) {
+      // Allow OAuth without email verification
+      if (account?.provider !== "credentials") return true;
+
+      // we are passing username and password and here the id is being passed here , where it is being checked if the user exists or not and accoridngly user id is being passed
+      const existingUser = await getUserById(user.id);
+
+      // Prevent sign in without email verification
+      if (!existingUser?.emailVerified) return false;
+
+      if (existingUser.isTwoFactorEnabled) {
+        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
+          existingUser.id
+        );
+
+        if (!twoFactorConfirmation) return false;
+
+        // Delete two factor confirmation for next sign in as it will be asked everytime the user signs in hence we are deleting it after the session is cancelled
+        await prismadb.twoFactorConfirmation.delete({
+          where: { id: twoFactorConfirmation.id },
+        });
+      }
+
+      return true;
+    },
+    async session({ token, session }) {
+      
+      if (token.sub && session.user) {
+        session.user.id = token.sub;
+      }
+
+      if (token.role && session.user) {
+        session.user.role = token.role as UserRole;
+      }
+
+      if (session.user) {
+        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
+      }
+
+      if (session.user) {
+        session.user.name = token.name;
+        session.user.email = token.email;
+        session.user.isOAuth = token.isOAuth as boolean;
+      }
+
+      return session;
+    },
+    async jwt({ token }) {
+      
+      // sub is a unique identifier for the user ie the user id
+      if (!token.sub) return token;
+      
+      const existingUser = await getUserById(token.sub);
+
+      if (!existingUser) return token;
+
+      const existingAccount = await getAccountByUserId(existingUser.id);
+
+      token.isOAuth = !!existingAccount;
+      token.name = existingUser.name;
+      token.email = existingUser.email;
+      token.role = existingUser.role;
+      token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
+
+      return token;
+
+    },
+  },
+  adapter: PrismaAdapter(prismadb),
+  session: { strategy: "jwt" },
+  ...authConfig,
 });

@@ -8,6 +8,7 @@ export const publicRoutes = [
   "/about-us",
   "/password-reset",
   "/contact-us",
+  "/categories"
 
 ];
 

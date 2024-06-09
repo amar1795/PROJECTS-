@@ -52,14 +52,33 @@ export const LoginSchema = z.object({
   code: z.optional(z.string()),
 });
 
+
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
 export const RegisterSchema = z.object({
+  firstname: z.string().min(1, {
+    message: "firstname is required",
+  }),
+  lastname: z.string().min(1, {
+    message: "lastname is required",
+  }),
   email: z.string().email({
     message: "Email is required",
   }),
   password: z.string().min(6, {
     message: "Minimum 6 characters required",
+  }).regex(passwordRegex, {
+    message: "Password must have at least one uppercase letter, one lowercase letter, one digit, and one special character",
   }),
-  name: z.string().min(1, {
-    message: "Name is required",
-  }),
-});
+  confirmpassword: z.string()
+}).refine(
+  (values) =>
+   values.password === values.confirmpassword
+  ,
+  {
+    message: "Please enter the same Password !",
+    path: ["confirmpassword"],
+  }
+)
+
+

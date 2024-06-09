@@ -32,3 +32,17 @@ export  async function dummyUserFunction() {
             console.error('Error creating dummy users:', error);}
       }
   
+      export async function getUserBySpecificEmail(email: string) {
+        try {
+          const user = await prismadb.user.findUnique({
+            where: {
+              email: email,
+            },
+          });
+          console.log("this is the user", user);
+          return user;
+        } catch (error) {
+          console.error('Error fetching user by email:', error);
+          throw error;
+        }
+      }
