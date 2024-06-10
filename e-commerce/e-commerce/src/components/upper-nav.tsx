@@ -15,6 +15,7 @@ import { useTheme } from "next-themes"
 import userCustomButton from "./userCustomButton";
 import UserCustomButton from "./userCustomButton";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import { useState } from "react";
 
 const Uppernav = () => {
   const completeUrl = typeof window !== "undefined" ? window.location.href : "";
@@ -73,7 +74,7 @@ const Uppernav = () => {
  user &&  ( <Link href="/wishlist">
     <div className=" ml-2">
       <button className=" p-2 border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500">
-        <WishingListIcon />
+        <WishingListIcon  />
       </button>
     </div>
   </Link>)

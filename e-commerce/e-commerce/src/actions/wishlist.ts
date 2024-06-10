@@ -1,6 +1,7 @@
 "use server"
 
 import { prismadb } from "@/lib/db";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from 'next/server';
 
 export const toggleWishlist = async (userId: string, productId: string) => {
@@ -65,7 +66,7 @@ export const toggleWishlist = async (userId: string, productId: string) => {
           brandName: item.product.brand.name,
         },
       }));
-  // console.log("this is the wishlist", formattedWishlist);
+  console.log("this is the wishlist", formattedWishlist);
       return formattedWishlist;
     } catch (error) {
       console.error("Error retrieving wishlist:", error);
@@ -81,8 +82,8 @@ export const toggleWishlist = async (userId: string, productId: string) => {
           userId,
           productId,
         },
-      });
-  
+        });
+      // revalidatePath("/wishlist")
       return { message: "Product removed from wishlist" };
     } catch (error) {
       console.error("Error removing product from wishlist:", error);

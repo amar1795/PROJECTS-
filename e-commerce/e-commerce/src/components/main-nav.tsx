@@ -58,10 +58,11 @@ export function MainNav({
   ]
 
   return (
+
     <>
   
     <div >
-    <Uppernav/>
+    <Uppernav />
     </div>
     <div className="flex justify-center items-center">
     <nav

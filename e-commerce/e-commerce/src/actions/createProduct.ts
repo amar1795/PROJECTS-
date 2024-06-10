@@ -601,6 +601,18 @@ export async function getProductsByCategory(categoryId: string,userId: string = 
       // Include any other relations you need
     },
   });
+
+
+// Fetch the total number of wishlisted items for the user
+let totalWishlistCount = 0;
+if (userId) {
+  totalWishlistCount = await prismadb.wishlist.count({
+    where: {
+      userId: userId,
+    },
+  });
+}
+
   const formattedProducts = products.map((product) => {
     const ratingsCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
     const reviews = [];
@@ -634,6 +646,7 @@ export async function getProductsByCategory(categoryId: string,userId: string = 
     return {
       ...product,
       isWishlisted: isWishlisted,
+      totalWishlistCount: totalWishlistCount,
       ratings: {
         count: ratingsCount,
         reviews: reviews,

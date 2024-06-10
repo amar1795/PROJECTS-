@@ -1,16 +1,18 @@
 "use client";
 
 import OrderDetailsComponent from "@/components/order summary component/OrderDetailsComponent";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { getUserWishlist } from "@/actions/wishlist";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import WishlistedProductCard from "@/components/Wishlisted product card/productCard";
+import { toast } from "@/components/ui/use-toast";
+// import RemoveFromWishlist from "@/components/removeFromWishlist/RemoveFromWishlist";
 
 const page = () => {
   const user = useCurrentUser();
 
   const [wishlist, setWishlist] = useState([]);
-
+const [data, setData] = useState(false);
   useEffect(() => {
     const fetchWishlist = async () => {
       try {
@@ -24,11 +26,13 @@ const page = () => {
     };
 
     fetchWishlist();
-  }, [user?.id]);
-  console.log("this is the wishlist", wishlist);
+  }, [user?.id,data]);
+
+  console.log("this is the wishlist count", wishlist.length);
 
   return (
     <div>
+
       <div className=" min-h-[95vh] bg-pink-500 ">
         <h1 className=" text-[4rem] pl-10 uppercase">Your Wishlisted Items</h1>
         <div className=" px-8">
@@ -40,7 +44,7 @@ const page = () => {
 
             {wishlist?.map((product) => (
               <div className="py-4" key={product?.id}>
-                <WishlistedProductCard product={product?.product} />
+                <WishlistedProductCard product={product?.product} setData={setData}  />
               </div>
             ))}
           </div>
