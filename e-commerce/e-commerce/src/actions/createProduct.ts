@@ -579,7 +579,9 @@ export async function getProductsByCategory(categoryId: string,userId: string = 
     },
     include: {
       brand: true, // Include brand details
-      images: true, // Include product images
+      images: { // Fetch only the first image
+        take: 1,
+      }, // Include product images
       ratings: {
         include: {
           images: true, // Include review images
@@ -600,6 +602,7 @@ export async function getProductsByCategory(categoryId: string,userId: string = 
     }),
       // Include any other relations you need
     },
+    take: 7, // Limit to 7 products per category
   });
 
 

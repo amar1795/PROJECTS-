@@ -117,6 +117,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
     "this is the parent Category Name",
     products[0]?.category?.parentName
   );
+
   const  toggleWishlistFunction=(userId:string,productId:string)=>{
     if(!user){
       toast({
@@ -126,10 +127,21 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
           "Please login to Wishlist this item",
       });
       return 
+     
+      }
+      else
+      {
+        toast({
+          variant: "destructive",
+          title: "Added to Wishlist",
+          description:
+            "The item has been wishlisted",
+        });
+        
+      toggleWishlist(userId, productId)
     }
 
 
-    toggleWishlist(userId, productId)
   }
 
   return (

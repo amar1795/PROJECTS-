@@ -1,3 +1,4 @@
+"use client"
 import { Heart, Minus, Plus, ShoppingCart, StarIcon } from "lucide-react";
 import React from "react";
 import "./product.css";
@@ -51,11 +52,11 @@ const WishlistedProductCard: React.FC<updatedDataResponse> = ({ product,setData 
   //  newUrl = `${completeUrl}/${removeSpaces(product?.category?.name)}/${product?.id}`;
   //  }
 
-  const newUrl = "/";
 
   const handleRemoveClick = async (userId, productId) => {
     await removeFromWishlist(userId, productId);
-    setData((prev) => !prev);
+    // setData((prev) => !prev);
+    // for the data to be validated the route should be a server component and the data should be fetched from the server and onclck works on server components
     toast({
       variant: "destructive",
       title: "ITEM DELETED",
