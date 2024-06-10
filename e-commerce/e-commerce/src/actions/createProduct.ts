@@ -546,7 +546,7 @@ export async function getProductsByCategoryOriginal(categoryId: string) {
 }
 
 // gives all the products of a specific category and its nested subcategories
-export async function getProductsByCategory(categoryId: string) {
+export async function getProductsByCategory(categoryId: string,userId: string = "") {
   // Fetch the category and its nested children categories
   const categories = await prismadb.category.findMany({
     where: {
@@ -590,6 +590,14 @@ export async function getProductsByCategory(categoryId: string) {
           parent: true, // Include the parent category
         },
       },
+      // Include wishlists related to each product only if userId is provided
+    ...(userId && {
+      wishlists: {
+        where: {
+          userId: userId,
+        },
+      },
+    }),
       // Include any other relations you need
     },
   });
@@ -620,8 +628,12 @@ export async function getProductsByCategory(categoryId: string) {
     const averageRating =
       totalRatings > 0 ? totalRatingValue / totalRatings : 0;
 
+      // Check if the product is wishlisted by the user
+  const isWishlisted = userId && product.wishlists.length > 0;
+
     return {
       ...product,
+      isWishlisted: isWishlisted,
       ratings: {
         count: ratingsCount,
         reviews: reviews,
@@ -634,12 +646,12 @@ export async function getProductsByCategory(categoryId: string) {
   });
 
   const productCount = formattedProducts.length;
-  console.log(
-    "These are the Products:",
-    formattedProducts,
-    "Product Count:",
-    productCount
-  );
+  // console.log(
+  //   "These are the Wishlisted Products:",
+  //   formattedProducts,
+  //   "Product Count:",
+  //   productCount
+  // );
   return formattedProducts;
 }
 

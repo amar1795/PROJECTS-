@@ -8,6 +8,9 @@ import {
   updatedDataResponse,
 } from "@/app/categories/[categories]/[product]/page";
 import Link from "next/link";
+import { Trash2  } from 'lucide-react';
+import { removeFromWishlist } from "@/actions/wishlist";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 const formatPrice = (price: number): string => {
   // Format the price with the Indian Rupee symbol
@@ -19,33 +22,35 @@ const removeSpaces = (name: string): string => {
   return name?.replace(/\s+/g, '');
 };
 
-const ProductCard: React.FC<updatedDataResponse> = ({ product }) => {
+const WishlistedProductCard: React.FC<updatedDataResponse> = ({ product }) => {
+  const user = useCurrentUser();
+
   // console.log("this is the productID from product card", product?.category?.name);
   
- const completeUrl = typeof window !== "undefined" ? window.location.href : "";
- console.log("this is the complete url", completeUrl);
+//  const completeUrl = typeof window !== "undefined" ? window.location.href : "";
+//  console.log("this is the complete url", completeUrl);
 
- const segments = completeUrl.split("/");
+//  const segments = completeUrl.split("/");
 
- const matchingSegmentIndex = segments.findIndex(segment => removeSpaces(segment) === removeSpaces(product?.category?.name));
-  console.log("this is the product category name", product?.category?.name);
- // If a matching segment is found, construct the new URL
- let newUrl = completeUrl;
- if (matchingSegmentIndex !== -1) {
-   // Remove the segments from the matching segment index onwards
-   const newSegments = segments.slice(0, matchingSegmentIndex);
-   // Add the product category name and ID to the new segments
-   newSegments.push(removeSpaces(product?.category?.name), product?.id);
-   // Join the new segments to form the new URL
-   newUrl = newSegments.join('/');
- }
- else
- {
- // If no matching segment is found, append the product category name and ID to the end of the URL
- newUrl = `${completeUrl}/${removeSpaces(product?.category?.name)}/${product?.id}`;
- }
+//  const matchingSegmentIndex = segments.findIndex(segment => removeSpaces(segment) === removeSpaces(product?.category?.name));
+//   console.log("this is the product category name", product?.category?.name);
+//  // If a matching segment is found, construct the new URL
+//  let newUrl = completeUrl;
+//  if (matchingSegmentIndex !== -1) {
+//    // Remove the segments from the matching segment index onwards
+//    const newSegments = segments.slice(0, matchingSegmentIndex);
+//    // Add the product category name and ID to the new segments
+//    newSegments.push(removeSpaces(product?.category?.name), product?.id);
+//    // Join the new segments to form the new URL
+//    newUrl = newSegments.join('/');
+//  }
+//  else
+//  {
+//  // If no matching segment is found, append the product category name and ID to the end of the URL
+//  newUrl = `${completeUrl}/${removeSpaces(product?.category?.name)}/${product?.id}`;
+//  }
 
-
+const  newUrl="/"
   return (
     <div>
       <div className="sembla__slide_product pl-[3rem] ">
@@ -58,8 +63,10 @@ const ProductCard: React.FC<updatedDataResponse> = ({ product }) => {
           <Link href={newUrl}>
           <div className="ProductImageCard min-h-[19rem] relative ">
             <button className={`heartButton z-10 hover:text-red-500`}>
-              <Heart
-                size={40}
+              
+              <Trash2 
+                                onClick={() => removeFromWishlist(user?.id, product.id)}
+                                size={40}
                 strokeWidth={0.8}
                 className={` hover:fill-red-500 text-black`}
               />
@@ -80,7 +87,7 @@ const ProductCard: React.FC<updatedDataResponse> = ({ product }) => {
           <div className=" text-sm flex justify-between bg-opacity-20 backdrop-blur-lg border border-white/30 ">
             <div className=" bg-gray-200 w-16  ">
               <div className=" flex justify-between px-2 pt-1">
-                {/* <span>{product?.ratings?.averageRating.toFixed(1)}</span> */}
+                <span>{product?.ratings?.averageRating.toFixed(1)}</span>
                 <div className=" self-center">
                   <StarIcon size={20} stroke="" fill="black" />
                 </div>
@@ -137,4 +144,4 @@ const ProductCard: React.FC<updatedDataResponse> = ({ product }) => {
   );
 };
 
-export default ProductCard;
+export default WishlistedProductCard;

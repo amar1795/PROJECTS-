@@ -18,6 +18,7 @@ import { useTheme } from "next-themes";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useToast } from "@/components/ui/use-toast"
 
+import { toggleWishlist } from "@/actions/wishlist";
 
 type Brand = {
   id: string;
@@ -48,6 +49,8 @@ type Product = {
   description: string;
   categoryId: string;
   category: Category;
+  isWishlisted: boolean;
+
   createdAt: Date;
   updatedAt: Date;
   brand: Brand;
@@ -77,13 +80,14 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
   //     return; // `theme` is null in the first render
   // }
   // console.log("this is the current theme", theme)
+
   const { slides, options, products, category } = props;
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
 
   const onNavButtonClick = useCallback((emblaApi: EmblaCarouselType) => {
     const autoplay = emblaApi?.plugins()?.autoplay;
     if (!autoplay) return;
-
+    
     const resetOrStop =
       autoplay.options.stopOnInteraction === false
         ? autoplay.reset
@@ -165,31 +169,34 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                       <div className="embla__slide__number__product">
                         {/* Rendering the product image */}
                         <div className="ProductImageCard h-60 over">
-                          <Link
-                            href={`categories/${category}/${product.category.name.replace(
-                              /\s+/g,
-                              ""
-                            )}/${product.id}`}
-                          >
+                         
                             {/* console.log("this is the product id",product.id) */}
                             <div className="ProductImage bg-red-400 h-full w-full">
                               <button
                                 className={`heartButton hover:text-red-500`}
                               >
                                 <Heart
+                                
+                                onClick={() => toggleWishlist(user?.id, product.id)}
                                   size={40}
-                                  className={` hover:fill-red-500 text-black`}
+                                  className={` hover:fill-red-500 text-black ${product?.isWishlisted ? 'fill-red-500' : ''}`}
                                 />
                               </button>
                               {/* Adding alt text to the product image */}
+                              <Link
+                            href={`categories/${category}/${product.category.name.replace(
+                              /\s+/g,
+                              ""
+                            )}/${product.id}`}
+                          >
                               <img
                                 src={product.images[0]?.url}
                                 alt={
                                   product.images[0].altText || "Product Image"
                                 }
                               />
-                            </div>
                           </Link>
+                            </div>
                         </div>
                         <div className="ProductDetails ">
                           <div

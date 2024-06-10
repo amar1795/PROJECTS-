@@ -36,6 +36,7 @@ type Product = {
   description: string;
   categoryId: string;
   category: Category;
+  isWishlisted: boolean;
   createdAt: Date;
   updatedAt: Date;
   brand: Brand;

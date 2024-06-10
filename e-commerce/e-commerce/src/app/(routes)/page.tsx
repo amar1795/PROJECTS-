@@ -6,6 +6,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
+import { auth } from "@/auth";
+
 
 import ProductCarousel from "@/components/product-carousel/carousel";
 import Testcarousel from "@/components/poster-carousel/carousel";
@@ -13,17 +15,20 @@ import { ThreeDCardDemo } from "@/components/3d card/3dCard";
 import { getProductsByCategory } from "@/actions/createProduct";
 
 export default async function Home() {
-  const mensCollectionData = await getProductsByCategory(
-    "665a0b9f14be77720636d443"
-  );
-  const womensCollection = await getProductsByCategory(
-    "665d97977547073cf15bf546"
-  );
-  const kidsCollection = await getProductsByCategory(
-    "665de7eb62075d484b0229db"
-  );
+  const session = await auth();
 
-  console.log("this is the menscollection", mensCollectionData[0].brand);
+  const user = session?.user?.id;
+
+  const mensCollectionData = await getProductsByCategory(
+    "665a0b9f14be77720636d443",user);
+  // console.log("this is the menscollection", mensCollectionData);
+  const womensCollection = await getProductsByCategory(
+    "665d97977547073cf15bf546",user);
+  // console.log("this is the womenscollection", womensCollection);
+  const kidsCollection = await getProductsByCategory(
+    "665de7eb62075d484b0229db",user);
+
+  // console.log("this is the menscollection", mensCollectionData[0].brand);
   return (
     <main className=" ">
       {/* hscreen was causing the issue for the footer as hscreen sets the height of the current viewable screen hence the footer waas not going to the bottom */}
