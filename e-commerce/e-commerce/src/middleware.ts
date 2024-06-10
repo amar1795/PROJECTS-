@@ -9,6 +9,8 @@ export const publicRoutes = [
   "/password-reset",
   "/contact-us",
   "/categories",
+ 
+  
 ];
 
 // "/cart",
@@ -25,6 +27,7 @@ export const authRoutes = [
   "/login",
   "/signup",
   "/password-reset",
+  
 ];
 
 // these are api routes that anyone with access can't hit without authentication
@@ -42,7 +45,10 @@ export default auth((req) => {
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
 
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+  // const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+  const isPublicRoute = publicRoutes.some(
+    (route) => nextUrl.pathname === route || nextUrl.pathname.startsWith(route)
+  );
 
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
@@ -50,6 +56,7 @@ export default auth((req) => {
     return null;
   }
 
+  
   if (isAuthRoute) {
     if (userLoggedIn) {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT_PATH, nextUrl));
@@ -67,7 +74,7 @@ export default auth((req) => {
     const encodedCallbackUrl = encodeURIComponent(callbackUrl);
 
     return Response.redirect(
-      new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl)
+      new URL(`/login?callbackUrl=${encodedCallbackUrl}`, nextUrl)
     );
   }
 

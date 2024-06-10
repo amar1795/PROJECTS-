@@ -1,3 +1,4 @@
+"use client";
 import Image from 'next/image'
 import React, { startTransition, useEffect, useState, useTransition } from 'react'
 import * as z from "zod";
@@ -10,9 +11,13 @@ interface LoginProps {
 }
 import { login } from "@/actions/login";
 import { LoginSchema } from '@/schemas';
+import { useSearchParams } from 'next/navigation';
 
 const Login:React.FC<LoginProps> = ({toggleView}) => {
 
+  const searchParams = useSearchParams();
+
+  const callbackUrl = searchParams.get("callbackUrl");
 
   const [showTwoFactor, setShowTwoFactor] = useState(false);
   const [error, setError] = useState<string | undefined>("");
@@ -27,13 +32,14 @@ const Login:React.FC<LoginProps> = ({toggleView}) => {
     },
   });
 
+  console.log("this is callback url",callbackUrl)
 
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError("");
     setSuccess("");
 
     startTransition(() => {
-      login(values)
+      login(values,callbackUrl)
         .then((data) => {
           if (data?.error) {
             reset();

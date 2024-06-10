@@ -43,14 +43,24 @@ const Uppernav = () => {
           </div>
         </Link>
         <div className="mx-2 ">
-        <UserCustomButton buttonName={user ? `Hello ${user.name.split(' ')[0]}` : 'Sign In'}  />
+
+          {user ? <UserCustomButton buttonName={user ? `Hello ${user.name.split(' ')[0]}` : 'Sign In'}  />:
+          <div className="  h-[4rem]">
+             <button
+           className="w-[10rem] p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500"
+          
+         >
+           <h1 className="font-bold">Sign in</h1>
+         </button>
+          </div> }
+        
         </div>
 
         
 
 
         <Link href="/cart">
-          <div className=" mr-4">
+          <div className="">
             <button className=" p-2 border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500">
               <ShoppingCart />
             </button>
@@ -58,8 +68,8 @@ const Uppernav = () => {
         </Link>
 
 {
-  user && ( <Link href="/wishlist">
-    <div className=" ">
+ user &&  ( <Link href="/wishlist">
+    <div className=" ml-2">
       <button className=" p-2 border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500">
         <WishingListIcon />
       </button>
@@ -68,7 +78,7 @@ const Uppernav = () => {
 }
        
 
-        <div className=" px-5 ml-5">
+        <div className=" px-2">
           <CustomThemeToggle />
           
         </div>

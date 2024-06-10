@@ -7,6 +7,7 @@ import { prismadb } from "@/lib/db";
 import { signIn } from "@/auth";
 import { LoginSchema } from "@/schemas";
 import { getUserByEmail } from "@/data/user";
+import { useSearchParams } from "next/navigation";
 // import { getTwoFactorTokenByEmail } from "@/data/two-factor-token";
 
 // import { sendVerificationEmail, sendTwoFactorTokenEmail } from "@/lib/mail";
@@ -20,6 +21,7 @@ const DEFAULT_LOGIN_REDIRECT = "/";
 // } from "@/lib/tokens";
 
 // import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
+
 
 export const login = async (
   values: z.infer<typeof LoginSchema>,
@@ -111,7 +113,7 @@ export const login = async (
     await signIn("credentials", {
       email,
       password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirectTo:callbackUrl || DEFAULT_LOGIN_REDIRECT ,
     });
     return { success: "Logged in!" };
   } catch (error) {

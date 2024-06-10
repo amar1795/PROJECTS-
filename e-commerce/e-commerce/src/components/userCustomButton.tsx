@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useCurrentUser } from "@/hooks/use-current-user";
+import { logout } from "@/actions/logout";
 
 const UserCustomButton = ({buttonName}:{buttonName:string}) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,10 +46,11 @@ const handleClickOutside = (event: MouseEvent) => {
       {isOpen && (
         <div className="absolute mt-2 w-[10rem]  bg-white border border-black  text-black z-10">
           <ul>
+            
             <li onClick={() => handleOptionClick('Option 1')} className="p-2 hover:bg-gray-200 cursor-pointer flex justify-center">Settings</li>
             <li onClick={() => handleOptionClick('Option 2')} className="p-2 hover:bg-gray-200 cursor-pointer flex justify-center">Order History</li>
             <li onClick={() => handleOptionClick('Option 3')} className="p-2 hover:bg-gray-200 cursor-pointer flex justify-center">Wishlist</li>
-            {user && <li onClick={() => handleOptionClick('Option 4')} className="p-2 hover:bg-gray-200 cursor-pointer flex justify-center font-bold text-red-800 ">Logout</li>}
+            { <li onClick={() =>  logout()} className="p-2 hover:bg-gray-200 cursor-pointer flex justify-center font-bold text-red-800 ">Logout</li>}
           </ul>
         </div>
       )}

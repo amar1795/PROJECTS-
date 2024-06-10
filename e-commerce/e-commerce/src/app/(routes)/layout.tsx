@@ -49,11 +49,11 @@ export default async function RootLayout({
         <div className="fixed top-0 left-0 right-0  z-10">
             <MainNav  />
         </div>
+              <Toaster />
         <div className=' mt-[8rem]'>
               
           
               {children}
-              <Toaster />
 
               <MainFooter/>
               </div>

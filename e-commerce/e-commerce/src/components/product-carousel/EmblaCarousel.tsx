@@ -15,6 +15,9 @@ import useEmblaCarousel from "embla-carousel-react";
 import { ThreeDCardDemo } from "../3d card/3dCard";
 import Link from "next/link";
 import { useTheme } from "next-themes";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { useToast } from "@/components/ui/use-toast"
+
 
 type Brand = {
   id: string;
@@ -60,6 +63,10 @@ type PropType = {
 
 const EmblaCarousel: React.FC<PropType> = (props) => {
   const { theme, setTheme } = useTheme();
+  const { toast } = useToast()
+
+
+  const user = useCurrentUser();
   // need to implement the theme toggle by myself
   //   useEffect(() => {
   //     let theme = localStorage.getItem('theme') || 'light';
@@ -202,14 +209,29 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                             </div>
                             {/* Rendering the product price */}
                             <div>{formatPrice(product.price)}</div>
-                            <Link href={`categories/men/${product.id}`}>
+                           {user ? ( <Link href={`categories/men/${product.id}`}>
                               <button className="buynow">
                                 <div>
                                   <ShoppingCart size={30} />
                                 </div>
                                 <div className="text-sm px-3">Buy Now</div>
                               </button>
-                            </Link>
+                            </Link>): <div>
+                            <button className="buynow">
+                                <div>
+                                  <ShoppingCart size={30} />
+                                </div>
+                                <div className="text-sm px-3" onClick={() => {
+        toast({
+          variant: "destructive",
+          title: "Not Logged In",
+          description: "Please login to continue the purchase",
+        })
+      }}>Buy Now</div>
+                              </button>
+                            </div>}
+
+                           
                           </div>
                         </div>
                       </div>

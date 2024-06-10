@@ -58,7 +58,6 @@ export const {
 } = NextAuth({
   pages: {
     signIn: "/login",
-    
   },
   events: {
     async linkAccount({ user }) {
@@ -136,6 +135,7 @@ export const {
       return token;
 
     },
+    
   },
   adapter: PrismaAdapter(prismadb),
   session: { strategy: "jwt" },
