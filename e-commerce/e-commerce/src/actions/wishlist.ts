@@ -6,6 +6,10 @@ import { NextResponse } from 'next/server';
 
 export const toggleWishlist = async (userId: string, productId: string) => {
     try {
+
+      if (!userId) {
+        throw new Error("User not authenticated");
+      }
       // Check if the product is already in the wishlist
       const existingEntry = await prismadb.wishlist.findFirst({
         where: {

@@ -7,7 +7,7 @@ import {
   NextButton,
   usePrevNextButtons,
 } from "./EmblaCarouselArrowButtons";
-import { Heart } from "lucide-react";
+import { Heart, Minus, Plus, StarIcon } from "lucide-react";
 import { ShoppingCart } from "lucide-react";
 
 import Autoplay from "embla-carousel-autoplay";
@@ -16,7 +16,7 @@ import { ThreeDCardDemo } from "../3d card/3dCard";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useCurrentUser } from "@/hooks/use-current-user";
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast";
 
 import { toggleWishlist } from "@/actions/wishlist";
 
@@ -66,8 +66,7 @@ type PropType = {
 
 const EmblaCarousel: React.FC<PropType> = (props) => {
   const { theme, setTheme } = useTheme();
-  const { toast } = useToast()
-
+  const { toast } = useToast();
 
   const user = useCurrentUser();
   // need to implement the theme toggle by myself
@@ -87,7 +86,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
   const onNavButtonClick = useCallback((emblaApi: EmblaCarouselType) => {
     const autoplay = emblaApi?.plugins()?.autoplay;
     if (!autoplay) return;
-    
+
     const resetOrStop =
       autoplay.options.stopOnInteraction === false
         ? autoplay.reset
@@ -118,6 +117,20 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
     "this is the parent Category Name",
     products[0]?.category?.parentName
   );
+  const  toggleWishlistFunction=(userId:string,productId:string)=>{
+    if(!user){
+      toast({
+        variant: "destructive",
+        title: "Not Logged In",
+        description:
+          "Please login to Wishlist this item",
+      });
+      return 
+    }
+
+
+    toggleWishlist(userId, productId)
+  }
 
   return (
     <section className="ProductEmbla_product">
@@ -169,36 +182,65 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                       <div className="embla__slide__number__product">
                         {/* Rendering the product image */}
                         <div className="ProductImageCard h-60 over">
-                         
-                            {/* console.log("this is the product id",product.id) */}
-                            <div className="ProductImage bg-red-400 h-full w-full">
-                              <button
-                                className={`heartButton hover:text-red-500`}
-                              >
-                                <Heart
-                                
-                                onClick={() => toggleWishlist(user?.id, product.id)}
-                                  size={40}
-                                  className={` hover:fill-red-500 text-black ${product?.isWishlisted ? 'fill-red-500' : ''}`}
-                                />
-                              </button>
-                              {/* Adding alt text to the product image */}
-                              <Link
-                            href={`categories/${category}/${product.category.name.replace(
-                              /\s+/g,
-                              ""
-                            )}/${product.id}`}
-                          >
+                          {/* console.log("this is the product id",product.id) */}
+                          <div className="ProductImage bg-red-400 h-full w-full">
+                            <button
+                              className={`heartButton hover:text-red-500`}
+                            >
+                              <Heart
+                                onClick={() =>
+                                  toggleWishlistFunction(user?.id,product.id)
+                                }
+                                size={40}
+                                className={` hover:fill-red-500 text-black ${
+                                  product?.isWishlisted ? "fill-red-500" : ""
+                                }`}
+                              />
+                            </button>
+                            {/* Adding alt text to the product image */}
+                            <Link
+                              href={`categories/${category}/${product.category.name.replace(
+                                /\s+/g,
+                                ""
+                              )}/${product.id}`}
+                            >
                               <img
                                 src={product.images[0]?.url}
                                 alt={
                                   product.images[0].altText || "Product Image"
                                 }
                               />
-                          </Link>
-                            </div>
+                            </Link>
+                          </div>
                         </div>
+                        {
+                          <div className=" mt-[1.5rem] text-sm flex justify-between bg-opacity-20 backdrop-blur-lg border border-white/30 ">
+                          <div className=" bg-gray-200 w-16  ">
+                            <div className=" flex justify-between px-2 pt-1">
+                              {/* <span>{product?.ratings?.averageRating.toFixed(1)}</span> */}
+                              <div className=" self-center">
+                                <StarIcon size={20} stroke="" fill="black" />
+                              </div>
+                            </div>
+                          </div>
+                          <div>
+                            <div className="box flex pr-4">
+                              <button className=" pr-2  hover:bg-gray-200 pl-1">
+                                <Minus size={20} />
+                              </button>
+                              <div className=" text-[1.5rem] w-7  bg-white  h-[2rem]">
+                                <div className=" px-2 py-2 ">0</div>
+                              </div>
+                              <button className=" pl-2  hover:bg-gray-200 pr-1">
+                                <Plus size={20} />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        }
+                        
                         <div className="ProductDetails ">
+                        
                           <div
                             className={`card_slider px-4 pb-5 ${
                               theme === "dark"
@@ -216,29 +258,16 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                             </div>
                             {/* Rendering the product price */}
                             <div>{formatPrice(product.price)}</div>
-                           {user ? ( <Link href={`categories/men/${product.id}`}>
-                              <button className="buynow">
-                                <div>
-                                  <ShoppingCart size={30} />
-                                </div>
-                                <div className="text-sm px-3">Buy Now</div>
-                              </button>
-                            </Link>): <div>
-                            <button className="buynow">
-                                <div>
-                                  <ShoppingCart size={30} />
-                                </div>
-                                <div className="text-sm px-3" onClick={() => {
-        toast({
-          variant: "destructive",
-          title: "Not Logged In",
-          description: "Please login to continue the purchase",
-        })
-      }}>Buy Now</div>
-                              </button>
-                            </div>}
-
-                           
+                            
+                              <Link href={`categories/men/${product.id}`}>
+                                <button className="buynow">
+                                  <div>
+                                    <ShoppingCart size={30} />
+                                  </div>
+                                  <div className="text-sm px-3 ">Buy Now</div>
+                                </button>
+                              </Link>
+                            
                           </div>
                         </div>
                       </div>
