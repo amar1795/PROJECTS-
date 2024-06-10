@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import React from "react";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import Link from "next/link";
 
 const page = () => {
   const user = useCurrentUser();
@@ -96,9 +97,12 @@ const page = () => {
                       <StyledButton buttonName="Sign In" />
                     </div>
                   ) : (
+                   <Link href={"/checkout"}>
                     <div className=" flex justify-center">
                       <StyledButton buttonName=" Proceed to Checkout" />
                     </div>
+                    
+                    </Link>
                   )
                 }
                 {/* <StyledButton buttonName=" Proceed to Checkout" /> */}

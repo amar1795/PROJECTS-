@@ -2,11 +2,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { logout } from "@/actions/logout";
+import { useRouter } from 'next/navigation';
+import { signOut, useSession } from 'next-auth/react';
 
 const UserCustomButton = ({buttonName}:{buttonName:string}) => {
+
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const user = useCurrentUser();
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
 
   const handleButtonClick = () => {
     setIsOpen(!isOpen);
@@ -17,6 +23,14 @@ const handleClickOutside = (event: MouseEvent) => {
         setIsOpen(false);
     }
 };
+
+// useEffect(() => {
+//   if (status === "authenticated") {
+//     signOut({ redirect: false });
+//   } else if (status === "unauthenticated") {
+//     router.push("/");
+//   }
+// }, [ status]);
 
   useEffect(() => {
     if (isOpen) {
@@ -30,9 +44,35 @@ const handleClickOutside = (event: MouseEvent) => {
     };
   }, [isOpen]);
 
-  const handleOptionClick = (option:String) => {
+  const handleOptionClick = (option: String) => {
     console.log(`You clicked ${option}`);
     setIsOpen(false);
+
+    switch(option) {
+      case 'Settings':
+        router.push('/account-settings');
+        break;
+      case 'OrderHistory':
+        router.push('/orders');
+        break;
+      case 'Wishlist':
+        router.push('/wishlist');
+        break;
+      default:
+        break;
+    }
+  };
+
+
+  const initiateLogout = async () => {
+  
+    signOut({ redirect: true, callbackUrl: '/'});
+    // await logout();
+    // window.location.href = '/';
+
+    setIsOpen(false);
+
+    // router.push('/');
   };
 
   return (
@@ -47,10 +87,10 @@ const handleClickOutside = (event: MouseEvent) => {
         <div className="absolute mt-2 w-[10rem]  bg-white border border-black  text-black z-10">
           <ul>
             
-            <li onClick={() => handleOptionClick('Option 1')} className="p-2 hover:bg-gray-200 cursor-pointer flex justify-center">Settings</li>
-            <li onClick={() => handleOptionClick('Option 2')} className="p-2 hover:bg-gray-200 cursor-pointer flex justify-center">Order History</li>
-            <li onClick={() => handleOptionClick('Option 3')} className="p-2 hover:bg-gray-200 cursor-pointer flex justify-center">Wishlist</li>
-            { <li onClick={() =>  logout()} className="p-2 hover:bg-gray-200 cursor-pointer flex justify-center font-bold text-red-800 ">Logout</li>}
+            <li onClick={() => handleOptionClick('Settings')} className="p-2 hover:bg-gray-200 cursor-pointer flex justify-center">Settings</li>
+            <li onClick={() => handleOptionClick('OrderHistory')} className="p-2 hover:bg-gray-200 cursor-pointer flex justify-center">Order History</li>
+            <li onClick={() => handleOptionClick('Wishlist')} className="p-2 hover:bg-gray-200 cursor-pointer flex justify-center">Wishlist</li>
+             <li onClick={() =>  initiateLogout()} className="p-2 hover:bg-gray-200 cursor-pointer flex justify-center font-bold text-red-800 ">Logout</li>
           </ul>
         </div>
       )}

@@ -66,6 +66,7 @@ export const {
         data: { emailVerified: new Date() },
       });
     },
+    
   },
   callbacks: {
     async signIn({ user, account }) {

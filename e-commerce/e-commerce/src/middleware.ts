@@ -27,8 +27,13 @@ export const authRoutes = [
   "/login",
   "/signup",
   "/password-reset",
+
   
 ];
+
+const restrictedRoutes = [
+  "/checkout",
+]
 
 // these are api routes that anyone with access can't hit without authentication
 export const apiAuthPrefix = "/api/auth";
@@ -52,6 +57,10 @@ export default auth((req) => {
 
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
+ const restricted = restrictedRoutes.some(
+    (route) => nextUrl.pathname === route || nextUrl.pathname.startsWith(route)
+  );
+  
   if (isApiAuthRoute) {
     return null;
   }
@@ -63,6 +72,11 @@ export default auth((req) => {
     }
     return null;
   }
+
+  if (restricted) {
+    if (!userLoggedIn) {
+      return Response.redirect(new URL("/", nextUrl));
+    }
 
    // this is to make sure that the user is redirected back to the page he was on after loggin in
   if (!userLoggedIn && !isPublicRoute) {
@@ -79,6 +93,7 @@ export default auth((req) => {
   }
 
   return null;
+}
 });
 
 export const config = {

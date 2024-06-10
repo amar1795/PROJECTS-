@@ -46,12 +46,14 @@ const Uppernav = () => {
 
           {user ? <UserCustomButton buttonName={user ? `Hello ${user.name.split(' ')[0]}` : 'Sign In'}  />:
           <div className="  h-[4rem]">
+             <Link href="/login">
              <button
            className="w-[10rem] p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500"
           
          >
            <h1 className="font-bold">Sign in</h1>
          </button>
+             </Link>
           </div> }
         
         </div>
