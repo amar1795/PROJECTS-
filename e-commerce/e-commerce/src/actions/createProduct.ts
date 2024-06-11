@@ -662,6 +662,11 @@ export async function getProductsByCategory(
       totalRatingValue += rating.rating; // Sum the star counts weighted by their star value
       totalRatings += 1;
     });
+    // Get the unique product IDs from cart items
+const uniqueProductIds = [...new Set(cartItems.map(item => item.productId))];
+
+// Calculate the total unique items in the cart
+const totalUniqueCartItems = uniqueProductIds.length;
 
     const totalReviews = reviews.length;
     const averageRating =
@@ -684,7 +689,7 @@ export async function getProductsByCategory(
         parentCategory: product?.category?.parent?.name,
       },
       cartQuantity: cartQuantity, // Add cart quantity to the product
-      cart: cartItems, // Add cart items to the product
+      totalUniqueCartItems: totalUniqueCartItems, // Add cart items to the product
     };
   });
 

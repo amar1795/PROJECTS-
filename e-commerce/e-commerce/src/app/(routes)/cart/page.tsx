@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import CheckoutProductCard from "@/components/checkout product card/checkoutProductCard";
 import ProductCard from "@/components/product card/productCard";
 import StyledButton from "@/components/styled Button/StyledButton";
@@ -11,12 +11,28 @@ import {
   Recycle,
   Trash2,
 } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import Link from "next/link";
+import { calculateCartSummary } from "@/actions/cart/cartSummary";
+
 
 const page = () => {
   const user = useCurrentUser();
+
+
+    useEffect(() => {
+      
+        const cartSummary = async () => {
+          const cartSummaryData = await calculateCartSummary(user.id);
+          // console.log("this is the cart summary data", cartSummaryData);
+        };
+        cartSummary();
+
+
+      },[])
+
+
   return (
     <div className="  border-2 border-black overflow-hidden ">
       <div className=" bg-teal-600  px-5 py-5">
@@ -91,20 +107,17 @@ const page = () => {
               </div>
               <div></div>
               <div className="">
-                {
-                  !user ? (
-                    <div className=" flex justify-center">
-                      <StyledButton buttonName="Sign In" />
-                    </div>
-                  ) : (
-                   <Link href={"/checkout"}>
+                {!user ? (
+                  <div className=" flex justify-center">
+                    <StyledButton buttonName="Sign In" />
+                  </div>
+                ) : (
+                  <Link href={"/checkout"}>
                     <div className=" flex justify-center">
                       <StyledButton buttonName=" Proceed to Checkout" />
                     </div>
-                    
-                    </Link>
-                  )
-                }
+                  </Link>
+                )}
                 {/* <StyledButton buttonName=" Proceed to Checkout" /> */}
               </div>
             </div>
@@ -113,11 +126,11 @@ const page = () => {
       </div>
       <div className=" bg-teal-600 min-h-[37rem] ">
         <div className="px-5">
-              <div className=" pt-10 mb-8 ">
-                <h3 className="w-[20rem] text-[2rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
-                  Related Product
-                </h3>
-              </div>
+          <div className=" pt-10 mb-8 ">
+            <h3 className="w-[20rem] text-[2rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
+              Related Product
+            </h3>
+          </div>
 
           <div className=" flex  flex-wrap pl-3">
             <div className=" pr-10 py-4 ">

@@ -54,7 +54,7 @@ export default async function RootLayout({
             >
                  <div className=' overflow-hidden'>
         <div className="fixed top-0 left-0 right-0  z-10">
-            <MainNav mensCollectionData={mensCollectionData[0].totalWishlistCount} />
+            <MainNav mensCollectionData={mensCollectionData} />
         </div>
               <Toaster />
         <div className=' mt-[8rem]'>

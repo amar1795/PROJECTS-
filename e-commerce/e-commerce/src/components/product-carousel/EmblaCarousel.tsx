@@ -226,7 +226,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                               {product.name.length > 36 ? product.name.slice(0, 30) + "..." : product.name}
                             </div>
                             <div>{formatPrice(product.price)}</div>
-                            <Link href={`categories/men/${product.id}`}>
+                            <Link href={`/cart`}>
                               <button className="buynow">
                                 <div>
                                   <ShoppingCart size={30} />

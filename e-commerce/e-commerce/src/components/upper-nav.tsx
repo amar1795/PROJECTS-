@@ -64,7 +64,7 @@ const Uppernav = ({mensCollectionData}) => {
         <Link href="/cart">
           <div className="">
             <button className=" p-2 border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500">
-              <ShoppingCart />
+              <ShoppingCart mensCollectionData={mensCollectionData}/>
             </button>
           </div>
         </Link>
