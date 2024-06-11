@@ -97,14 +97,16 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
       const updatedProductsList = updatedProducts.map((product) => {
         if (product.id === productId) {
 
-          const updatedCartItems = product.cartItems.map((item) => {
-            if (item.productId === productId) {
-              // Ensure quantity doesn't go below 0
-              const newQuantity = Math.max(item.quantity + change, 0);
-              return { ...item, quantity: newQuantity };
-            }
-            return item;
-          });
+          const updatedCartItems = product.cartItems.length > 0 
+          ? product.cartItems.map((item) => {
+              if (item.productId === productId) {
+                // Ensure quantity doesn't go below 0
+                const newQuantity = Math.max(item.quantity + change, 0);
+                return { ...item, quantity: newQuantity };
+              }
+              return item;
+            })
+          : [{ productId, quantity: Math.max(change, 0) }];
           return { ...product, cartItems: updatedCartItems };
         }
         return product;
