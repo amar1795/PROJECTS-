@@ -546,7 +546,10 @@ export async function getProductsByCategoryOriginal(categoryId: string) {
 }
 
 // gives all the products of a specific category and its nested subcategories
-export async function getProductsByCategory(categoryId: string,userId: string = "") {
+export async function getProductsByCategory(
+  categoryId: string,
+  userId: string = ""
+) {
   // Fetch the category and its nested children categories
   const categories = await prismadb.category.findMany({
     where: {
@@ -571,7 +574,7 @@ export async function getProductsByCategory(categoryId: string,userId: string = 
   // console.log("Category Ids:", categoryIds);
 
   // Fetch products under the extracted category IDs
-  const products = await prismadb.product.findMany({
+  let products = await prismadb.product.findMany({
     where: {
       categoryId: {
         in: categoryIds,
@@ -579,7 +582,8 @@ export async function getProductsByCategory(categoryId: string,userId: string = 
     },
     include: {
       brand: true, // Include brand details
-      images: { // Fetch only the first image
+      images: {
+        // Fetch only the first image
         take: 1,
       }, // Include product images
       ratings: {
@@ -593,28 +597,48 @@ export async function getProductsByCategory(categoryId: string,userId: string = 
         },
       },
       // Include wishlists related to each product only if userId is provided
-    ...(userId && {
-      wishlists: {
-        where: {
-          userId: userId,
+      ...(userId && {
+        wishlists: {
+          where: {
+            userId: userId,
+          },
         },
-      },
-    }),
+      }),
+      cartItems: true, // Include cart items
       // Include any other relations you need
     },
     take: 7, // Limit to 7 products per category
   });
 
+  // Fetch the total number of wishlisted items for the user
+  let totalWishlistCount = 0;
+  if (userId) {
+    totalWishlistCount = await prismadb.wishlist.count({
+      where: {
+        userId: userId,
+      },
+    });
+  }
 
-// Fetch the total number of wishlisted items for the user
-let totalWishlistCount = 0;
-if (userId) {
-  totalWishlistCount = await prismadb.wishlist.count({
-    where: {
-      userId: userId,
-    },
-  });
-}
+  // Fetch the user's cart items
+  let cartItems = [];
+  if (userId) {
+    const cart = await prismadb.cart.findFirst({
+      where: { userId },
+      include: { cartItems: true },
+    });
+    cartItems = cart ? cart.cartItems : [];
+  }
+
+    // Map the cart items to products and include cart quantity
+    products = products.map((product) => {
+      const cartItem = cartItems.find((item) => item.productId === product.id);
+      const cartQuantity = cartItem ? cartItem.quantity : 0;
+      return {
+        ...product,
+        cartQuantity: cartQuantity,
+      };
+    });
 
   const formattedProducts = products.map((product) => {
     const ratingsCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
@@ -643,8 +667,9 @@ if (userId) {
     const averageRating =
       totalRatings > 0 ? totalRatingValue / totalRatings : 0;
 
-      // Check if the product is wishlisted by the user
-  const isWishlisted = userId && product.wishlists.length > 0;
+    // Check if the product is wishlisted by the user
+    const isWishlisted = userId && product.wishlists.length > 0;
+    const cartQuantity = cartItems ? cartItems.length : 0;
 
     return {
       ...product,
@@ -658,6 +683,8 @@ if (userId) {
         averageRating: averageRating,
         parentCategory: product?.category?.parent?.name,
       },
+      cartQuantity: cartQuantity, // Add cart quantity to the product
+      cart: cartItems, // Add cart items to the product
     };
   });
 
@@ -670,6 +697,108 @@ if (userId) {
   // );
   return formattedProducts;
 }
+
+
+
+// optimsed version of the getproductsbycategory 
+
+// export async function getProductsByCategory(
+//   categoryId: string,
+//   userId: string = ""
+// ) {
+//   // Fetch the category and its nested children categories
+//       const categories = await prismadb.category.findMany({
+//         where: {
+//           OR: [{ id: categoryId }, { parentId: categoryId }],
+//         },
+//         select: {
+//           id: true,
+//           name: true,
+//           subcategories: {
+//             select: {
+//               id: true,
+//               name: true,
+//               parentId: true, // Include the parent category ID
+//               products: {
+//                 // Include products for each subcategory
+//                 include: {
+//                   brand: true,
+//                   images: { take: 1 },
+//                   ratings: { include: { images: true } },
+//                   category: { include: { parent: true } },
+//                   wishlists: userId ? { where: { userId } } : false, // Include wishlists if userId is provided
+//                   cartItems: userId ? true : false, // Include cart items if userId is provided
+//                 },
+//                 take: 7,
+//               },
+//             },
+//           },
+//         },
+//       });
+
+//       // Map and format categories and subcategories
+//       const formattedCategories = categories.map((category) => ({
+//         ...category,
+//         subcategories: category.subcategories.map((subcategory) => ({
+//           ...subcategory,
+//           products: subcategory.products.map((product) =>
+//             formatProduct(product, userId)
+//           ),
+//         })),
+//       }));
+
+//       return formattedCategories;
+// }
+// // Helper function to format product data
+// function formatProduct(product, userId) {
+//   const ratingsCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+//   const reviews = [];
+//   let totalRatings = 0;
+//   let totalRatingValue = 0;
+
+//   product.ratings.forEach((rating) => {
+//     const reviewWithImages = {
+//       rating: rating.rating,
+//       review: rating.review,
+//       images: rating.images.map((image) => ({
+//         id: image.id,
+//         url: image.url,
+//       })),
+//     };
+//     if (rating.review) {
+//       reviews.push(reviewWithImages);
+//     }
+//     ratingsCount[rating.rating] = (ratingsCount[rating.rating] || 0) + 1;
+//     totalRatingValue += rating.rating;
+//     totalRatings += 1;
+//   });
+
+//   const totalReviews = reviews.length;
+//   const averageRating = totalRatings > 0 ? totalRatingValue / totalRatings : 0;
+//   const isWishlisted = userId && product.wishlists.length > 0;
+//   const cartQuantity = product.cartItems ? product.cartItems.length : 0;
+
+//   return {
+//     ...product,
+//     isWishlisted,
+//     totalWishlistCount: 0, // You might want to pass this value from outside if necessary
+//     ratings: {
+//       count: ratingsCount,
+//       reviews: reviews,
+//       totalReviews: totalReviews,
+//       totalRatings: totalRatings,
+//       averageRating: averageRating,
+//       parentCategory: product?.category?.parent?.name,
+//     },
+//     cartQuantity: cartQuantity,
+//     cart: product.cartItems, // Add cart items to the product
+//   };
+// }
+
+
+
+
+
 
 // gives all the products of a specific category and its nested subcategories using filter and pagination
 // export async function getProductsByCategoryfiltered(categoryId: string, page:number = 1, pageSize:number = 9) {
@@ -788,7 +917,7 @@ export const getProductsByCategoryFiltered = cache(
     maxDiscountPercentage: number,
     page: number = 1,
     pageSize: number = 9,
-    sortBy: string = "", // 'priceAsc', 'priceDesc', 'discountAsc', 'discountDesc', 'ratingsAsc', 'ratingsDesc'
+    sortBy: string = "" // 'priceAsc', 'priceDesc', 'discountAsc', 'discountDesc', 'ratingsAsc', 'ratingsDesc'
   ) => {
     // Function to format camel case or Pascal case strings to separate words
     const formatCategoryName = (name: string): string => {
@@ -862,17 +991,15 @@ export const getProductsByCategoryFiltered = cache(
       // selectedCategories = [...selectedCategory];
 
       categoryName.forEach((categoryName) => {
-
         // const category
         // = categories.find(
         //   (cat) =>cat.name.toLowerCase() === categoryName.toLowerCase()|| cat.subcategories.map((subcategory) => subcategory.name.toLowerCase()).includes(categoryName.toLowerCase())
         // );
-        
+
         // Find the category matching the provided name
         const category = categories.find(
           (cat) => cat.name.toLowerCase() === categoryName.toLowerCase()
         );
-        
 
         if (category && !selectedCategory.includes(category.name)) {
           selectedCategory.push(category.id);
@@ -947,57 +1074,56 @@ export const getProductsByCategoryFiltered = cache(
     // const categoryNames = [selectedCategory.name, ...selectedCategory.subcategories.map(subcategory => subcategory.name)];
     // console.log("Category Names:", categoryNames);
 
+    // Sorting function
+    const sortProducts = (products, sortBy) => {
+      products.sort((a, b) => {
+        let valueA, valueB;
+        let order = "asc";
 
-          // Sorting function
-          const sortProducts = (products, sortBy) => {
-            products.sort((a, b) => {
-              let valueA, valueB;
-              let order = 'asc';
-              
-              // Determine sorting criteria and order
-              switch (sortBy) {
-                case 'priceAsc':
-                  valueA = a.discountedPrice;
-                  valueB = b.discountedPrice;
-                  order = 'asc';
-                  break;
-                case 'priceDesc':
-                  valueA = a.discountedPrice;
-                  valueB = b.discountedPrice;
-                  order = 'desc';
-                  break;
-                case 'discountAsc':
-                  valueA = a.discount;
-                  valueB = b.discount;
-                  order = 'asc';
-                  break;
-                case 'discountDesc':
-                  valueA = a.discount;
-                  valueB = b.discount;
-                  order = 'desc';
-                  break;
-                case 'ratingsAsc':
-                  valueA = a.ratings.averageRating;
-                  valueB = b.ratings.averageRating;
-                  order = 'asc';
-                  break;
-                case 'ratingsDesc':
-                  valueA = a.ratings.averageRating;
-                  valueB = b.ratings.averageRating;
-                  order = 'desc';
-                  break;
-                default:
-                  return 0;
-              }
-          
-              if (order === 'asc') {
-                return valueA - valueB;
-              } else if (order === 'desc') {
-                return valueB - valueA;
-              }
-              return 0;
-            });
-          };
+        // Determine sorting criteria and order
+        switch (sortBy) {
+          case "priceAsc":
+            valueA = a.discountedPrice;
+            valueB = b.discountedPrice;
+            order = "asc";
+            break;
+          case "priceDesc":
+            valueA = a.discountedPrice;
+            valueB = b.discountedPrice;
+            order = "desc";
+            break;
+          case "discountAsc":
+            valueA = a.discount;
+            valueB = b.discount;
+            order = "asc";
+            break;
+          case "discountDesc":
+            valueA = a.discount;
+            valueB = b.discount;
+            order = "desc";
+            break;
+          case "ratingsAsc":
+            valueA = a.ratings.averageRating;
+            valueB = b.ratings.averageRating;
+            order = "asc";
+            break;
+          case "ratingsDesc":
+            valueA = a.ratings.averageRating;
+            valueB = b.ratings.averageRating;
+            order = "desc";
+            break;
+          default:
+            return 0;
+        }
+
+        if (order === "asc") {
+          return valueA - valueB;
+        } else if (order === "desc") {
+          return valueB - valueA;
+        }
+        return 0;
+      });
+    };
 
     // Calculate the skip value
     const skip = (page - 1) * pageSize;
@@ -1044,21 +1170,20 @@ export const getProductsByCategoryFiltered = cache(
       // take: pageSize,
     });
 
+    // Sort all products
 
-            // Sort all products
-      
     if (sortBy) {
       sortProducts(products, sortBy);
-  }
+    }
 
-     // Calculate pagination
-     const totalProducts = products.length;
-     const totalPages = Math.ceil(totalProducts / pageSize);
-     const startIndex = (page - 1) * pageSize;
-     const endIndex = Math.min(startIndex + pageSize, totalProducts);
- 
-     // Apply pagination
-     const allProducts = products.slice(startIndex, endIndex);
+    // Calculate pagination
+    const totalProducts = products.length;
+    const totalPages = Math.ceil(totalProducts / pageSize);
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = Math.min(startIndex + pageSize, totalProducts);
+
+    // Apply pagination
+    const allProducts = products.slice(startIndex, endIndex);
     // console.log('Fetched Products:', products);
     // Count the number of fetched products
     const productCount = allProducts.length;
@@ -1176,12 +1301,10 @@ export const getProductsByCategoryFiltered = cache(
       };
     });
 
-      const fetchedCategories=categories
-
-
+    const fetchedCategories = categories;
 
     return {
-      products:formattedProducts ,
+      products: formattedProducts,
       totalProducts: totalProductsCount,
       currentPage: page,
       totalPages: totalPages,
@@ -1189,11 +1312,9 @@ export const getProductsByCategoryFiltered = cache(
       uniqueBrands,
       priceRanges,
       discountRanges,
-      fetchedCategories
+      fetchedCategories,
     };
   }
-
-  
 );
 
 export async function fetchAllReviews() {

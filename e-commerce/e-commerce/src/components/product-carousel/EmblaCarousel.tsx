@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useCallback, useEffect } from "react";
+import React, { use, useCallback, useEffect, useState, useTransition } from "react";
 import { EmblaOptionsType, EmblaCarouselType } from "embla-carousel";
 import { DotButton, useDotButton } from "./EmblaCarouselDotButton";
 import {
@@ -19,6 +19,9 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { useToast } from "@/components/ui/use-toast";
 
 import { toggleWishlist } from "@/actions/wishlist";
+import increaseProductQuantity from "@/actions/cart/increaseProduct";
+import decreaseProductQuantity from "@/actions/cart/decreaseProduct";
+
 
 type Brand = {
   id: string;
@@ -48,8 +51,10 @@ type Product = {
   discountedPrice: number | null;
   description: string;
   categoryId: string;
+
   category: Category;
   isWishlisted: boolean;
+  cartItems: any;
 
   createdAt: Date;
   updatedAt: Date;
@@ -65,6 +70,10 @@ type PropType = {
 };
 
 const EmblaCarousel: React.FC<PropType> = (props) => {
+  const [updatedProducts, setupdatedProducts] = useState<Product[]>(props.products); // Initialize products state
+  const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
+  const [isPending, startTransition] = useTransition();
+
   const { theme, setTheme } = useTheme();
   const { toast } = useToast();
   const user = useCurrentUser();
@@ -112,10 +121,10 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
   };
 
   const subcategories = "subcategories";
-  console.log(
-    "this is the parent Category Name",
-    products[0]?.category?.parentName
-  );
+  // console.log(
+  //   "this is the parent Category Name",
+  //   products[0]?.category?.parentName
+  // );
 
   const  toggleWishlistFunction=async(userId:string,productId:string)=>{
     if(!user){
@@ -161,6 +170,93 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
   }
 }
 
+// Debouncing implementation for wishlist toggle
+const handleWishlistToggle = async (userId: string, productId: string) => {
+
+
+  const updatedProducts = products.map((product) => {
+    if (product.id === productId) {
+      return { ...product, isWishlisted: !product.isWishlisted };
+    }
+    return product;
+  });
+
+  setupdatedProducts(updatedProducts);
+
+  // await toggleWishlistFunction(userId, productId);
+  if (debounceTimer) {
+    clearTimeout(debounceTimer);
+  }
+
+  const timer = setTimeout(async () => {
+    await toggleWishlistFunction(userId, productId);
+  }, 10); // Set debounce time to 1 second (1000 milliseconds)
+
+  setDebounceTimer(timer);
+};
+
+// const handleIncreaseQuantity = async(userID:string, productID:string) => {
+//  await increaseProductQuantity(userID, productID);
+// };
+
+// const handleDecreaseQuantity = async(userID:string, productID:string) => {
+//   await decreaseProductQuantity(userID, productID);
+//  };
+
+
+// debouncing implementation for handleIncreaseQuantity 
+const handleIncreaseQuantity = async (userID: string, productID: string) => {
+  if (debounceTimer) {
+    clearTimeout(debounceTimer);
+  }
+
+  const updatedProducts = products.map((product) => {
+    if (product.id === productID) {
+      const updatedCartItems = [...product.cartItems];
+      const cartItemIndex = updatedCartItems.findIndex(item => item.productId === productID);
+      if (cartItemIndex !== -1) {
+        updatedCartItems[cartItemIndex].quantity++;
+        return { ...product, cartItems: updatedCartItems };
+      }
+    }
+    return product;
+  });
+
+  setupdatedProducts(updatedProducts);
+
+  const timer = setTimeout(async () => {
+    await increaseProductQuantity(userID, productID);
+  }, 200); // Set debounce time to 1 second (1000 milliseconds)
+
+  setDebounceTimer(timer);
+};
+
+// debouncing implementation for handleDecreaseQuantity
+const handleDecreaseQuantity = async (userID: string, productID: string) => {
+  if (debounceTimer) {
+    clearTimeout(debounceTimer);
+  }
+
+  const updatedProducts = products.map((product) => {
+    if (product.id === productID) {
+      const updatedCartItems = [...product.cartItems];
+      const cartItemIndex = updatedCartItems.findIndex(item => item.productId === productID);
+      if (cartItemIndex !== -1 && updatedCartItems[cartItemIndex].quantity > 0) {
+        updatedCartItems[cartItemIndex].quantity--;
+        return { ...product, cartItems: updatedCartItems };
+      }
+    }
+    return product;
+  });
+
+  setupdatedProducts(updatedProducts);
+
+  const timer = setTimeout(async () => {
+    await decreaseProductQuantity(userID, productID);
+  }, 200); // Set debounce time to 1 second (1000 milliseconds)
+
+  setDebounceTimer(timer);
+};
 
 
   return (
@@ -206,7 +302,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
             </>
           ) : (
             <>
-              {products.slice(0, 7).map((product, index) => (
+              {updatedProducts.slice(0, 7).map((product, index) => (
                 <div>
                   <div className="embla__slide_product" key={product.id}>
                     {index !== 6 ? (
@@ -220,7 +316,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                             >
                               <Heart
                                 onClick={() =>
-                                  toggleWishlistFunction(user?.id,product.id)
+                                  handleWishlistToggle(user?.id,product.id)
                                 }
                                 size={40}
                                 className={` hover:fill-red-500 text-black ${
@@ -257,14 +353,17 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                           <div>
                             <div className="box flex pr-4">
                               <button className=" pr-2  hover:bg-gray-200 pl-1">
-                                <Minus size={20} />
+                                <Minus size={20} onClick={() => handleDecreaseQuantity(user?.id, product.id)} />
                               </button>
-                              <div className=" text-[1.5rem] w-7  bg-white  h-[2rem]">
-                                <div className=" px-2 py-2 ">0</div>
+                              <div className=" text-[1.5rem]  bg-white  h-[2rem]">
+                              <div className="px-2 py-2">{product.cartItems[0]?.quantity || 0}</div>
                               </div>
-                              <button className=" pl-2  hover:bg-gray-200 pr-1">
-                                <Plus size={20} />
+                              <button className=" pl-2  hover:bg-gray-200 pr-1 ">
+                                <Plus size={20}  onClick={() => handleIncreaseQuantity(user?.id, product.id)}
+                                />
                               </button>
+
+
                             </div>
                           </div>
                         </div>

@@ -19,6 +19,8 @@ export default async function Home() {
 
   const user = session?.user?.id;
 
+  
+
   const mensCollectionData = await getProductsByCategory(
     "665a0b9f14be77720636d443",user);
   // console.log("this is the menscollection", mensCollectionData);
@@ -28,7 +30,7 @@ export default async function Home() {
   const kidsCollection = await getProductsByCategory(
     "665de7eb62075d484b0229db",user);
 
-  // console.log("this is the menscollection", mensCollectionData[0].brand);
+  // console.log("this is the menscollection cart quantity for the user test", mensCollectionData );
   return (
     <main className=" ">
       {/* hscreen was causing the issue for the footer as hscreen sets the height of the current viewable screen hence the footer waas not going to the bottom */}

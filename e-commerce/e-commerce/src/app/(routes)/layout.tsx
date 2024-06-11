@@ -33,7 +33,7 @@ export default async function RootLayout({
   const user = session?.user?.id;
   const mensCollectionData = await getProductsByCategory(
     "665a0b9f14be77720636d443",user);
-    console.log("this is the menscollection wishlist count ", mensCollectionData);
+    // console.log("this is the menscollection wishlist count ", mensCollectionData);
     
   return (
     
