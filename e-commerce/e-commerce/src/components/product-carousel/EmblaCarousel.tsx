@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect } from "react";
+import React, { use, useCallback, useEffect } from "react";
 import { EmblaOptionsType, EmblaCarouselType } from "embla-carousel";
 import { DotButton, useDotButton } from "./EmblaCarouselDotButton";
 import {
@@ -67,7 +67,6 @@ type PropType = {
 const EmblaCarousel: React.FC<PropType> = (props) => {
   const { theme, setTheme } = useTheme();
   const { toast } = useToast();
-
   const user = useCurrentUser();
   // need to implement the theme toggle by myself
   //   useEffect(() => {
@@ -118,7 +117,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
     products[0]?.category?.parentName
   );
 
-  const  toggleWishlistFunction=(userId:string,productId:string)=>{
+  const  toggleWishlistFunction=async(userId:string,productId:string)=>{
     if(!user){
       toast({
         variant: "destructive",
@@ -131,18 +130,38 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
       }
       else
       {
+        // toast({
+        //   variant: "destructive",
+        //   title: "Added to Wishlist",
+        //   description:
+        //     "The item has been wishlisted",
+        // });
+        
+     const message=await toggleWishlist(userId, productId);
+     
+      
+      if(message.message==="added"){
         toast({
-          variant: "destructive",
+          variant: "default",
           title: "Added to Wishlist",
           description:
             "The item has been wishlisted",
         });
-        
-      toggleWishlist(userId, productId)
+      }
+      else{
+        toast({
+          variant: "destructive",
+          title: "Removed from Wishlist",
+          description:
+            "The item has been removed from wishlist",
+        });
     }
 
 
   }
+}
+
+
 
   return (
     <section className="ProductEmbla_product">
@@ -229,7 +248,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                           <div className=" mt-[1.5rem] text-sm flex justify-between bg-opacity-20 backdrop-blur-lg border border-white/30 ">
                           <div className=" bg-gray-200 w-16  ">
                             <div className=" flex justify-between px-2 pt-1">
-                              {/* <span>{product?.ratings?.averageRating.toFixed(1)}</span> */}
+                              <span>{product?.ratings?.averageRating.toFixed(1)}</span>
                               <div className=" self-center">
                                 <StarIcon size={20} stroke="" fill="black" />
                               </div>

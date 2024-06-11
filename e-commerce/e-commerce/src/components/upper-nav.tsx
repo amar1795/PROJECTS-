@@ -17,7 +17,7 @@ import UserCustomButton from "./userCustomButton";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useState } from "react";
 
-const Uppernav = () => {
+const Uppernav = ({mensCollectionData}) => {
   const completeUrl = typeof window !== "undefined" ? window.location.href : "";
   const segments = completeUrl.split("/");
   const previousSegment = segments[segments.length - 2];
@@ -73,7 +73,7 @@ const Uppernav = () => {
           <Link href="/wishlist">
             <div className=" ml-2">
               <button className=" p-2 border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500">
-                <WishingListIcon />
+                <WishingListIcon mensCollectionData={mensCollectionData} />
               </button>
             </div>
           </Link>

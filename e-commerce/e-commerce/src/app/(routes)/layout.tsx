@@ -16,6 +16,7 @@ const fontSans = FontSans({
 import { SessionProvider } from 'next-auth/react'
 
 import { auth } from '@/auth'
+import { getProductsByCategory } from "@/actions/createProduct";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -29,7 +30,13 @@ export default async function RootLayout({
 }>) {
   const session = await auth();
 
+  const user = session?.user?.id;
+  const mensCollectionData = await getProductsByCategory(
+    "665a0b9f14be77720636d443",user);
+    console.log("this is the menscollection wishlist count ", mensCollectionData);
+    
   return (
+    
     <SessionProvider session={session}>
 
     <html lang="en" suppressHydrationWarning>
@@ -47,7 +54,7 @@ export default async function RootLayout({
             >
                  <div className=' overflow-hidden'>
         <div className="fixed top-0 left-0 right-0  z-10">
-            <MainNav  />
+            <MainNav mensCollectionData={mensCollectionData[0].totalWishlistCount} />
         </div>
               <Toaster />
         <div className=' mt-[8rem]'>

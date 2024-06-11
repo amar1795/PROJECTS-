@@ -56,7 +56,7 @@ const WishlistedProductCard: React.FC<updatedDataResponse> = ({ product,setData 
   const handleRemoveClick = async (userId, productId) => {
     await removeFromWishlist(userId, productId);
     // setData((prev) => !prev);
-    // for the data to be validated the route should be a server component and the data should be fetched from the server and onclck works on server components
+    // for the data to be validated the route should be a server component and the data should be fetched from the server 
     toast({
       variant: "destructive",
       title: "ITEM DELETED",

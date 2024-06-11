@@ -62,7 +62,7 @@ export function MainNav({
     <>
   
     <div >
-    <Uppernav />
+    <Uppernav {...props} />
     </div>
     <div className="flex justify-center items-center">
     <nav

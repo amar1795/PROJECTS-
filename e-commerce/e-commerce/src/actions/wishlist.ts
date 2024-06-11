@@ -27,7 +27,7 @@ export const toggleWishlist = async (userId: string, productId: string) => {
 
       revalidatePath("/");
       // it does not matter which path i use in revalidate path as soon as the revalidate path is there the data is being revalidated where it is being called
-      return { message: "Product removed from wishlist" };
+      return { message: "removed" };
     } else {
       // Add product to wishlist
       const wishlistItem = await prismadb.wishlist.create({
@@ -38,7 +38,8 @@ export const toggleWishlist = async (userId: string, productId: string) => {
       });
 
       revalidatePath("/");
-      return wishlistItem;
+      return { message: "added" };
+      // return wishlistItem;
     }
   } catch (error) {
     console.error("Error toggling product in wishlist:", error);
