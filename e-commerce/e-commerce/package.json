@@ -48,6 +48,7 @@
     "react-use": "^17.5.0",
     "recharts": "^2.12.7",
     "rsuite": "^5.61.0",
+    "stripe": "^15.10.0",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^9.0.1",
