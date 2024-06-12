@@ -13,42 +13,48 @@ export async function getRelatedProducts(userId) {
             orderBy: { createdAt: 'desc' },
             include: { cartItems: true }
         });
-        console.log("this is the cart", cart);
+
         if (!cart) {
             // If no cart found for the user, return an empty array
             return [];
         }
 
         const cartItems = cart.cartItems;
-        console.log("this is the cart items", cartItems);
         const relatedProducts = [];
 
-        for (const cartItem of cartItems) {
+        // If there's only one product in the cart, fetch related products from its parent category
+        if (cartItems.length === 1) {
             const product = await prismadb.product.findUnique({
-                where: { id: cartItem.productId },
+                where: { id: cartItems[0].productId },
                 include: { category: true } // Include category info
             });
-
+            console.log("this is the product", product);
             // Find parent category
             const parentCategory = await prismadb.category.findUnique({
                 where: { id: product.category.parentId }
             });
-                // Fetch related products from the parent category's children categories
-            const childCategories = await prismadb.category.findMany({
-                where: { parentId: parentCategory.id }
+                console.log("this is the parent category", parentCategory);
+            // Fetch products from the parent category
+            const parentCategoryProducts = await prismadb.product.findMany({
+                where: { categoryId: parentCategory.id }
+            });
+            console.log("this is the parent category products", parentCategoryProducts);
+            // Show all products from the parent category
+            relatedProducts.push(...parentCategoryProducts);
+            console.log("this is the related products", relatedProducts);
+        } else {
+            // If there are multiple products in the cart, randomly select a parent category
+            const randomParentCategory = await getRandomParentCategory();
+
+            // Fetch products from the randomly selected parent category
+            const parentCategoryProducts = await prismadb.product.findMany({
+                where: { categoryId: randomParentCategory.id },
+                take: 6 // Adjust based on your requirements
             });
 
-            for (const childCategory of childCategories) {
-                const categoryProducts = await prismadb.product.findMany({
-                    where: { categoryId: childCategory.id },
-                    take: 1 // Adjust based on your requirements
-                });
-
-            relatedProducts.push(...categoryProducts);
-            }
-
+            // Show 4-6 randomly selected products
+            relatedProducts.push(...getRandomProducts(parentCategoryProducts));
         }
-        console.log("this is the related products", relatedProducts.length);
 
         return relatedProducts;
     } catch (error) {
@@ -57,6 +63,34 @@ export async function getRelatedProducts(userId) {
         return [];
     }
 }
+
+// Function to get a random parent category
+async function getRandomParentCategory() {
+    const parentCategories = await prismadb.category.findMany({
+        where: { parentId: null } // Find top-level categories
+    });
+
+    // Randomly select a parent category
+    const randomIndex = Math.floor(Math.random() * parentCategories.length);
+    return parentCategories[randomIndex];
+}
+
+// Function to get 4-6 randomly selected products from an array of products
+function getRandomProducts(products) {
+    const randomProducts = [];
+    const numProductsToShow = Math.min(6, Math.max(4, products.length)); // Show 4-6 products
+
+    // Shuffle the array of products
+    products.sort(() => Math.random() - 0.5);
+
+    // Select the required number of products
+    for (let i = 0; i < numProductsToShow; i++) {
+        randomProducts.push(products[i]);
+    }
+
+    return randomProducts;
+}
+
 
   
   

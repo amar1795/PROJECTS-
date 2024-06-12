@@ -94,16 +94,8 @@ const page = ({ params }: { params: { product: string } }) => {
   const { user } = useCurrentUser();
 
   const currentUser = session?.user?.id;
- console.log("this is the current user:", user);
-  useEffect(() => {
-    
-    const data=async()=>{
-      const mensCollectionData = await getProductsByCategory(
-        "665a0b9f14be77720636d443",currentUser);
-        setMensCollectionData(mensCollectionData);
-    }
-    data();
-  },[])
+
+ 
 
   React.useEffect(() => {
     const updateData = async () => {
@@ -150,9 +142,9 @@ const ProductId=data?.id;
   // console.log("this is the data i am searching:", data?.images);
   return (
     <div className=" overflow-hidden">
-      <div className="fixed top-0 left-0 right-0  z-10">
+      {/* <div className="fixed top-0 left-0 right-0  z-10">
         <MainNav mensCollectionData={mensCollectionData} />
-      </div>
+      </div> */}
 
       <div className=" mt-[8rem]">
         <div>

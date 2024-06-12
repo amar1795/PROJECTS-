@@ -7,6 +7,7 @@ import "../globals.css";
 import { SessionProvider } from 'next-auth/react'
 import { auth } from '@/auth'
 import { getProductsByCategory } from "@/actions/createProduct";
+import { MainNav } from "@/components/main-nav";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -25,6 +26,10 @@ export default async function RootLayout({
 }>) {
   const session = await auth();
 
+  const user = session?.user?.id;
+  const mensCollectionData = await getProductsByCategory(
+    "665a0b9f14be77720636d443",user);
+
   // console.log("this is the session", session);
   return (
     <SessionProvider session={session}>
@@ -42,6 +47,9 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+            <div className="fixed top-0 left-0 right-0  z-10">
+        <MainNav mensCollectionData={mensCollectionData} />
+      </div>
           {children}
         </ThemeProvider>
       </body>

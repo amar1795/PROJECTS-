@@ -179,9 +179,9 @@ const { start, end } = calculateProductRange(currentPage);
 
   return (
     <div className=" overflow-hidden ">
-      <div className="fixed top-0 left-0 right-0  z-10">
+      {/* <div className="fixed top-0 left-0 right-0  z-10">
         <MainNav />
-      </div>
+      </div> */}
 
       <div className=" mt-[8rem]">
         <BreadcrumbWithCustomSeparator items={breadcrumbsData} />
