@@ -24,7 +24,7 @@ const CategoriesRight: React.FC<CategoriesRightProps>  = ({ data }) => {
 
   return (
     <div>
-       <div className=" bg-pink-500  ">
+       <div className=" bg-teal-600  ">
                   <div className=" px-4">
                     <h1 className=" text-[4rem] font-bold">
                       {data?.brand?.name}

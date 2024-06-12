@@ -152,8 +152,8 @@ const ProductId=data?.id;
             <BreadcrumbWithCustomSeparator items={breadcrumbsData} />
           </div>
 
-          <div className="bg-green-700 h-auto flex ">
-            <div className=" bg-yellow-400 flex-1 h-auto">
+          <div className=" bg-teal-600 h-auto flex ">
+            <div className=" bg-teal-600 flex-1 h-auto">
               <PhotoViewer images={data?.images} />
             </div>
             <div className="flex-1 h-[115rem]">
@@ -166,9 +166,11 @@ const ProductId=data?.id;
             </div>
           </div>
           <div>
-            <div className="bg-blue-500">
-            <h1 className=" pt-4 pb-4 text-[2rem]">Related products</h1>
-
+            
+            <div className="bg-teal-600 ">           
+            <h3 className=" ml-8 w-[20rem] text-[2rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
+              Related Products
+            </h3>
             </div>
             <CategoriesRelatedProduct relatedProduct={relatedProducts} ProductId={ProductId} />
           </div>
