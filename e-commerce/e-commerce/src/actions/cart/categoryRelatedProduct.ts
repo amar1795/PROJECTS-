@@ -1,6 +1,7 @@
 "use server";
 
 import { prismadb } from "@/lib/db";
+import { tr } from "@faker-js/faker";
 import { revalidatePath } from "next/cache";
 
 
@@ -83,7 +84,8 @@ export async function getRelatedProducts(userId: string) {
        images: {
          select: { url: true },
          take: 1
-       }
+       },
+       ratings: true
      }
    });
    potentialProducts.push(...products);
@@ -96,8 +98,37 @@ export async function getRelatedProducts(userId: string) {
  // Shuffle the array to pick random products
  potentialProducts = potentialProducts.sort(() => 0.5 - Math.random());
 
+ const formattedProducts = potentialProducts.map((product) => {
+    const ratingsCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    const reviews = [];
+    let totalRatings = 0;
+    let totalRatingValue = 0;
+
+    product.ratings.forEach((rating) => { 
+      ratingsCount[rating.rating] = (ratingsCount[rating.rating] || 0) + 1;
+      totalRatingValue += rating.rating; // Sum the star counts weighted by their star value
+      totalRatings += 1;
+    });
+
+    const totalReviews = reviews.length;
+    const averageRating =
+      totalRatings > 0 ? totalRatingValue / totalRatings : 0;
+
+    return {
+      ...product,
+      ratings: {
+        count: ratingsCount,
+        reviews: reviews,
+        totalReviews: totalReviews,
+        totalRatings: totalRatings,
+        averageRating: averageRating,
+      },
+    };
+  });
+
+
   // Select 6 unique products
-  const relatedProducts = potentialProducts.slice(0, 6);
+  const relatedProducts = formattedProducts.slice(0, 6);
   revalidatePath("/cart")
   // Ensure we do not exceed 6 products
   console.log("relatedProducts", relatedProducts.length);

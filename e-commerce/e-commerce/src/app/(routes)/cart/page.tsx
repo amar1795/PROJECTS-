@@ -24,6 +24,7 @@ import increaseProductQuantity from "@/actions/cart/increaseProduct";
 import decreaseProductQuantity from "@/actions/cart/decreaseProduct";
 import deleteCartItem from "@/actions/cart/deleteCartProducts";
 import { getRelatedProducts } from "@/actions/cart/categoryRelatedProduct";
+import addProductToCart from "@/actions/cart/addToProduct";
 
 
 const page = () => {
@@ -36,6 +37,11 @@ const page = () => {
 
   const handleClickDelete = (userID,productID) => {
     deleteCartItem(userID, productID);
+    setUpdateTrigger(prev => !prev);
+  };
+  
+  const handleClickAdd = (userID,productID) => {
+    addProductToCart(userID, productID);
     setUpdateTrigger(prev => !prev);
 
   };
@@ -53,6 +59,7 @@ const page = () => {
   }, [updateTrigger]);
   // console.log("this is the updated products", updatedProducts);
 
+  
   useEffect(() => {
     const relatedData = async () => {
       const data =await getRelatedProducts(user.id);
@@ -61,6 +68,8 @@ const page = () => {
     relatedData();
     
    },[updateTrigger])
+
+
 
   // need to implement deboucning here for the quantity change
   const handleQuantityChange = useCallback(
@@ -246,7 +255,7 @@ const page = () => {
              {relatedProducts
               .map((product) => (
                 <div className=" mb-4" key={product.id}>
-                  <ProductCard product={product} />
+                  <ProductCard product={product} handleClickAdd={handleClickAdd} />
                 </div>
               ))
              
