@@ -12,7 +12,7 @@ import {
   Trash2,
   X,
 } from "lucide-react";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { use, useCallback, useEffect, useState } from "react";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import Link from "next/link";
 import {
@@ -23,6 +23,7 @@ import CheckoutPorductCardComponent from "@/components/CheckoutPorductCardCompon
 import increaseProductQuantity from "@/actions/cart/increaseProduct";
 import decreaseProductQuantity from "@/actions/cart/decreaseProduct";
 import deleteCartItem from "@/actions/cart/deleteCartProducts";
+import { getRelatedProducts } from "@/actions/cart/categoryRelatedProduct";
 
 
 const page = () => {
@@ -31,6 +32,7 @@ const page = () => {
   const [summaryData, setSummaryData] = useState([]); // [totalItems, totalAmount
   const [productData, setproductData] = useState([]);
   const [updateTrigger, setUpdateTrigger] = useState(false);
+  const [relatedProducts, setRelatedProducts] = useState([]);
 
   const handleClickDelete = (userID,productID) => {
     deleteCartItem(userID, productID);
@@ -51,6 +53,14 @@ const page = () => {
   }, [updateTrigger]);
   // console.log("this is the updated products", updatedProducts);
 
+  useEffect(() => {
+    const relatedData = async () => {
+      const data =await getRelatedProducts(user.id);
+      setRelatedProducts(data);
+    }
+    relatedData();
+    
+   },[updateTrigger])
 
   // need to implement deboucning here for the quantity change
   const handleQuantityChange = useCallback(
@@ -227,13 +237,20 @@ const page = () => {
         <div className="px-5">
           <div className=" pt-10 mb-8 ">
             <h3 className="w-[20rem] text-[2rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
-              Related Product
+              Related Products
             </h3>
           </div>
 
           <div className=" flex  flex-wrap pl-3">
-            <div className=" pr-10 py-4 ">
-              <ProductCard />
+            <div className=" pr-10 py-4 flex  flex-wrap">
+             {relatedProducts
+              .map((product) => (
+                <div className=" mb-4" key={product.id}>
+                  <ProductCard product={product} />
+                </div>
+              ))
+             
+             } 
             </div>
           </div>
         </div>

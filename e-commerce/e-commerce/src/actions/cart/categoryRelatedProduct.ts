@@ -4,103 +4,105 @@ import { prismadb } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
 
-// Function to retrieve related products based on cart items
-export async function getRelatedProducts(userId) {
-    try {
-        // Find the user's most recent cart
-        const cart = await prismadb.cart.findFirst({
-            where: { userId },
-            orderBy: { createdAt: 'desc' },
-            include: { cartItems: true }
-        });
+// Function to get related products
+export async function getRelatedProducts(userId: string) {
+  // Fetch the user's cart
+  const cart = await prismadb.cart.findFirst({
+    where: { userId },
+    orderBy: { createdAt: 'desc' },
+    include: { cartItems: { include: { product: true } } }
+  });
 
-        if (!cart) {
-            // If no cart found for the user, return an empty array
-            return [];
-        }
+  if (!cart || cart.cartItems.length === 0) return [];
 
-        const cartItems = cart.cartItems;
-        const relatedProducts = [];
+  const cartProducts = cart.cartItems.map(item => item.product);
+  const parentCategories = [];
 
-        // If there's only one product in the cart, fetch related products from its parent category
-        if (cartItems.length === 1) {
-            const product = await prismadb.product.findUnique({
-                where: { id: cartItems[0].productId },
-                include: { category: true } // Include category info
-            });
-            console.log("this is the product", product);
-            // Find parent category
-            const parentCategory = await prismadb.category.findUnique({
-                where: { id: product.category.parentId }
-            });
-                console.log("this is the parent category", parentCategory);
-            // Fetch products from the parent category
-            const parentCategoryProducts = await prismadb.product.findMany({
-                where: { categoryId: parentCategory.id }
-            });
-            console.log("this is the parent category products", parentCategoryProducts);
-            // Show all products from the parent category
-            relatedProducts.push(...parentCategoryProducts);
-            console.log("this is the related products", relatedProducts);
-        } else {
-            // If there are multiple products in the cart, randomly select a parent category
-            const randomParentCategory = await getRandomParentCategory();
-
-            // Fetch products from the randomly selected parent category
-            const parentCategoryProducts = await prismadb.product.findMany({
-                where: { categoryId: randomParentCategory.id },
-                take: 6 // Adjust based on your requirements
-            });
-
-            // Show 4-6 randomly selected products
-            relatedProducts.push(...getRandomProducts(parentCategoryProducts));
-        }
-
-        return relatedProducts;
-    } catch (error) {
-        // Handle error
-        console.error("Error fetching related products:", error);
-        return [];
-    }
-}
-
-// Function to get a random parent category
-async function getRandomParentCategory() {
-    const parentCategories = await prismadb.category.findMany({
-        where: { parentId: null } // Find top-level categories
+  // Find parent categories for each product in the cart
+  for (const product of cartProducts) {
+    const category = await prismadb.category.findUnique({
+      where: { id: product.categoryId },
+      select: { parentId: true }
     });
-
-    // Randomly select a parent category
-    const randomIndex = Math.floor(Math.random() * parentCategories.length);
-    return parentCategories[randomIndex];
-}
-
-// Function to get 4-6 randomly selected products from an array of products
-function getRandomProducts(products) {
-    const randomProducts = [];
-    const numProductsToShow = Math.min(6, Math.max(4, products.length)); // Show 4-6 products
-
-    // Shuffle the array of products
-    products.sort(() => Math.random() - 0.5);
-
-    // Select the required number of products
-    for (let i = 0; i < numProductsToShow; i++) {
-        randomProducts.push(products[i]);
+    if (category?.parentId) {
+      parentCategories.push(category.parentId);
     }
+  }
 
-    return randomProducts;
+  const uniqueParentCategories = [...new Set(parentCategories)];
+
+  // Find all children categories from the unique parent categories
+  let allChildrenCategories = [];
+  for (const parentId of uniqueParentCategories) {
+    const childrenCategories = await prismadb.category.findMany({
+      where: { parentId },
+      select: { id: true }
+    });
+    allChildrenCategories.push(...childrenCategories.map(category => category.id));
+  }
+
+  allChildrenCategories = [...new Set(allChildrenCategories)]; // Deduplicate
+
+//   // Fetch related products in a cyclic manner from the children categories
+//   let relatedProducts = [];
+//   let index = 0;
+
+//   while (relatedProducts.length < 6 && allChildrenCategories.length > 0) {
+//     const categoryId = allChildrenCategories[index % allChildrenCategories.length];
+//     const products = await prismadb.product.findMany({
+//       where: { categoryId },
+//       include: {
+//         images: {
+//           select: { url: true },
+//           take: 1
+//         }
+//       },
+//       take: 10, // Fetch more products to ensure we can pick a different one
+//     });
+
+//     // Filter out already selected products
+//     const newProducts = products.filter(
+//       product => !relatedProducts.some(rp => rp.id === product.id)
+//     );
+
+//     // Select the first new product
+//     if (newProducts.length > 0) {
+//       relatedProducts.push(newProducts[0]);
+//     }
+
+//     index++;
+//   }
+  
+
+ // Fetch a large number of products from the children categories
+ let potentialProducts = [];
+ for (const categoryId of allChildrenCategories) {
+   const products = await prismadb.product.findMany({
+     where: { categoryId },
+     include: {
+       images: {
+         select: { url: true },
+         take: 1
+       }
+     }
+   });
+   potentialProducts.push(...products);
+ }
+
+ potentialProducts = potentialProducts.filter(
+   product => !cartProducts.some(cartProduct => cartProduct.id === product.id)
+ );
+
+ // Shuffle the array to pick random products
+ potentialProducts = potentialProducts.sort(() => 0.5 - Math.random());
+
+  // Select 6 unique products
+  const relatedProducts = potentialProducts.slice(0, 6);
+  revalidatePath("/cart")
+  // Ensure we do not exceed 6 products
+  console.log("relatedProducts", relatedProducts.length);
+  return relatedProducts;
 }
 
 
   
-  
-  
-// // Usage example
-// const cartId = 'your-cart-id';
-// getRelatedProducts(cartId)
-//   .then((relatedProducts) => {
-//     console.log(relatedProducts);
-//   })
-//   .catch((error) => {
-//     console.error(error);
-//   });
