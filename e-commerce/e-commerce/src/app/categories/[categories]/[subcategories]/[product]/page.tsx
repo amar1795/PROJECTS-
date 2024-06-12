@@ -2,7 +2,7 @@
 import { BreadcrumbWithCustomSeparator } from "@/components/breadcrumb";
 import MainFooter from "@/components/footer";
 import { MainNav } from "@/components/main-nav";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   DollarSign,
   Heart,
@@ -11,6 +11,7 @@ import {
   ThumbsDown,
   ThumbsUp,
 } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 import { SelectSeparator } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -21,7 +22,7 @@ import PhotoViewer from "@/components/photo viewer/photoViewer";
 import CategoriesRight from "@/components/categories/CategoriesRight";
 import CategoriesRelatedProduct from "@/components/categories/CategoriesRelatedProduct";
 import { fetchProductAllData, getProductsByCategory, getProductsByCategoryOriginal } from "@/actions/createProduct";
-
+import { useCurrentUser } from "@/hooks/use-current-user";
 //meta data generation
 // export async function generateMetadata({ params }: { params: { product: string}}) {
 
@@ -77,14 +78,33 @@ export type updatedDataResponse = {
   updatedAt: string;
 };
 
-
 const page = ({ params }: { params: { product: string } }) => {
+  const { data: session } = useSession();
+  console.log("this is the session",session?.user?.id)
+
+  
   const [outOfStock, setoutOfStock] = React.useState(false);
 
   const [data, setData] = React.useState<updatedDataResponse | null>(null);  
   const [relatedProducts, setRelatedProducts] = React.useState<relatedProduct[] | null>(null);
   const [parentCategory, setParentCategory] = React.useState<string>("");
-  
+  const [mensCollectionData, setMensCollectionData] = React.useState<any[]>([]);
+
+  // this user doesn't work for some reason whereas this is meant to be used in the client side
+  const { user } = useCurrentUser();
+
+  const currentUser = session?.user?.id;
+ console.log("this is the current user:", user);
+  useEffect(() => {
+    
+    const data=async()=>{
+      const mensCollectionData = await getProductsByCategory(
+        "665a0b9f14be77720636d443",currentUser);
+        setMensCollectionData(mensCollectionData);
+    }
+    data();
+  },[])
+
   React.useEffect(() => {
     const updateData = async () => {
         const updatedData: updatedDataResponse | undefined = await fetchProductAllData(params.product);
@@ -131,7 +151,7 @@ const ProductId=data?.id;
   return (
     <div className=" overflow-hidden">
       <div className="fixed top-0 left-0 right-0  z-10">
-        <MainNav />
+        <MainNav mensCollectionData={mensCollectionData} />
       </div>
 
       <div className=" mt-[8rem]">

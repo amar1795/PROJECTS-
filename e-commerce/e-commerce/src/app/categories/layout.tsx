@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import "../globals.css";
 import { SessionProvider } from 'next-auth/react'
 import { auth } from '@/auth'
+import { getProductsByCategory } from "@/actions/createProduct";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -24,6 +25,7 @@ export default async function RootLayout({
 }>) {
   const session = await auth();
 
+  // console.log("this is the session", session);
   return (
     <SessionProvider session={session}>
 

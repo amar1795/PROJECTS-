@@ -40,6 +40,7 @@ const page = () => {
   // fetchProductsByCategory("665a0b9f14be77720636d443")
   // getProductsByCategory("665a0b9f14be77720636d443")
   // getUserBySpecificEmail("test@test.com")
+  
   return (
     <div className=" bg-pink-500 border-2 border-black px-10 ">
       <div>
