@@ -13,7 +13,7 @@ export default async function increaseProductQuantity(userId: string, productId:
     orderBy: { createdAt: 'desc' },
     include: { cartItems: true }
   });
-console.log("this is the cart data", cart)
+// console.log("this is the cart data", cart)
   if (!cart) {
     // Create a new cart and add the product with quantity 1
     cart = await prismadb.cart.create({
@@ -29,7 +29,7 @@ console.log("this is the cart data", cart)
       include: { cartItems: true }
     });
     revalidatePath('/')
-    console.log("this is the newly generated cart ", cart)
+    // console.log("this is the newly generated cart ", cart)
   } else {
     // Check if the product is already in the cart
     let cartItem = cart.cartItems.find(item => item.productId === productId);
@@ -40,7 +40,7 @@ console.log("this is the cart data", cart)
         where: { id: cartItem.id },
         data: { quantity: cartItem.quantity + 1 }
       });
-      console.log("this is the cart item data", cartItem)
+      // console.log("this is the cart item data", cartItem)
       revalidatePath('/')
 
     } else {

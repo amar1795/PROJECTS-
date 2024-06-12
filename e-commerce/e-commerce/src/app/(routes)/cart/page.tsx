@@ -22,6 +22,7 @@ import {
 import CheckoutPorductCardComponent from "@/components/CheckoutPorductCardComponent";
 import increaseProductQuantity from "@/actions/cart/increaseProduct";
 import decreaseProductQuantity from "@/actions/cart/decreaseProduct";
+import deleteCartItem from "@/actions/cart/deleteCartProducts";
 
 
 const page = () => {
@@ -30,6 +31,12 @@ const page = () => {
   const [summaryData, setSummaryData] = useState([]); // [totalItems, totalAmount
   const [productData, setproductData] = useState([]);
   const [updateTrigger, setUpdateTrigger] = useState(false);
+
+  const handleClickDelete = (userID,productID) => {
+    deleteCartItem(userID, productID);
+    setUpdateTrigger(prev => !prev);
+
+  };
 
   useEffect(() => {
     const cartSummary = async () => {
@@ -44,6 +51,8 @@ const page = () => {
   }, [updateTrigger]);
   // console.log("this is the updated products", updatedProducts);
 
+
+  // need to implement deboucning here for the quantity change
   const handleQuantityChange = useCallback(
     async (userId: string, productId: string, change: number) => {
       let refetch = false;
@@ -117,6 +126,7 @@ const page = () => {
                 return (
                   <div className=" mb-4" key={product.id}>
                     <CheckoutProductCard
+                    handleClickDelete={handleClickDelete}
                       product={product}
                       handleQuantityChange={handleQuantityChange}
                     />

@@ -1,14 +1,17 @@
 "use client"
 import decreaseProductQuantity from "@/actions/cart/decreaseProduct";
+import deleteCartItem from "@/actions/cart/deleteCartProducts";
 import increaseProductQuantity from "@/actions/cart/increaseProduct";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { DollarSign, Heart, Minus, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
 import React, { useCallback, useState } from "react";
 
-const CheckoutProductCard = ({ product,handleQuantityChange }) => {
+const CheckoutProductCard = ({ product,handleQuantityChange,handleClickDelete }) => {
   // console.log("this is the updated products", updatedProducts);
     const user = useCurrentUser();
+  
+  
 // Assuming the product object has cartItems array and we are getting the quantity from it
 const quantity = product.cartItems?.find(item => item.productId === product.id)?.quantity || 0;
 
@@ -57,7 +60,9 @@ const quantity = product.cartItems?.find(item => item.productId === product.id)?
                 <button className="transform transition-transform duration-300 hover:scale-110">
                   <Heart size={25} />
                 </button>
-                <button className="transform transition-transform duration-300 hover:scale-110">
+                <button className="transform transition-transform duration-300 hover:scale-110" onClick={()=>
+                handleClickDelete(user.id,product.id)
+                }>
                   <Trash2 />
                 </button>
               </div>
