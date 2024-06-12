@@ -24,7 +24,7 @@ const Uppernav = ({mensCollectionData}) => {
   const previousSegment1 = segments[segments.length - 3];
   const user = useCurrentUser();
   console.log("this is the user", user);
-  console.log("this is the mens collection data", mensCollectionData);
+  // console.log("this is the mens collection data", mensCollectionData);
   return (
     <div className=" flex justify-center items-center mt-7 w-full h-10 px-[1.9rem] z-50">
       <div className="w-full h-[9rem] bg-white bg-opacity-[80px] backdrop-blur-lg border border-white/30 flex justify-center items-center">

@@ -1,3 +1,4 @@
+import { getRelatedProducts } from "@/actions/cart/categoryRelatedProduct";
 import deleteCartItem from "@/actions/cart/deleteCartProducts";
 import { createProduct, createProductRating, createProductReview, createProductVarient, deleteProduct, fetchAllProduct, fetchAllReviews, fetchProduct, fetchProductAllData, fetchProductVarient, fetchProductanotherversion, fetchProductsByCategory, fethChildrenCategories, getProductsByCategory } from "@/actions/createProduct";
 import { dummyUserFunction, getUserBySpecificEmail } from "@/actions/dummyUser";
@@ -42,7 +43,8 @@ const page = () => {
   // getProductsByCategory("665a0b9f14be77720636d443")
   // getUserBySpecificEmail("test@test.com")
   // deleteCartItem("6665de25b7e0328f68f43485","665af50e3220eba7c7eab944")
-  
+ const data= getRelatedProducts("6665de25b7e0328f68f43485").then((data)=>{console.log("this is the related products", data)})
+//  console.log("this is the related products", data);
   return (
     <div className=" bg-pink-500 border-2 border-black px-10 ">
       <div>
