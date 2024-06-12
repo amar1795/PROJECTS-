@@ -88,6 +88,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
         variant: message.message === "added" ? "default" : "destructive",
         title: message.message === "added" ? "Added to Wishlist" : "Removed from Wishlist",
         description: message.message === "added" ? "The item has been wishlisted" : "The item has been removed from wishlist",
+        
       });
     }, 200);
   }, [updatedProducts, user, toast]);

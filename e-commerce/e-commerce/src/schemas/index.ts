@@ -81,4 +81,23 @@ export const RegisterSchema = z.object({
   }
 )
 
+export const AddressSchema = z.object({
+  street: z.string().min(1, { message: "Street is required" }).max(255),
+  landmark: z.string().min(1, { message: "Landmark is required" }).max(255),
+  city: z.string().min(1, { message: "City is required" }).max(255),
+  state: z.string().min(1, { message: "State is required" }).max(255),
+  country: z.string().min(1, { message: "Country is required" }).max(255),
+  postalCode: z
+  .string()
+  .nonempty({ message: "Postal code is required" })
+  .regex(/^\d+$/, { message: "Postal code must be a number" }),
+  firstName: z.string().min(1, { message: "First name is required" }).max(100),
+  lastName: z.string().min(1, { message: "Last name is required" }).max(100),
+  apartment: z.string().min(1, { message: "Apartment is required" }).max(100),
+  phoneNumber: z
+  .string()
+  .nonempty({ message: "Phone number is required" })
+  .regex(/^\d+$/, { message: "Phone number must be a number" }),
 
+
+});
