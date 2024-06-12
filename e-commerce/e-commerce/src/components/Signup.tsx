@@ -20,16 +20,20 @@ import { register } from "@/actions/register";
 
 interface SignupProps {
   toggleView: () => void;
-  setIsSignup:(value:boolean)=>void
+  setIsSignup: (value: boolean) => void;
 }
-const Signup: React.FC<SignupProps> = ({ toggleView,setIsSignup }) => {
+const Signup: React.FC<SignupProps> = ({ toggleView, setIsSignup }) => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
-console.log(error, success)
+  console.log(error, success);
 
-
-const { register: registerField, handleSubmit, formState: { errors }, trigger  }= useForm<z.infer<typeof RegisterSchema>>({
+  const {
+    register: registerField,
+    handleSubmit,
+    formState: { errors },
+    trigger,
+  } = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
       firstname: "",
@@ -45,7 +49,7 @@ const { register: registerField, handleSubmit, formState: { errors }, trigger  }
     setError("");
     setSuccess("");
     // alert(values.email);
-  
+
     startTransition(() => {
       register(values).then((data) => {
         setError(data.error);
@@ -53,19 +57,15 @@ const { register: registerField, handleSubmit, formState: { errors }, trigger  }
       });
     });
   };
-  
 
-useEffect(() => {
-  if (error) {
-    alert(error);
-  }
-  if (success) {
-    setIsSignup(false)
-  }
-
-
-}, [error, success,setIsSignup]);
-
+  useEffect(() => {
+    if (error) {
+      alert(error);
+    }
+    if (success) {
+      setIsSignup(false);
+    }
+  }, [error, success, setIsSignup]);
 
   return (
     <div>
@@ -76,74 +76,89 @@ useEffect(() => {
         <h1 className="text-4xl font-bold text-center">
           Create Your Free Account
         </h1>
-        
 
-          <form className="mt-8" onSubmit={handleSubmit(onSubmit)}>
-            <div className="flex flex-col items-center">
-              <div className=" flex ">
-                <div>
+        <form className="mt-8" onSubmit={handleSubmit(onSubmit)}>
+          <div className="flex flex-col items-center">
+            <div className=" flex ">
+              <div>
                 <input
                   type="text"
                   {...registerField("firstname")}
-
                   // name="firstname"
                   placeholder="First Name"
                   className=" w-64 p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none  mr-8"
                 />
-                            {errors.firstname && <span className=" italic text-red-950  text-[1.1rem]">{errors.firstname.message}</span>}
-
-                </div>
-                <div>
+                {errors.firstname && (
+                  <span className=" italic text-red-950  text-[1.1rem]">
+                    {errors.firstname.message}
+                  </span>
+                )}
+              </div>
+              <div>
                 <input
                   type="text"
                   {...registerField("lastname")}
-
                   // name="lastname"
                   placeholder="lastname"
                   className="w-64 p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
                 />
-                            {errors.lastname && <span className=" italic text-red-950  text-[1.1rem]">{errors.lastname.message}</span>}
-
-                </div>
-              </div>
-              <input
-                type="text"
-                // name="email"
-                {...registerField("email")}
-
-                placeholder="Email"
-                className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
-              />
-                                          {errors.email  && <span className=" italic text-red-950  text-[1.1rem]">{errors.email.message}</span>}
-
-              <input
-                type="password"
-                // name="password"
-                {...registerField("password")}
-
-                placeholder="Password"
-                className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
-              />
-                     <div className=" px-5 ml-4 mt-2">
-                     {errors.password && <span className=" italic text-red-950  text-[1.1rem]">{errors.password.message}</span>}
-                     </div>
-
-              <input
-                type="password"
-                {...registerField("confirmpassword")}
-                placeholder="Confirm Password"
-                className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
-                />
-                {errors.confirmpassword && <span className=" italic text-red-950  text-[1.1rem]" >{errors.confirmpassword.message}</span>}
-
-              <div className=" h-[4rem] ">
-                <button type="submit" className="w-80  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2  bg-green-500 ">
-                  <h1 className=" font-bold">Create Account </h1>
-                </button>
+                {errors.lastname && (
+                  <span className=" italic text-red-950  text-[1.1rem]">
+                    {errors.lastname.message}
+                  </span>
+                )}
               </div>
             </div>
-          </form>
-      
+            <input
+              type="text"
+              // name="email"
+              {...registerField("email")}
+              placeholder="Email"
+              className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
+            />
+            {errors.email && (
+              <span className=" italic text-red-950  text-[1.1rem]">
+                {errors.email.message}
+              </span>
+            )}
+
+            <input
+              type="password"
+              // name="password"
+              {...registerField("password")}
+              placeholder="Password"
+              className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
+            />
+            <div className=" px-5 ml-4 mt-2">
+              {errors.password && (
+                <span className=" italic text-red-950  text-[1.1rem]">
+                  {errors.password.message}
+                </span>
+              )}
+            </div>
+
+            <input
+              type="password"
+              {...registerField("confirmpassword")}
+              placeholder="Confirm Password"
+              className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
+            />
+            {errors.confirmpassword && (
+              <span className=" italic text-red-950  text-[1.1rem]">
+                {errors.confirmpassword.message}
+              </span>
+            )}
+
+            <div className=" h-[4rem] ">
+              <button
+                type="submit"
+                className="w-80  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2  bg-green-500 "
+              >
+                <h1 className=" font-bold">Create Account </h1>
+              </button>
+            </div>
+          </div>
+        </form>
 
         <div className=" text-center pb-7">
           <p className=" mx-[5rem] mt-4">

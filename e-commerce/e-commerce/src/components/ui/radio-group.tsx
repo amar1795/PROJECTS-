@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { CheckIcon } from "@radix-ui/react-icons"
+import { CheckIcon, RadiobuttonIcon } from "@radix-ui/react-icons"
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
 
 import { cn } from "@/lib/utils"
@@ -34,7 +34,9 @@ const RadioGroupItem = React.forwardRef<
       {...props}
     >
       <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
-        <CheckIcon className="h-3.5 w-3.5 fill-primary" />
+        {/* <CheckIcon className="h-3.5 w-3.5 fill-black" /> */}
+        {/* <RadiobuttonIcon className=" h-full w-full  fill-inherit" /> */}
+        <div className="flex items-center justify-center  h-5 w-5 bg-pink-600 rounded-full"/>
       </RadioGroupPrimitive.Indicator>
     </RadioGroupPrimitive.Item>
   )

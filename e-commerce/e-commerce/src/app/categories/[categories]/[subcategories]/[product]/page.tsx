@@ -152,8 +152,8 @@ const ProductId=data?.id;
             <BreadcrumbWithCustomSeparator items={breadcrumbsData} />
           </div>
 
-          <div className=" bg-teal-600 h-auto flex ">
-            <div className=" bg-teal-600 flex-1 h-auto">
+          <div className=" bg-orange-300 h-auto flex ">
+            <div className=" bg-orange-300 flex-1 h-auto">
               <PhotoViewer images={data?.images} />
             </div>
             <div className="flex-1 h-[115rem]">
