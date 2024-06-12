@@ -16,7 +16,7 @@ const page = () => {
           </div>
         </div>
         <div className="px-8  mt-[5rem] ml-[50rem]">
-        <PaginationComponent />
+        {/* <PaginationComponent /> */}
         </div>
       </div>
     </div>
