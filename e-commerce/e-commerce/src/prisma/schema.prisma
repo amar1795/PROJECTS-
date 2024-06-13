@@ -14,8 +14,6 @@ enum UserRole {
   USER
 }
 
-
-
 enum DeliveryStatus {
   ORDER_PLACED
   ORDER_PROCESSING
@@ -23,7 +21,6 @@ enum DeliveryStatus {
   ORDER_OUT_FOR_DELIVERY
   ORDER_DELIVERED
 }
-
 
 enum PaymentMode {
   CARD
@@ -94,7 +91,7 @@ model Address {
   lastName    String? // Optional last name
   apartment   String? // Optional apartment
   phoneNumber String? // Optional phone number
-  orders  Order[]  @relation("AddressToOrder")
+  orders      Order[] @relation("AddressToOrder")
 
   userId String? @db.ObjectId
   user   User?   @relation(fields: [userId], references: [id])
@@ -364,22 +361,21 @@ model CartItem {
 
 // order model
 model Order {
-  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  id             String         @id @default(auto()) @map("_id") @db.ObjectId
   orderItems     OrderItem[] // Relation to OrderItem model
-  isPaid         Boolean          @default(false)
-  deliveryStatus DeliveryStatus   @default(ORDER_PLACED)
-  userId         String           @db.ObjectId // Foreign Key to User
-  user           User             @relation("UsertoOrder", fields: [userId], references: [id])
-  phone          String           @default("")
- addressId      String           @db.ObjectId // Foreign Key to Address
-  address        Address          @relation("AddressToOrder", fields: [addressId], references: [id])
-  cardId         String?          @db.ObjectId // Foreign Key to Card (optional)
-  card           Card?            @relation("CardToOrder", fields: [cardId], references: [id])
-  walletId       String?          @db.ObjectId // Foreign Key to Wallet (optional)
-  wallet         Wallet?          @relation("WalletToOrder", fields: [walletId], references: [id])
-  paymentMode    PaymentMode      @default(CARD)
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+  isPaid         Boolean        @default(false)
+  deliveryStatus DeliveryStatus @default(ORDER_PLACED)
+  userId         String         @db.ObjectId // Foreign Key to User
+  user           User           @relation("UsertoOrder", fields: [userId], references: [id])
+  addressId      String         @db.ObjectId // Foreign Key to Address
+  address        Address        @relation("AddressToOrder", fields: [addressId], references: [id])
+  cardId         String?        @db.ObjectId // Foreign Key to Card (optional)
+  card           Card?          @relation("CardToOrder", fields: [cardId], references: [id])
+  walletId       String?        @db.ObjectId // Foreign Key to Wallet (optional)
+  wallet         Wallet?        @relation("WalletToOrder", fields: [walletId], references: [id])
+  paymentMode    PaymentMode    @default(CARD)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 }
 
 model OrderItem {
@@ -388,8 +384,8 @@ model OrderItem {
   order     Order   @relation(fields: [orderId], references: [id])
   productId String  @db.ObjectId // Foreign Key to Product
   product   Product @relation(fields: [productId], references: [id])
-  quantity  Int      // Quantity of the product in this order item
-  price     Float    // Price of the product at the time of order
+  quantity  Int // Quantity of the product in this order item
+  price     Float // Price of the product at the time of order
 
   @@index([orderId])
   @@index([productId])

@@ -53,7 +53,7 @@ export async function getAllAddressesForUser(userId) {
     const addresses = await prismadb.address.findMany({
       where: { userId: userId },
     });
-    console.log('Addresses fetched successfully', addresses);
+    // console.log('Addresses fetched successfully', addresses);
     return addresses;
   } catch (error) {
     console.error(error);

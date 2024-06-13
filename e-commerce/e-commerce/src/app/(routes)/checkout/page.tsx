@@ -5,7 +5,10 @@ import React, { use, useEffect, useRef, useState, useTransition } from "react";
 import * as z from "zod";
 import { Input } from "@/components/ui/input";
 import { DollarSign } from "lucide-react";
-import { RadioGroupComponent, formatAddress } from "@/components/RadioGroupComponent";
+import {
+  RadioGroupComponent,
+  formatAddress,
+} from "@/components/RadioGroupComponent";
 import StyledButton from "@/components/styled Button/StyledButton";
 import { auth } from "@/auth";
 import {
@@ -18,12 +21,17 @@ import { AddressSchema, PaymentSchema } from "@/schemas";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useToast } from "@/components/ui/use-toast";
 import { userCheckoutPayment } from "@/actions/user-account/userpayment";
+import { getProductsInCartSummary } from "@/actions/cart/cartSummary";
+import { prepareOrderData } from "@/actions/order/prepareOrderData";
+import { createOrder } from "@/actions/order/orderCreation";
 
 const page = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [alladdress, setalladdress] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState<string | undefined>();
+  const [productData, setproductData] = useState([]);
+  const [paymentData, setPaymentData] = useState([]);
 
   const [isPending, startTransition] = useTransition();
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -47,8 +55,27 @@ const page = () => {
     data();
   }, [success]);
 
+  // userId: string,
+  // products: Product[],
+  // addressID: string,
+  // paymentMode: string,
+  // cardId?: string,
+  // walletId?: string
 
-  console.log("this is the user id", user?.id);
+  useEffect(() => {
+    const cartSummary = async () => {
+      const data = await getProductsInCartSummary(user.id);
+      setproductData(data);
+
+    };
+    cartSummary();
+  }, []);
+
+
+
+  // console.log("this is the payment Data ", paymentData);
+
+  // console.log("this is the user id", user?.id);
   const addresses1 = [
     {
       street: "1234 Elm Street",
@@ -94,8 +121,6 @@ const page = () => {
   // addAddressToUser(user, addresses1[4])
 
   const onSubmit = (values: z.infer<typeof AddressSchema>) => {
-
-    
     setError("");
     setSuccess("");
     // alert(values.email);
@@ -107,29 +132,61 @@ const page = () => {
         reset();
       });
     });
-    
-   
+
     toast({
       title: "Successfully added the address",
       description: "You have successfully added the address",
     });
   };
-  
-  const onSubmitPayment = (values: z.infer<typeof PaymentSchema>) => {
+  const onSubmitPayment = async (values: z.infer<typeof PaymentSchema>) => {
     setError("");
     setSuccess("");
 
-    startTransition(() => {
-      userCheckoutPayment(user?.id, values).then((data) => {
-        setError(data.error);
-        setSuccess(data.success);
+    try {
+        startTransition(async () => {
+            try {
+                const data = await userCheckoutPayment(user?.id, values);
+                setError(data.error);
+                setSuccess(data.success);
+                setPaymentData(data.paymentRecord);
+            } catch (error) {
+                console.error("Error during payment:", error);
+                setError("Failed to process payment. Please try again.");
+            } finally {
+                resetPayment();
+            }
+        });
+
+        // Await until the transition is complete
+        await new Promise(resolve => setTimeout(resolve, 0));
+
+        // Creating the order after the transition
+        const { userId, products, addressID } =  prepareOrderData(user.id, productData, "666b18dcd4a3961818aeb7a9"
+);
+        const orderData = {
+            userId: userId,
+            products: products,
+            addressId: addressID, // Changed to addressId to match the interface
+        };
+        console.log("Order data prepared successfully:", orderData);
+
+        const orderResult = await createOrder(orderData);
+        toast({
+          title: "Successfully order created",
+          description: "You have successfully created the order",
+          
       });
-      resetPayment();
-    });
-
-
-
-  };
+        // console.log("Order created successfully:", orderResult);
+    } catch (error) {
+        console.error("Error creating order:", error);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to create order. Please try again.",
+      });
+        setError("Failed to create order. Please try again.");
+    }
+};
 
 
   const {
@@ -172,7 +229,6 @@ const page = () => {
     mode: "onBlur",
   });
 
-  
   const handleProceedToPayment = () => {
     if (!selectedAddress) {
       toast({
@@ -196,7 +252,9 @@ const page = () => {
       description: `Your Shipping Address is: ${formatAddress(address)}`,
     });
     setSelectedAddress(address);
-    alert(`Your Shipping Address is: ${formatAddress(address)}`);
+
+    console.log("Selected Address: ",selectedAddress?.id);
+    // alert(`Your Shipping Address is: ${formatAddress(address)}`);
   };
 
   return (
@@ -352,7 +410,7 @@ const page = () => {
                         <h1 className="font-bold">Submit</h1>
                       </button>
                       <button
-                       type="button"
+                        type="button"
                         className="w-80 p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-pink-500 ml-4"
                         onClick={() => {
                           reset(); // Call the reset method from useForm
@@ -377,7 +435,6 @@ const page = () => {
                       address={alladdress}
                       selectedAddress={selectedAddress}
                       onChange={handleAddressChange}
-
                     />
                   </div>
                 </div>

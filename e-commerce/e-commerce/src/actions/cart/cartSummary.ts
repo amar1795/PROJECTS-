@@ -127,7 +127,7 @@ export async function getProductsInCartSummary(userId: string) {
       });
   
       revalidatePath('/cart')
-      console.log("this is the products in cart summary", products)
+      // console.log("this is the products in cart summary", products)
     //   wierd issue here was unable to fethc the product id with the url and was shwoing undefined imracoulously it started working again  now 
 //   console.log("this is the products in cart summary", products[0].images[0].url)
 // console.log("this is the products in cart summary", products)

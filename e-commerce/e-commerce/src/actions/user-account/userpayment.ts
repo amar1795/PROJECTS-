@@ -47,8 +47,9 @@ export async function userCheckoutPayment(userId: string, paymentDetails: z.infe
     // Simulate storing the payment details
     
 
-    console.log('Payment processed successfully', paymentRecord);
-    return { success: "Payment processed successfully" };
+    // console.log('Payment processed successfully', paymentRecord);
+
+    return {paymentRecord, success: "Payment processed successfully" };
   } catch (error) {
     console.error(error);
     return { error: "An error occurred while processing the payment" };
