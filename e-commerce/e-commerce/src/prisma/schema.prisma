@@ -365,6 +365,7 @@ model Order {
   orderItems     OrderItem[] // Relation to OrderItem model
   isPaid         Boolean        @default(false)
   deliveryStatus DeliveryStatus @default(ORDER_PLACED)
+  orderTotal     Float
   userId         String         @db.ObjectId // Foreign Key to User
   user           User           @relation("UsertoOrder", fields: [userId], references: [id])
   addressId      String         @db.ObjectId // Foreign Key to Address

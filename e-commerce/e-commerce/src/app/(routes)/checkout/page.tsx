@@ -66,6 +66,7 @@ const page = () => {
     const cartSummary = async () => {
       const data = await getProductsInCartSummary(user.id);
       setproductData(data);
+      console.log("this is the product data", data);
 
     };
     cartSummary();
@@ -161,14 +162,15 @@ const page = () => {
         await new Promise(resolve => setTimeout(resolve, 0));
 
         // Creating the order after the transition
-        const { userId, products, addressID } =  prepareOrderData(user.id, productData, "666b18dcd4a3961818aeb7a9"
-);
+        const { userId, products, addressID,totalAmount } =  prepareOrderData(user.id, productData, selectedAddress?.id);
         const orderData = {
             userId: userId,
             products: products,
-            addressId: addressID, // Changed to addressId to match the interface
+            addressID: addressID,
+            totalAmount // Changed to addressId to match the interface
         };
-        console.log("Order data prepared successfully:", orderData);
+        // console.log("selected addresID is", selectedAddress?.id);
+        // console.log("Order data prepared successfully:", orderData);
 
         const orderResult = await createOrder(orderData);
         toast({

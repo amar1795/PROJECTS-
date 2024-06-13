@@ -21,6 +21,7 @@ export async function calculateCartSummary(userId: string) {
                   id: true,
                   name: true,
                   price: true,
+                  discountedPrice: true,
                 },
               },
             },
@@ -50,7 +51,7 @@ export async function calculateCartSummary(userId: string) {
       totalUniqueItems++;
 
       // Calculate the amount for the current cart item
-      const amount = cartItem.product.price * cartItem.quantity;
+      const amount = cartItem.product.discountedPrice * cartItem.quantity;
 
       // Update total amount
       totalAmount += amount;

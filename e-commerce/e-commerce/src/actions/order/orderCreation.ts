@@ -18,12 +18,13 @@ interface CreateOrderProps {
     paymentMode?: string;
     cardId?: string;
     walletId?: string;
+    totalAmount?: number;
 }
 
 
 export async function createOrder(props: CreateOrderProps) {
     try {
-        const { userId, products, addressID="666b18dcd4a3961818aeb7a9",paymentMode="CARD", cardId="666b163bd4a3961818aeb7a7", walletId } = props;
+        const { userId, products, addressID,paymentMode="CARD", cardId="666b163bd4a3961818aeb7a7", walletId,totalAmount } = props;
 
         // Step 1: Prepare formatted order details
         const formattedOrder = {
@@ -38,14 +39,8 @@ export async function createOrder(props: CreateOrderProps) {
                 }
             },
             paymentMode: paymentMode as any,
-
-            card: {
-                connect: {
-                    id: cardId // Use nested connect for card
-                }
-            },
-            walletId: walletId ?? undefined,
             deliveryStatus: DeliveryStatus.ORDER_PLACED,
+            orderTotal: totalAmount,
             orderItems: {
                 create: products.map((product) => ({
                     productId: product.productId,
@@ -54,6 +49,21 @@ export async function createOrder(props: CreateOrderProps) {
                 }))
             }
         };
+
+              // Add nested objects based on paymentMode
+              if (paymentMode === "CARD" && cardId) {
+                formattedOrder.card = {
+                    connect: {
+                        id: cardId
+                    }
+                };
+            } else if (paymentMode === "WALLET" && walletId) {
+                formattedOrder.wallet = {
+                    connect: {
+                        id: walletId
+                    }
+                };
+            }
 console.log('Order data prepared successfully', formattedOrder);
         // Step 2: Create the order using the formatted order details
         const createdOrder = await prismadb.order.create({

@@ -103,7 +103,7 @@ const page = () => {
     },
     [productData]
   );
-  console.log("this is the summary data", summaryData);
+  // console.log("this is the summary data", summaryData);
 
   return (
     <div className="  border-2 border-black overflow-hidden ">

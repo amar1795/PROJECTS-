@@ -25,14 +25,23 @@ export function prepareOrderData(
   addressID: string,
   paymentMode: string,
   cardId?: string,
-  walletId?: string
+  walletId?: string,
 ): OrderData {
-  const orderItems = products.map((product) => ({
-    productId: product.id,
-    quantity: product.cartQuantity,
-    price: product.price,
-  }));
+  let totalAmount = 0;
+  
+  const orderItems = products.map((product) => {
+    const price = product.discountedPrice ; // Use discounted price if available, otherwise regular price
+    const quantity = product.cartQuantity;
+    totalAmount += price * quantity;
+    
+    return {
+      productId: product.id,
+      quantity: quantity,
+      price: price,
+    };
+  });
 
+  // console.log("this is the total amount", totalAmount);
 
 //   console.log('Order data prepared successfully', orderItems);
   return {
@@ -40,6 +49,7 @@ export function prepareOrderData(
     products: orderItems,
     addressID,
     paymentMode,
+    totalAmount,
     cardId,
     walletId,
   };
