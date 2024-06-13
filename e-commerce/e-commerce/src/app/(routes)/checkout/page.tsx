@@ -47,6 +47,7 @@ const page = () => {
     data();
   }, [success]);
 
+
   console.log("this is the user id", user?.id);
   const addresses1 = [
     {
@@ -93,6 +94,8 @@ const page = () => {
   // addAddressToUser(user, addresses1[4])
 
   const onSubmit = (values: z.infer<typeof AddressSchema>) => {
+
+    
     setError("");
     setSuccess("");
     // alert(values.email);
@@ -104,7 +107,8 @@ const page = () => {
         reset();
       });
     });
-
+    
+   
     toast({
       title: "Successfully added the address",
       description: "You have successfully added the address",
@@ -166,6 +170,7 @@ const page = () => {
     mode: "onBlur",
   });
 
+  
   const handleProceedToPayment = () => {
     if (!selectedAddress) {
       toast({
@@ -336,12 +341,21 @@ const page = () => {
                         )}
                       </div>
                     </div>
-                    <div className="h-[4rem]">
+                    <div className="h-[4rem] flex">
                       <button
                         type="submit"
                         className="w-80 p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-green-500"
                       >
                         <h1 className="font-bold">Submit</h1>
+                      </button>
+                      <button
+                       type="button"
+                        className="w-80 p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-pink-500 ml-4"
+                        onClick={() => {
+                          reset(); // Call the reset method from useForm
+                        }}
+                      >
+                        <h1 className="font-bold">Reset</h1>
                       </button>
                     </div>
                   </form>
@@ -361,7 +375,6 @@ const page = () => {
                       selectedAddress={selectedAddress}
                       onChange={handleAddressChange}
 
-                      // onChange={(value) => setSelectedAddress(value)}
                     />
                   </div>
                 </div>

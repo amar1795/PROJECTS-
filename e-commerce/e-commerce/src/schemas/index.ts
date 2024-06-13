@@ -84,9 +84,21 @@ export const RegisterSchema = z.object({
 export const AddressSchema = z.object({
   street: z.string().min(1, { message: "Street is required" }).max(255),
   landmark: z.string().min(1, { message: "Landmark is required" }).max(255),
-  city: z.string().min(1, { message: "City is required" }).max(255),
-  state: z.string().min(1, { message: "State is required" }).max(255),
-  country: z.string().min(1, { message: "Country is required" }).max(255),
+  city: z.string()
+  .min(3, { message: "City should be at least 3 characters" })
+  .max(255)
+  .nonempty({ message: "City is required" })
+  .regex(/^[^\d]+$/, { message: "City cannot contain numbers" }),
+state: z.string()
+  .min(3, { message: "State should be at least 3 characters" })
+  .max(255)
+  .nonempty({ message: "State is required" })
+  .regex(/^[^\d]+$/, { message: "State cannot contain numbers" }),
+country: z.string()
+  .min(3, { message: "Country should be at least 3 characters" })
+  .max(255)
+  .nonempty({ message: "Country is required" })
+  .regex(/^[^\d]+$/, { message: "Country cannot contain numbers" }),
   postalCode: z
   .string()
   .nonempty({ message: "Postal code is required" })

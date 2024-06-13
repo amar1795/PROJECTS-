@@ -34,7 +34,7 @@ export function RadioGroupComponent({
   const handleChange = (address: Address) => {
     // alert("Selected Address: " + formatAddress(address));
     if (onChange) {
-      console.log("Selected Address: ", formatAddress(address));
+      // console.log("Selected Address: ", formatAddress(address));
       onChange(address);
     }
 
