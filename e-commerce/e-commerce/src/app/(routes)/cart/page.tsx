@@ -2,16 +2,8 @@
 import CheckoutProductCard from "@/components/checkout product card/checkoutProductCard";
 import ProductCard from "@/components/product card/productCard";
 import StyledButton from "@/components/styled Button/StyledButton";
-import {
-  Delete,
-  DollarSign,
-  Heart,
-  Minus,
-  Plus,
-  Recycle,
-  Trash2,
-  X,
-} from "lucide-react";
+import { Delete, DollarSign, Heart, Minus, Plus, Recycle, Trash2, X } from "lucide-react";
+
 import React, { use, useCallback, useEffect, useState } from "react";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import Link from "next/link";
@@ -55,6 +47,7 @@ const page = () => {
     };
     cartSummary();
   }, [updateTrigger]);
+  console.log("this is the product data", productData);
   // console.log("this is the updated products", updatedProducts);
 
   useEffect(() => {
