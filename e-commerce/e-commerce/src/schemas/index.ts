@@ -101,3 +101,35 @@ export const AddressSchema = z.object({
 
 
 });
+
+
+
+const isFutureDate = (expirationDate: string) => {
+  const [month, year] = expirationDate.split('/').map(Number);
+  const today = new Date();
+  const expiration = new Date(2000 + year, month - 1); // Adjust the year to full year
+
+  return expiration > today;
+};
+
+
+
+export const PaymentSchema = z.object({
+  cardNumber: z
+    .string()
+    .nonempty({ message: "Card number is required" })
+    .regex(/^\d{13,19}$/, { message: "Card number must be a number between 13 and 19 digits " }),
+    expirationDate: z
+    .string()
+    .nonempty({ message: "Expiration date is required" })
+    .regex(/^(0[1-9]|1[0-2])\/\d{2}$/, { message: "Expiration date must be in MM/YY format" })
+    .refine(isFutureDate, { message: "Expiration date must be in the future" }),
+  cvv: z
+    .string()
+    .nonempty({ message: "CVV is required" })
+    .regex(/^\d{3,4}$/, { message: "CVV must be 3 or 4 number and not alphabets" }),
+  nameOnCard: z
+    .string()
+    .nonempty({ message: "Name on card is required" })
+    .regex(/^[A-Za-z\s]+$/, { message: "Name on card must contain only letters and not numbers" }), // Ensures only alphabetic characters and spaces
+});

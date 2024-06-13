@@ -26,7 +26,6 @@ import deleteCartItem from "@/actions/cart/deleteCartProducts";
 import { getRelatedProducts } from "@/actions/cart/categoryRelatedProduct";
 import addProductToCart from "@/actions/cart/addToProduct";
 
-
 const page = () => {
   const user = useCurrentUser();
 
@@ -35,15 +34,14 @@ const page = () => {
   const [updateTrigger, setUpdateTrigger] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
 
-  const handleClickDelete = (userID,productID) => {
+  const handleClickDelete = (userID, productID) => {
     deleteCartItem(userID, productID);
-    setUpdateTrigger(prev => !prev);
+    setUpdateTrigger((prev) => !prev);
   };
-  
-  const handleClickAdd = (userID,productID) => {
-    addProductToCart(userID, productID);
-    setUpdateTrigger(prev => !prev);
 
+  const handleClickAdd = (userID, productID) => {
+    addProductToCart(userID, productID);
+    setUpdateTrigger((prev) => !prev);
   };
 
   useEffect(() => {
@@ -59,39 +57,41 @@ const page = () => {
   }, [updateTrigger]);
   // console.log("this is the updated products", updatedProducts);
 
-  
   useEffect(() => {
     const relatedData = async () => {
-      const data =await getRelatedProducts(user.id);
+      const data = await getRelatedProducts(user.id);
       setRelatedProducts(data);
-    }
+    };
     relatedData();
-    
-   },[updateTrigger])
-
-
+  }, [updateTrigger]);
 
   // need to implement deboucning here for the quantity change
   const handleQuantityChange = useCallback(
     async (userId: string, productId: string, change: number) => {
       let refetch = false;
-      
-      const updatedProductsList = productData?.map((product) => {
-        if (product.id === productId) {
-          const updatedCartItems = product.cartItems.length > 0 
-            ? product.cartItems.map((item) => {
-                if (item.productId === productId) {
-                  const newQuantity = Math.max(item.quantity + change, 0);
-                  if (newQuantity === 0) refetch = true;
-                  return { ...item, quantity: newQuantity };
-                }
-                return item;
-              })
-            : [{ productId, quantity: Math.max(change, 0) }];
-          return { ...product, cartItems: updatedCartItems.filter(item => item.quantity > 0) };
-        }
-        return product;
-      }).filter(product => product.cartItems.length > 0);
+
+      const updatedProductsList = productData
+        ?.map((product) => {
+          if (product.id === productId) {
+            const updatedCartItems =
+              product.cartItems.length > 0
+                ? product.cartItems.map((item) => {
+                    if (item.productId === productId) {
+                      const newQuantity = Math.max(item.quantity + change, 0);
+                      if (newQuantity === 0) refetch = true;
+                      return { ...item, quantity: newQuantity };
+                    }
+                    return item;
+                  })
+                : [{ productId, quantity: Math.max(change, 0) }];
+            return {
+              ...product,
+              cartItems: updatedCartItems.filter((item) => item.quantity > 0),
+            };
+          }
+          return product;
+        })
+        .filter((product) => product.cartItems.length > 0);
 
       setproductData(updatedProductsList);
 
@@ -102,7 +102,7 @@ const page = () => {
       }
 
       if (refetch) {
-        setUpdateTrigger(prev => !prev);
+        setUpdateTrigger((prev) => !prev);
       } else {
         const cartSummaryData = await calculateCartSummary(user.id);
         setSummaryData(cartSummaryData);
@@ -145,7 +145,7 @@ const page = () => {
                 return (
                   <div className=" mb-4" key={product.id}>
                     <CheckoutProductCard
-                    handleClickDelete={handleClickDelete}
+                      handleClickDelete={handleClickDelete}
                       product={product}
                       handleQuantityChange={handleQuantityChange}
                     />
@@ -252,14 +252,14 @@ const page = () => {
 
           <div className=" flex  flex-wrap pl-3">
             <div className=" pr-10 py-4 flex  flex-wrap">
-             {relatedProducts
-              .map((product) => (
+              {relatedProducts.map((product) => (
                 <div className=" mb-4" key={product.id}>
-                  <ProductCard product={product} handleClickAdd={handleClickAdd} />
+                  <ProductCard
+                    product={product}
+                    handleClickAdd={handleClickAdd}
+                  />
                 </div>
-              ))
-             
-             } 
+              ))}
             </div>
           </div>
         </div>

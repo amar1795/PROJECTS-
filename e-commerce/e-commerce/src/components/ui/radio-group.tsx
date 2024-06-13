@@ -22,7 +22,7 @@ RadioGroup.displayName = RadioGroupPrimitive.Root.displayName
 
 const RadioGroupItem = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>
+  React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item> 
 >(({ className, ...props }, ref) => {
   return (
     <RadioGroupPrimitive.Item
@@ -38,6 +38,7 @@ const RadioGroupItem = React.forwardRef<
         {/* <RadiobuttonIcon className=" h-full w-full  fill-inherit" /> */}
         <div className="flex items-center justify-center  h-5 w-5 bg-pink-600 rounded-full"/>
       </RadioGroupPrimitive.Indicator>
+      
     </RadioGroupPrimitive.Item>
   )
 })

@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
 import SummaryCard from "@/components/summary product card/SummaryCard";
-import React, { use, useEffect, useState, useTransition } from "react";
+import React, { use, useEffect, useRef, useState, useTransition } from "react";
 import * as z from "zod";
 import { Input } from "@/components/ui/input";
 import { DollarSign } from "lucide-react";
-import { RadioGroupComponent } from "@/components/RadioGroupComponent";
+import { RadioGroupComponent, formatAddress } from "@/components/RadioGroupComponent";
 import StyledButton from "@/components/styled Button/StyledButton";
 import { auth } from "@/auth";
 import {
@@ -14,16 +14,19 @@ import {
 } from "@/actions/user-account/userAddress";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AddressSchema } from "@/schemas";
+import { AddressSchema, PaymentSchema } from "@/schemas";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useToast } from "@/components/ui/use-toast";
-
+import { userCheckoutPayment } from "@/actions/user-account/userpayment";
 
 const page = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
-  const [alladdress, setalladdress] = useState<string[] | undefined>([]);
+  const [alladdress, setalladdress] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState<string | undefined>();
+
   const [isPending, startTransition] = useTransition();
+  const formRef = useRef<HTMLFormElement | null>(null);
 
   const user = useCurrentUser();
   console.log("this is the user id", user?.id);
@@ -36,16 +39,13 @@ const page = () => {
     "3344 Birch Boulevard, Room 10, Miami, FL 33101, United States",
   ];
   const { toast } = useToast();
-
-          useEffect(() => {
-            const data =(async()=>{
-              const alladdress = await getAllAddressesForUser(user?.id);
-              setalladdress(alladdress);
-            })
-            data()
-
-          }, [success]);
-
+  useEffect(() => {
+    const data = async () => {
+      const alladdress = await getAllAddressesForUser(user?.id);
+      setalladdress(alladdress);
+    };
+    data();
+  }, [success]);
 
   console.log("this is the user id", user?.id);
   const addresses1 = [
@@ -92,18 +92,16 @@ const page = () => {
   ];
   // addAddressToUser(user, addresses1[4])
 
-  
-
   const onSubmit = (values: z.infer<typeof AddressSchema>) => {
     setError("");
     setSuccess("");
     // alert(values.email);
 
     startTransition(() => {
-      addAddressToUser(user?.id,values).then((data) => {
+      addAddressToUser(user?.id, values).then((data) => {
         setError(data.error);
         setSuccess(data.success);
-      reset();
+        reset();
       });
     });
 
@@ -113,16 +111,27 @@ const page = () => {
     });
   };
 
+  const onSubmitPayment = (values: z.infer<typeof PaymentSchema>) => {
+    setError("");
+    setSuccess("");
 
+    startTransition(() => {
+      userCheckoutPayment(user?.id, values).then((data) => {
+        setError(data.error);
+        setSuccess(data.success);
+      });
+      resetPayment();
+    });
+  };
 
-
+  PaymentSchema;
 
   const {
     register: registerField,
     handleSubmit,
     formState: { errors },
     trigger,
-    reset
+    reset,
   } = useForm<z.infer<typeof AddressSchema>>({
     resolver: zodResolver(AddressSchema),
     defaultValues: {
@@ -140,7 +149,47 @@ const page = () => {
     mode: "onBlur", // Validate on blur
   });
 
+  const {
+    register: registerPayment,
+    handleSubmit: handleSubmitPayment,
+    formState: { errors: errorsPayment },
+    trigger: triggerPayment,
+    reset: resetPayment,
+  } = useForm<z.infer<typeof PaymentSchema>>({
+    resolver: zodResolver(PaymentSchema),
+    defaultValues: {
+      cardNumber: "",
+      expirationDate: "",
+      cvv: "",
+      nameOnCard: "",
+    },
+    mode: "onBlur",
+  });
 
+  const handleProceedToPayment = () => {
+    if (!selectedAddress) {
+      toast({
+        title: "Error",
+        description: "Please select a shipping address",
+        variant: "destructive",
+      });
+      return;
+    }
+    if (formRef.current) {
+      formRef.current.dispatchEvent(
+        new Event("submit", { cancelable: true, bubbles: true })
+      );
+    }
+  };
+
+  const handleAddressChange = (address) => {
+    // formatAddress
+    toast({
+      title: "Shipping Address Selected",
+      description: `Your Shipping Address is: ${formatAddress(address)}`,
+    });
+    setSelectedAddress(address);
+  };
 
   return (
     <div>
@@ -170,32 +219,32 @@ const page = () => {
                         {errors.country.message}
                       </span>
                     )}
-                    <div className="flex justify-between">
-                     <div className=" flex flex-col w-full">
-                     <input
-                        type="text"
-                        {...registerField("firstName")}
-                        placeholder="First Name"
-                        className="w-full p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
-                      />
-                      {errors.firstName && (
-                        <span className=" italic text-red-950  text-[1.1rem]">
-                          {errors.firstName.message}
-                        </span>
-                      )}
-                     </div>
+                    <div className="flex justify-between ">
                       <div className=" flex flex-col w-full">
-                      <input
-                        type="text"
-                        {...registerField("lastName")}
-                        placeholder="Last Name"
-                        className="w-full ml-5 p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
-                      />
-                      {errors.lastName && (
-                        <span className=" italic text-red-950  text-[1.1rem]">
-                          {errors.lastName.message}
-                        </span>
-                      )}
+                        <input
+                          type="text"
+                          {...registerField("firstName")}
+                          placeholder="First Name"
+                          className="w-full p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
+                        />
+                        {errors.firstName && (
+                          <span className=" italic text-red-950  text-[1.1rem]">
+                            {errors.firstName.message}
+                          </span>
+                        )}
+                      </div>
+                      <div className=" flex flex-col w-full">
+                        <input
+                          type="text"
+                          {...registerField("lastName")}
+                          placeholder="Last Name"
+                          className="w-full ml-5 p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
+                        />
+                        {errors.lastName && (
+                          <span className=" italic text-red-950  text-[1.1rem]">
+                            {errors.lastName.message}
+                          </span>
+                        )}
                       </div>
                     </div>
                     <input
@@ -222,30 +271,30 @@ const page = () => {
                     )}
                     <div className="flex">
                       <div className=" flex flex-col w-full">
-                      <input
-                        type="text"
-                        {...registerField("city")}
-                        placeholder="City"
-                        className="w-full p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
-                      />
-                      {errors.city && (
-                        <span className=" italic text-red-950  text-[1.1rem]">
-                          {errors.city.message}
-                        </span>
-                      )}
+                        <input
+                          type="text"
+                          {...registerField("city")}
+                          placeholder="City"
+                          className="w-full p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
+                        />
+                        {errors.city && (
+                          <span className=" italic text-red-950  text-[1.1rem]">
+                            {errors.city.message}
+                          </span>
+                        )}
                       </div>
                       <div className=" flex flex-col w-full">
-                      <input
-                        type="text"
-                        {...registerField("state")}
-                        placeholder="State"
-                        className="w-full ml-5 p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
-                      />
-                      {errors.state && (
-                        <span className=" italic text-red-950  text-[1.1rem]">
-                          {errors.state.message}
-                        </span>
-                      )}
+                        <input
+                          type="text"
+                          {...registerField("state")}
+                          placeholder="State"
+                          className="w-full ml-5 p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
+                        />
+                        {errors.state && (
+                          <span className=" italic text-red-950  text-[1.1rem]">
+                            {errors.state.message}
+                          </span>
+                        )}
                       </div>
                     </div>
                     <input
@@ -261,30 +310,30 @@ const page = () => {
                     )}
                     <div className="flex ">
                       <div className=" flex flex-col  w-full">
-                      <input
-                        type="text"
-                        {...registerField("postalCode")}
-                        placeholder="Postal Code"
-                        className="w-full p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
-                      />
-                      {errors.postalCode && (
-                        <span className=" italic text-red-950  text-[1.1rem]">
-                          {errors.postalCode.message}
-                        </span>
-                      )}
+                        <input
+                          type="text"
+                          {...registerField("postalCode")}
+                          placeholder="Postal Code"
+                          className="w-full p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
+                        />
+                        {errors.postalCode && (
+                          <span className=" italic text-red-950  text-[1.1rem]">
+                            {errors.postalCode.message}
+                          </span>
+                        )}
                       </div>
                       <div className=" flex flex-col w-full">
-                      <input
-                        type="text"
-                        {...registerField("phoneNumber")}
-                        placeholder="Phone Number"
-                        className="w-full ml-5 p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
-                      />
-                      {errors.phoneNumber && (
-                        <span className=" italic text-red-950  text-[1.1rem]">
-                          {errors.phoneNumber.message}
-                        </span>
-                      )}
+                        <input
+                          type="text"
+                          {...registerField("phoneNumber")}
+                          placeholder="Phone Number"
+                          className="w-full ml-5 p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
+                        />
+                        {errors.phoneNumber && (
+                          <span className=" italic text-red-950  text-[1.1rem]">
+                            {errors.phoneNumber.message}
+                          </span>
+                        )}
                       </div>
                     </div>
                     <div className="h-[4rem]">
@@ -307,47 +356,73 @@ const page = () => {
                   <div>
                     <div></div>
 
-                    <RadioGroupComponent address={alladdress} />
+                    <RadioGroupComponent
+                      address={alladdress}
+                      selectedAddress={selectedAddress}
+                      onChange={handleAddressChange}
+
+                      // onChange={(value) => setSelectedAddress(value)}
+                    />
                   </div>
                 </div>
               </div>
 
               <div className=" border-2 border-black  mt-8"></div>
-              <div className=" w-[20rem]">
-                <div className=" pt-10 mb-8 ">
-                  <h3 className="w-[20rem] text-[2rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
+              <form onSubmit={handleSubmitPayment(onSubmitPayment)}>
+                <div className="w-[20rem]">
+                  <h3 className="w-[20rem] text-[2rem] leading-none p-2 border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
                     Payment Method
                   </h3>
-                </div>
-                <div className=" ">
                   <input
                     type="text"
+                    {...registerPayment("cardNumber")}
                     placeholder="Card Number"
-                    className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
+                    className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
                   />
+                  {errorsPayment.cardNumber && (
+                    <span className="italic text-red-950 text-[1.1rem]">
+                      {errorsPayment.cardNumber.message}
+                    </span>
+                  )}
                   <input
                     type="text"
+                    {...registerPayment("expirationDate")}
                     placeholder="MM/YY"
-                    className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
+                    className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
                   />
-                </div>
-                <div className=" ">
+                  {errorsPayment.expirationDate && (
+                    <span className="italic text-red-950 text-[1.1rem]">
+                      {errorsPayment.expirationDate.message}
+                    </span>
+                  )}
                   <input
                     type="text"
+                    {...registerPayment("cvv")}
                     placeholder="CVV"
-                    className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
+                    className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
                   />
-
+                  {errorsPayment.cvv && (
+                    <span className="italic text-red-950 text-[1.1rem]">
+                      {errorsPayment.cvv.message}
+                    </span>
+                  )}
                   <input
                     type="text"
+                    {...registerPayment("nameOnCard")}
                     placeholder="Name on card"
-                    className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
+                    className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
                   />
+                  {errorsPayment.nameOnCard && (
+                    <span className="italic text-red-950 text-[1.1rem]">
+                      {errorsPayment.nameOnCard.message}
+                    </span>
+                  )}
+
+                  <div className=" mt-5" onClick={handleProceedToPayment}>
+                    <StyledButton buttonName="Proceed to Payment" />
+                  </div>
                 </div>
-                <div className=" mt-5">
-                  <StyledButton buttonName="Proceed to Payment" />
-                </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>
