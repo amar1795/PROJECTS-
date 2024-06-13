@@ -14,6 +14,12 @@ enum UserRole {
   USER
 }
 
+enum PaymentMode {
+  CARD
+  WALLET
+  OTHER // Add other payment modes if needed
+}
+
 // @db.ObjectId is optional as the prisma client will automatically convert the id to ObjectId anyways 
 
 model User {
@@ -35,9 +41,34 @@ model User {
   likedReviews          Like[]
   dislikedReviews       Dislike[]
   address               Address[] // Optional relation to Address model
+  cards                 Card[]                 @relation("UsertoCard")
+  wallet                Wallet?                @relation("UsertoWallet")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Wallet {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @unique @db.ObjectId // Foreign Key to User
+  user      User     @relation("UsertoWallet", fields: [userId], references: [id])
+  balance   Float    @default(0.0)
+  orders    Order[]  @relation("WalletToOrder")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Card {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @db.ObjectId // Foreign Key to User
+  user           User     @relation("UsertoCard", fields: [userId], references: [id])
+  cardNumber     String // Should be stored securely, preferably encrypted
+  cardExpiry     String
+  cardCvc        String // Should be stored securely, preferably encrypted
+  cardHolderName String
+  orders         Order[]  @relation("CardToOrder")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model Address {
@@ -329,6 +360,11 @@ model Order {
   user           User             @relation("UsertoOrder", fields: [userId], references: [id])
   phone          String           @default("")
   address        String           @default("")
+  cardId         String?          @db.ObjectId // Foreign Key to Card (optional)
+  card           Card?            @relation("CardToOrder", fields: [cardId], references: [id])
+  walletId       String?          @db.ObjectId // Foreign Key to Wallet (optional)
+  wallet         Wallet?          @relation("WalletToOrder", fields: [walletId], references: [id])
+  paymentMode    PaymentMode      @default(CARD)
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
 }
