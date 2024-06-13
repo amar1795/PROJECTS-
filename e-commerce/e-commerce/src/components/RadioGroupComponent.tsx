@@ -10,14 +10,15 @@ export type Address = {
   state: string;
   country: string;
   postalCode: string;
+  phoneNumber?: string;
 };
 
 // Define the format function
 export function formatAddress(address: Address): string {
-  const { street, apartment, city, state, country, postalCode } = address;
-  return `${street}${
-    apartment ? `, ${apartment}` : ""
-  }, ${city}, ${state} ${postalCode}, ${country}`;
+  const { street, apartment, city, state, country, postalCode,phoneNumber } = address;
+  return `${street}${apartment ? `, ${apartment}` : ""}, ${city}, ${state}, ${postalCode}, ${country}${
+    phoneNumber ? `, ${phoneNumber}` : ""
+  }`;
 }
 
 export function RadioGroupComponent({

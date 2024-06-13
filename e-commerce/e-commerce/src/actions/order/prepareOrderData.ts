@@ -29,11 +29,11 @@ export function prepareOrderData(userId: string, products: Product[], address: s
 
     return {
         userId,
+        products: orderItems,
         address,
         phone,
         paymentMode,
         cardId,
         walletId,
-        products: orderItems,
     };
 }

@@ -114,7 +114,7 @@ const page = () => {
       description: "You have successfully added the address",
     });
   };
-
+  
   const onSubmitPayment = (values: z.infer<typeof PaymentSchema>) => {
     setError("");
     setSuccess("");
@@ -126,9 +126,11 @@ const page = () => {
       });
       resetPayment();
     });
+
+
+
   };
 
-  PaymentSchema;
 
   const {
     register: registerField,
@@ -194,6 +196,7 @@ const page = () => {
       description: `Your Shipping Address is: ${formatAddress(address)}`,
     });
     setSelectedAddress(address);
+    alert(`Your Shipping Address is: ${formatAddress(address)}`);
   };
 
   return (

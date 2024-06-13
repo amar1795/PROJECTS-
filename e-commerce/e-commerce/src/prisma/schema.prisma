@@ -94,6 +94,7 @@ model Address {
   lastName    String? // Optional last name
   apartment   String? // Optional apartment
   phoneNumber String? // Optional phone number
+  orders  Order[]  @relation("AddressToOrder")
 
   userId String? @db.ObjectId
   user   User?   @relation(fields: [userId], references: [id])
@@ -370,7 +371,8 @@ model Order {
   userId         String           @db.ObjectId // Foreign Key to User
   user           User             @relation("UsertoOrder", fields: [userId], references: [id])
   phone          String           @default("")
-  address        String           @default("")
+ addressId      String           @db.ObjectId // Foreign Key to Address
+  address        Address          @relation("AddressToOrder", fields: [addressId], references: [id])
   cardId         String?          @db.ObjectId // Foreign Key to Card (optional)
   card           Card?            @relation("CardToOrder", fields: [cardId], references: [id])
   walletId       String?          @db.ObjectId // Foreign Key to Wallet (optional)

@@ -86,7 +86,9 @@ async function createSecureCard(userId: string, cardDetails: HandlePaymentInfoIn
                 cardHolderName: cardDetails.cardHolderName
             }
         });
-
+        
+        // card ID :666b163bd4a3961818aeb7a7
+        console.log('Secure card created:', newCard);
         return newCard;
     } catch (error) {
         console.error('Error creating secure card:', error);

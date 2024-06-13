@@ -4,6 +4,7 @@ import { PaymentSchema } from "@/schemas"; // Adjust the import path accordingly
 
 import { prismadb } from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { handlePaymentInfo } from "../payments/handlePayment";
 
 export async function userCheckoutPayment(userId: string, paymentDetails: z.infer<typeof PaymentSchema>) {
   try {
@@ -16,6 +17,16 @@ export async function userCheckoutPayment(userId: string, paymentDetails: z.infe
       return { error: "Invalid payment fields" };
     }
 
+  //   interface HandlePaymentInfoInput {
+  //     userId: string;
+  //     paymentMode: PaymentMode; // Assuming this is the selected payment mode (PaymentMode.CARD or PaymentMode.WALLET)
+  //     cardDetails?: {
+  //         cardNumber: string;
+  //         cardExpiry: string;
+  //         cardCvc: string;
+  //         cardHolderName: string;
+  //     }; // Card details provided by user if creating a new card
+  // }
     // Find the user to ensure they exist
     const user = await prismadb.user.findUnique({
       where: { id: userId },
@@ -25,12 +36,16 @@ export async function userCheckoutPayment(userId: string, paymentDetails: z.infe
       return { error: "User not found" };
     }
 
+    const UserCardDetails = {
+      cardNumber: validatedPayment.data.cardNumber,
+      cardExpiry: validatedPayment.data.expirationDate,
+      cardCvc: validatedPayment.data.cvv,
+      cardHolderName: validatedPayment.data.nameOnCard,
+    }
+
+   const paymentRecord= handlePaymentInfo({ userId, paymentMode: "CARD", cardDetails: {...UserCardDetails} });
     // Simulate storing the payment details
-    const paymentRecord = {
-      ...validatedPayment.data,
-      userId: userId,
-      // Add any other necessary fields here
-    };
+    
 
     console.log('Payment processed successfully', paymentRecord);
     return { success: "Payment processed successfully" };
