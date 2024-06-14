@@ -21,7 +21,7 @@ import { AddressSchema, PaymentSchema } from "@/schemas";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useToast } from "@/components/ui/use-toast";
 import { userCheckoutPayment } from "@/actions/user-account/userpayment";
-import { getProductsInCartSummary } from "@/actions/cart/cartSummary";
+import { calculateCartSummary, getProductsInCartSummary } from "@/actions/cart/cartSummary";
 import { prepareOrderData } from "@/actions/order/prepareOrderData";
 import { createOrder } from "@/actions/order/orderCreation";
 import { processOrder } from "@/actions/order/checkout";
@@ -52,6 +52,15 @@ const page = () => {
     const data = async () => {
       const alladdress = await getAllAddressesForUser(user?.id);
       setalladdress(alladdress);
+      const cartSummaryData = await calculateCartSummary(user.id);
+      if(cartSummaryData.totalUniqueItems === 0){
+        toast({
+          variant: "destructive",
+          title: "No Orders in the Cart ",
+          description: "Please add some products to the cart to proceed with the checkout",
+          
+      });      }
+
     };
     data();
   }, [success]);
@@ -161,6 +170,11 @@ const page = () => {
 
         // Await until the transition is complete
         await new Promise(resolve => setTimeout(resolve, 0));
+        toast({
+          title: "Successfully order created",
+          description: "You have successfully created the order",
+          
+      });
           const order= await processOrder({ selectedAddressId: selectedAddress?.id });
           console.log("this is the order data", order.url);
 
@@ -189,11 +203,7 @@ const page = () => {
 
         // const orderResult = await createOrder(orderData);
 
-        toast({
-          title: "Successfully order created",
-          description: "You have successfully created the order",
-          
-      });
+    
         // console.log("Order created successfully:", orderResult);
     } catch (error) {
         console.error("Error creating order:", error);
@@ -273,6 +283,53 @@ const page = () => {
 
     console.log("Selected Address: ",selectedAddress?.id);
     // alert(`Your Shipping Address is: ${formatAddress(address)}`);
+  };
+
+
+  // Format card number as XXXX-XXXX-XXXX-XXXX
+  const formatCardNumber = (e) => {
+    const value = e.target.value.replace(/\D/g, '').substring(0, 16);
+    const formattedValue = value
+      .match(/.{1,4}/g)
+      ?.join('-')
+      .substring(0, 19) || '';
+    e.target.value = formattedValue;
+  };
+
+ // Format expiration date as MM/YY with leading zero for months 2-9
+ // Format expiration date as MM/YY with handling of leading zero for months 2-9
+  const formatExpirationDate = (e) => {
+    let value = e.target.value.replace(/\D/g, '').substring(0, 4);
+    let formattedValue = '';
+
+    if (value.length >= 1) {
+      const month = value.substring(0, 2);
+      const year = value.substring(2, 4);
+
+      if (month === '00' || year === '00') {
+        // Prevent '00/' or '/00'
+        formattedValue = '';
+      } else if (parseInt(month, 10) >= 1 && parseInt(month, 10) <= 12) {
+        // Valid month, format as MM/YY
+        formattedValue = `${month}/${year}`;
+      } else if (value.length === 4 && parseInt(month, 10) >= 2 && parseInt(month, 10) <= 9) {
+        // Handle cases like '08/5' -> '08/05'
+        formattedValue = `0${month}/${year}`;
+      } else if (value.length === 4 && parseInt(month, 10) === 1) {
+        // Handle case like '1' -> '01/'
+        formattedValue = `0${month}/`;
+      } else {
+        // Invalid input, reset value
+        formattedValue = '';
+      }
+    }
+
+    e.target.value = formattedValue;
+  };
+  // Restrict CVV to 3 digits
+  const restrictCvv = (e) => {
+    const value = e.target.value.replace(/\D/g, '').substring(0, 3);
+    e.target.value = value;
   };
 
   return (
@@ -460,7 +517,7 @@ const page = () => {
 
               <div className=" border-2 border-black  mt-8"></div>
               <form onSubmit={handleSubmitPayment(onSubmitPayment)}>
-                <div className="w-[20rem]">
+                <div className="w-[20rem] pt-5">
                   <h3 className="w-[20rem] text-[2rem] leading-none p-2 border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
                     Payment Method
                   </h3>
@@ -469,6 +526,8 @@ const page = () => {
                     {...registerPayment("cardNumber")}
                     placeholder="Card Number"
                     className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
+                    // onInput={formatCardNumber}
+
                   />
                   {errorsPayment.cardNumber && (
                     <span className="italic text-red-950 text-[1.1rem]">
@@ -480,6 +539,8 @@ const page = () => {
                     {...registerPayment("expirationDate")}
                     placeholder="MM/YY"
                     className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
+                    // onInput={formatExpirationDate}
+
                   />
                   {errorsPayment.expirationDate && (
                     <span className="italic text-red-950 text-[1.1rem]">
@@ -491,6 +552,8 @@ const page = () => {
                     {...registerPayment("cvv")}
                     placeholder="CVV"
                     className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
+                    // onInput={restrictCvv}
+
                   />
                   {errorsPayment.cvv && (
                     <span className="italic text-red-950 text-[1.1rem]">
