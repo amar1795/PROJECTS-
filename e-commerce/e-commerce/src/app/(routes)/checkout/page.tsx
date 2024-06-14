@@ -24,6 +24,7 @@ import { userCheckoutPayment } from "@/actions/user-account/userpayment";
 import { getProductsInCartSummary } from "@/actions/cart/cartSummary";
 import { prepareOrderData } from "@/actions/order/prepareOrderData";
 import { createOrder } from "@/actions/order/orderCreation";
+import { processOrder } from "@/actions/order/checkout";
 
 const page = () => {
   const [error, setError] = useState<string | undefined>("");
@@ -160,19 +161,34 @@ const page = () => {
 
         // Await until the transition is complete
         await new Promise(resolve => setTimeout(resolve, 0));
+          const order= await processOrder({ selectedAddressId: selectedAddress?.id });
+          console.log("this is the order data", order.url);
 
+        
         // Creating the order after the transition
-        const { userId, products, addressID,totalAmount } =  prepareOrderData(user.id, productData, selectedAddress?.id);
-        const orderData = {
-            userId: userId,
-            products: products,
-            addressID: addressID,
-            totalAmount // Changed to addressId to match the interface
-        };
+        // const { userId, products, addressID,totalAmount } =  prepareOrderData(user.id, productData, selectedAddress?.id);
+        // const orderData = {
+        //     userId: userId,
+        //     products: products,
+        //     addressID: addressID,
+        //     totalAmount 
+        //     // Changed to addressId to match the interface
+        // };
         // console.log("selected addresID is", selectedAddress?.id);
         // console.log("Order data prepared successfully:", orderData);
+        const addressID = selectedAddress?.id;
+        // Append the address ID to the URL
+        if (addressID) {
+          const url = new URL(window.location);
+          url.searchParams.set('addressID', addressID);
+          window.history.pushState({}, '', url);
+      }
+      window.location = order.url
 
-        const orderResult = await createOrder(orderData);
+
+
+        // const orderResult = await createOrder(orderData);
+
         toast({
           title: "Successfully order created",
           description: "You have successfully created the order",
