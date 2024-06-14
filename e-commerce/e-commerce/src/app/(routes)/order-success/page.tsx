@@ -1,5 +1,6 @@
 "use client";
 import emptyCart from "@/actions/cart/emptyCart";
+import { updateOrderPaymentStatus } from "@/actions/order/orderUpdate";
 import StepProgress from "@/components/StepProgress";
 import ConfettiComponent from "@/components/confetti";
 import SummaryCard from "@/components/summary product card/SummaryCard";
@@ -7,18 +8,31 @@ import { CircleCheck, CircleCheckBig, DollarSign } from "lucide-react";
 import React, { use, useEffect } from "react";
 
 const page = () => {
+
+
   useEffect(() => {
-    const deleteCart = async () => {
+    const processOrder = async () => {
       const queryParams = new URLSearchParams(window.location.search);
       const successParam = queryParams.get("success");
 
       if (successParam) {
-        // alert("success");
-        await emptyCart();
+        const [success, orderId] = successParam.split('/orderId=');
+
+        // Empty the cart if the success parameter is true
+        if (success) {
+          await emptyCart();
+        }
+
+        // Update the order payment status if the orderId parameter is present
+        if (orderId) {
+          await updateOrderPaymentStatus({ orderId: orderId }); 
+        }
+      } else {
+        console.error("Missing success parameter");
       }
-      // alert("failed");
     };
-    deleteCart();
+
+    processOrder();
   }, []);
   return (
     <div className=" overflow-hidden border-2 border-black">

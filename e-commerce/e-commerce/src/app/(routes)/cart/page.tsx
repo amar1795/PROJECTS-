@@ -2,7 +2,16 @@
 import CheckoutProductCard from "@/components/checkout product card/checkoutProductCard";
 import ProductCard from "@/components/product card/productCard";
 import StyledButton from "@/components/styled Button/StyledButton";
-import { Delete, DollarSign, Heart, Minus, Plus, Recycle, Trash2, X } from "lucide-react";
+import {
+  Delete,
+  DollarSign,
+  Heart,
+  Minus,
+  Plus,
+  Recycle,
+  Trash2,
+  X,
+} from "lucide-react";
 
 import React, { use, useCallback, useEffect, useState } from "react";
 import { useCurrentUser } from "@/hooks/use-current-user";
@@ -57,6 +66,10 @@ const page = () => {
     };
     relatedData();
   }, [updateTrigger]);
+
+  if (productData.length === 0 && !summaryData) {
+    return <div>loading...</div>;
+  }
 
   // need to implement deboucning here for the quantity change
   const handleQuantityChange = useCallback(
@@ -130,7 +143,9 @@ const page = () => {
           </div>
         </div>
       </div>
-      <div className=" bg-orange-300 flex justify-around px-30 py-4">
+     {
+      summaryData.totalUniqueItems && (
+        <div className=" bg-orange-300 flex justify-around px-30 py-4">
         <div>
           <div>
             <div className=" px-4 py-4 mt-2 w-[40rem] flex-1 ">
@@ -235,28 +250,33 @@ const page = () => {
           </div>
         </div>
       </div>
-      <div className=" bg-teal-600 min-h-[37rem] ">
-        <div className="px-5">
-          <div className=" pt-10 mb-8 ">
-            <h3 className="w-[20rem] text-[2rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
-              Related Products
-            </h3>
-          </div>
+      )
+     }
 
-          <div className=" flex  flex-wrap pl-3">
-            <div className=" pr-10 py-4 flex  flex-wrap">
-              {relatedProducts.map((product) => (
-                <div className=" mb-4" key={product.id}>
-                  <ProductCard
-                    product={product}
-                    handleClickAdd={handleClickAdd}
-                  />
-                </div>
-              ))}
+      {relatedProducts && relatedProducts.length > 0 && (
+        <div className=" bg-teal-600 min-h-[37rem] ">
+          <div className="px-5">
+            <div className=" pt-10 mb-8 ">
+              <h3 className="w-[20rem] text-[2rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
+                Related Products
+              </h3>
+            </div>
+
+            <div className=" flex  flex-wrap pl-3">
+              <div className=" pr-10 py-4 flex  flex-wrap">
+                {relatedProducts.map((product) => (
+                  <div className=" mb-4" key={product.id}>
+                    <ProductCard
+                      product={product}
+                      handleClickAdd={handleClickAdd}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
