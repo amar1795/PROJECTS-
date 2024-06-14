@@ -74,13 +74,13 @@ console.log('Order data prepared successfully', formattedOrder);
         });
 console.log('Order created successfully', createdOrder);
         // Step 3: Delete cart items (assuming this function is elsewhere)
-        await prismadb.cartItem.deleteMany({
-            where: {
-                cart: {
-                    userId: userId
-                }
-            }
-        });
+        // await prismadb.cartItem.deleteMany({
+        //     where: {
+        //         cart: {
+        //             userId: userId
+        //         }
+        //     }
+        // });
 
         return { createdOrder :createdOrder,  success: true, message: "Order created successfully" };
 

@@ -1,11 +1,25 @@
 "use client";
+import emptyCart from "@/actions/cart/emptyCart";
 import StepProgress from "@/components/StepProgress";
 import ConfettiComponent from "@/components/confetti";
 import SummaryCard from "@/components/summary product card/SummaryCard";
 import { CircleCheck, CircleCheckBig, DollarSign } from "lucide-react";
-import React from "react";
+import React, { use, useEffect } from "react";
 
 const page = () => {
+  useEffect(() => {
+    const deleteCart = async () => {
+      const queryParams = new URLSearchParams(window.location.search);
+      const successParam = queryParams.get("success");
+
+      if (successParam) {
+        // alert("success");
+        await emptyCart();
+      }
+      // alert("failed");
+    };
+    deleteCart();
+  }, []);
   return (
     <div className=" overflow-hidden border-2 border-black">
       <div className=" flex ">
@@ -50,27 +64,26 @@ const page = () => {
             </div>
           </div>
           <div className=" px-8 mt-8  pb-5">
-            <div className=" border-b-2 border-black">
-
-            
-            </div>
+            <div className=" border-b-2 border-black"></div>
             <div className="">
-            <h1 className="w-80  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 uppercase text-2xl bg-yellow-400 font-bold">
-                    Order Items(3)
-                  </h1>
+              <h1 className="w-80  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 uppercase text-2xl bg-yellow-400 font-bold">
+                Order Items(3)
+              </h1>
             </div>
             <div className=" flex flex-wrap justify-around pt-4">
-            <div className=" py-1 mt-2 mb-2 w-[25rem] mr-3  ">
-                    <SummaryCard />
-            </div> <div className=" py-1 mt-2 mb-2 w-[25rem] mr-3  ">
-                    <SummaryCard />
-            </div> <div className=" py-1 mt-2 mb-2 w-[25rem] mr-3  ">
-                    <SummaryCard />
-            </div> <div className=" py-1 mt-2 mb-2 w-[25rem] mr-3  ">
-                    <SummaryCard />
-            </div> 
+              <div className=" py-1 mt-2 mb-2 w-[25rem] mr-3  ">
+                <SummaryCard />
+              </div>{" "}
+              <div className=" py-1 mt-2 mb-2 w-[25rem] mr-3  ">
+                <SummaryCard />
+              </div>{" "}
+              <div className=" py-1 mt-2 mb-2 w-[25rem] mr-3  ">
+                <SummaryCard />
+              </div>{" "}
+              <div className=" py-1 mt-2 mb-2 w-[25rem] mr-3  ">
+                <SummaryCard />
+              </div>
             </div>
-           
           </div>
         </div>
 
@@ -125,7 +138,7 @@ const page = () => {
                   {/* <div className=" py-1 mt-2 mb-2 w-auto flex-1 ">
                     <SummaryCard />
                   </div> */}
-                 
+
                   <div className=" border-b-2 border-black">
                     <div className=" flex justify-between">
                       <span className=" self-center">Sub Total</span>
