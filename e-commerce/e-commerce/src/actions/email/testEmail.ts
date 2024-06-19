@@ -1,24 +1,18 @@
-"use server";
+import {sendEmail} from '@/lib/email';
 
-import { EmailTemplate } from '@/components/email-template'; // Adjust path as necessary
-import { Resend } from 'resend';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-export async function sendEmail() {
-  try {
-    const { data, error } = await resend.emails.send({
-        from: 'Acme <onboarding@resend.dev>',
-        to: "facfrenzy97@gmail.com",
-        subject: 'Hello world',
-        react: EmailTemplate({ firstName: 'John' }),
-      });
-    if (error) {
-      return { error, status: 500 };
-    }
-
-    return (data);
-  } catch (error) {
-    return { error, status: 500 };
+export async function testEmail() {
+  // Example usage
+try {
+  await sendEmail({
+    to: 'jeetamar496@gmail.com',
+    from: 'Register <register@purchaespal.shop>',
+    subject: 'Hello from Next.js',
+    message: 'Congractulations! You have successfully sent an email with purchasepal.shop!',
+  });
+  console.log('Email sent successfully!');
+} catch (error) {
+  console.error('Error sending email:', error);
+  // Handle error
 }
+		
 }
