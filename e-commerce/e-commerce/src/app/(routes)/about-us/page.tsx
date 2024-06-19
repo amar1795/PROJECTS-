@@ -48,7 +48,7 @@ const page = () => {
 //  const data= getRelatedProducts("6665de25b7e0328f68f43485").then((data)=>{console.log("this is the related products", data)})
 //  console.log("this is the related products", data);  
 // fetchAllOrders()
-// testEmail()
+// testEmail({last_name:"smith",first_name:"john"})
   return (
     <div className=" bg-pink-500 border-2 border-black px-10 ">
       <div>

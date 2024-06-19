@@ -1,32 +1,57 @@
-    
-import mailgun from 'mailgun-js';
+import mailgun from "mailgun-js";
 
 const mailgunClient = mailgun({
   apiKey: process.env.MAILGUN_API_KEY,
   domain: process.env.MAILGUN_DOMAIN,
 });
-		
-    
 
-    
-export async function sendEmail({ to, from, subject, message }) {
-    const emailData = {
-      from,
-      to,
-      subject,
-      text: message,  
-      template: "account creation",
-      'h:X-Mailgun-Variables': {test: "test"}
-    };
+export async function sendEmail({ to, from, subject, message,last_name,first_name }) {
   
-    try {
-      const result = await mailgunClient.messages().send(emailData);
-      console.log('Email sent successfully!');
-      return result;
-    } catch (error) {
-      console.error('Error sending email:', error);
-      throw error;
-    }
+  
+  const emailData = {
+    from,
+    to,
+    subject,
+    text: message,
+    template: "account creation",
+    'h:X-Mailgun-Variables': JSON.stringify({
+  
+    first_name: first_name,
+    last_name: last_name,
+  })
+  };
+
+  try {
+    const result = await mailgunClient.messages().send(emailData);
+    console.log("Email sent successfully!");
+    return result;
+  } catch (error) {
+    console.error("Error sending email:", error);
+    throw error;
   }
-          
-      
+}
+
+
+export async function ForgotPassword({ first_name,senders_email,from_email,subject}) {
+  
+  
+  const emailData = {
+    from:from_email,
+    to:senders_email,
+    subject:subject,
+    template: "account creation",
+    'h:X-Mailgun-Variables': JSON.stringify({
+
+    first_name: first_name,
+  })
+  };
+
+  try {
+    const result = await mailgunClient.messages().send(emailData);
+    console.log("Email sent successfully!");
+    return result;
+  } catch (error) {
+    console.error("Error sending email:", error);
+    throw error;
+  }
+}
