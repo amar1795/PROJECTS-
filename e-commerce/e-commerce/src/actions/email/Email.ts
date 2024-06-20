@@ -1,6 +1,6 @@
 "use server"
 
-import { sendEmail,ForgotPassword } from "@/lib/email";
+import { sendEmail,ForgotPassword, PasswordChanged } from "@/lib/email";
 
 export async function testEmail({last_name,first_name}) {
   // Example usage
@@ -41,3 +41,23 @@ export async function ForgotPasswordEmail({first_name,senders_email,token}:{firs
     // Handle error
   }
 }
+
+
+export async function PasswordChangeSuccessfull({first_name,senders_email}:{first_name:string|null,senders_email:string}) {
+  // Example usage
+  try {
+    await PasswordChanged({
+      senders_email: senders_email,
+      first_name: first_name,
+      from_email: "PurchasesPal PasswordChangeSuccessfull <no-reply@purchaespal.shop>",
+      subject:"password reset",
+      
+    });
+    // console.log("Email sent successfully!");
+  } catch (error) {
+    console.error("Error sending email:", error);
+    // Handle error
+  }
+}
+
+

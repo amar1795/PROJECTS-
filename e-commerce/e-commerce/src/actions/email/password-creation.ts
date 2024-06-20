@@ -7,6 +7,7 @@ import { NewPasswordSchema } from "@/schemas";
 import { getUserByEmail } from "@/data/user";
 import { prismadb } from "@/lib/db";
 import { getPasswordResetTokenByToken } from "@/lib/tokens";
+import { ForgotPasswordEmail, PasswordChangeSuccessfull } from "./Email";
 
 export const newPassword = async (
   values: z.infer<typeof NewPasswordSchema> ,
@@ -53,6 +54,14 @@ export const newPassword = async (
   await prismadb.passwordResetToken.delete({
     where: { id: existingToken.id }
   });
+
+  await PasswordChangeSuccessfull(
+    {
+      first_name: existingUser.name,
+      senders_email: existingUser.email,
+    }
+  );
+
 
   return { success: "Password updated!" };
 };

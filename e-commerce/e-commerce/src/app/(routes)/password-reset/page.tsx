@@ -74,17 +74,18 @@ const page = () => {
     if (error) {
       // alert(error);
       toast({
-        title: "Password reset link sent!",
+        title: `${error}`,
+        variant: "destructive",
         description:
-          "Password rest link has been sent to your email address. Please check your email to reset your password.",
+          "Please request a new password reset link. The link you are using is invalid or has expired.",
       });
     }
     if (success) {
       // alert(success);
       toast({
-        title: "Password reset link sent!",
+        title: `${success}`,
         description:
-          "Password rest link has been sent to your email address. Please check your email to reset your password.",
+          "You have successfully reset your password! You will be redirected to the login page within 5 seconds.",
       });
     }
   }, [error, success]);
@@ -100,20 +101,20 @@ const page = () => {
   };
 
   useEffect(() => {
-    if (showToast) {
-      toast({
-        title: "Password has been reset successfully!",
-        description:
-          "You will be redirected to the login page within 5 seconds",
-      });
+    if (success ) {
+      // toast({
+      //   title: "Password has been reset successfully!",
+      //   description:
+      //     "You will be redirected to the login page within 5 seconds",
+      // });
       setTimeout(() => {
         router.push("/login");
-      }, 2000);
+      }, 4000);
 
       // Reset the showToast state to prevent repeated toasts
       setShowToast(false);
     }
-  }, [showToast, toast]);
+  }, [showToast, toast,success]);
 
 
 
