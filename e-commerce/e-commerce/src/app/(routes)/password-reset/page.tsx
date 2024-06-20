@@ -51,8 +51,8 @@ const page = () => {
 
                 
                 <div className=" h-[4rem]">
-                <button className="w-[10rem] p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2  bg-yellow-400"  onClick={handleClick} >
-                    <h1 className=" font-bold"> Password reset </h1>
+                <button className="w-[15rem] p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2  bg-yellow-400"  onClick={handleClick} >
+                    <h1 className=" font-bold"> Create New Password </h1>
                   </button>
                 </div>
                 

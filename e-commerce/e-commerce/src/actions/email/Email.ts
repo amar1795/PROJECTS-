@@ -1,3 +1,5 @@
+"use server"
+
 import { sendEmail,ForgotPassword } from "@/lib/email";
 
 export async function testEmail({last_name,first_name}) {
@@ -21,16 +23,19 @@ export async function testEmail({last_name,first_name}) {
 
 // "PurchasesPal passWord reset <Password@purchaespal.shop>"
 
-export async function ForgotPasswordEmail({first_name,senders_email,from_email,subject}) {
+export async function ForgotPasswordEmail({first_name,senders_email,token}:{first_name:string|null,senders_email:string,token:string}) {
   // Example usage
   try {
     await ForgotPassword({
       senders_email: senders_email,
-      from_email: from_email,
-      subject:subject,
+      from_email: "PurchasesPal PasswordReset <no-reply@purchaespal.shop>",
+      subject:"Password Reset",
+      token:token,
       first_name: first_name,
+      resetlink:`https://localhost:3000/password-reset?token=${token}`
+      ,
     });
-    console.log("Email sent successfully!");
+    // console.log("Email sent successfully!");
   } catch (error) {
     console.error("Error sending email:", error);
     // Handle error

@@ -5,20 +5,24 @@ const mailgunClient = mailgun({
   domain: process.env.MAILGUN_DOMAIN,
 });
 
-export async function sendEmail({ to, from, subject, message,last_name,first_name }) {
-  
-  
+export async function sendEmail({
+  to,
+  from,
+  subject,
+  message,
+  last_name,
+  first_name,
+}) {
   const emailData = {
     from,
     to,
     subject,
     text: message,
     template: "account creation",
-    'h:X-Mailgun-Variables': JSON.stringify({
-  
-    first_name: first_name,
-    last_name: last_name,
-  })
+    "h:X-Mailgun-Variables": JSON.stringify({
+      first_name: first_name,
+      last_name: last_name,
+    }),
   };
 
   try {
@@ -31,19 +35,34 @@ export async function sendEmail({ to, from, subject, message,last_name,first_nam
   }
 }
 
+interface ForgotPasswordParams {
+  first_name: string|null;
+  senders_email: string;
+  from_email: string;
+  subject: string;
+  token: string;
+  resetlink: string;
+}
 
-export async function ForgotPassword({ first_name,senders_email,from_email,subject}) {
-  
-  
+// http://localhost:3000/password-reset
+
+
+export async function ForgotPassword({
+  first_name,
+  senders_email,
+  from_email,
+  subject,
+  token,
+  resetlink,
+}: ForgotPasswordParams) {
   const emailData = {
-    from:from_email,
-    to:senders_email,
-    subject:subject,
+    from: from_email,
+    to: senders_email,
+    subject: subject,
     template: "account creation",
-    'h:X-Mailgun-Variables': JSON.stringify({
-
-    first_name: first_name,
-  })
+    "h:X-Mailgun-Variables": JSON.stringify({
+      first_name,token ,resetlink
+    }),
   };
 
   try {
