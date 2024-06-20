@@ -24,10 +24,11 @@ export function CustomModal({ buttonName }: { buttonName: string }) {
 
   const router = useRouter();
 
-  const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
+
   const [isPending, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
+  const [Modalerror, setModalError] = useState<string | undefined>("");
+  const [Modalsuccess, setModalSuccess] = useState<string | undefined>("");
 
   const {
     register: registerField,
@@ -46,15 +47,15 @@ export function CustomModal({ buttonName }: { buttonName: string }) {
   // console.log("this is callback url", callbackUrl);
 
   const onSubmit = (values: z.infer<typeof ResetSchema>) => {
-    setError("");
-    setSuccess("");
+    setModalError("");
+    setModalSuccess("");
 
     startTransition(() => {
       Reset(values)
         .then((data) => {
           if (data?.error) {
             reset();
-            setError(data.error);
+            setModalError(data.error);
 
             // setModalErrorToast(data.error);
           }
@@ -62,39 +63,39 @@ export function CustomModal({ buttonName }: { buttonName: string }) {
           if (data?.success) {
             reset();
             // alert("Password reset link sent! Password rest link has been sent to your email address. Please check your email to reset your password.");
-            setSuccess(data.success);
-            toast({
-              title: "Password reset link sent!",
-              description:
-                "Password rest link has been sent to your email address. Please check your email to reset your password.",
-            });
+            setModalSuccess(data.success);
+            // toast({
+            //   title: "Password reset link sent!",
+            //   description:
+            //     "Password rest link has been sent to your email address. Please check your email to reset your password.",
+            // });
             // setTimeout(() => {
             //   router.push('/password-reset'); // Replace with your target page URL
             // }, 2000); // 2000 milliseconds = 2 seconds
           }
         })
-        .catch(() => setError("Something went wrong"));
+        .catch(() => setModalError("Something went wrong"));
     });
   };
 
   useEffect(() => {
-    if (error) {
+    if (Modalerror) {
       // alert(error);
       toast({
-        title: "Password reset link sent!",
+        title: `${Modalerror}`,
         description:
           "Password rest link has been sent to your email address. Please check your email to reset your password.",
       });
     }
-    if (success) {
+    if (Modalsuccess) {
       // alert(success);
       toast({
-        title: "Password reset link sent!",
+        title: `${Modalsuccess}`,
         description:
           "Password rest link has been sent to your email address. Please check your email to reset your password.",
       });
     }
-  }, [error, success]);
+  }, [Modalerror, Modalsuccess]);
 
   return (
     <Dialog
@@ -102,8 +103,8 @@ export function CustomModal({ buttonName }: { buttonName: string }) {
       onOpenChange={(open) => {
         setIsOpen(open);
         if (!open) {
-          setError("");
-          setSuccess("");
+          setModalError("");
+          setModalSuccess("");
         }
       }}
     >
@@ -144,14 +145,14 @@ export function CustomModal({ buttonName }: { buttonName: string }) {
                   {errors.email.message}
                 </span>
               )}
-              {error && (
+              {Modalerror && (
                 <span className=" italic text-red-950  text-[1.1rem]">
-                  {error}
+                  {Modalerror}
                 </span>
               )}
-              {success && (
+              {Modalsuccess && (
                 <span className=" italic text-yellow-600  text-[1.1rem]">
-                  {success} {"Please check your email for the reset link"}
+                  {Modalsuccess} {"Please check your email for the reset link"}
                 </span>
               )}
             </div>

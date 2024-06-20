@@ -56,11 +56,11 @@ const page = () => {
             reset();
            
             setSuccess(data.success);
-            toast({
-              title: "Password reset link sent!",
-              description:
-                "Password rest link has been sent to your email address. Please check your email to reset your password.",
-            });
+            // toast({
+            //   title: "Password reset link sent!",
+            //   description:
+            //     "Password rest link has been sent to your email address. Please check your email to reset your password.",
+            // });
             // setTimeout(() => {
             //   router.push('/password-reset'); // Replace with your target page URL
             // }, 2000); // 2000 milliseconds = 2 seconds
@@ -114,7 +114,7 @@ const page = () => {
       // Reset the showToast state to prevent repeated toasts
       setShowToast(false);
     }
-  }, [showToast, toast,success]);
+  }, [success]);
 
 
 

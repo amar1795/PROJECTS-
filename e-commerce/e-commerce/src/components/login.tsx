@@ -17,7 +17,7 @@ interface LoginProps {
 import { login } from "@/actions/login";
 import { LoginSchema } from "@/schemas";
 import { useSearchParams } from "next/navigation";
-import { useToast } from "./ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 
 const Login: React.FC<LoginProps> = ({ toggleView }) => {
   const { toast } = useToast();
@@ -32,6 +32,7 @@ const Login: React.FC<LoginProps> = ({ toggleView }) => {
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
 
+
   const {
     register: registerField,
     handleSubmit,
@@ -44,6 +45,7 @@ const Login: React.FC<LoginProps> = ({ toggleView }) => {
       password: "",
     },
   });
+
 
   console.log("this is callback url", callbackUrl);
 
@@ -81,6 +83,7 @@ const Login: React.FC<LoginProps> = ({ toggleView }) => {
     }
    
   }, [error, success]);
+
 
   return (
     <div>
@@ -132,6 +135,7 @@ const Login: React.FC<LoginProps> = ({ toggleView }) => {
           <div className=" h-[4rem]">
             <CustomModal
               buttonName="click here"
+              
        
             />
           </div>
