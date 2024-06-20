@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -22,7 +21,7 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { da } from "@faker-js/faker";
 
-export function CustomModal({ buttonName }: { buttonName: string}) {
+export function CustomModal({ buttonName }: { buttonName: string }) {
   const { toast } = useToast();
 
   const router = useRouter();
@@ -30,6 +29,7 @@ export function CustomModal({ buttonName }: { buttonName: string}) {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
+  const [isOpen, setIsOpen] = useState(false);
 
   const {
     register: registerField,
@@ -42,7 +42,7 @@ export function CustomModal({ buttonName }: { buttonName: string}) {
       email: "",
     },
   });
-  
+
   // toast is not working inside the modal need to check
 
   // console.log("this is callback url", callbackUrl);
@@ -57,13 +57,13 @@ export function CustomModal({ buttonName }: { buttonName: string}) {
           if (data?.error) {
             reset();
             setError(data.error);
-            
+
             // setModalErrorToast(data.error);
           }
 
           if (data?.success) {
             reset();
-              // alert("Password reset link sent! Password rest link has been sent to your email address. Please check your email to reset your password.");
+            // alert("Password reset link sent! Password rest link has been sent to your email address. Please check your email to reset your password.");
             setSuccess(data.success);
             toast({
               title: "Password reset link sent!",
@@ -73,7 +73,6 @@ export function CustomModal({ buttonName }: { buttonName: string}) {
             // setTimeout(() => {
             //   router.push('/password-reset'); // Replace with your target page URL
             // }, 2000); // 2000 milliseconds = 2 seconds
-          
           }
         })
         .catch(() => setError("Something went wrong"));
@@ -100,7 +99,16 @@ export function CustomModal({ buttonName }: { buttonName: string}) {
   }, [error, success]);
 
   return (
-    <Dialog>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        setIsOpen(open);
+        if (!open) {
+          setError("");
+          setSuccess("");
+        }
+      }}
+    >
       <div>
         <DialogTrigger asChild>
           {/* <Button variant="outline">Edit Profile</Button> */}
@@ -132,19 +140,22 @@ export function CustomModal({ buttonName }: { buttonName: string}) {
                   {...registerField("email")}
                   className="w-[18rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
                 />
-               
               </div>
               {errors.email && (
-                  <span className=" italic text-red-950  text-[1.1rem]">
-                    {errors.email.message}
-                  </span>
-                )}
-                {error && ( <span className=" italic text-red-950  text-[1.1rem]">
-                    {error}
-                  </span>)}
-                  {success && (<span className=" italic text-yellow-600  text-[1.1rem]">
-                    {success} {"Please check your email for the reset link"}
-                  </span>)}
+                <span className=" italic text-red-950  text-[1.1rem]">
+                  {errors.email.message}
+                </span>
+              )}
+              {error && (
+                <span className=" italic text-red-950  text-[1.1rem]">
+                  {error}
+                </span>
+              )}
+              {success && (
+                <span className=" italic text-yellow-600  text-[1.1rem]">
+                  {success} {"Please check your email for the reset link"}
+                </span>
+              )}
             </div>
             <div>
               {/* {success && (

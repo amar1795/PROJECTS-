@@ -69,12 +69,14 @@ export const generatePasswordResetToken = async (email: string) => {
   
     const existingToken = await getPasswordResetTokenByEmail(email);
   
+    // deleting the existing token if it exists
     if (existingToken) {
       await prismadb.passwordResetToken.delete({
         where: { id: existingToken.id }
       });
     }
   
+    // creating a new token
     const passwordResetToken = await prismadb.passwordResetToken.create({
       data: {
         email,
