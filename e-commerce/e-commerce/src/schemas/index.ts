@@ -1,6 +1,8 @@
 import * as z from "zod";
 import { UserRole } from "@prisma/client";
 
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+
 export const SettingsSchema = z.object({
   name: z.optional(z.string()),
   isTwoFactorEnabled: z.optional(z.boolean()),
@@ -32,9 +34,20 @@ export const SettingsSchema = z.object({
 
 export const NewPasswordSchema = z.object({
   password: z.string().min(6, {
-    message: "Minimum of 6 characters required",
+    message: "Minimum 6 characters required",
+  }).regex(passwordRegex, {
+    message: "Password must have at least one uppercase letter, one lowercase letter, one digit, and one special character",
   }),
-});
+  confirmpassword: z.string()
+}).refine(
+  (values) =>
+   values.password === values.confirmpassword
+  ,
+  {
+    message: "Please enter the same Password !",
+    path: ["confirmpassword"],
+  }
+);
 
 export const ResetSchema = z.object({
   email: z.string().email({
@@ -53,7 +66,6 @@ export const LoginSchema = z.object({
 });
 
 
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
 
 export const RegisterSchema = z.object({
   firstname: z.string().min(1, {

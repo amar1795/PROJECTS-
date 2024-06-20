@@ -53,7 +53,10 @@ export const generateTwoFactorToken = async (email: string) => {
 
 export const generatePasswordResetToken = async (email: string) => {
     const token = uuidv4();
-    const expires = new Date(new Date().getTime() + 3600 * 1000);
+    
+    // 10 minutes expiry time added to the current time
+    const expires = new Date(new Date().getTime() + 600 * 1000);
+
 
      const getPasswordResetTokenByEmail = async (email: string) => {
         try {
@@ -89,3 +92,17 @@ export const generatePasswordResetToken = async (email: string) => {
   
     
   }
+
+
+  // at the time of verification
+export const getPasswordResetTokenByToken = async (token: string) => {
+  try {
+    const passwordResetToken = await prismadb.passwordResetToken.findUnique({
+      where: { token }
+    });
+
+    return passwordResetToken;
+  } catch {
+    return null;
+  }
+};
