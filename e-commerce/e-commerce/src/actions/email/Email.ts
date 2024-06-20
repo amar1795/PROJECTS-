@@ -29,10 +29,10 @@ export async function ForgotPasswordEmail({first_name,senders_email,token}:{firs
     await ForgotPassword({
       senders_email: senders_email,
       from_email: "PurchasesPal PasswordReset <no-reply@purchaespal.shop>",
-      subject:"Password Reset",
+      subject:"password reset",
       token:token,
       first_name: first_name,
-      resetlink:`https://localhost:3000/password-reset?token=${token}`
+      resetlink:`http://localhost:3000/password-reset?token=${token}`
       ,
     });
     // console.log("Email sent successfully!");

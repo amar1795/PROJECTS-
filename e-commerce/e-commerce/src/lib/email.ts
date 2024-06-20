@@ -59,9 +59,9 @@ export async function ForgotPassword({
     from: from_email,
     to: senders_email,
     subject: subject,
-    template: "account creation",
+    template: "password recovery",
     "h:X-Mailgun-Variables": JSON.stringify({
-      first_name,token ,resetlink
+      token ,resetlink,first_name
     }),
   };
 

@@ -27,13 +27,13 @@ export const Reset = async (values: z.infer<typeof ResetSchema>) => {
 
 // send email to user with reset link now commented out for testing
 
-  // await ForgotPasswordEmail(
-  //   {
-  //     first_name: existingUser.name,
-  //     senders_email: email,
-  //     token: passwordResetToken.token,
-  //   }
-  // );
+  await ForgotPasswordEmail(
+    {
+      first_name: existingUser.name,
+      senders_email: email,
+      token: passwordResetToken.token,
+    }
+  );
 
 
   return { success: "Reset email sent!" };

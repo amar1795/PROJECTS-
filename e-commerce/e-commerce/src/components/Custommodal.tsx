@@ -16,10 +16,8 @@ import { Label } from "@/components/ui/label";
 import { useEffect, useState, useTransition } from "react";
 import { ResetSchema } from "@/schemas";
 import { Reset } from "@/actions/email/reset-password";
-import { Router } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
-import { da } from "@faker-js/faker";
 
 export function CustomModal({ buttonName }: { buttonName: string }) {
   const { toast } = useToast();
