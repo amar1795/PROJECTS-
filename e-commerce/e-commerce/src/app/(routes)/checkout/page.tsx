@@ -21,10 +21,14 @@ import { AddressSchema, PaymentSchema } from "@/schemas";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useToast } from "@/components/ui/use-toast";
 import { userCheckoutPayment } from "@/actions/user-account/userpayment";
-import { calculateCartSummary, getProductsInCartSummary } from "@/actions/cart/cartSummary";
+import {
+  calculateCartSummary,
+  getProductsInCartSummary,
+} from "@/actions/cart/cartSummary";
 import { prepareOrderData } from "@/actions/order/prepareOrderData";
 import { createOrder } from "@/actions/order/orderCreation";
 import { processOrder } from "@/actions/order/checkout";
+import { useRouter } from "next/navigation";
 
 const page = () => {
   const [error, setError] = useState<string | undefined>("");
@@ -33,6 +37,7 @@ const page = () => {
   const [selectedAddress, setSelectedAddress] = useState<string | undefined>();
   const [productData, setproductData] = useState([]);
   const [paymentData, setPaymentData] = useState([]);
+  const router = useRouter();
 
   const [isPending, startTransition] = useTransition();
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -48,19 +53,36 @@ const page = () => {
     "3344 Birch Boulevard, Room 10, Miami, FL 33101, United States",
   ];
   const { toast } = useToast();
+  const handleProceedToPayment = () => {
+    if (!selectedAddress) {
+      toast({
+        title: "Error",
+        description: "Please select a shipping address",
+        variant: "destructive",
+      });
+      return;
+    }
+    // i guess formref was creating the issue of creating the order twice  at times 
+    // if (formRef.current) {
+    //   formRef.current.dispatchEvent(
+    //     new Event("submit", { cancelable: true, bubbles: true })
+    //   );
+    // }
+  };
+
   useEffect(() => {
     const data = async () => {
       const alladdress = await getAllAddressesForUser(user?.id);
       setalladdress(alladdress);
       const cartSummaryData = await calculateCartSummary(user.id);
-      if(cartSummaryData.totalUniqueItems === 0){
+      if (cartSummaryData.totalUniqueItems === 0) {
         toast({
           variant: "destructive",
           title: "No Orders in the Cart ",
-          description: "Please add some products to the cart to proceed with the checkout",
-          
-      });      }
-
+          description:
+            "Please add some products to the cart to proceed with the checkout",
+        });
+      }
     };
     data();
   }, [success]);
@@ -77,12 +99,9 @@ const page = () => {
       const data = await getProductsInCartSummary(user.id);
       setproductData(data);
       console.log("this is the product data", data);
-
     };
     cartSummary();
   }, []);
-
-
 
   // console.log("this is the payment Data ", paymentData);
 
@@ -149,73 +168,83 @@ const page = () => {
       description: "You have successfully added the address",
     });
   };
+
   const onSubmitPayment = async (values: z.infer<typeof PaymentSchema>) => {
+    // Check if the address is selected before proceeding
+    if (!selectedAddress) {
+      toast({
+        title: "Error",
+        description: "Please select a shipping address",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setError("");
     setSuccess("");
-
     try {
-        startTransition(async () => {
-            try {
-                const data = await userCheckoutPayment(user?.id, values);
-                setError(data.error);
-                setSuccess(data.success);
-                setPaymentData(data.paymentRecord);
-            } catch (error) {
-                console.error("Error during payment:", error);
-                setError("Failed to process payment. Please try again.");
-            } finally {
-                resetPayment();
-            }
-        });
-
-        // Await until the transition is complete
-        await new Promise(resolve => setTimeout(resolve, 0));
-        toast({
-          title: "Successfully order created",
-          description: "You have successfully created the order",
-          
+      startTransition(async () => {
+        try {
+          const data = await userCheckoutPayment(user?.id, values);
+          setError(data.error);
+          setSuccess(data.success);
+          setPaymentData(data.paymentRecord);
+        } catch (error) {
+          console.error("Error during payment:", error);
+          setError("Failed to process payment. Please try again.");
+        } finally {
+          resetPayment();
+        }
       });
-          const order= await processOrder({ selectedAddressId: selectedAddress?.id });
-          console.log("this is the order data", order.url);
 
-        
-        // Creating the order after the transition
-        // const { userId, products, addressID,totalAmount } =  prepareOrderData(user.id, productData, selectedAddress?.id);
-        // const orderData = {
-        //     userId: userId,
-        //     products: products,
-        //     addressID: addressID,
-        //     totalAmount 
-        //     // Changed to addressId to match the interface
-        // };
-        // console.log("selected addresID is", selectedAddress?.id);
-        // console.log("Order data prepared successfully:", orderData);
-        const addressID = selectedAddress?.id;
-        // Append the address ID to the URL
-        if (addressID) {
-          const url = new URL(window.location);
-          url.searchParams.set('addressID', addressID);
-          window.history.pushState({}, '', url);
-      }
-      window.location = order.url
+      // Await until the transition is complete
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
+      toast({
+        title: "Successfully Filled the Data",
+        description:
+          "Order Creation in progress and proceeding to the next step...",
+      });
+      const order = await processOrder({
+        selectedAddressId: selectedAddress?.id,
+      });
+      console.log("this is the order data", order.url);
 
+      // Creating the order after the transition
+      // const { userId, products, addressID,totalAmount } =  prepareOrderData(user.id, productData, selectedAddress?.id);
+      // const orderData = {
+      //     userId: userId,
+      //     products: products,
+      //     addressID: addressID,
+      //     totalAmount
+      //     // Changed to addressId to match the interface
+      // };
+      // console.log("selected addresID is", selectedAddress?.id);
+      // console.log("Order data prepared successfully:", orderData);
 
-        // const orderResult = await createOrder(orderData);
+      // this addressId was done for debugging purposes
 
-    
-        // console.log("Order created successfully:", orderResult);
+      // const addressID = selectedAddress?.id;
+      // Append the address ID to the URL
+
+      // if (addressID) {
+      //   const url = new URL(window.location);
+      //   url.searchParams.set("addressID", addressID);
+      //   window.history.pushState({}, "", url);
+      // }
+
+      window.location = order.url;
+      // router.push(order.url);
     } catch (error) {
-        console.error("Error creating order:", error);
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to create order. Please try again.",
+      console.error("Error creating order:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to create order. Please try again.",
       });
-        setError("Failed to create order. Please try again.");
+      setError("Failed to create order. Please try again.");
     }
-};
-
+  };
 
   const {
     register: registerField,
@@ -257,22 +286,6 @@ const page = () => {
     mode: "onBlur",
   });
 
-  const handleProceedToPayment = () => {
-    if (!selectedAddress) {
-      toast({
-        title: "Error",
-        description: "Please select a shipping address",
-        variant: "destructive",
-      });
-      return;
-    }
-    if (formRef.current) {
-      formRef.current.dispatchEvent(
-        new Event("submit", { cancelable: true, bubbles: true })
-      );
-    }
-  };
-
   const handleAddressChange = (address) => {
     // formatAddress
     toast({
@@ -281,38 +294,42 @@ const page = () => {
     });
     setSelectedAddress(address);
 
-    console.log("Selected Address: ",selectedAddress?.id);
+    console.log("Selected Address: ", selectedAddress?.id);
     // alert(`Your Shipping Address is: ${formatAddress(address)}`);
   };
 
-
   // Format card number as XXXX-XXXX-XXXX-XXXX
   const formatCardNumber = (e) => {
-    const value = e.target.value.replace(/\D/g, '').substring(0, 16);
-    const formattedValue = value
-      .match(/.{1,4}/g)
-      ?.join('-')
-      .substring(0, 19) || '';
+    const value = e.target.value.replace(/\D/g, "").substring(0, 16);
+    const formattedValue =
+      value
+        .match(/.{1,4}/g)
+        ?.join("-")
+        .substring(0, 19) || "";
     e.target.value = formattedValue;
   };
 
- // Format expiration date as MM/YY with leading zero for months 2-9
- // Format expiration date as MM/YY with handling of leading zero for months 2-9
+  // Format expiration date as MM/YY with leading zero for months 2-9
+  // Format expiration date as MM/YY with handling of leading zero for months 2-9
   const formatExpirationDate = (e) => {
-    let value = e.target.value.replace(/\D/g, '').substring(0, 4);
-    let formattedValue = '';
+    let value = e.target.value.replace(/\D/g, "").substring(0, 4);
+    let formattedValue = "";
 
     if (value.length >= 1) {
       const month = value.substring(0, 2);
       const year = value.substring(2, 4);
 
-      if (month === '00' || year === '00') {
+      if (month === "00" || year === "00") {
         // Prevent '00/' or '/00'
-        formattedValue = '';
+        formattedValue = "";
       } else if (parseInt(month, 10) >= 1 && parseInt(month, 10) <= 12) {
         // Valid month, format as MM/YY
         formattedValue = `${month}/${year}`;
-      } else if (value.length === 4 && parseInt(month, 10) >= 2 && parseInt(month, 10) <= 9) {
+      } else if (
+        value.length === 4 &&
+        parseInt(month, 10) >= 2 &&
+        parseInt(month, 10) <= 9
+      ) {
         // Handle cases like '08/5' -> '08/05'
         formattedValue = `0${month}/${year}`;
       } else if (value.length === 4 && parseInt(month, 10) === 1) {
@@ -320,7 +337,7 @@ const page = () => {
         formattedValue = `0${month}/`;
       } else {
         // Invalid input, reset value
-        formattedValue = '';
+        formattedValue = "";
       }
     }
 
@@ -328,7 +345,7 @@ const page = () => {
   };
   // Restrict CVV to 3 digits
   const restrictCvv = (e) => {
-    const value = e.target.value.replace(/\D/g, '').substring(0, 3);
+    const value = e.target.value.replace(/\D/g, "").substring(0, 3);
     e.target.value = value;
   };
 
@@ -516,7 +533,10 @@ const page = () => {
               </div>
 
               <div className=" border-2 border-black  mt-8"></div>
-              <form onSubmit={handleSubmitPayment(onSubmitPayment)}>
+              <form
+                // ref={formRef}
+                onSubmit={handleSubmitPayment(onSubmitPayment)}
+              >
                 <div className="w-[20rem] pt-5">
                   <h3 className="w-[20rem] text-[2rem] leading-none p-2 border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
                     Payment Method
@@ -527,7 +547,6 @@ const page = () => {
                     placeholder="Card Number"
                     className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
                     // onInput={formatCardNumber}
-
                   />
                   {errorsPayment.cardNumber && (
                     <span className="italic text-red-950 text-[1.1rem]">
@@ -540,7 +559,6 @@ const page = () => {
                     placeholder="MM/YY"
                     className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
                     // onInput={formatExpirationDate}
-
                   />
                   {errorsPayment.expirationDate && (
                     <span className="italic text-red-950 text-[1.1rem]">
@@ -553,7 +571,6 @@ const page = () => {
                     placeholder="CVV"
                     className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
                     // onInput={restrictCvv}
-
                   />
                   {errorsPayment.cvv && (
                     <span className="italic text-red-950 text-[1.1rem]">

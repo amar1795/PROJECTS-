@@ -44,7 +44,6 @@ export async function userCheckoutPayment(userId: string, paymentDetails: z.infe
     }
 
    const paymentRecord= handlePaymentInfo({ userId, paymentMode: "CARD", cardDetails: {...UserCardDetails} });
-    // Simulate storing the payment details
     
 
     // console.log('Payment processed successfully', paymentRecord);

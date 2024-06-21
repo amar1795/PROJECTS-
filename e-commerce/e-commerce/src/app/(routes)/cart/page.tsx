@@ -12,6 +12,7 @@ import {
   Trash2,
   X,
 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
 import React, { use, useCallback, useEffect, useState } from "react";
 import { useCurrentUser } from "@/hooks/use-current-user";
@@ -26,14 +27,29 @@ import decreaseProductQuantity from "@/actions/cart/decreaseProduct";
 import deleteCartItem from "@/actions/cart/deleteCartProducts";
 import { getRelatedProducts } from "@/actions/cart/categoryRelatedProduct";
 import addProductToCart from "@/actions/cart/addToProduct";
+import { useToast } from "@/components/ui/use-toast";
 
 const page = () => {
   const user = useCurrentUser();
+  const { toast } = useToast();
 
+  const searchParams = useSearchParams();
+  const cancelled = searchParams.get("canceled");
   const [summaryData, setSummaryData] = useState([]); // [totalItems, totalAmount
   const [productData, setproductData] = useState([]);
   const [updateTrigger, setUpdateTrigger] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
+
+  useEffect(() => {
+    if (cancelled) {
+      toast({
+        title: "Order Payment Failed",
+        description: "Something went wrong, please try again!",
+        variant: "destructive",
+      });
+    }
+  }, [cancelled]);
+
 
   const handleClickDelete = (userID, productID) => {
     deleteCartItem(userID, productID);

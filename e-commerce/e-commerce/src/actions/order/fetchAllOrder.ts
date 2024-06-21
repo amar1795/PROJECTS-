@@ -14,7 +14,18 @@ export async function fetchAllOrders() {
                 userId: user,
             },
             include: {
-                orderItems: true,
+                orderItems: {
+                    include: {
+                        product: {
+                            include: {
+                                brand: true,
+                                images: {
+                                    take: 1,  // Limit to only the first image
+                                },
+                            },
+                        },
+                    },
+                },
                 address: true,
                 card: true,
                 wallet: true,

@@ -23,6 +23,7 @@ interface CreateOrderProps {
 
 
 export async function createOrder(props: CreateOrderProps) {
+    console.log("create order function is being called");
     try {
         const { userId, products, addressID,paymentMode="CARD", cardId="666b163bd4a3961818aeb7a7", walletId,totalAmount } = props;
 

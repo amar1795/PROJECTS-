@@ -13,6 +13,7 @@ import { auth } from "@/auth";
 // no need to use the loadstripe when using checout session 
 
 export async function processOrder({ selectedAddressId }:{selectedAddressId:string}) {
+  console.log("Process order function is being called ")
   try {
    
     const userSession = await auth();
@@ -61,7 +62,7 @@ export async function processOrder({ selectedAddressId }:{selectedAddressId:stri
       line_items,
       mode: "payment",
       success_url: `http://localhost:3000/order-success/?success=true/orderId=${orderResult?.createdOrder.id}`,
-      cancel_url: `http://localhost:3000/order-fail/?canceled=true`,
+      cancel_url: `http://localhost:3000/cart/?canceled=true`,
       metadata: {
         orderId: orderResult?.createdOrder.id,
       },
