@@ -4,6 +4,7 @@ import { createProduct, createProductRating, createProductReview, createProductV
 import { dummyUserFunction, getUserBySpecificEmail } from "@/actions/dummyUser";
 import {  testEmail } from "@/actions/email/testEmail";
 import { fetchAllOrders } from "@/actions/order/fetchAllOrder";
+import { fetchOrderById } from "@/actions/order/fetchSingleOrder";
 import { CreateBrand, CreateCategories, CreateColour, CreateSize, Createposter, UpdateCategory, createdummyPosterFunction, deleteSize, deleteduplicatebrandnames, dummyPosterFunction, fetchCategoriesWithPosters, fetchImagesByProductId, getAllColorsWithCount, getAllDummyPosters, getAllPosters, getAllSizes, getAllUsers, getBrand, getallCategory } from "@/actions/posterAction";
 import { productCreationNew } from "@/actions/product/productCreation";
 import React from "react";
@@ -49,6 +50,7 @@ const page = () => {
 //  console.log("this is the related products", data);  
 // fetchAllOrders()
 // testEmail({last_name:"smith",first_name:"john"})
+// fetchOrderById("66756c6354363728fe808d27")
   return (
     <div className=" bg-pink-500 border-2 border-black px-10 ">
       <div>

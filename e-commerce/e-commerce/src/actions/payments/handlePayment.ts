@@ -75,6 +75,7 @@ async function createSecureCard(userId: string, cardDetails: HandlePaymentInfoIn
         // Encrypt sensitive card details
         const encryptedCardNumber = await bcrypt.hash(cardDetails.cardNumber, 10); // Hash card number
         const encryptedCardCvc = await bcrypt.hash(cardDetails.cardCvc, 10); // Hash CVC
+        const lastFourDigits = cardDetails.cardNumber.slice(-4);
 
         // Create the card entity with encrypted details
         const newCard = await prismadb.card.create({
@@ -83,7 +84,9 @@ async function createSecureCard(userId: string, cardDetails: HandlePaymentInfoIn
                 cardNumber: encryptedCardNumber,
                 cardExpiry: cardDetails.cardExpiry,
                 cardCvc: encryptedCardCvc,
-                cardHolderName: cardDetails.cardHolderName
+                cardHolderName: cardDetails.cardHolderName,
+                lastFourDigits: lastFourDigits // Store last 4 digits separately
+
             }
         });
 

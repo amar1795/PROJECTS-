@@ -10,15 +10,23 @@ interface CustomButtonProps {
 const CustomButton: React.FC<CustomButtonProps> = ({ initialButtonName, initialOptions }) => {
   const completeUrl = typeof window !== "undefined" ? window.location.href : "";
   const segments = completeUrl.split("/");
-  // let previousSegment = segments[segments.length - 1];
+  console.log("this is the segments",segments);
+  let removeSegment = segments[segments.length - 2];
+  console.log("this is the removeSegment",removeSegment);
 // Get the second segment from the path
 let previousSegment = segments.length >= 3 ? segments[4] : '';
 // Remove query string and hash from the segment
 previousSegment = previousSegment?.split(/[?#]/)[0];
   // Check if the last character of previousSegment is '?' and remove it if true
-let sanitizedSegment = previousSegment?.endsWith('?') 
-? previousSegment.slice(0, -1) 
-: previousSegment;
+  let sanitizedSegment;
+  if(removeSegment === "orders"){
+    sanitizedSegment=null;
+  }else{
+    sanitizedSegment = previousSegment?.endsWith('?') 
+    ? previousSegment.slice(0, -1) 
+    : previousSegment;
+  }
+
 
   const [isOpen, setIsOpen] = useState(false);
   const [buttonName, setButtonName] = useState(initialButtonName);

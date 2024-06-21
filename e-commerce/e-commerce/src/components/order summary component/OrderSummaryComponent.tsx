@@ -126,7 +126,7 @@ const formattedTime = `${hours}:${minutes}`;
           <div className="flex flex-col  h-full text-[1.3rem] w-[20rem] pt-5">
             <h1> ORDER#{order.id.toUpperCase()}</h1>
             <button>
-              <Link href={`/orders/${102456321789}`}>View Order Details</Link>
+              <Link href={`/orders/${order.id}`}>View Order Details</Link>
             </button>
           </div>
         </div>

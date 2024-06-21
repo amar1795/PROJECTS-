@@ -1,8 +1,7 @@
-
 import type { Metadata } from "next";
-import { Inter as FontSans } from "next/font/google"
-import { cn } from "@/lib/utils"
-import { ThemeToggle } from "@/components/theme-toggle"
+import { Inter as FontSans } from "next/font/google";
+import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { ThemeProvider } from "@/components/theme-provider";
 import "../globals.css";
 import { MainNav } from "@/components/main-nav";
@@ -12,10 +11,10 @@ import { Toaster } from "@/components/ui/toaster";
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
-})
-import { SessionProvider } from 'next-auth/react'
+});
+import { SessionProvider } from "next-auth/react";
 
-import { auth } from '@/auth'
+import { auth } from "@/auth";
 import { getProductsByCategory } from "@/actions/createProduct";
 
 export const metadata: Metadata = {
@@ -32,48 +31,41 @@ export default async function RootLayout({
 
   const user = session?.user?.id;
   const mensCollectionData = await getProductsByCategory(
-    "665a0b9f14be77720636d443",user);
-    // console.log("this is the menscollection wishlist count ", mensCollectionData);
-    
+    "665a0b9f14be77720636d443",
+    user
+  );
+  // console.log("this is the menscollection wishlist count ", mensCollectionData);
+
   return (
-    
     <SessionProvider session={session}>
-
-    <html lang="en" suppressHydrationWarning>
-     
-      <body  className={cn(
-          "min-h-screen bg-background font-mono antialiased px-8 ",
-          fontSans.variable
-        )}>
-
-           <ThemeProvider
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={cn(
+            "min-h-screen bg-background font-mono antialiased px-8 ",
+            fontSans.variable
+          )}
+        >
+          <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
-            >
-                 <div className=' overflow-hidden'>
-        <div className="fixed top-0 left-0 right-0  z-10">
-            <MainNav mensCollectionData={mensCollectionData} />
-        </div>
-              <Toaster />
-        <div className=' mt-[8rem]'>
-              
-          
-              {children}
-
-              <MainFooter/>
+          >
+            <div className=" overflow-hidden">
+              <div className="fixed top-0 left-0 right-0  z-10">
+                <MainNav mensCollectionData={mensCollectionData} />
               </div>
-        </div>
-            </ThemeProvider>
-            
-         
-            </body>
-            
-            
-    </html>
-    </SessionProvider>
+              <Toaster />
+              <div className=" mt-[8rem]">
+                {children}
 
+                <MainFooter />
+              </div>
+            </div>
+          </ThemeProvider>
+        </body>
+      </html>
+    </SessionProvider>
   );
 }
 
