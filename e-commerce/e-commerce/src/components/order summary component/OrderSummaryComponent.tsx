@@ -41,7 +41,7 @@ interface Order {
   paymentMode: string;
   createdAt: Date;
   updatedAt: Date;
-  orderItems:any;
+  orderItems: any;
   address: Address;
   card: Card;
   wallet: any | null; // Define the actual type if known
@@ -73,27 +73,43 @@ const OrderSummaryComponent: React.FC<OrderProps> = ({
   isPaid,
 }) => {
   // Assuming order.createdAt is a string representing a valid date in ISO 8601 format
-const createdAtDate = new Date(order.createdAt);
+  const createdAtDate = new Date(order.createdAt);
 
-// Extracting day, month, and year from the date object
-const day = createdAtDate.getDate();
-const month = createdAtDate.toLocaleString('en-US', { month: 'short' }).toUpperCase(); // Convert month to uppercase
-const year = createdAtDate.getFullYear();
+  // Extracting day, month, and year from the date object
+  const day = createdAtDate.getDate();
+  const month = createdAtDate
+    .toLocaleString("en-US", { month: "short" })
+    .toUpperCase(); // Convert month to uppercase
+  const year = createdAtDate.getFullYear();
 
-// Extracting hours and minutes
-const hours = createdAtDate.getHours().toString().padStart(2, '0');
-const minutes = createdAtDate.getMinutes().toString().padStart(2, '0');
+  // Extracting hours and minutes
+  const hours = createdAtDate.getHours().toString().padStart(2, "0");
+  const minutes = createdAtDate.getMinutes().toString().padStart(2, "0");
 
-// Constructing the final formatted date and time string
-const formattedDate = `${day} ${month} ${year}`;
-const formattedTime = `${hours}:${minutes}`;
-// Constructing the final formatted date string
-// const finalFormattedDate = `${day} ${month} ${year}`;
+  // Constructing the final formatted date and time string
+  const formattedDate = `${day} ${month} ${year}`;
+  const formattedTime = `${hours}:${minutes}`;
+  // Constructing the final formatted date string
+  // const finalFormattedDate = `${day} ${month} ${year}`;
 
   return (
-    
     <div>
-      <div className=" mt-14 pt-2 border-2 border-black mx-24 pb-5 bg-teal-600">
+      
+      
+      <div className="mt-14 pt-2">
+      <div className=" mx-24 pb-5 h-[4rem]">
+        
+          <button
+            type="submit"
+            className=" p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-teal-600"
+          >
+            <h1 className=" font-bold text-[2rem]">ORDER#{order.id.toUpperCase()} </h1>
+          </button>
+        
+      </div>
+      
+      <div className="  border-2 border-black mx-24 pt-4 pb-5 bg-teal-600">
+        
         <div className=" bg-yellow-500 text-black pb-5 flex justify-between px-9 mx-2 border-2 border-black border-b-8 border-r-4  ">
           <div>
             <div className=" flex justify-between h-full text-[1.3rem] w-[30rem] pt-5 ">
@@ -101,7 +117,7 @@ const formattedTime = `${hours}:${minutes}`;
                 <h1>ORDER PLACED </h1>
                 <p>{formattedDate}</p>
                 <p>{formattedTime}</p>
-                </div>
+              </div>
               <div className="min-w-40">
                 <h1> TOTAL AMOUNT</h1>
                 <p>{order.orderTotal}</p>
@@ -120,7 +136,7 @@ const formattedTime = `${hours}:${minutes}`;
               <div className=" ml-7 min-w-[10rem]">
                 <h1>Paid Status</h1>
                 <p>{order.isPaid ? "Paid" : "Unpaid"}</p>
-                </div>
+              </div>
             </div>
           </div>
           <div className="flex flex-col  h-full text-[1.3rem] w-[20rem] pt-5">
@@ -132,18 +148,13 @@ const formattedTime = `${hours}:${minutes}`;
         </div>
         <div className=" mx-2 mt-4 ">
           <div>
-            {
-              
-              order.orderItems.map((orderItem, index) => (
-                <OrderDetailsComponent
-                  key={index}
-                  orderItem={orderItem}
-                />
-              ))
-            }
+            {order.orderItems.map((orderItem, index) => (
+              <OrderDetailsComponent key={index} orderItem={orderItem} />
+            ))}
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

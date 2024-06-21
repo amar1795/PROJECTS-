@@ -30,12 +30,25 @@ const page = async ({ params }: { params: { ordernumber: string } }) => {
     <div>
       <div className=" min-h-[95vh] bg-pink-500 ">
         <h1 className=" text-[4rem] pl-10 uppercase">Your Orders</h1>
-        <div className=" text-[1.3rem] flex px-8 mb-5">
+        <div className=" text-[1.3rem] flex px-8 mb-5 justify-between">
           <h1 className=" mr-11">
             Ordered on : {formattedDate} {formattedTime}
           </h1>
           <h1>Ordered Number : #{params.ordernumber}</h1>
+          <div className="">
+          <div className=" h-[4rem]">
+                      <Link href="/orders">
+                      <button
+                        type="submit"
+                        className="w-80  p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-teal-600"
+                      >
+                        <h1 className=" font-bold">Back to Orders </h1>
+                      </button>
+                        </Link>
+                    </div>
+          </div>
         </div>
+      
         <div className=" px-8">
           <div className=" border-black border-b-4 "></div>
         </div>
@@ -90,7 +103,9 @@ const page = async ({ params }: { params: { ordernumber: string } }) => {
                   <div className="">
                     <div className=" flex justify-between">
                       <h1>Item(s) Subtotal </h1>
-                      <div className=" w-[5rem]">:${orderData.order?.orderTotal.toFixed(2)}</div>
+                      <div className=" w-[5rem]">
+                        :${orderData.order?.orderTotal.toFixed(2)}
+                      </div>
                     </div>
                     <div className=" flex justify-between">
                       <h1>Shipping </h1>
@@ -102,15 +117,28 @@ const page = async ({ params }: { params: { ordernumber: string } }) => {
                     </div>
                     <div className=" flex justify-between">
                       <h1>Total</h1>
-                      <div className=" w-[5rem]">:${orderData.order?.orderTotal.toFixed(2)}</div>
+                      <div className=" w-[5rem]">
+                        :${orderData.order?.orderTotal.toFixed(2)}
+                      </div>
                     </div>
                     <div className=" flex justify-between font-bold">
                       <h1 className=" ">GrandTotal </h1>
-                      <div className=" w-[5rem]">:${orderData.order?.orderTotal.toFixed(2)}</div>
+                      <div className=" w-[5rem]">
+                        :${orderData.order?.orderTotal.toFixed(2)}
+                      </div>
+                    </div>
+                  </div>
+                  <div className=" mt-8">
+                    <div className=" h-[4rem]">
+                      <button
+                        type="submit"
+                        className="w-80  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-teal-600"
+                      >
+                        <h1 className=" font-bold">Download Invoice </h1>
+                      </button>
                     </div>
                   </div>
                 </div>
-                
               </div>
             </div>
             <div className=" px-2 ">
