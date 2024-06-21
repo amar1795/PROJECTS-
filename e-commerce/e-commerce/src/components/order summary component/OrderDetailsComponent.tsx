@@ -16,15 +16,18 @@ const OrderDetailsComponent = ({ orderItem }) => {
             alt=""
             className=" h-[11rem] w-[10rem] object-cover  px-2 py-4  "
           />
-          <div className=" price py-4">
+          <div className=" price py-4 w-full">
             <h1 className=" py-2 px-2">
               Product Name: {orderItem?.product.name}
             </h1>
-            <h1 className=" py-2 px-2">
+            <div className=" flex justify-between ">
+              <div>
+              <h1 className=" py-2 px-2">
               Brand Name :{orderItem?.product.brand.name}
             </h1>
             <h1 className=" py-2 px-2">
               Qty : <span>{orderItem?.quantity}</span>
+              
             </h1>
             <h1 className="py-2 px-2">
               Price:{" "}
@@ -36,12 +39,16 @@ const OrderDetailsComponent = ({ orderItem }) => {
                 / Item
               </span>
             </h1>
+              </div>
+              <div className=" mr-11 ">
+                  <p>We would love to hear your review</p>
+                  <p> Add your Review</p>
+                  <p>Add your Rating</p>
+
+              </div>
+            </div>
           </div>
-          {/* <div className=' w-[5rem] flex pl-7 h-0 pt-[4.5rem]'>
-                    <button className='transform transition-transform duration-300    hover:scale-110 '>                                          
-                            <Trash2 size={30}/>
-                            </button>
-                    </div> */}
+         
         </div>
 
         <div></div>

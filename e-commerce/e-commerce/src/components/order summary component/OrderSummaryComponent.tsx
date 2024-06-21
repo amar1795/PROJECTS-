@@ -93,12 +93,12 @@ const formattedTime = `${hours}:${minutes}`;
   return (
     
     <div>
-      <div className=" mt-8 pt-2 border-2 border-black mx-24 pb-5">
-        <div className=" bg-yellow-500 text-white pb-5 flex justify-between px-9 mx-2 border-2 border-black border-b-8 border-r-4 ">
+      <div className=" mt-14 pt-2 border-2 border-black mx-24 pb-5 bg-teal-600">
+        <div className=" bg-yellow-500 text-black pb-5 flex justify-between px-9 mx-2 border-2 border-black border-b-8 border-r-4  ">
           <div>
             <div className=" flex justify-between h-full text-[1.3rem] w-[30rem] pt-5 ">
               <div className=" min-w-[10rem]">
-                <h1>ORDER PLACED</h1>
+                <h1>ORDER PLACED </h1>
                 <p>{formattedDate}</p>
                 <p>{formattedTime}</p>
                 </div>
@@ -133,6 +133,7 @@ const formattedTime = `${hours}:${minutes}`;
         <div className=" mx-2 mt-4 ">
           <div>
             {
+              
               order.orderItems.map((orderItem, index) => (
                 <OrderDetailsComponent
                   key={index}

@@ -32,6 +32,8 @@ export async function fetchOrderById( orderId: string) {
                                 images: {
                                     take: 1, // Limit to only the first image
                                 },
+                                ratings: true, // Include the ratings to calculate the average
+
                             },
                         },
                     },

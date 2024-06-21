@@ -8,7 +8,7 @@ import React from "react";
 const page = async ({ params }: { params: { ordernumber: string } }) => {
   // console.log("this is the order number",params.ordernumber);
   const orderData = await fetchOrderById(params.ordernumber);
-  console.log("this is the order data for single order", orderData);
+  // console.log("this is the order rating data for single order", orderData.order?.orderItems[0].product.ratings);
 
   const createdAtDate = new Date(orderData.order.createdAt);
 
@@ -110,6 +110,7 @@ const page = async ({ params }: { params: { ordernumber: string } }) => {
                     </div>
                   </div>
                 </div>
+                
               </div>
             </div>
             <div className=" px-2 ">

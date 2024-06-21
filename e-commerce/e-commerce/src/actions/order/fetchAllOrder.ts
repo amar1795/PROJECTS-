@@ -22,6 +22,8 @@ export async function fetchAllOrders() {
                                 images: {
                                     take: 1,  // Limit to only the first image
                                 },
+                                ratings: true, // Include the ratings to calculate the average
+
                             },
                         },
                     },

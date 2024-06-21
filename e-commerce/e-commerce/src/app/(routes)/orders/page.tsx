@@ -26,7 +26,7 @@ const page = async () => {
   return (
     <div>
       <div className=" min-h-[95vh] bg-pink-500 ">
-        <h1 className=" text-[4rem] pl-10 uppercase">Your Orders</h1>
+        <h1 className=" text-[4rem] pl-10 uppercase">Your Orders : {orders.length}</h1>
         <div className=" px-8">
           <div className=" border-black border-b-4 "></div>
         </div>
