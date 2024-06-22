@@ -26,7 +26,7 @@ const StarComponent = ({ selected = false, index, onMouseEnter, onMouseLeave, on
     >
       <Star
         strokeWidth={1}
-        size={50}
+        size={60}
         fill={`${getStrokeColorClass()}`}
         // className={`fill-current ${getStrokeColorClass()}`}
       />

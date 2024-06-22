@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Camera } from "lucide-react";
+
 import {
   Dialog,
   DialogContent,
@@ -32,6 +34,20 @@ export function ReviewModal({ buttonName }: { buttonName: string }) {
   const [Modalerror, setModalError] = useState<string | undefined>("");
   const [Modalsuccess, setModalSuccess] = useState<string | undefined>("");
 
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files); // Convert FileList to array
+
+    // Extract file names from the array of files
+    const fileNames = files.map((file) => file.name);
+
+    // Update state with selected file names
+    setSelectedFiles(fileNames);
+
+    // Optionally, you can also handle other file details here if needed
+    console.log("Selected files:", files);
+  };
   const {
     register: registerField,
     handleSubmit,
@@ -117,7 +133,7 @@ export function ReviewModal({ buttonName }: { buttonName: string }) {
             <h1 className=" font-bold">{buttonName} </h1>
           </button>
         </DialogTrigger>
-        <DialogContent className=" h-[40rem] ">
+        <DialogContent className=" h-[41rem] ">
           <form action="" onSubmit={handleSubmit(onSubmit)}>
             <DialogHeader>
               <DialogTitle>
@@ -125,12 +141,12 @@ export function ReviewModal({ buttonName }: { buttonName: string }) {
                   <h1 className=" font-bold">Forgot Password </h1>
                 </h1>
               </DialogTitle>
-              <DialogDescription>
+              {/* <DialogDescription>
                 Please Enter your Email address registered with us and we will
                 send you a link to reset your password
-              </DialogDescription>
+              </DialogDescription> */}
             </DialogHeader>
-            <div className=" main flex bg-green-300 h-[26rem] ">
+            <div className=" main flex bg-green-300 h-[30rem]  border-2 border-black border-b-8 border-r-4">
               <div className=" left flex-1 pl-5">
                 <div>
                   <div>
@@ -140,12 +156,12 @@ export function ReviewModal({ buttonName }: { buttonName: string }) {
                       </h1>
                     </h1>
                   </div>
-                  <div>
+                  <div className=" flex mt-2 ml-8">
                     <StarRatingComponent />
                   </div>
                 </div>
 
-                <div className=" mt-20">
+                <div className=" mt-2">
                   <div>
                     <h1 className="w-[25rem]  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4   bg-yellow-400">
                       <h1 className=" font-bold text-[1.5rem]">
@@ -153,8 +169,59 @@ export function ReviewModal({ buttonName }: { buttonName: string }) {
                       </h1>
                     </h1>
                   </div>
-                  <div>
-                    <h1> Photo Component</h1>
+                  <div className="">
+                    {/* <div >
+                     
+                      <input
+                        type="file"
+                        placeholder="Upload your Photos"
+                        {...registerField("email")}
+                        className=" w-[25rem] h-[6rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none pt-8 pl-14 "
+                      />
+                    
+                    </div> */}
+                    <div className=" flex">
+                      <div className=" w-[22rem] mt-7">
+                        <label
+                          htmlFor="fileInput"
+                          className="relative cursor-pointer  h-[6rem] p-2 border-2 border-black bg-white text-black mt-4 flex justify-center items-center border-b-8 border-r-4 focus:outline-none"
+                        >
+                          <Camera size={50} strokeWidth={1} />
+
+                          {selectedFiles.length > 0 ? (
+                            <span className="ml-8">Images Selected</span>
+                          ) : (
+                            <span className="ml-8">Upload your Photos</span>
+                          )}
+
+                          <input
+                            id="fileInput"
+                            type="file"
+                            onChange={handleFileChange}
+                            className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
+                            multiple // Allow multiple file selection
+                          />
+                        </label>
+                      </div>
+
+                      {/* Container with white background for selected file names */}
+                      <div className=" pl-2">
+                        {selectedFiles.length > 0 && (
+                          <div className=" mr-2 ">
+                            <h2 className="text-xl font-bold mt-2 ">
+                              Selected Files:
+                            </h2>
+                            <div className="bg-white p-4 border border-gray-200 shadow-md mt-2 h-[6rem] overflow-y-auto">
+                              <ul className="list-disc list-inside">
+                                {selectedFiles.map((fileName, index) => (
+                                  <li key={index}>{fileName}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -169,12 +236,12 @@ export function ReviewModal({ buttonName }: { buttonName: string }) {
                     </h1>
                   </div>
                   <div>
-                  <input
-                  type="text"
-                  placeholder="Whats most important to know?"
-                  {...registerField("email")}
-                  className=" w-[30rem] h-[3rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
-                />
+                    <input
+                      type="text"
+                      placeholder="Whats most important to know?"
+                      {...registerField("email")}
+                      className=" w-[30rem] h-[3rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
+                    />
                   </div>
                 </div>
 
@@ -187,12 +254,11 @@ export function ReviewModal({ buttonName }: { buttonName: string }) {
                     </h1>
                   </div>
                   <div>
-                  <textarea
-                  
-                  placeholder="What did you like or dislike? What did you use this product for?"
-                  {...registerField("email")}
-                  className=" w-[30rem] h-[10rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
-                />
+                    <textarea
+                      placeholder="What did you like or dislike? What did you use this product for?"
+                      {...registerField("email")}
+                      className=" w-[30rem] h-[13.5rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
+                    />
                   </div>
                 </div>
               </div>
