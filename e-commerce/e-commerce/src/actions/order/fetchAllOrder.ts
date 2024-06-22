@@ -4,6 +4,30 @@ import { auth } from "@/auth";
 import { prismadb } from "@/lib/db";
 import { Prisma } from "@prisma/client";
 
+
+async function getNestedParentCategories(categoryId: string) {
+    let categories = [];
+    let currentCategory = await prismadb.category.findUnique({
+        where: { id: categoryId },
+        include: { parent: true },
+    });
+
+    while (currentCategory && currentCategory.parentId) {
+        categories.push(currentCategory);
+        currentCategory = await prismadb.category.findUnique({
+            where: { id: currentCategory.parentId },
+            include: { parent: true },
+        });
+    }
+
+    if (currentCategory) {
+        categories.push(currentCategory);  // Add the topmost category
+    }
+
+    return categories.reverse();  // To get the order from topmost to the given category
+}
+
+
 export async function fetchAllOrders({page = 1, limit = 10, sortOrder = 'desc'}) {
     const userSession = await auth();
     const user = userSession?.user?.id;
@@ -51,6 +75,18 @@ export async function fetchAllOrders({page = 1, limit = 10, sortOrder = 'desc'})
                 wallet: true,
             },
         });
+
+
+        // Fetch and attach the nested parent categories
+        for (const order of orders) {
+            for (const orderItem of order.orderItems) {
+                const product = orderItem.product;
+                if (product && product.categoryId) {
+                    const parentCategories = await getNestedParentCategories(product.categoryId);
+                    product['parentCategories'] = parentCategories;
+                }
+            }
+        }
 
 
         // Ensure orderTotal is not null
