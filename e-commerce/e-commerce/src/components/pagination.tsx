@@ -8,49 +8,50 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-export function PaginationComponent({ currentPage, totalPages, onPageChange }) {
+export function PaginationComponent({currentOrderPage, totalPages, onPageChange }) {
+
+  const [currentPage, setCurrentPage] = useState(currentOrderPage);
+
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set("page", currentOrderPage);
+    window.history.pushState({}, "", `${window.location.pathname}?${urlParams}`);
+
+    setCurrentPage(currentOrderPage)
+
+  }, []);
+
   // Function to handle page change
-  const handlePageChange = (page: number) => {
+  const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
-      onPageChange(page);
+      setCurrentPage(page);
       updateUrl(page);
+      onPageChange(page); // Notify parent component about page change
+
     }
-    console.log("this is the page", page);
   };
 
   // Function to update URL
-  const updateUrl = (page: number) => {
+  const updateUrl = (page) => {
     const urlParams = new URLSearchParams(window.location.search);
     if (page !== 1) {
-      urlParams.set("page", page);
+      urlParams.set("page", page.toString());
     } else {
       urlParams.delete("page");
     }
-    window.history.pushState(
-      {},
-      "",
-      `${window.location.pathname}?${urlParams}`
-    );
+    window.history.pushState({}, "", `${window.location.pathname}?${urlParams}`);
   };
-  // Effect to retrieve page parameter from URL on component mount
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const pageParam = urlParams.get("page");
-    const parsedPage = parseInt(pageParam, 10);
-    if (!isNaN(parsedPage) && parsedPage >= 1 && parsedPage <= totalPages) {
-      onPageChange(parsedPage);
-    } else {
-      onPageChange(1); // Default to page 1 if page parameter is missing or invalid
-      updateUrl(1); // Update URL to reflect the default page
-    }
-  }, [totalPages]); // Re-run effect when totalPages changes
+
 
   return (
     <div className=" mt-5 mb-3">
       <Pagination>
         <PaginationContent className=" w-[30rem] flex justify-between ">
+
+          {/* previous Button */}
           <div className="first previous">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
@@ -65,6 +66,8 @@ export function PaginationComponent({ currentPage, totalPages, onPageChange }) {
               </PaginationItem>
             </button>
           </div>
+
+        {/* middle small Buttons */}
           <div className="mid flex">
             {[...Array(totalPages)].map((_, index) => (
               <button
@@ -76,7 +79,7 @@ export function PaginationComponent({ currentPage, totalPages, onPageChange }) {
               >
                 <PaginationItem>
                   <PaginationLink
-                    href="#"
+                    
                     className=" hover:bg-black hover:text-white"
                   >
                     {index + 1}
@@ -85,10 +88,13 @@ export function PaginationComponent({ currentPage, totalPages, onPageChange }) {
               </button>
             ))}
 
+
             {/* <PaginationItem>
               <PaginationEllipsis />
             </PaginationItem> */}
           </div>
+
+          {/* next Button */}
           <div className="last next">
             <button
               onClick={() => handlePageChange(currentPage + 1)}

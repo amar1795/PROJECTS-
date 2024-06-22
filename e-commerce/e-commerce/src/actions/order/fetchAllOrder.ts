@@ -3,9 +3,10 @@
 import { auth } from "@/auth";
 import { prismadb } from "@/lib/db";
 import { Prisma } from "@prisma/client";
+import { cache } from "react";
 
 
-async function getNestedParentCategories(categoryId: string) {
+export const getNestedParentCategories=cache(async(categoryId: string)=> {
     let categories = [];
     let currentCategory = await prismadb.category.findUnique({
         where: { id: categoryId },
@@ -25,10 +26,10 @@ async function getNestedParentCategories(categoryId: string) {
     }
 
     return categories.reverse();  // To get the order from topmost to the given category
-}
+})
 
-
-export async function fetchAllOrders({page = 1, limit = 10, sortOrder = 'desc'}) {
+// export const getProductsByCategoryFiltered = cache(
+export const  fetchAllOrders = cache( async ({page = 1, limit = 5, sortOrder = 'desc'})=> {
     const userSession = await auth();
     const user = userSession?.user?.id;
     const offset = (page - 1) * limit;  // Calculate offset
@@ -106,4 +107,4 @@ export async function fetchAllOrders({page = 1, limit = 10, sortOrder = 'desc'})
     } finally {
         await prismadb.$disconnect(); // Disconnect Prisma client
     }
-}
+})

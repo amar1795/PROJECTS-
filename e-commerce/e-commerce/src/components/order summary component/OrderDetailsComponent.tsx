@@ -4,11 +4,8 @@ import React from "react";
 import { ReviewModal } from "../ReviewModal";
 import Link from "next/link";
 
-{
-  /* <Link href={`categories/${category}/${product.category.name.replace(/\s+/g, "")}/${product.id}`}>
-                              <img src={product.images[0]?.url} alt={product.images[0].altText || "Product Image"} />
-                            </Link> */
-}
+
+// helper function to format the parent Categories to be used in the link
 const extractFirstAndLastParentCategoryNamesWithNumbers = (parentCategories) => {
   if (!parentCategories || parentCategories.length === 0) return [];
 
@@ -24,6 +21,7 @@ const extractFirstAndLastParentCategoryNamesWithNumbers = (parentCategories) => 
 };
 
 const OrderDetailsComponent = ({ orderItem }) => {
+  // calling the helper function 
   const parentCategoryNamesWithNumbers = extractFirstAndLastParentCategoryNamesWithNumbers(orderItem?.product?.parentCategories);
 
   console.log("these are the parent categories", parentCategoryNamesWithNumbers)

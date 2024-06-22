@@ -15,6 +15,7 @@ const page =  () => {
     const storedPage = localStorage.getItem("currentOrdersPage");
     return storedPage ? parseInt(storedPage, 10) : 1;
   });
+  
   const [sortOrder, setSortOrder] = useState("desc");
      // Save current page to local storage whenever it changes
      useEffect(() => {
@@ -97,7 +98,7 @@ const page =  () => {
         </div>
         <div className="px-8  mt-[5rem] ml-[50rem]">
           <PaginationComponent 
-          currentPage={currentPage}
+          currentOrderPage={currentPage}
           totalPages={orders[0]?.totalPages}
           onPageChange={(page) => setCurrentPage(page)}/>
 
