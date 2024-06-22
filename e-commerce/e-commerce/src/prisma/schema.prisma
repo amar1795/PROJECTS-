@@ -252,7 +252,9 @@ model Rating {
   productId String        @db.ObjectId // Foreign Key to Product
   product   Product       @relation("RatingToProduct", fields: [productId], references: [id])
   rating    Int
+  reviewTitle String?
   review    String?
+  verifiedPurchase Boolean @default(false)
   userId    String        @db.ObjectId // Foreign Key to User  
   user      User          @relation("RatingToUser", fields: [userId], references: [id])
   images    ReviewImage[] @relation("RatingToImage")

@@ -1,6 +1,7 @@
 import { Trash2 } from "lucide-react";
 import Image from "next/image";
 import React from "react";
+import { ReviewModal } from "../ReviewModal";
 
 const OrderDetailsComponent = ({ orderItem }) => {
   return (
@@ -42,6 +43,7 @@ const OrderDetailsComponent = ({ orderItem }) => {
               </div>
               <div className=" mr-11 ">
                   <p>We would love to hear your review</p>
+                  <ReviewModal buttonName="Add your Review" />
                   <p> Add your Review</p>
                   <p>Add your Rating</p>
 
