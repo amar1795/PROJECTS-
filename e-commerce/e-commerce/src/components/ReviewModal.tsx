@@ -115,6 +115,15 @@ export function ReviewModal({ buttonName }: { buttonName: string }) {
     }
   }, [Modalerror, Modalsuccess]);
 
+    // Function to handle modal close
+    const handleModalClose = () => {
+      setIsOpen(false);
+      setModalError("");
+      setModalSuccess("");
+      setSelectedFiles([]); // Clear selected files state
+    };
+  
+
   return (
     <Dialog
       open={isOpen}
@@ -123,13 +132,15 @@ export function ReviewModal({ buttonName }: { buttonName: string }) {
         if (!open) {
           setModalError("");
           setModalSuccess("");
+          handleModalClose(); // Reset state when modal closes
+
         }
       }}
     >
       <div>
         <DialogTrigger asChild>
           {/* <Button variant="outline">Edit Profile</Button> */}
-          <button className="w-auto p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2  bg-yellow-400">
+          <button className="w-auto p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2  bg-teal-600">
             <h1 className=" font-bold">{buttonName} </h1>
           </button>
         </DialogTrigger>

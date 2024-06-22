@@ -49,10 +49,10 @@ const StarRating = ({ totalStars = 5 }) => {
         ))}
       </div>
       <div className="mt-4">
-        {smileys[selectedStars - 1] || smileys[0]} 
+        {smileys[selectedStars - 1] || smileys[4]} 
       </div>
       <div className="mt-2 text-lg font-semibold text-center h-[1rem]">
-        {getFeedbackText()}
+        {getFeedbackText()|| ""}
       </div>
     </div>
   );
