@@ -1,6 +1,8 @@
 "use client"
 
 import { fetchAllOrders } from "@/actions/order/fetchAllOrder";
+import CustomButton from "@/components/CustomButton";
+import CustomOrderSortButton from "@/components/CustomOrderSortButton";
 import OrderSummaryComponent from "@/components/order summary component/OrderSummaryComponent";
 import { PaginationComponent } from "@/components/pagination";
 import React, { use, useEffect, useState } from "react";
@@ -13,7 +15,7 @@ const page =  () => {
     const storedPage = localStorage.getItem("currentOrdersPage");
     return storedPage ? parseInt(storedPage, 10) : 1;
   });
-
+  const [sortOrder, setSortOrder] = useState("desc");
      // Save current page to local storage whenever it changes
      useEffect(() => {
       localStorage.setItem("currentOrdersPage", currentPage.toString());
@@ -21,7 +23,7 @@ const page =  () => {
 
   useEffect(() => {
     const fetchOrders = async () => {
-     const  fetchedOrders = await fetchAllOrders({page:currentPage});
+     const  fetchedOrders = await fetchAllOrders({page:currentPage,sortOrder});
       setOrders(fetchedOrders);
       console.log("these are the orders",fetchedOrders);
       
@@ -30,7 +32,7 @@ const page =  () => {
     fetchOrders();
 
   }
-  , [currentPage])
+  , [currentPage,sortOrder])
 
 
 
@@ -55,9 +57,24 @@ const page =  () => {
   return (
     <div>
       <div className=" min-h-[95vh] bg-pink-500 ">
+        <div className=" flex justify-between">
+      
+        <div>
         <h1 className=" text-[4rem] pl-10 uppercase">Your Total Orders : {orders[0]?.totalOrdersCount}</h1>
+        </div>
+        <div className=" pr-11">
+       
+       <CustomOrderSortButton
+            initialButtonName="SORTBY"
+            initialOptions={["New to Old", "Old to New"]}
+            setSortOrder={setSortOrder}
+          />
+        </div>
+        </div>
         <div className=" px-8">
-          <div className=" border-black border-b-4 "></div>
+          <div className=" border-black border-b-4 ">
+          
+          </div>
         </div>
         <div>
           <div className="  pt-5 pb-5">

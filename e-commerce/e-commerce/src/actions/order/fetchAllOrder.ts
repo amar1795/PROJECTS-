@@ -2,8 +2,9 @@
 
 import { auth } from "@/auth";
 import { prismadb } from "@/lib/db";
+import { Prisma } from "@prisma/client";
 
-export async function fetchAllOrders({page = 1, limit = 10}) {
+export async function fetchAllOrders({page = 1, limit = 10, sortOrder = 'desc'}) {
     const userSession = await auth();
     const user = userSession?.user?.id;
     const offset = (page - 1) * limit;  // Calculate offset
@@ -27,6 +28,9 @@ export async function fetchAllOrders({page = 1, limit = 10}) {
             },
             skip: offset,
             take: limit,
+            orderBy: {
+                createdAt: sortOrder as Prisma.SortOrder,  // Sort by createdAt field
+            },
             include: {
                 orderItems: {
                     include: {
