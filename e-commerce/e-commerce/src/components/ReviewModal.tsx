@@ -172,7 +172,7 @@ export function ReviewModal({
                 send you a link to reset your password
               </DialogDescription> */}
             </DialogHeader>
-            <div className=" main flex bg-green-300 h-[30rem]  border-2 border-black border-b-8 border-r-4">
+            <div className=" main flex bg-pink-500 h-[30rem]  border-2 border-black border-b-8 border-r-4">
               <div className=" left flex-1 pl-5">
                 <div>
                   <div>

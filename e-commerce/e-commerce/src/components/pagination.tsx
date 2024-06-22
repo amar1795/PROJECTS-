@@ -9,28 +9,22 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useEffect, useState } from "react";
+import React from "react";
 
-export function PaginationComponent({currentOrderPage, totalPages, onPageChange }) {
-
+export function PaginationComponent({ currentOrderPage, totalPages, onPageChange }) {
   const [currentPage, setCurrentPage] = useState(currentOrderPage);
 
-
+  // Update currentPage when currentOrderPage changes
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    urlParams.set("page", currentOrderPage);
-    window.history.pushState({}, "", `${window.location.pathname}?${urlParams}`);
-
-    setCurrentPage(currentOrderPage)
-
-  }, []);
+    setCurrentPage(currentOrderPage);
+  }, [currentOrderPage]);
 
   // Function to handle page change
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
-      updateUrl(page);
       onPageChange(page); // Notify parent component about page change
-
+      updateUrl(page); // Update URL with new page
     }
   };
 
@@ -45,13 +39,54 @@ export function PaginationComponent({currentOrderPage, totalPages, onPageChange 
     window.history.pushState({}, "", `${window.location.pathname}?${urlParams}`);
   };
 
+  // Function to generate visible pages with ellipses
+  const generateVisiblePages = () => {
+    const numAdjacentPages = 2; // Number of pages adjacent to current page to show
+    const numPagesToShow = numAdjacentPages * 2 + 1; // Total number of pages to show
+
+    let startPage = Math.max(2, currentPage - numAdjacentPages);
+    let endPage = Math.min(totalPages, currentPage + numAdjacentPages);
+
+    let pages = [];
+
+    // Always show the first page
+    pages.push(1);
+
+    // Show ellipsis if there are pages before the visible range
+    if (startPage > 2) {
+      pages.push(null); // null indicates ellipsis
+    }
+
+    // Add the visible pages
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+     // Remove duplicate last page if it's already included
+  if (pages.length > 1 && pages[pages.length - 1] === totalPages) {
+    pages.pop(); // Remove the last element (duplicate totalPages)
+  }
+    // Show ellipsis if there are pages after the visible range
+    if (endPage < totalPages - 1) {
+      pages.push(null); // null indicates ellipsis
+    }
+
+    // Always show the last page
+    if (totalPages > 1) {
+      pages.push(totalPages);
+    }
+
+    return pages;
+  };
+
+  // Get visible pages
+  const visiblePages = generateVisiblePages();
 
   return (
-    <div className=" mt-5 mb-3">
+    <div className="mt-5 mb-3">
       <Pagination>
-        <PaginationContent className=" w-[30rem] flex justify-between ">
-
-          {/* previous Button */}
+        <PaginationContent className="w-[30rem] flex justify-between">
+          {/* Previous Button */}
           <div className="first previous">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
@@ -59,42 +94,38 @@ export function PaginationComponent({currentOrderPage, totalPages, onPageChange 
               className="hover:bg-black hover:text-white"
             >
               <PaginationItem>
-                <PaginationPrevious
-                  href="#"
-                  className=" hover:bg-black hover:text-white"
-                />
+                <PaginationPrevious className="hover:bg-black hover:text-white" />
               </PaginationItem>
             </button>
           </div>
 
-        {/* middle small Buttons */}
+          {/* Middle Pages */}
           <div className="mid flex">
-            {[...Array(totalPages)].map((_, index) => (
-              <button
-                key={index}
-                onClick={() => handlePageChange(index + 1)}
-                className={`hover:bg-black hover:text-white ${
-                  currentPage === index + 1 ? "bg-black text-white" : ""
-                }`}
-              >
-                <PaginationItem>
-                  <PaginationLink
-                    
-                    className=" hover:bg-black hover:text-white"
+            {visiblePages.map((page, index) => (
+              <React.Fragment key={index}>
+                {page === null ? (
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                ) : (
+                  <button
+                    onClick={() => handlePageChange(page)}
+                    className={`hover:bg-black hover:text-white ${
+                      currentPage === page ? "bg-black text-white" : ""
+                    }`}
                   >
-                    {index + 1}
-                  </PaginationLink>
-                </PaginationItem>
-              </button>
+                    <PaginationItem>
+                      <PaginationLink className="hover:bg-black hover:text-white">
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  </button>
+                )}
+              </React.Fragment>
             ))}
-
-
-            {/* <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem> */}
           </div>
 
-          {/* next Button */}
+          {/* Next Button */}
           <div className="last next">
             <button
               onClick={() => handlePageChange(currentPage + 1)}
@@ -102,10 +133,7 @@ export function PaginationComponent({currentOrderPage, totalPages, onPageChange 
               className="hover:bg-black hover:text-white"
             >
               <PaginationItem>
-                <PaginationNext
-                  href="#"
-                  className=" hover:bg-black hover:text-white"
-                />
+                <PaginationNext className="hover:bg-black hover:text-white" />
               </PaginationItem>
             </button>
           </div>
