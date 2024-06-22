@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {
   Pagination,
   PaginationContent,
@@ -11,34 +11,33 @@ import {
 import { useEffect } from "react";
 
 export function PaginationComponent({ currentPage, totalPages, onPageChange }) {
-
-
-  
-   // Function to handle page change
-   const handlePageChange = (page:number) => {
+  // Function to handle page change
+  const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
-      
       onPageChange(page);
       updateUrl(page);
     }
     console.log("this is the page", page);
   };
 
-
-// Function to update URL
-const updateUrl = (page:number) => {
-  const urlParams = new URLSearchParams(window.location.search);
-  if (page !== 1) {
-    urlParams.set('page', page);
-  } else {
-    urlParams.delete('page');
-  }
-  window.history.pushState({}, '', `${window.location.pathname}?${urlParams}`);
-};
+  // Function to update URL
+  const updateUrl = (page: number) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (page !== 1) {
+      urlParams.set("page", page);
+    } else {
+      urlParams.delete("page");
+    }
+    window.history.pushState(
+      {},
+      "",
+      `${window.location.pathname}?${urlParams}`
+    );
+  };
   // Effect to retrieve page parameter from URL on component mount
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const pageParam = urlParams.get('page');
+    const pageParam = urlParams.get("page");
     const parsedPage = parseInt(pageParam, 10);
     if (!isNaN(parsedPage) && parsedPage >= 1 && parsedPage <= totalPages) {
       onPageChange(parsedPage);
@@ -67,26 +66,25 @@ const updateUrl = (page:number) => {
             </button>
           </div>
           <div className="mid flex">
-
-
-          {[...Array(totalPages)].map((_, index) => (
-          <button
-            key={index}
-            onClick={() => handlePageChange(index + 1)}
-            className={`hover:bg-black hover:text-white ${currentPage === index + 1 ? 'bg-black text-white' : ''}`}
-          >
-               <PaginationItem>
-              <PaginationLink
-                href="#"
-                className=" hover:bg-black hover:text-white"
+            {[...Array(totalPages)].map((_, index) => (
+              <button
+                key={index}
+                onClick={() => handlePageChange(index + 1)}
+                className={`hover:bg-black hover:text-white ${
+                  currentPage === index + 1 ? "bg-black text-white" : ""
+                }`}
               >
-            {index + 1}
-                
-              </PaginationLink>
-            </PaginationItem>
-          </button>
-        ))}
-                 
+                <PaginationItem>
+                  <PaginationLink
+                    href="#"
+                    className=" hover:bg-black hover:text-white"
+                  >
+                    {index + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              </button>
+            ))}
+
             {/* <PaginationItem>
               <PaginationEllipsis />
             </PaginationItem> */}

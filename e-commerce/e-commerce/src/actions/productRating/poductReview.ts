@@ -24,6 +24,10 @@ export async function createUserReview({
     const userSession = await auth();
     const user = userSession?.user?.id;
 
+    if(!user){
+        return  {error:"User not Signed in"}
+    }
+
   try {
     // Create a new rating with associated images
     const newRating = await prismadb.rating.create({

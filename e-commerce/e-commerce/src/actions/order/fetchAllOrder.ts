@@ -3,16 +3,30 @@
 import { auth } from "@/auth";
 import { prismadb } from "@/lib/db";
 
-export async function fetchAllOrders() {
+export async function fetchAllOrders({page = 1, limit = 10}) {
     const userSession = await auth();
     const user = userSession?.user?.id;
+    const offset = (page - 1) * limit;  // Calculate offset
+
     try {
+        // Fetch the total number of orders for the given userId
+        const totalOrdersCount = await prismadb.order.count({
+            where: {
+                userId: user,
+            },
+        });
+
+        // Calculate total number of pages
+        const totalPages = Math.ceil(totalOrdersCount / limit);
+
 
         // Fetch all orders for the given userId
         const orders = await prismadb.order.findMany({
             where: {
                 userId: user,
             },
+            skip: offset,
+            take: limit,
             include: {
                 orderItems: {
                     include: {
@@ -39,6 +53,8 @@ export async function fetchAllOrders() {
         const sanitizedOrders = orders.map(order => ({
             ...order,
             orderTotal: order.orderTotal ?? 0,  // Defaulting to 0 if orderTotal is null
+            totalPages,
+            totalOrdersCount
         }));
 
         // console.log('Orders fetched successfully', sanitizedOrders);

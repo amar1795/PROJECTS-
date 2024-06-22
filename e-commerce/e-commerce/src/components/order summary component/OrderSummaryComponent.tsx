@@ -114,16 +114,16 @@ const OrderSummaryComponent: React.FC<OrderProps> = ({
           <div>
             <div className=" flex justify-between h-full text-[1.3rem] w-[30rem] pt-5 ">
               <div className=" min-w-[10rem]">
-                <h1>ORDER PLACED </h1>
+                <h1 className=" font-bold underline">ORDER PLACED </h1>
                 <p>{formattedDate}</p>
                 <p>{formattedTime}</p>
               </div>
               <div className="min-w-40">
-                <h1> TOTAL AMOUNT</h1>
+                <h1 className=" font-bold underline"> TOTAL AMOUNT</h1>
                 <p>{order.orderTotal}</p>
               </div>
               <div className="min-w-[12rem]">
-                <h1>SHIPPING ADDRESS</h1>
+                <h1 className=" font-bold underline">SHIPPING ADDRESS</h1>
                 <p>Street: {order.address.street}</p>
                 <p>Apartment: {order.address.apartment}</p>
                 <p>City: {order.address.city}</p>
@@ -133,16 +133,26 @@ const OrderSummaryComponent: React.FC<OrderProps> = ({
                 <p>Country: {order.address.country}</p>
                 <p>Phone Number: {order.address.phoneNumber}</p> */}
               </div>
+              <div className=" flex flex-col justify-between">
               <div className=" ml-7 min-w-[10rem]">
-                <h1>Paid Status</h1>
+                <h1 className=" font-bold underline">Paid Status</h1>
                 <p>{order.isPaid ? "Paid" : "Unpaid"}</p>
+              </div>
+              <div className=" ml-2 min-w-[15rem]">
+                <h1 className=" font-bold underline">Delivery Status</h1>
+                <p>
+                  {!order.isPaid ? "Order Not Confirmed" : order.deliveryStatus =="ORDER_PLACED" ? "Order Confirmed":""}
+                 </p>
+              </div>
               </div>
             </div>
           </div>
           <div className="flex flex-col  h-full text-[1.3rem] w-[20rem] pt-5">
-            <h1> ORDER#{order.id.toUpperCase()}</h1>
+            <h1 className=" font-bold"> ORDER#{order.id.toUpperCase()}</h1>
             <button>
-              <Link href={`/orders/${order.id}`}>View Order Details</Link>
+              <Link href={`/orders/${order.id}`}><button className="w-auto p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2  bg-teal-600">
+            <h1 className=" font-bold">View Order Details </h1>
+          </button></Link>
             </button>
           </div>
         </div>

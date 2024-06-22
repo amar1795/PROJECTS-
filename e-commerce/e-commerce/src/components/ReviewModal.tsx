@@ -265,7 +265,7 @@ export function ReviewModal({
                     <input
                       type="text"
                       placeholder="Whats most important to know?"
-                      {...registerField("email")}
+                     
                       className=" w-[30rem] h-[3rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
                     />
                   </div>
@@ -282,7 +282,7 @@ export function ReviewModal({
                   <div>
                     <textarea
                       placeholder="What did you like or dislike? What did you use this product for?"
-                      {...registerField("email")}
+                      
                       className=" w-[30rem] h-[13.5rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
                     />
                   </div>
