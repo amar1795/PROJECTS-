@@ -23,8 +23,15 @@ import { Reset } from "@/actions/email/reset-password";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import StarRatingComponent from "./rating star component/StarRatingComponent";
+import Image from "next/image";
 
-export function ReviewModal({ buttonName }: { buttonName: string }) {
+export function ReviewModal({
+  buttonName,
+  ProductImage,
+  ProductName,
+}: {
+  buttonName: string;
+}) {
   const { toast } = useToast();
 
   const router = useRouter();
@@ -115,14 +122,13 @@ export function ReviewModal({ buttonName }: { buttonName: string }) {
     }
   }, [Modalerror, Modalsuccess]);
 
-    // Function to handle modal close
-    const handleModalClose = () => {
-      setIsOpen(false);
-      setModalError("");
-      setModalSuccess("");
-      setSelectedFiles([]); // Clear selected files state
-    };
-  
+  // Function to handle modal close
+  const handleModalClose = () => {
+    setIsOpen(false);
+    setModalError("");
+    setModalSuccess("");
+    setSelectedFiles([]); // Clear selected files state
+  };
 
   return (
     <Dialog
@@ -133,7 +139,6 @@ export function ReviewModal({ buttonName }: { buttonName: string }) {
           setModalError("");
           setModalSuccess("");
           handleModalClose(); // Reset state when modal closes
-
         }
       }}
     >
@@ -148,9 +153,19 @@ export function ReviewModal({ buttonName }: { buttonName: string }) {
           <form action="" onSubmit={handleSubmit(onSubmit)}>
             <DialogHeader>
               <DialogTitle>
-                <h1 className="w-[12rem]  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4   bg-yellow-400">
-                  <h1 className=" font-bold">Forgot Password </h1>
-                </h1>
+                <div className=" flex">
+                  <div className="w-[4rem] overflow-hidden h-[4rem] border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 text-[1.1rem]  ">
+                    <Image
+                      src={ProductImage}
+                      width={100}
+                      height={100}
+                      className=" h-[5.5rem]  object-contain "
+                    />
+                  </div>
+                  <h1 className=" h-[4rem] border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 pt-4 text-[1.1rem]  bg-yellow-400">
+                    {ProductName}
+                  </h1>
+                </div>
               </DialogTitle>
               {/* <DialogDescription>
                 Please Enter your Email address registered with us and we will

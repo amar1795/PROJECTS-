@@ -43,9 +43,8 @@ const OrderDetailsComponent = ({ orderItem }) => {
               </div>
               <div className=" mr-11 ">
                   <p>We would love to hear your review</p>
-                  <ReviewModal buttonName="Add your Review" />
-                  <p> Add your Review</p>
-                  <p>Add your Rating</p>
+                  <ReviewModal buttonName="Add your Review" ProductImage={orderItem?.product.images[0].url} ProductName={orderItem?.product.name} />
+                 
 
               </div>
             </div>

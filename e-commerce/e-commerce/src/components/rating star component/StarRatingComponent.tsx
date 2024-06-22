@@ -16,7 +16,7 @@ const feedbackTexts = ['Terrible', 'Bad', 'Okay', 'Good', 'Awesome'];
 const StarRating = ({ totalStars = 5 }) => {
   const [selectedStars, setSelectedStars] = useState(0);
   const [hoveredStar, setHoveredStar] = useState(null);
-    const[finalRating,setFinalRating]=useState(0);
+    const[finalRating,setFinalRating]=useState(6);
 
     const handleStarClick = (index) => {
         setSelectedStars(index + 1);
