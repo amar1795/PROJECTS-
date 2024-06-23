@@ -41,6 +41,7 @@ export function ReviewModal({
   ProductId: string;
   isPaid: boolean;
 }) {
+  console.log("this is the isPaid data from the review Modal", isPaid);
   const { toast } = useToast();
 
   const router = useRouter();
@@ -112,11 +113,14 @@ export function ReviewModal({
         .then((data) => {
           if (data?.error) {
             reset();
+            setStarRating(0);
             setModalError(data.error);
           }
 
           if (data?.success) {
             reset();
+            setStarRating(0);
+
             setModalSuccess(data.success);
           }
         })

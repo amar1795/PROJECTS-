@@ -3,7 +3,7 @@
 import * as z from "zod";
 
 import { ReviewSchema } from "@/schemas";
-import { createUserReview } from "./poductReview";
+import { createUserReview } from "./CreateProductReview";
 
 
 export const ValidatedReviewData = async (values: z.infer<typeof ReviewSchema>,ProductId, isPaid) => {
@@ -35,11 +35,11 @@ const data={
     imageUrls: images,
 }
 
+  console.log("Data:", data);
 
+  const validatedReviewData = await createUserReview({...data});
 
-  const validatedReviewData = await createUserReview(data);
-
-
+    console.log("User review created:", validatedReviewData);
 
 // send email to user with reset link now commented out for testing
 

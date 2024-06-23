@@ -74,7 +74,8 @@ const OrderSummaryComponent: React.FC<OrderProps> = ({
 }) => {
   // Assuming order.createdAt is a string representing a valid date in ISO 8601 format
   const createdAtDate = new Date(order.createdAt);
-
+  // this is Paid is true
+// console.log("this is the order from order SUmmary containg isPaid Data",order.isPaid);
   // Extracting day, month, and year from the date object
   const day = createdAtDate.getDate();
   const month = createdAtDate
@@ -159,7 +160,7 @@ const OrderSummaryComponent: React.FC<OrderProps> = ({
         <div className=" mx-2 mt-4 ">
           <div>
             {order.orderItems.map((orderItem, index) => (
-              <OrderDetailsComponent key={index} orderItem={orderItem} />
+              <OrderDetailsComponent key={index} orderItem={orderItem}  isPaid={order.isPaid} />
             ))}
           </div>
         </div>

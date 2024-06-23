@@ -14,7 +14,6 @@ interface ReviewData {
 }
 
 export async function createUserReview({
-  ispaid,
   productId,
   rating,
   reviewTitle,
@@ -31,8 +30,6 @@ export async function createUserReview({
     }
 
     // find the productID and if the user has purchased the product that is the the user paid for the item then mark it as  verifiedPurchase
-
-
 
 
   try {

@@ -20,7 +20,10 @@ const extractFirstAndLastParentCategoryNamesWithNumbers = (parentCategories) => 
   return formattedCategories;
 };
 
-const OrderDetailsComponent = ({ orderItem }) => {
+const OrderDetailsComponent = ({ orderItem,isPaid }) => {
+
+
+  // console.log("this is the order item", orderItem);
   // calling the helper function 
   const parentCategoryNamesWithNumbers = extractFirstAndLastParentCategoryNamesWithNumbers(orderItem?.product?.parentCategories);
 
@@ -73,7 +76,7 @@ const OrderDetailsComponent = ({ orderItem }) => {
                   ProductImage={orderItem?.product.images[0].url}
                   ProductName={orderItem?.product.name}
                   ProductId={orderItem?.productId}
-                  isPaid={orderItem?.isPaid}
+                  isPaid={isPaid}
                 />
               </div>
             </div>

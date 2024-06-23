@@ -37,7 +37,7 @@ const page =  () => {
 
 
 
-  // console.log("these are the orders",orders);
+  console.log("these are the orders",orders);
   // orders.forEach((order) => {
   //   console.log(`Order ID: ${order.id}`);
   //   console.log(`Order Total: ${order.orderTotal}`);
