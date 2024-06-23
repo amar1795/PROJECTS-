@@ -24,7 +24,7 @@ const OrderDetailsComponent = ({ orderItem }) => {
   // calling the helper function 
   const parentCategoryNamesWithNumbers = extractFirstAndLastParentCategoryNamesWithNumbers(orderItem?.product?.parentCategories);
 
-  console.log("these are the parent categories", parentCategoryNamesWithNumbers)
+  // console.log("these are the parent categories", parentCategoryNamesWithNumbers)
 
   return (
     <div>
@@ -72,6 +72,8 @@ const OrderDetailsComponent = ({ orderItem }) => {
                   buttonName="Add your Review"
                   ProductImage={orderItem?.product.images[0].url}
                   ProductName={orderItem?.product.name}
+                  ProductId={orderItem?.productId}
+                  isPaid={orderItem?.isPaid}
                 />
               </div>
             </div>

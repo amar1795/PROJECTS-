@@ -13,7 +13,7 @@ const smileys = [
 const feedbackTexts = ['Terrible', 'Bad', 'Okay', 'Good', 'Awesome'];
 
 
-const StarRating = ({ totalStars = 5 }) => {
+const StarRating = ({ totalStars = 5,setStarRating }) => {
   const [selectedStars, setSelectedStars] = useState(0);
   const [hoveredStar, setHoveredStar] = useState(null);
     const[finalRating,setFinalRating]=useState(6);
@@ -21,12 +21,18 @@ const StarRating = ({ totalStars = 5 }) => {
     const handleStarClick = (index) => {
         setSelectedStars(index + 1);
         setFinalRating(index);
+        setStarRating(index+1)
+        
+        // alert(`You've rated this ${index + 1} stars`);
       };
 
 
       const getFeedbackText = () => {
-        if (finalRating >= 0) {
-          return feedbackTexts[finalRating];
+        if (finalRating >= 0) {      
+          
+          const feedbackText = feedbackTexts[finalRating];
+
+          return feedbackText;
         } else {
           return '';
         }
@@ -52,8 +58,10 @@ const StarRating = ({ totalStars = 5 }) => {
         {smileys[selectedStars - 1] || smileys[4]} 
       </div>
       <div className="mt-2 text-lg font-semibold text-center h-[1rem]">
-        {getFeedbackText()|| ""}
+        {getFeedbackText()}
       </div>
+     
+
     </div>
   );
 };

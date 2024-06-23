@@ -18,19 +18,26 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEffect, useState, useTransition } from "react";
-import { ResetSchema } from "@/schemas";
+import { ReviewSchema } from "@/schemas";
 import { Reset } from "@/actions/email/reset-password";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import StarRatingComponent from "./rating star component/StarRatingComponent";
 import Image from "next/image";
+import { ValidatedReviewData } from "@/actions/productRating/validatedReviewData";
 
 export function ReviewModal({
   buttonName,
   ProductImage,
   ProductName,
+  ProductId,
+  isPaid,
 }: {
   buttonName: string;
+  ProductImage: string;
+  ProductName: string;
+  ProductId: string;
+  isPaid: boolean;
 }) {
   const { toast } = useToast();
 
@@ -40,8 +47,14 @@ export function ReviewModal({
   const [isOpen, setIsOpen] = useState(false);
   const [Modalerror, setModalError] = useState<string | undefined>("");
   const [Modalsuccess, setModalSuccess] = useState<string | undefined>("");
+  const [starRating, setStarRating] = useState(0);
 
   const [selectedFiles, setSelectedFiles] = useState([]);
+
+  // useEffect(() => {
+
+  //   alert("this is the star rating"+starRating)
+  // }, []);
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files); // Convert FileList to array
@@ -55,74 +68,80 @@ export function ReviewModal({
     // Optionally, you can also handle other file details here if needed
     console.log("Selected files:", files);
   };
+
   const {
-    register: registerField,
+    register: reviewField,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<z.infer<typeof ResetSchema>>({
-    resolver: zodResolver(ResetSchema),
+    setValue
+  } = useForm<z.infer<typeof ReviewSchema>>({
+    resolver: zodResolver(ReviewSchema),
     defaultValues: {
-      email: "",
+      rating: 0,
+      images: [],
+      title: "",
+      review: "",
     },
+    mode: "onBlur", // Validate on blur
   });
 
-  // toast is not working inside the modal need to check
+  useEffect(() => {
+    setValue("rating", starRating); // Sync starRating with form state
+    // alert("this is the star rating"+starRating)
+    console.log("this is the star rating", starRating);
+  }, [starRating]);
 
-  // console.log("this is callback url", callbackUrl);
 
-  const onSubmit = (values: z.infer<typeof ResetSchema>) => {
+  const onSubmit = (values: z.infer<typeof ReviewSchema>) => {
     setModalError("");
     setModalSuccess("");
+    // console.log("this is the values", values);
+    // console.log("this is the star rating", starRating);
+    // alert("this is the star rating" + starRating);
 
+    // alert("form submitted")
     startTransition(() => {
-      Reset(values)
+      console.log("Form values:", values);
+      ValidatedReviewData(values, ProductId, isPaid)
         .then((data) => {
           if (data?.error) {
             reset();
             setModalError(data.error);
-
-            // setModalErrorToast(data.error);
           }
 
           if (data?.success) {
             reset();
-            // alert("Password reset link sent! Password rest link has been sent to your email address. Please check your email to reset your password.");
             setModalSuccess(data.success);
-            // toast({
-            //   title: "Password reset link sent!",
-            //   description:
-            //     "Password rest link has been sent to your email address. Please check your email to reset your password.",
-            // });
-            // setTimeout(() => {
-            //   router.push('/password-reset'); // Replace with your target page URL
-            // }, 2000); // 2000 milliseconds = 2 seconds
+            
           }
         })
         .catch(() => setModalError("Something went wrong"));
     });
   };
 
-  useEffect(() => {
-    if (Modalerror) {
-      // alert(error);
-      toast({
-        title: `${Modalerror}`,
-        description:
-          "Password rest link has been sent to your email address. Please check your email to reset your password.",
-      });
-    }
-    if (Modalsuccess) {
-      // alert(success);
-      toast({
-        title: `${Modalsuccess}`,
-        description:
-          "Password rest link has been sent to your email address. Please check your email to reset your password.",
-      });
-    }
-  }, [Modalerror, Modalsuccess]);
+  // useEffect(() => {
+  //   if (Modalerror) {
+  //     // alert(error);
+  //     toast({
+  //       title: `${Modalerror}`,
+  //       description:
+  //         "Password rest link has been sent to your email address. Please check your email to reset your password.",
+  //     });
+  //   }
+  //   if (Modalsuccess) {
+  //     // alert(success);
+  //     toast({
+  //       title: `${Modalsuccess}`,
+  //       description:
+  //         "Password rest link has been sent to your email address. Please check your email to reset your password.",
+  //     });
+  //   }
+  // }, [Modalerror, Modalsuccess]);
 
   // Function to handle modal close
+  
+  
   const handleModalClose = () => {
     setIsOpen(false);
     setModalError("");
@@ -139,6 +158,7 @@ export function ReviewModal({
           setModalError("");
           setModalSuccess("");
           handleModalClose(); // Reset state when modal closes
+          reset(); // Reset form when modal closes
         }
       }}
     >
@@ -150,7 +170,7 @@ export function ReviewModal({
           </button>
         </DialogTrigger>
         <DialogContent className=" h-[41rem] ">
-          <form action="" onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <DialogHeader>
               <DialogTitle>
                 <div className=" flex">
@@ -167,13 +187,11 @@ export function ReviewModal({
                   </h1>
                 </div>
               </DialogTitle>
-              {/* <DialogDescription>
-                Please Enter your Email address registered with us and we will
-                send you a link to reset your password
-              </DialogDescription> */}
+             
             </DialogHeader>
             <div className=" main flex bg-pink-500 h-[30rem]  border-2 border-black border-b-8 border-r-4">
               <div className=" left flex-1 pl-5">
+                {/* star rating component */}
                 <div>
                   <div>
                     <h1 className="w-[25rem]  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4   bg-yellow-400">
@@ -183,11 +201,23 @@ export function ReviewModal({
                     </h1>
                   </div>
                   <div className=" flex mt-2 ml-8">
-                    <StarRatingComponent />
+                    <StarRatingComponent setStarRating={setStarRating} />
                   </div>
+                  
+                  <input
+                    {...reviewField("rating")}
+                    type="hidden"
+                    value={starRating}  
+                  />
+                  {errors.rating && (
+                    <span className="italic text-red-950 text-[1.1rem]">
+                      {errors.rating.message}
+                    </span>
+                  )}
                 </div>
 
                 <div className=" mt-2">
+                  {/* image upload component */}
                   <div>
                     <h1 className="w-[25rem]  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4   bg-yellow-400">
                       <h1 className=" font-bold text-[1.5rem]">
@@ -196,16 +226,7 @@ export function ReviewModal({
                     </h1>
                   </div>
                   <div className="">
-                    {/* <div >
-                     
-                      <input
-                        type="file"
-                        placeholder="Upload your Photos"
-                        {...registerField("email")}
-                        className=" w-[25rem] h-[6rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none pt-8 pl-14 "
-                      />
-                    
-                    </div> */}
+                    {/* showing selected files component */}
                     <div className=" flex">
                       <div className=" w-[22rem] mt-7">
                         <label
@@ -222,12 +243,18 @@ export function ReviewModal({
 
                           <input
                             id="fileInput"
-                            type="file"
+                            {...reviewField("images")}
+                            type="images"
                             onChange={handleFileChange}
                             className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
                             multiple // Allow multiple file selection
                           />
                         </label>
+                        {errors.images && (
+                          <span className=" italic text-red-950  text-[1.1rem]">
+                            {errors.images.message}
+                          </span>
+                        )}
                       </div>
 
                       {/* Container with white background for selected file names */}
@@ -254,6 +281,7 @@ export function ReviewModal({
 
               <div className=" right flex-1">
                 <div>
+                  {/* review Title */}
                   <div>
                     <h1 className="w-[30rem]  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4   bg-yellow-400">
                       <h1 className=" font-bold text-[1.5rem]">
@@ -264,15 +292,21 @@ export function ReviewModal({
                   <div>
                     <input
                       type="text"
+                      {...reviewField("title")}
                       placeholder="Whats most important to know?"
-                     
                       className=" w-[30rem] h-[3rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
                     />
                   </div>
+                  {errors.title && (
+                    <span className=" italic text-red-950  text-[1.1rem]">
+                      {errors.title.message}
+                    </span>
+                  )}
                 </div>
 
                 <div>
                   <div>
+                    {/* review textArea */}
                     <h1 className="w-[30rem]  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4   bg-yellow-400">
                       <h1 className=" font-bold text-[1.5rem]">
                         Write your Review
@@ -281,11 +315,16 @@ export function ReviewModal({
                   </div>
                   <div>
                     <textarea
+                      {...reviewField("review")}
                       placeholder="What did you like or dislike? What did you use this product for?"
-                      
                       className=" w-[30rem] h-[13.5rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
                     />
                   </div>
+                  {errors.review && (
+                    <span className=" italic text-red-950  text-[1.1rem]">
+                      {errors.review.message}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -318,14 +357,7 @@ export function ReviewModal({
                 </span>
               )}
             </div> */}
-            <div>
-              {/* {success && (
-                <p className="text-sm text-gray-500">
-                  We have sent a link to reset your password to your email
-                  address .
-                </p>
-              )} */}
-            </div>
+            <div></div>
             <DialogFooter>
               <button
                 type="submit"

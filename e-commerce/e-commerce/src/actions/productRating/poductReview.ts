@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { prismadb } from "@/lib/db";
 
 interface ReviewData {
+  ispaid:boolean;
   productId: string;
   rating: number;
   reviewTitle?: string | null;
@@ -13,12 +14,13 @@ interface ReviewData {
 }
 
 export async function createUserReview({
+  ispaid,
   productId,
   rating,
-  reviewTitle = null,
-  review = null,
-  verifiedPurchase = false, // This will default to false if not provided
-  imageUrls = [],
+  reviewTitle,
+  review ,
+  verifiedPurchase , // This will default to false if not provided
+  imageUrls,
 }: ReviewData) {
    
     const userSession = await auth();
@@ -28,6 +30,11 @@ export async function createUserReview({
         return  {error:"User not Signed in"}
     }
 
+    // find the productID and if the user has purchased the product that is the the user paid for the item then mark it as  verifiedPurchase
+
+
+
+
   try {
     // Create a new rating with associated images
     const newRating = await prismadb.rating.create({
@@ -36,10 +43,10 @@ export async function createUserReview({
         rating: rating,
         reviewTitle: reviewTitle,
         review: review,
-        verifiedPurchase: verifiedPurchase,
+        verifiedPurchase:verifiedPurchase,
         userId:user as string,
         images: {
-          create: imageUrls.map((image) => ({ url: image })),
+          create: imageUrls?.map((image) => ({ url: image })),
         },
       },
     });
@@ -49,6 +56,8 @@ export async function createUserReview({
     console.error("Error creating user review:", error);
   }
 }
+
+
 
 // // Sample usage
 // const sampleReviewData: ReviewData = {

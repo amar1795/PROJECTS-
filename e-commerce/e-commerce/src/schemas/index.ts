@@ -157,3 +157,31 @@ export const PaymentSchema = z.object({
     .nonempty({ message: "Name on card is required" })
     .regex(/^[A-Za-z\s]+$/, { message: "Name on card must contain only letters and not numbers" }), // Ensures only alphabetic characters and spaces
 });
+
+
+
+// Define the schema
+export const ReviewSchema = z.object({
+  rating: z.number()
+    .min(1, { message: 'Please add the Rating' })
+    .max(5, { message: 'Rating must be at most 5' })
+    .int({ message: 'Rating must be an integer' })
+    .nonnegative({ message: 'Rating must be a positive number' }),
+    images: z.array(z.string().url().refine(url => url.endsWith('.jpeg') || url.endsWith('.jpg'), {
+      message: 'Only JPEG files are allowed',
+    })).optional(),
+  title: z.string().optional(),
+  review: z.string().optional(),
+}).refine(
+  data => (data.title && data.review) || (!data.title && !data.review),
+  {
+    message: 'Both title and review must be filled or both must be empty',
+    path: ['title'], // You can set the path to highlight either title or review
+  }
+).refine(
+  data => data.rating !== undefined && data.rating !== null,
+  {
+    message: 'Rating is required',
+    path: ['rating'],
+  }
+);
