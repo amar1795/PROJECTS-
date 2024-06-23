@@ -5,6 +5,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Camera } from "lucide-react";
+import { CldUploadWidget } from "next-cloudinary";
 
 import {
   Dialog,
@@ -25,6 +26,7 @@ import { useToast } from "@/components/ui/use-toast";
 import StarRatingComponent from "./rating star component/StarRatingComponent";
 import Image from "next/image";
 import { ValidatedReviewData } from "@/actions/productRating/validatedReviewData";
+import ReviewImageUpload from "./ReviewImageUpload";
 
 export function ReviewModal({
   buttonName,
@@ -74,7 +76,8 @@ export function ReviewModal({
     handleSubmit,
     formState: { errors },
     reset,
-    setValue
+    watch,
+    setValue,
   } = useForm<z.infer<typeof ReviewSchema>>({
     resolver: zodResolver(ReviewSchema),
     defaultValues: {
@@ -86,12 +89,14 @@ export function ReviewModal({
     mode: "onBlur", // Validate on blur
   });
 
+  // Watch the images field
+  const images = watch("images", []);
+
   useEffect(() => {
     setValue("rating", starRating); // Sync starRating with form state
     // alert("this is the star rating"+starRating)
     console.log("this is the star rating", starRating);
   }, [starRating]);
-
 
   const onSubmit = (values: z.infer<typeof ReviewSchema>) => {
     setModalError("");
@@ -113,7 +118,6 @@ export function ReviewModal({
           if (data?.success) {
             reset();
             setModalSuccess(data.success);
-            
           }
         })
         .catch(() => setModalError("Something went wrong"));
@@ -140,8 +144,7 @@ export function ReviewModal({
   // }, [Modalerror, Modalsuccess]);
 
   // Function to handle modal close
-  
-  
+
   const handleModalClose = () => {
     setIsOpen(false);
     setModalError("");
@@ -187,7 +190,6 @@ export function ReviewModal({
                   </h1>
                 </div>
               </DialogTitle>
-             
             </DialogHeader>
             <div className=" main flex bg-pink-500 h-[30rem]  border-2 border-black border-b-8 border-r-4">
               <div className=" left flex-1 pl-5">
@@ -203,11 +205,11 @@ export function ReviewModal({
                   <div className=" flex mt-2 ml-8">
                     <StarRatingComponent setStarRating={setStarRating} />
                   </div>
-                  
+
                   <input
                     {...reviewField("rating")}
                     type="hidden"
-                    value={starRating}  
+                    value={starRating}
                   />
                   {errors.rating && (
                     <span className="italic text-red-950 text-[1.1rem]">
@@ -216,30 +218,37 @@ export function ReviewModal({
                   )}
                 </div>
 
-                <div className=" mt-2">
-                  {/* image upload component */}
-                  <div>
+                <div>
+                  <div className=" mt-2">
+                    {/* image upload component */}
+                    {/* <div>
                     <h1 className="w-[25rem]  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4   bg-yellow-400">
                       <h1 className=" font-bold text-[1.5rem]">
                         Share the Photos{" "}
                       </h1>
                     </h1>
-                  </div>
-                  <div className="">
-                    {/* showing selected files component */}
-                    <div className=" flex">
-                      <div className=" w-[22rem] mt-7">
-                        <label
-                          htmlFor="fileInput"
-                          className="relative cursor-pointer  h-[6rem] p-2 border-2 border-black bg-white text-black mt-4 flex justify-center items-center border-b-8 border-r-4 focus:outline-none"
-                        >
-                          <Camera size={50} strokeWidth={1} />
+                  </div> */}
+                    <div className="">
+                      {/* showing selected files component */}
+                      <div className=" flex">
+                        <div className=" w-[22rem] mt-7">
+                          {/* <label
+                            htmlFor="fileInput"
+                            className="relative cursor-pointer  h-[6rem] p-2 border-2 border-black bg-white text-black mt-4 flex justify-center items-center border-b-8 border-r-4 focus:outline-none"
+                          > */}
+                            {/* <Camera size={50} strokeWidth={1} />
 
-                          {selectedFiles.length > 0 ? (
-                            <span className="ml-8">Images Selected</span>
-                          ) : (
-                            <span className="ml-8">Upload your Photos</span>
-                          )}
+                            {selectedFiles.length > 0 ? (
+                              <span className="ml-8">Images Selected</span>
+                            ) : (
+                              <span className="ml-8">Upload your Photos</span>
+                            )} */}
+
+                            {/* <CldUploadWidget onUpload={onUpload} uploadPreset="mjsgvhim">
+        {({ open }) => {
+          const onClick = () => {
+            open();
+          };
 
                           <input
                             id="fileInput"
@@ -249,30 +258,41 @@ export function ReviewModal({
                             className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
                             multiple // Allow multiple file selection
                           />
-                        </label>
-                        {errors.images && (
-                          <span className=" italic text-red-950  text-[1.1rem]">
-                            {errors.images.message}
-                          </span>
-                        )}
-                      </div>
+                        }}
+            </CldUploadWidget> */}
+                            {/* disbaling the share photo will add this functionality later as bugs */}
+                            {/* <div>
+            <ReviewImageUpload
+        value={images.map((image) => ({ url: image }))}
+        onChange={(url) => setValue("images", [...images, url])}
+        onRemove={(url) => setValue("images", images.filter((current) => current !== url))}
+      />
+            </div> */}
+                          {/* </label> */}
+                          {errors.images && (
+                            <span className=" italic text-red-950  text-[1.1rem]">
+                              {errors.images.message}
+                            </span>
+                          )}
+                        </div>
 
-                      {/* Container with white background for selected file names */}
-                      <div className=" pl-2">
-                        {selectedFiles.length > 0 && (
-                          <div className=" mr-2 ">
-                            <h2 className="text-xl font-bold mt-2 ">
-                              Selected Files:
-                            </h2>
-                            <div className="bg-white p-4 border border-gray-200 shadow-md mt-2 h-[6rem] overflow-y-auto">
-                              <ul className="list-disc list-inside">
-                                {selectedFiles.map((fileName, index) => (
-                                  <li key={index}>{fileName}</li>
-                                ))}
-                              </ul>
+                        {/* Container with white background for selected file names */}
+                        <div className=" pl-2">
+                          {selectedFiles.length > 0 && (
+                            <div className=" mr-2 ">
+                              <h2 className="text-xl font-bold mt-2 ">
+                                Selected Files:
+                              </h2>
+                              <div className="bg-white p-4 border border-gray-200 shadow-md mt-2 h-[6rem] overflow-y-auto">
+                                <ul className="list-disc list-inside">
+                                  {selectedFiles.map((fileName, index) => (
+                                    <li key={index}>{fileName}</li>
+                                  ))}
+                                </ul>
+                              </div>
                             </div>
-                          </div>
-                        )}
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
