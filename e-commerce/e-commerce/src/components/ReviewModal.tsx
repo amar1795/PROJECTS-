@@ -101,17 +101,17 @@ export function ReviewModal({
   // Watch the images field
   const images = watch("images", []);
 
+  // this useffect needs to run everytime the modal is opened
   useEffect(() => {
-    if(reviewTitle || reviewMessage || reviewStars){
-      setValue("review", reviewMessage);
-      console.log("this is the  review message"+reviewMessage)
-      setValue("rating", starRating);
-      setValue("title", reviewTitle);
+    if (isOpen && (reviewTitle || reviewMessage || reviewStars)) {
+      setValue("review", reviewMessage || "");
+      setValue("rating", reviewStars || 0);
+      setValue("title", reviewTitle || "");
+      console.log("Setting initial form values");
     }
-  }, []);
+  }, [isOpen]);
 
   useEffect(() => {
-   
     setValue("rating", starRating); // Sync starRating with form state
     // alert("this is the star rating"+starRating)
     console.log("this is the star rating", starRating);
@@ -127,7 +127,7 @@ export function ReviewModal({
     // alert("form submitted")
     startTransition(() => {
       console.log("Form values:", values);
-      ValidatedReviewData(values, ProductId,reviewId, isPaid)
+      ValidatedReviewData(values, ProductId, reviewId, isPaid)
         .then((data) => {
           if (data?.error) {
             reset();
@@ -225,7 +225,7 @@ export function ReviewModal({
                     </h1>
                   </div>
                   <div className=" flex mt-2 ml-8">
-                    <StarRatingComponent setStarRating={setStarRating} />
+                    <StarRatingComponent setStarRating={setStarRating} reviewStars={reviewStars}  />
                   </div>
 
                   <input
@@ -258,7 +258,7 @@ export function ReviewModal({
                             htmlFor="fileInput"
                             className="relative cursor-pointer  h-[6rem] p-2 border-2 border-black bg-white text-black mt-4 flex justify-center items-center border-b-8 border-r-4 focus:outline-none"
                           > */}
-                            {/* <Camera size={50} strokeWidth={1} />
+                          {/* <Camera size={50} strokeWidth={1} />
 
                             {selectedFiles.length > 0 ? (
                               <span className="ml-8">Images Selected</span>
@@ -266,11 +266,11 @@ export function ReviewModal({
                               <span className="ml-8">Upload your Photos</span>
                             )} */}
 
-                            {/* <CldUploadWidget onUpload={onUpload} uploadPreset="mjsgvhim">
-        {({ open }) => {
-          const onClick = () => {
-            open();
-          };
+                          {/* <CldUploadWidget onUpload={onUpload} uploadPreset="mjsgvhim">
+                          {({ open }) => {
+                            const onClick = () => {
+                              open();
+                            };
 
                           <input
                             id="fileInput"
@@ -281,15 +281,15 @@ export function ReviewModal({
                             multiple // Allow multiple file selection
                           />
                         }}
-            </CldUploadWidget> */}
-                            {/* disbaling the share photo will add this functionality later as bugs */}
-                            {/* <div>
-            <ReviewImageUpload
-        value={images.map((image) => ({ url: image }))}
-        onChange={(url) => setValue("images", [...images, url])}
-        onRemove={(url) => setValue("images", images.filter((current) => current !== url))}
-      />
-            </div> */}
+                        </CldUploadWidget> */}
+                          {/* disbaling the share photo will add this functionality later as bugs */}
+                          {/* <div>
+                            <ReviewImageUpload
+                        value={images.map((image) => ({ url: image }))}
+                        onChange={(url) => setValue("images", [...images, url])}
+                        onRemove={(url) => setValue("images", images.filter((current) => current !== url))}
+                      />
+                            </div> */}
                           {/* </label> */}
                           {errors.images && (
                             <span className=" italic text-red-950  text-[1.1rem]">

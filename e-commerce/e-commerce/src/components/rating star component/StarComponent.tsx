@@ -3,7 +3,7 @@ import { Star } from 'lucide-react';
 
 const colors = ['red', 'orange', 'green', 'pink', 'yellow'];
 
-const StarComponent = ({ selected = false, index, onMouseEnter, onMouseLeave, onClick, hoverIndex,finalRating }) => {
+const StarComponent = ({ selected = false, index, onMouseEnter, onMouseLeave, onClick, hoverIndex,finalRating,reviewStars }) => {
 
   const getStrokeColorClass = () => {
     if (hoverIndex !== null) {

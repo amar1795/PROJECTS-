@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import StarComponent from './StarComponent';
 import { Angry, Frown, Meh, Smile, Laugh } from 'lucide-react';
 
@@ -13,14 +13,24 @@ const smileys = [
 const feedbackTexts = ['Terrible', 'Bad', 'Okay', 'Good', 'Awesome'];
 
 
-const StarRating = ({ totalStars = 5,setStarRating }) => {
+const StarRating = ({ totalStars = 5,setStarRating,reviewStars }) => {
   const [selectedStars, setSelectedStars] = useState(0);
   const [hoveredStar, setHoveredStar] = useState(null);
     const[finalRating,setFinalRating]=useState(6);
 
+     // Use useEffect to update selectedStars and finalRating when reviewStars changes
+  useEffect(() => {
+    if (reviewStars !== undefined && reviewStars >= 0 && reviewStars <= totalStars) {
+      setSelectedStars(reviewStars);
+      setFinalRating(reviewStars - 1); // Adjust finalRating accordingly
+    }
+  }, [reviewStars, totalStars]);
+
     const handleStarClick = (index) => {
         setSelectedStars(index + 1);
+        
         setFinalRating(index);
+        // setFinalRating(reviewStars);
         setStarRating(index+1)
         
         // alert(`You've rated this ${index + 1} stars`);
@@ -46,6 +56,7 @@ const StarRating = ({ totalStars = 5,setStarRating }) => {
             key={i}
             index={i}
             finalRating={finalRating}
+            reviewStars={reviewStars}
             selected={i < selectedStars}
             onMouseEnter={() => setHoveredStar(i)}
             onMouseLeave={() => setHoveredStar(null)}
