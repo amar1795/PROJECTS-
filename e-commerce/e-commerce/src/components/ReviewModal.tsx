@@ -29,6 +29,7 @@ import { ValidatedReviewData } from "@/actions/productRating/validatedReviewData
 import ReviewImageUpload from "./ReviewImageUpload";
 
 export function ReviewModal({
+  setNewData,
   buttonName,
   ProductImage,
   ProductName,
@@ -144,6 +145,8 @@ export function ReviewModal({
         })
         .catch(() => setModalError("Something went wrong"));
     });
+
+    handleModalClose();
   };
 
   // useEffect(() => {
@@ -172,6 +175,7 @@ export function ReviewModal({
     setModalError("");
     setModalSuccess("");
     setSelectedFiles([]); // Clear selected files state
+    setNewData(prev => !prev);
   };
 
   return (

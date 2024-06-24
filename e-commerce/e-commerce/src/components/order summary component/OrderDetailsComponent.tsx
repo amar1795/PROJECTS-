@@ -33,6 +33,7 @@ const extractFirstAndLastParentCategoryNamesWithNumbers = (
 
 const OrderDetailsComponent = ({ orderItem, isPaid }) => {
   const [reviewData, setReviewData] = useState(null);
+  const [newData, setNewData] = useState(true);
   console.log("this is the review Data", reviewData);
   // console.log("this is the review rating", reviewData?.review?.rating);
   // console.log("this is the review reviewTitle", reviewData?.review?.review);
@@ -48,7 +49,7 @@ const OrderDetailsComponent = ({ orderItem, isPaid }) => {
       setReviewData(Data);
     };
     fetchReviewData();
-  }, []);
+  }, [newData]);
 
   // console.log("this is the order item", orderItem);
   // calling the helper function
@@ -100,11 +101,12 @@ const OrderDetailsComponent = ({ orderItem, isPaid }) => {
                 </h1>
               </div>
 
-              {reviewData?.review?.rating && (
+              {reviewData?.review?.rating ? (
                 <div className="mr-11">
                   <p>You Rated {reviewData?.review?.rating}</p>
                   {reviewData?.review?.review === "" ? (
                     <ReviewModal
+                    setNewData={setNewData}
                       buttonName="Add your Review"
                       reviewId={reviewData?.review?.id}
                       ProductImage={orderItem?.product.images[0].url}
@@ -120,6 +122,7 @@ const OrderDetailsComponent = ({ orderItem, isPaid }) => {
                     <p>Your Review is</p>
                       <p>{reviewData?.review?.review}</p>
                       <ReviewModal
+                      setNewData={setNewData}
                       reviewId={reviewData?.review?.id}
                       buttonName="Edit your Review"
                       reviewStars={reviewData?.review?.rating}
@@ -133,7 +136,22 @@ const OrderDetailsComponent = ({ orderItem, isPaid }) => {
                    </div>
                   )}
                 </div>
-              )}
+              ):(
+                <div className="mr-11"> 
+
+                  <ReviewModal
+                  setNewData={setNewData}
+                buttonName="Rate the product"
+                reviewId={reviewData?.review?.id}
+                ProductImage={orderItem?.product.images[0].url}
+                ProductName={orderItem?.product.name}
+                ProductId={orderItem?.productId}
+                reviewStars={reviewData?.review?.rating}
+                reviewTitle={reviewData?.review?.reviewTitle}
+                reviewMessage={reviewData?.review?.review}
+                isPaid={isPaid}
+              />
+              </div>)}
 
               {/* */}
             </div>
