@@ -24,15 +24,17 @@ export async function handlePaymentInfo(paymentInfo: HandlePaymentInfoInput): Pr
 
         if (paymentInfo.paymentMode === PaymentMode.CARD) {
             // Fetch existing card if available
-            const existingCard = await prismadb.card.findFirst({
-                where: {
-                    userId: paymentInfo.userId
-                }
-            });
+            // const existingCard = await prismadb.card.findFirst({
+            //     where: {
+            //         userId: paymentInfo.userId
+            //     }
+            // });
 
-            if (existingCard) {
-                card = existingCard;
-            } else if (paymentInfo.cardDetails) {
+            // if (existingCard) {
+            //     card = existingCard;
+            // } else 
+            
+            if (paymentInfo.cardDetails) {
                 // Create a new card securely
                 const newCard = await createSecureCard(paymentInfo.userId, paymentInfo.cardDetails);
                 card = newCard;

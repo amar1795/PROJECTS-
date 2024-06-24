@@ -74,6 +74,7 @@ model Card {
   cardExpiry     String
   cardCvc        String // Should be stored securely, preferably encrypted
   cardHolderName String
+  lastFourDigits String? // Last four digits of the card number
   orders         Order[]  @relation("CardToOrder")
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt

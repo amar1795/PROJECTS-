@@ -38,7 +38,7 @@ const page = () => {
   const [productData, setproductData] = useState([]);
   const [paymentData, setPaymentData] = useState([]);
   const router = useRouter();
-
+// console.log("this is the address",alladdress)
   const [isPending, startTransition] = useTransition();
   const formRef = useRef<HTMLFormElement | null>(null);
 
