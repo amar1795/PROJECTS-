@@ -28,7 +28,7 @@ import Image from "next/image";
 import { ValidatedReviewData } from "@/actions/productRating/validatedReviewData";
 import ReviewImageUpload from "./ReviewImageUpload";
 
-export function ReviewModal({
+export function EditReviewModal({
   buttonName,
   ProductImage,
   ProductName,
@@ -37,14 +37,12 @@ export function ReviewModal({
   reviewStars,
   reviewTitle,
   reviewMessage,
-  reviewId,
 }: {
   buttonName: string;
   ProductImage: string;
   ProductName: string;
   ProductId: string;
   isPaid: boolean;
-  reviewId?: string;
   reviewStars?: number;
   reviewTitle?: string;
   reviewMessage?: string;
@@ -127,7 +125,7 @@ export function ReviewModal({
     // alert("form submitted")
     startTransition(() => {
       console.log("Form values:", values);
-      ValidatedReviewData(values, ProductId,reviewId, isPaid)
+      ValidatedReviewData(values, ProductId, isPaid)
         .then((data) => {
           if (data?.error) {
             reset();

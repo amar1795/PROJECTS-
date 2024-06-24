@@ -29,10 +29,27 @@ export async function createUserReview({
         return  {error:"User not Signed in"}
     }
 
-    // find the productID and if the user has purchased the product that is the the user paid for the item then mark it as  verifiedPurchase
+  //  if the user has already added the review he Cannot add another review and will the the his previous review instead to which he can edit or delete it 
 
 
   try {
+
+       // Check if the user has already reviewed the product
+    const existingReview = await prismadb.rating.findFirst({
+      where: {
+        productId: productId,
+        userId: user,
+      },
+    });
+
+    if (existingReview) {
+      // User has already created a review for this product
+      return {
+        message: "You have already reviewed this product.",
+        review: existingReview,
+      };
+    }
+    
     // Create a new rating with associated images
     const newRating = await prismadb.rating.create({
       data: {

@@ -1,31 +1,60 @@
 import { Trash2 } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import React, { use, useEffect, useState } from "react";
 import { ReviewModal } from "../ReviewModal";
 import Link from "next/link";
-
+import { fetchReview } from "@/actions/productRating/fetchReview";
 
 // helper function to format the parent Categories to be used in the link
-const extractFirstAndLastParentCategoryNamesWithNumbers = (parentCategories) => {
+const extractFirstAndLastParentCategoryNamesWithNumbers = (
+  parentCategories
+) => {
   if (!parentCategories || parentCategories.length === 0) return [];
 
   const formattedCategories = [];
   if (parentCategories[0]) {
-    formattedCategories.push(`${parentCategories[0].name.replace(/\s+/g, '')}`);
+    formattedCategories.push(`${parentCategories[0].name.replace(/\s+/g, "")}`);
   }
-  if (parentCategories.length > 1 && parentCategories[parentCategories.length - 1]) {
-    formattedCategories.push(`${parentCategories[parentCategories.length - 1].name.replace(/\s+/g, '')}`);
+  if (
+    parentCategories.length > 1 &&
+    parentCategories[parentCategories.length - 1]
+  ) {
+    formattedCategories.push(
+      `${parentCategories[parentCategories.length - 1].name.replace(
+        /\s+/g,
+        ""
+      )}`
+    );
   }
 
   return formattedCategories;
 };
 
-const OrderDetailsComponent = ({ orderItem,isPaid }) => {
-
+const OrderDetailsComponent = ({ orderItem, isPaid }) => {
+  const [reviewData, setReviewData] = useState(null);
+  console.log("this is the review Data", reviewData);
+  // console.log("this is the review rating", reviewData?.review?.rating);
+  // console.log("this is the review reviewTitle", reviewData?.review?.review);
+  // console.log(
+  //   "this is the review reviewMessage",
+  //   reviewData?.review?.reviewTitle
+  // );
+// console.log("this is the product ID and the name", orderItem?.product.id, orderItem?.product.name)
+// console.log("this is the product ID inside the orderItem", orderItem)
+  useEffect(() => {
+    const fetchReviewData = async () => {
+      const Data = await fetchReview({productId:orderItem?.productId});
+      setReviewData(Data);
+    };
+    fetchReviewData();
+  }, []);
 
   // console.log("this is the order item", orderItem);
-  // calling the helper function 
-  const parentCategoryNamesWithNumbers = extractFirstAndLastParentCategoryNamesWithNumbers(orderItem?.product?.parentCategories);
+  // calling the helper function
+  const parentCategoryNamesWithNumbers =
+    extractFirstAndLastParentCategoryNamesWithNumbers(
+      orderItem?.product?.parentCategories
+    );
 
   // console.log("these are the parent categories", parentCategoryNamesWithNumbers)
 
@@ -69,16 +98,43 @@ const OrderDetailsComponent = ({ orderItem,isPaid }) => {
                   </span>
                 </h1>
               </div>
-              <div className=" mr-11 ">
-                <p>We would love to hear your Feedback !</p>
-                <ReviewModal
-                  buttonName="Add your Review"
-                  ProductImage={orderItem?.product.images[0].url}
-                  ProductName={orderItem?.product.name}
-                  ProductId={orderItem?.productId}
-                  isPaid={isPaid}
-                />
-              </div>
+
+              {reviewData?.review?.rating && (
+                <div className="mr-11">
+                  <p>You Rated {reviewData?.review?.rating}</p>
+                  {reviewData?.review?.review === "" ? (
+                    <ReviewModal
+                      buttonName="Add your Review"
+                      reviewId={reviewData?.review?.id}
+                      ProductImage={orderItem?.product.images[0].url}
+                      ProductName={orderItem?.product.name}
+                      ProductId={orderItem?.productId}
+                      reviewStars={reviewData?.review?.rating}
+                      reviewTitle={reviewData?.review?.reviewTitle}
+                      reviewMessage={reviewData?.review?.review}
+                      isPaid={isPaid}
+                    />
+                  ) : (
+                   <div>
+                    <p>Your Review is</p>
+                      <p>{reviewData?.review?.review}</p>
+                      <ReviewModal
+                      reviewId={reviewData?.review?.id}
+                      buttonName="Edit your Review"
+                      reviewStars={reviewData?.review?.rating}
+                      reviewTitle={reviewData?.review?.reviewTitle}
+                      reviewMessage={reviewData?.review?.review}
+                      ProductImage={orderItem?.product.images[0].url}
+                      ProductName={orderItem?.product.name}
+                      ProductId={orderItem?.productId}
+                      isPaid={isPaid}
+                    />
+                   </div>
+                  )}
+                </div>
+              )}
+
+              {/* */}
             </div>
           </div>
         </div>
