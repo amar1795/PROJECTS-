@@ -26,6 +26,8 @@ import { DeleteModal } from "@/components/deleteModal";
 
 const page = () => {
   const user = useCurrentUser();
+  const [activeTab, setActiveTab] = useState("credit");
+
   const { toast } = useToast();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
@@ -33,6 +35,14 @@ const page = () => {
   const [selectedAddress, setSelectedAddress] = useState<string | undefined>();
   const [paymentData, setPaymentData] = useState([]);
   const [AllUserCards, setAllUserCards] = useState([]);
+
+  // need to restructure these helper functions later
+  const formatToINR = (amount) => {
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+    }).format(amount);
+  };
 
   console.log("this is the user", user);
   // console.log("All Address: ", alladdress);
@@ -158,6 +168,13 @@ const page = () => {
     // alert(`Your Shipping Address is: ${formatAddress(address)}`);
   };
 
+  const [isSelected, setIsSelected] = useState(false);
+
+  const toggleColor = (e) => {
+    e.preventDefault();
+    setIsSelected(!isSelected);
+  };
+
   return (
     <div className="overflow-hidden border-2 border-black  flex flex-col ">
       <div className=" bg-violet-600 w-full border-b-4 border-black fixed top-0 left-0 right-0 z-10">
@@ -198,7 +215,7 @@ const page = () => {
         {/* Adjust this margin-top to ensure content starts below the fixed topbar */}
         <div className="bg-pink-600 flex-1 border-2 border-black min-h-96 px-[5rem] ">
           {/* profile photo */}
-          <div className="  bg-teal-600 border-2 border-black  h-[30rem] mt-5  ">
+          <div className="  bg-teal-600 border-2 border-black   mt-5  ">
             <div className="flex justify-between h-full px-6 py-6  text-wrap">
               <div className="  h-full pr-4  w-[34rem]">
                 <h1 className=" text-4xl font-bold">Profile Photo</h1>
@@ -207,7 +224,7 @@ const page = () => {
                   This image will appear as your profile photo
                 </p>
               </div>
-              <div className="flex flex-col    border-2 border-black flex-1  h-full  ">
+              <div className="flex flex-col    border-2 border-black flex-1  h-[20rem]  ">
                 <div className=" flex px-4 py-4 justify-between h-full">
                   <div>
                     <div className=" pl-[2rem] pt-4 flex   h-[10rem] w-full">
@@ -215,7 +232,7 @@ const page = () => {
                     </div>
                   </div>
                 </div>
-                <div className=" bg-yellow-500 border-t-2 border-black h-[5rem] flex w-full justify-end">
+                {/* <div className=" bg-yellow-500 border-t-2 border-black h-[5rem] flex w-full justify-end">
                   <div className=" flex pr-5 pb-6">
                     <div className="h-[4rem] ">
                       <button className="w-[10rem] p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-red-600 mr-4">
@@ -228,7 +245,7 @@ const page = () => {
                       </button>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -276,6 +293,28 @@ const page = () => {
                             <h1 className=" font-bold">Update </h1>
                           </button>
                         </div>
+                        <div className=" mt-4 flex h-full ">
+                          <h3 className=" w-[32rem] h-[3.4rem] pt-4 mt-3 text-[1rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
+                            Enable two Step Verification
+                          </h3>
+                          <div className=" h-[4rem]">
+                            <button
+                              className="p-1 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 ml-2 bg-green-500"
+                              onClick={toggleColor}
+                            >
+                              <div
+                                className={`h-6 w-6 ${
+                                  isSelected ? "bg-black" : "bg-white"
+                                }`}
+                              >
+                                {/* Add an empty space to keep the div rendered */}
+                                &nbsp;
+                              </div>
+                            </button>
+                          </div>
+                        </div>
+
+                        <div></div>
                         <div className=" flex">
                           <div className=" h-[4rem]">
                             <div className="  p-2  ml-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4  bg-green-500">
@@ -585,31 +624,33 @@ const page = () => {
                   <div className=" mt-4">
                     {AllUserCards.map((card) => (
                       <div className="w-[40rem] h-[4rem] mt-2 text-[1rem] leading-none p-2 border-2 border-black text-black  border-b-8 border-r-4 bg-yellow-500">
-                      <div className=" flex justify-between h-full">
-                      <div className=" flex ">
-                        <div className=" h-full">
-                        <Image src="/1.jpg" width={50} height={50} alt="Logo" className=' rounded-md mr-2' />
-
-                        </div>
-                        <div className=" flex flex-col justify-between h-full ">
-                      <div className=" flex">
-                          <p>{card.cardHolderName}</p>
-                              <div className=" flex ml-4">
-                              <p>VISA </p>
-                              <p> **** {card.lastFourDigits}</p>
+                        <div className=" flex justify-between h-full">
+                          <div className=" flex ">
+                            <div className=" h-full">
+                              <Image
+                                src="/1.jpg"
+                                width={50}
+                                height={50}
+                                alt="Logo"
+                                className=" rounded-md mr-2"
+                              />
+                            </div>
+                            <div className=" flex flex-col justify-between h-full ">
+                              <div className=" flex">
+                                <p>{card.cardHolderName}</p>
+                                <div className=" flex ml-4">
+                                  <p>VISA </p>
+                                  <p> **** {card.lastFourDigits}</p>
+                                </div>
                               </div>
+                              <p>Expires :{card.cardExpiry} </p>
+                            </div>
+                          </div>
+                          <div className=" flex self-center">
+                            <DeleteModal />
+                          </div>
+                        </div>
                       </div>
-                      <p>Expires :{card.cardExpiry} </p>
-                      </div>
-                      </div>
-                      <div className=" flex self-center">
-                      
-                      <DeleteModal />
-
-                      </div>
-                      </div>
-                    </div>
-
                     ))}
                   </div>
                 </div>
@@ -622,69 +663,70 @@ const page = () => {
               <div className="  h-full pr-4 ">
                 <h1 className=" text-4xl font-bold">Your Wallet Details </h1>
                 <p className=" text-2xl  mt-4">
-                  Upload your personal information here
+                  See your Wallet related Details Here
                 </p>
-              </div>
-              <div className="flex flex-col  border-2 border-black w-[50vw]  h-full  ">
-                <div className=" flex px-4 py-4 justify-center h-full ">
-                  <div>
-                    <form className="">
-                      <div className="flex flex-col items-center">
-                        <div className=" flex ">
-                          <input
-                            type="text"
-                            placeholder="First Name"
-                            className=" w-64 p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none  mr-8"
-                          />
-                          <input
-                            type="text"
-                            placeholder="Last Name"
-                            className="w-64 p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
-                          />
-                        </div>
-                        <input
-                          type="text"
-                          placeholder="Email"
-                          className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
-                        />
-
-                        <div className=" flex">
-                          <input
-                            type="number"
-                            placeholder="Enter your phone number"
-                            className="w-[30rem] mr-4 p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
-                          />
-                          <div className=" h-[4rem]">
-                            <div className="  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4  bg-green-500">
-                              <h1 className=" font-bold">
-                                <Check />{" "}
-                              </h1>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className=" h-[4rem]">
-                          <button className="  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2  bg-green-500">
-                            <h1 className=" font-bold">Verify Phone Number </h1>
-                          </button>
-                        </div>
+                <div>
+                  <div className=" flex mt-4">
+                    <div className=" w-[25rem] text-[2rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
+                      <div className=" p-4 px-4">
+                        <h1 className=" text-[2rem]"> Available balance</h1>
+                        <h1 className=" mt-4 text-[1.8rem]">
+                          {formatToINR(100000)}
+                        </h1>
                       </div>
-                    </form>
+                    </div>
+                  </div>
+
+                  <div className=" mt-5 w-[15rem]">
+                    <StyledButton buttonName="Add Money" />
                   </div>
                 </div>
-                <div className=" bg-yellow-500 border-t-2 border-black h-[5rem] flex w-full justify-end">
-                  <div className=" flex pr-5 pb-6">
-                    <div className="h-[4rem] ">
-                      <button className="w-[10rem] p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-red-600 mr-4">
-                        <h1 className="font-bold">Cancel</h1>
-                      </button>
-                    </div>
-                    <div className="h-[4rem]">
-                      <button className="w-[10rem] p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2  bg-pink-500">
-                        <h1 className="font-bold">Save</h1>
-                      </button>
-                    </div>
+              </div>
+
+              <div className=" flex-1 ">
+                <div className=" flex justify-around ">
+                  <div className="   mb-8 ">
+                    <button
+                      type="button"
+                      className={`w-[15rem] p-2 border-2 border-black  mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2  ml-4  ${
+                        activeTab === "credit"
+                          ? "bg-white text-black"
+                          : "bg-yellow-400 text-black"
+                      }`}
+                      onClick={() => setActiveTab("credit")}
+                    >
+                      <h1 className="font-bold">Credit History</h1>
+                    </button>
                   </div>
+                  <div className="   mb-8 ">
+                  <button
+            type="button"
+            className={`w-[15rem] p-2 border-2 border-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 ml-4 ${
+              activeTab === 'debit' ? 'bg-white text-black' : 'bg-yellow-400 text-black'
+            }`}
+            onClick={() => setActiveTab('debit')}
+          >
+            <h1 className="font-bold">Debit History</h1>
+          </button>
+                  </div>
+                </div>
+
+                <div className=" bg-white h-[20rem] w-full border-black border-2">
+
+                {activeTab === 'credit' && (
+          <div>
+            {/* Credit History Content */}
+            <h2>Credit History</h2>
+            <p>Details about credit history...</p>
+          </div>
+        )}
+        {activeTab === 'debit' && (
+          <div>
+            {/* Debit History Content */}
+            <h2>Debit History</h2>
+            <p>Details about debit history...</p>
+          </div>
+        )}
                 </div>
               </div>
             </div>
@@ -718,18 +760,14 @@ const page = () => {
                     </form>
                   </div>
                 </div>
-                <div className=" bg-yellow-500 border-t-2 border-black h-[5rem] flex w-full justify-end">
+                <div className="  border-black h-[5rem] flex w-full justify-end">
                   <div className=" flex pr-5 pb-6">
                     <div className="h-[4rem] ">
-                      <button className="w-[10rem] p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-red-600 mr-4">
-                        <h1 className="font-bold">Cancel</h1>
+                      <button className="w-[10rem] p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500 mr-4">
+                        <h1 className="font-bold">Update</h1>
                       </button>
                     </div>
-                    <div className="h-[4rem]">
-                      <button className="w-[10rem] p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2  bg-pink-500">
-                        <h1 className="font-bold">Save</h1>
-                      </button>
-                    </div>
+                    
                   </div>
                 </div>
               </div>
