@@ -5,6 +5,8 @@ import React, { use, useEffect, useState } from "react";
 import { ReviewModal } from "../ReviewModal";
 import Link from "next/link";
 import { fetchReview } from "@/actions/productRating/fetchReview";
+import MiniStarComponent from "../rating star component/MiniStarComponent";
+import MiniStarRatingComponent from "../rating star component/MiniStarRatingComponent";
 
 // helper function to format the parent Categories to be used in the link
 const extractFirstAndLastParentCategoryNamesWithNumbers = (
@@ -103,7 +105,13 @@ const OrderDetailsComponent = ({ orderItem, isPaid }) => {
 
               {reviewData?.review?.rating ? (
                 <div className="mr-11">
-                  <p>You Rated {reviewData?.review?.rating}</p>
+                  <div className=" flex ">
+                  <p>You Rated {reviewData?.review?.rating} Stars </p>
+                  <div className=" self-center ml-2" >
+                    <MiniStarRatingComponent  reviewStars={reviewData?.review?.rating}/>
+                  </div>
+                  </div>
+                  
                   {reviewData?.review?.review === "" ? (
                     <ReviewModal
                     setNewData={setNewData}
@@ -119,7 +127,7 @@ const OrderDetailsComponent = ({ orderItem, isPaid }) => {
                     />
                   ) : (
                    <div>
-                    <p>Your Review is</p>
+                    <p>Your Review is :</p>
                       <p>{reviewData?.review?.review}</p>
                       <ReviewModal
                       setNewData={setNewData}
