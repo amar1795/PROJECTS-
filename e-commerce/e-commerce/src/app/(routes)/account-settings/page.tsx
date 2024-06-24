@@ -623,7 +623,8 @@ const page = () => {
                 lastFourDigits: true */}
                   <div className=" mt-4">
                     {AllUserCards.map((card) => (
-                      <div className="w-[40rem] h-[4rem] mt-2 text-[1rem] leading-none p-2 border-2 border-black text-black  border-b-8 border-r-4 bg-yellow-500">
+                      <div 
+                      key={card.id}  className="w-[40rem] h-[4rem] mt-2 text-[1rem] leading-none p-2 border-2 border-black text-black  border-b-8 border-r-4 bg-yellow-500">
                         <div className=" flex justify-between h-full">
                           <div className=" flex ">
                             <div className=" h-full">

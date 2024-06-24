@@ -19,6 +19,7 @@ export async function fetchUserCards(userId: string)  {
                 userId: user
             },
             select: {
+                id: true,
                 cardHolderName: true,
                 cardExpiry: true,
                 lastFourDigits: true

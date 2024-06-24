@@ -113,7 +113,7 @@ export function DeleteModal({ buttonName }: { buttonName: string }) {
         <DialogTrigger asChild>
           {/* <Button variant="outline">Edit Profile</Button> */}
           <button className="">
-            <h1 className=" font-bold"><Trash2 fill="red" /> </h1>
+            <h1 className=" font-bold"><Trash2  strokeWidth={1.5}  /> </h1>
           </button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[445px] h-[20rem]">

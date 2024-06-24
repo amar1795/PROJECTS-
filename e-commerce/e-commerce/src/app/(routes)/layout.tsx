@@ -56,7 +56,7 @@ export default async function RootLayout({
                 <MainNav mensCollectionData={mensCollectionData} />
               </div>
               <Toaster />
-              <div className=" mt-[8rem]">
+              <div className=" mt-[8rem]  ">
                 {children}
 
                 <MainFooter />
