@@ -33,6 +33,7 @@ export const authRoutes = [
 
 const restrictedRoutes = [
   "/checkout",
+  "/account-settings"
 ]
 
 // these are api routes that anyone with access can't hit without authentication

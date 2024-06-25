@@ -12,19 +12,6 @@ import authConfig from "@/auth.config";
 // import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 // import { getAccountByUserId } from "./data/account";
 
-export const getTwoFactorConfirmationByUserId = async (
-  userId: string
-) => {
-  try {
-    const twoFactorConfirmation = await prismadb.twoFactorConfirmation.findUnique({
-      where: { userId }
-    });
-
-    return twoFactorConfirmation;
-  } catch {
-    return null;
-  }
-};
 
 export const getUserById = async (id: string) => {
   try {
@@ -77,21 +64,22 @@ export const {
       const existingUser = await getUserById(user.id);
 
       // Prevent sign in without email verification
-      // if (!existingUser?.emailVerified) return false;
+      if (!existingUser?.emailVerified) return false;
 
         // prevent signin using two factor authentication
-      // if (existingUser.isTwoFactorEnabled) {
-      //   const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
-      //     existingUser.id
-      //   );
 
-      //   if (!twoFactorConfirmation) return false;
+      if (existingUser.isTwoFactorEnabled) {
+        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
+          existingUser.id
+        );
 
-      //   // Delete two factor confirmation for next sign in as it will be asked everytime the user signs in hence we are deleting it after the session is cancelled
-      //   await prismadb.twoFactorConfirmation.delete({
-      //     where: { id: twoFactorConfirmation.id },
-      //   });
-      // }
+        if (!twoFactorConfirmation) return false;
+
+        // Delete two factor confirmation for next sign in as it will be asked everytime the user signs in hence we are deleting it after the session is cancelled
+        await prismadb.twoFactorConfirmation.delete({
+          where: { id: twoFactorConfirmation.id },
+        });
+      }
 
       return true;
     },

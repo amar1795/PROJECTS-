@@ -45,7 +45,7 @@ const page = () => {
   // fetchProductAllData()
   // fetchProductsByCategory("665a0b9f14be77720636d443")
   // getProductsByCategory("665a0b9f14be77720636d443")
-  getUserBySpecificEmail("facfrenzy97@gmail.com")
+  // getUserBySpecificEmail("facfrenzy97@gmail.com")
   // deleteCartItem("6665de25b7e0328f68f43485","665af50e3220eba7c7eab944")
 //  const data= getRelatedProducts("6665de25b7e0328f68f43485").then((data)=>{console.log("this is the related products", data)})
 //  console.log("this is the related products", data);  
