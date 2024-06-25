@@ -25,6 +25,7 @@ import Image from "next/image";
 import { DeleteModal } from "@/components/deleteModal";
 import { UpdateModal } from "@/components/UpdateModal";
 import { getUserNameandEmailData } from "@/actions/update User Settings/fetchnameAndEmail";
+import { updateTwoStepVerificationStatus } from "@/actions/update User Settings/twoStepVerifcationUpdate";
 
 const page = () => {
   const user = useCurrentUser();
@@ -39,36 +40,83 @@ const page = () => {
   const [AllUserCards, setAllUserCards] = useState([]);
   const [personalInformation, setPersonalInformation] = useState([]);
   const [newData, setNewData] = useState(true);
-
+  // const [toastData, setToastData] = useState({});
   const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(
-    personalInformation?.data?.isTwoFactorEnabled
+    // personalInformation?.data?.isTwoFactorEnabled
   );
+
+  console.log("this is the isTwoFactorEnabled", isTwoFactorEnabled)
   const [initialState, setInitialState] = useState(
     personalInformation?.data?.isTwoFactorEnabled
   );
 
   const [showSaveChanges, setShowSaveChanges] = useState(false);
 
+  
+  useEffect(() => {
+    const data = async () => {
+      const alladdress = await getAllAddressesForUser(user?.id);
+      console.log("All Address: ", alladdress);
+      setalladdress(alladdress);
+      const allUserCards = await fetchUserCards(user?.id);
+      setAllUserCards(allUserCards);
+      const personalData = await getUserNameandEmailData();
+      setPersonalInformation(personalData.data);
+      setIsTwoFactorEnabled(personalData.data.isTwoFactorEnabled);
+    };
+    data();
+  }, [success, newData]);
+
   useEffect(() => {
     setInitialState(personalInformation?.data?.isTwoFactorEnabled);
     setShowSaveChanges(false); // Initially hide Save Changes button
   }, [personalInformation?.data?.isTwoFactorEnabled]);
 
-  useEffect(() => {
-    // Check if current state is different from initial state
-    setShowSaveChanges(isTwoFactorEnabled !== personalInformation?.data?.isTwoFactorEnabled);
-  }, [isTwoFactorEnabled, personalInformation?.data?.isTwoFactorEnabled]);
+  // useEffect(() => {
+  //   // Check if current state is different from initial state
+  //     setShowSaveChanges(isTwoFactorEnabled !== personalInformation?.data?.isTwoFactorEnabled);
+  // }, [isTwoFactorEnabled, personalInformation?.data?.isTwoFactorEnabled]);
+
+
+  // this will show the Data in the update Modal in the toast 
+  const setToastData = (data) => {
+    toast(data)
+  }
 
   const toggleTwoFactor = (e) => {
     e.preventDefault();
-    setIsTwoFactorEnabled((prevState) => !prevState); // Toggle the state using the previous state
+    setIsTwoFactorEnabled(!isTwoFactorEnabled); // Toggle the state using the previous state
     // setShowSaveChanges(true); // Show Save Changes whenever toggled
+    setShowSaveChanges(isTwoFactorEnabled !== personalInformation?.data?.isTwoFactorEnabled);
   };
 
   const saveChanges = () => {
     // Implement the function to save changes to the database
     setInitialState(isTwoFactorEnabled); // Update the initial state to match the new saved state
     setShowSaveChanges(false); // Hide Save Changes after saving
+    updateTwoStepVerificationStatus({ isTwoFactorEnabled})
+      .then((data) => {
+        
+      if(data.data)
+        {
+          toast({
+            title: "Two Step Verifictation enabled",
+            description: "Successfully Updated the two step Verification Status",
+          });
+        }
+        else{
+          toast({
+            title: "Two Step Verifictation Disabled",
+            variant: "destructive",
+            description: "Successfully Updated the two step Verification Status",
+          });
+        }
+        // alert(data.message);
+      })
+      .catch((error) => {
+        console.error("Error updating two-step verification status:", error);
+        setToastData("Failed to update two-step verification status");
+      });
   };
 
   // need to restructure these helper functions later
@@ -161,18 +209,6 @@ const page = () => {
     mode: "onBlur", // Validate on blur
   });
 
-  useEffect(() => {
-    const data = async () => {
-      const alladdress = await getAllAddressesForUser(user?.id);
-      console.log("All Address: ", alladdress);
-      setalladdress(alladdress);
-      const allUserCards = await fetchUserCards(user?.id);
-      setAllUserCards(allUserCards);
-      const personalData = await getUserNameandEmailData();
-      setPersonalInformation(personalData.data);
-    };
-    data();
-  }, [success, newData]);
 
   const onSubmit = (values: z.infer<typeof AddressSchema>) => {
     setError("");
@@ -298,33 +334,38 @@ const page = () => {
                           </div>
 
                           <div>
-                            <UpdateModal buttonName={"Update"} inputData={"name"} data={personalInformation} setNewData={setNewData} />
+                            <UpdateModal buttonName={"Update"} inputData={"name"} data={personalInformation} setNewData={setNewData} setToastData={setToastData} />
                           </div>
                         </div>
                         <div className=" flex ">
                           <h3 className=" w-[34rem] h-[3.4rem] pt-4 mt-3 text-[1rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500 ">
                             {personalInformation.email}
                           </h3>
-                          <UpdateModal buttonName={"Update"} inputData={"email"} data={personalInformation} setNewData={setNewData}/>
+                          <UpdateModal buttonName={"Update"} inputData={"email"} data={personalInformation} setNewData={setNewData} setToastData={setToastData}/>
                         </div>
                         <div className=" mt-4 flex h-full ">
                           <h3 className=" w-[25rem] h-[3.4rem] pt-4 mt-3 text-[1rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
                             Enable two Step Verification
                           </h3>
                           <div className=" h-[4rem] mr-4">
-                            <button
+                            {isTwoFactorEnabled !== undefined && (
+                              <button
                               className="p-1 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 ml-2 bg-green-500"
                               onClick={toggleTwoFactor}
                             >
                               <div
                                 className={`h-6 w-6 ${
-                                  isTwoFactorEnabled ? "bg-black" : "bg-white"
+                                  isTwoFactorEnabled === true ? "bg-black" : "bg-white"
                                 }`}
                               >
                                 {/* Add an empty space to keep the div rendered */}
                                 &nbsp;
                               </div>
                             </button>
+
+                            )
+                              
+                            }
                           </div>
                           {showSaveChanges && (
                             <button

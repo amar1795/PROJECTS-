@@ -26,12 +26,12 @@ export function UpdateModal({
   buttonName,
   inputData,
   data,
-  setNewData
+  setNewData,
+  setToastData
 }: {
   buttonName: string;
   inputData: string;
 }) {
-  const { toast } = useToast();
 
   const router = useRouter();
 
@@ -83,14 +83,25 @@ export function UpdateModal({
           if (data?.error) {
             resetEmail();
             setModalError(data.error);
-            alert(data.error);
-
+            // alert(data.error);
+            setToastData({
+              variant: "destructive",
+              title: data.error,
+              description: "Please try again later",
+            })
             // setModalErrorToast(data.error);
           }
 
+          
+      
+
           if (data?.success) {
             resetEmail();
-            alert("Email Updated");
+            setToastData({
+              title: "Email",
+              description: "Successfully Updated the Email",
+            })
+            // alert("Email Updated");
 
             // alert("Password reset link sent! Password rest link has been sent to your email address. Please check your email to reset your password.");
             setModalSuccess(data.success);
@@ -115,7 +126,11 @@ export function UpdateModal({
           if (data?.error) {
             reset();
             setModalError(data.error);
-
+            setToastData({
+              variant: "destructive",
+              title: data.error,
+              description: "Please try again later",
+            })
             // setModalErrorToast(data.error);
           }
 
@@ -123,6 +138,10 @@ export function UpdateModal({
             reset();
             // alert("Password reset link sent! Password rest link has been sent to your email address. Please check your email to reset your password.");
             setModalSuccess(data.success);
+            setToastData({
+              title: data.success,
+              description: "Successfully Updated the Name",
+            })
             
           }
         })
@@ -163,11 +182,8 @@ export function UpdateModal({
         </DialogTrigger>
         <DialogContent className="sm:max-w-[445px] h-[20rem]">
         <form onSubmit={inputData === "email" ? handleSubmitEmail(onSubmitEmail) : handleSubmit(onSubmit)}>
-        facfrenzy97@gmail.com
 
-{/* facfrenzy97@gmail.com
 
- */}
             <DialogHeader className=" mt-4">
 
               { inputData === "email" ? (
