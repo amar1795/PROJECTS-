@@ -79,18 +79,19 @@ export const {
       // Prevent sign in without email verification
       // if (!existingUser?.emailVerified) return false;
 
-      if (existingUser.isTwoFactorEnabled) {
-        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
-          existingUser.id
-        );
+        // prevent signin using two factor authentication
+      // if (existingUser.isTwoFactorEnabled) {
+      //   const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
+      //     existingUser.id
+      //   );
 
-        if (!twoFactorConfirmation) return false;
+      //   if (!twoFactorConfirmation) return false;
 
-        // Delete two factor confirmation for next sign in as it will be asked everytime the user signs in hence we are deleting it after the session is cancelled
-        await prismadb.twoFactorConfirmation.delete({
-          where: { id: twoFactorConfirmation.id },
-        });
-      }
+      //   // Delete two factor confirmation for next sign in as it will be asked everytime the user signs in hence we are deleting it after the session is cancelled
+      //   await prismadb.twoFactorConfirmation.delete({
+      //     where: { id: twoFactorConfirmation.id },
+      //   });
+      // }
 
       return true;
     },

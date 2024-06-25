@@ -1,7 +1,7 @@
 "use client";
 import UploadImage from "@/components/uploadImage";
 
-import React, { startTransition, useEffect, useState } from "react";
+import React, { startTransition, use, useEffect, useState } from "react";
 import { Check, Trash2 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -26,6 +26,8 @@ import { DeleteModal } from "@/components/deleteModal";
 import { UpdateModal } from "@/components/UpdateModal";
 import { getUserNameandEmailData } from "@/actions/update User Settings/fetchnameAndEmail";
 import { updateTwoStepVerificationStatus } from "@/actions/update User Settings/twoStepVerifcationUpdate";
+import CustomUserAvatar from "@/components/CustomAvatar";
+import { getUserById } from "@/data/user";
 
 const page = () => {
   const user = useCurrentUser();
@@ -40,6 +42,8 @@ const page = () => {
   const [AllUserCards, setAllUserCards] = useState([]);
   const [personalInformation, setPersonalInformation] = useState([]);
   const [newData, setNewData] = useState(true);
+  const [userImage, setUserImage] = useState("");
+  const [fetchImage, setfetchImage] = useState(false);
   // const [toastData, setToastData] = useState({});
   const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(
     // personalInformation?.data?.isTwoFactorEnabled
@@ -55,6 +59,7 @@ const page = () => {
   
   useEffect(() => {
     const data = async () => {
+      
       const alladdress = await getAllAddressesForUser(user?.id);
       console.log("All Address: ", alladdress);
       setalladdress(alladdress);
@@ -63,9 +68,41 @@ const page = () => {
       const personalData = await getUserNameandEmailData();
       setPersonalInformation(personalData.data);
       setIsTwoFactorEnabled(personalData.data.isTwoFactorEnabled);
+      
     };
     data();
   }, [success, newData]);
+
+  useEffect(() => {
+    const fetchUpdatedImage = async () => {
+      
+      const newData = await getUserById(user?.id);
+      setUserImage(newData?.image);
+      console.log("this is the new data", newData);
+
+     
+
+    };
+    fetchUpdatedImage()
+
+  }, []);
+
+  
+    const fetchUpdatedImage = async () => {
+      
+      const newData = await getUserById(user?.id);
+      setUserImage(newData?.image);
+      console.log("this is the new data", newData);
+
+      toast({
+        title: "Updated Profile Image",
+        description: "Successfully Updated the Profile Image",
+      });
+
+    };
+   
+    
+
 
   useEffect(() => {
     setInitialState(personalInformation?.data?.isTwoFactorEnabled);
@@ -77,7 +114,7 @@ const page = () => {
   //     setShowSaveChanges(isTwoFactorEnabled !== personalInformation?.data?.isTwoFactorEnabled);
   // }, [isTwoFactorEnabled, personalInformation?.data?.isTwoFactorEnabled]);
 
-
+  
   // this will show the Data in the update Modal in the toast 
   const setToastData = (data) => {
     toast(data)
@@ -261,6 +298,20 @@ const page = () => {
             </h1>
           </div>
 
+          <div>
+          <div className=" py-4">
+           <div className=" flex">
+           <div>
+           <h1 className="text-[2rem]">
+            Hello,
+            </h1>
+           <h1 className=" self-center mr-4 text-[2rem] uppercase font-bold">{user?.name?.split(" ")[0]}</h1>
+           </div>
+          <CustomUserAvatar  src={userImage}  />
+                </div>
+           </div>
+          </div>
+
           <div className=" flex">
             <div className="h-[4rem]">
               <Link href="/orders">
@@ -296,12 +347,20 @@ const page = () => {
                   {" "}
                   This image will appear as your profile photo
                 </p>
+                <div className=" mt-4">
+               { 
+               
+
+                 <CustomUserAvatar  src={userImage}  />
+               
+               }
+                </div>
               </div>
               <div className="flex flex-col    border-2 border-black flex-1  h-[20rem]  ">
                 <div className=" flex px-4 py-4 justify-between h-full">
                   <div>
                     <div className=" pl-[2rem] pt-4 flex   h-[10rem] w-full">
-                      <UploadImage />
+                      <UploadImage fetchUpdatedImage={fetchUpdatedImage}  />
                     </div>
                   </div>
                 </div>
