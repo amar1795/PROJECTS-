@@ -45,6 +45,15 @@ const Login: React.FC<LoginProps> = ({ toggleView }) => {
     },
   });
 
+  
+  const calltwoFactor = async () => {
+toast({
+    title: "2 Factor Token Sent to your Email",
+    description: "Please check your email for the 2 Factor Token",
+  });
+  }
+  
+
   console.log("this is callback url", callbackUrl);
 
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
@@ -66,6 +75,7 @@ const Login: React.FC<LoginProps> = ({ toggleView }) => {
 
           if (data?.twoFactor) {
             setShowTwoFactor(true);
+            calltwoFactor();
           }
         })
         .catch(() => setError("Something went wrong"));
