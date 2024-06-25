@@ -28,6 +28,8 @@ import { getUserNameandEmailData } from "@/actions/update User Settings/fetchnam
 import { updateTwoStepVerificationStatus } from "@/actions/update User Settings/twoStepVerifcationUpdate";
 import CustomUserAvatar from "@/components/CustomAvatar";
 import { getUserById } from "@/data/user";
+import { signOut } from "next-auth/react";
+import { logout } from "@/actions/logout";
 
 const page = () => {
   const user = useCurrentUser();
@@ -285,6 +287,19 @@ const page = () => {
   //   setIsSelected(!isSelected);
   // };
 
+  
+  const initiateLogout = async () => {
+  
+    signOut({ redirect: true, callbackUrl: '/'});
+    await logout();
+    // window.location.href = '/';
+
+    // setIsOpen(false);
+
+    // router.push('/');
+  };
+
+
   return (
     <div className="overflow-hidden border-2 border-black  flex flex-col ">
       <div className=" bg-violet-600 w-full border-b-4 border-black fixed top-0 left-0 right-0 z-10">
@@ -328,7 +343,7 @@ const page = () => {
               </Link>
             </div>
             <div className="h-[4rem]">
-              <button className="w-[10rem] p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-pink-600">
+              <button onClick={() =>  initiateLogout()} className="w-[10rem] p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-pink-600">
                 <h1 className="font-bold">Logout</h1>
               </button>
             </div>
