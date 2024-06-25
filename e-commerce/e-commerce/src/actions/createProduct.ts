@@ -703,8 +703,6 @@ const totalUniqueCartItems = uniqueProductIds.length;
   return formattedProducts;
 }
 
-
-
 // optimsed version of the getproductsbycategory 
 
 // export async function getProductsByCategory(

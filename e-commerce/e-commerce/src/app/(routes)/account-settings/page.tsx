@@ -23,6 +23,8 @@ import StyledButton from "@/components/styled Button/StyledButton";
 import { fetchUserCards } from "@/actions/payments/fetchAllCards";
 import Image from "next/image";
 import { DeleteModal } from "@/components/deleteModal";
+import { UpdateModal } from "@/components/UpdateModal";
+import { getUserNameandEmailData } from "@/actions/update User Settings/fetchnameAndEmail";
 
 const page = () => {
   const user = useCurrentUser();
@@ -35,6 +37,39 @@ const page = () => {
   const [selectedAddress, setSelectedAddress] = useState<string | undefined>();
   const [paymentData, setPaymentData] = useState([]);
   const [AllUserCards, setAllUserCards] = useState([]);
+  const [personalInformation, setPersonalInformation] = useState([]);
+  const [newData, setNewData] = useState(true);
+
+  const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(
+    personalInformation?.data?.isTwoFactorEnabled
+  );
+  const [initialState, setInitialState] = useState(
+    personalInformation?.data?.isTwoFactorEnabled
+  );
+
+  const [showSaveChanges, setShowSaveChanges] = useState(false);
+
+  useEffect(() => {
+    setInitialState(personalInformation?.data?.isTwoFactorEnabled);
+    setShowSaveChanges(false); // Initially hide Save Changes button
+  }, [personalInformation?.data?.isTwoFactorEnabled]);
+
+  useEffect(() => {
+    // Check if current state is different from initial state
+    setShowSaveChanges(isTwoFactorEnabled !== personalInformation?.data?.isTwoFactorEnabled);
+  }, [isTwoFactorEnabled, personalInformation?.data?.isTwoFactorEnabled]);
+
+  const toggleTwoFactor = (e) => {
+    e.preventDefault();
+    setIsTwoFactorEnabled((prevState) => !prevState); // Toggle the state using the previous state
+    // setShowSaveChanges(true); // Show Save Changes whenever toggled
+  };
+
+  const saveChanges = () => {
+    // Implement the function to save changes to the database
+    setInitialState(isTwoFactorEnabled); // Update the initial state to match the new saved state
+    setShowSaveChanges(false); // Hide Save Changes after saving
+  };
 
   // need to restructure these helper functions later
   const formatToINR = (amount) => {
@@ -133,9 +168,11 @@ const page = () => {
       setalladdress(alladdress);
       const allUserCards = await fetchUserCards(user?.id);
       setAllUserCards(allUserCards);
+      const personalData = await getUserNameandEmailData();
+      setPersonalInformation(personalData.data);
     };
     data();
-  }, [success]);
+  }, [success, newData]);
 
   const onSubmit = (values: z.infer<typeof AddressSchema>) => {
     setError("");
@@ -170,10 +207,10 @@ const page = () => {
 
   const [isSelected, setIsSelected] = useState(false);
 
-  const toggleColor = (e) => {
-    e.preventDefault();
-    setIsSelected(!isSelected);
-  };
+  // const toggleColor = (e) => {
+  //   e.preventDefault();
+  //   setIsSelected(!isSelected);
+  // };
 
   return (
     <div className="overflow-hidden border-2 border-black  flex flex-col ">
@@ -232,20 +269,7 @@ const page = () => {
                     </div>
                   </div>
                 </div>
-                {/* <div className=" bg-yellow-500 border-t-2 border-black h-[5rem] flex w-full justify-end">
-                  <div className=" flex pr-5 pb-6">
-                    <div className="h-[4rem] ">
-                      <button className="w-[10rem] p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-red-600 mr-4">
-                        <h1 className="font-bold">Cancel</h1>
-                      </button>
-                    </div>
-                    <div className="h-[4rem]">
-                      <button className="w-[10rem] p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2  bg-pink-500">
-                        <h1 className="font-bold">Save</h1>
-                      </button>
-                    </div>
-                  </div>
-                </div> */}
+          
               </div>
             </div>
           </div>
@@ -264,47 +288,37 @@ const page = () => {
                     <form className="">
                       <div className="flex flex-col items-center">
                         <div className=" flex ">
-                          <div className=" flex">
-                            <input
-                              type="text"
-                              placeholder="First Name"
-                              className=" w-64 p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none  mr-8"
-                            />
-                            <input
-                              type="text"
-                              placeholder="Last Name"
-                              className="w-64 p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
-                            />
+                          <div className=" flex ">
+                            <h3 className=" w-[16rem] h-[3.4rem] pt-4 mt-3 text-[1rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500 mr-4">
+                              {personalInformation.firstName}
+                            </h3>
+                            <h3 className=" w-[16rem] h-[3.4rem] pt-4 mt-3 text-[1rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
+                              {personalInformation.lastName}
+                            </h3>
                           </div>
 
                           <div>
-                            <button className="  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 ml-2  bg-green-500">
-                              <h1 className=" font-bold">Update </h1>
-                            </button>
+                            <UpdateModal buttonName={"Update"} inputData={"name"} data={personalInformation} setNewData={setNewData} />
                           </div>
                         </div>
                         <div className=" flex ">
-                          <input
-                            type="email"
-                            placeholder="Please Enter your Email"
-                            className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
-                          />
-                          <button className="  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 ml-2  bg-green-500">
-                            <h1 className=" font-bold">Update </h1>
-                          </button>
+                          <h3 className=" w-[34rem] h-[3.4rem] pt-4 mt-3 text-[1rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500 ">
+                            {personalInformation.email}
+                          </h3>
+                          <UpdateModal buttonName={"Update"} inputData={"email"} data={personalInformation} setNewData={setNewData}/>
                         </div>
                         <div className=" mt-4 flex h-full ">
-                          <h3 className=" w-[32rem] h-[3.4rem] pt-4 mt-3 text-[1rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
+                          <h3 className=" w-[25rem] h-[3.4rem] pt-4 mt-3 text-[1rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
                             Enable two Step Verification
                           </h3>
-                          <div className=" h-[4rem]">
+                          <div className=" h-[4rem] mr-4">
                             <button
                               className="p-1 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 ml-2 bg-green-500"
-                              onClick={toggleColor}
+                              onClick={toggleTwoFactor}
                             >
                               <div
                                 className={`h-6 w-6 ${
-                                  isSelected ? "bg-black" : "bg-white"
+                                  isTwoFactorEnabled ? "bg-black" : "bg-white"
                                 }`}
                               >
                                 {/* Add an empty space to keep the div rendered */}
@@ -312,25 +326,39 @@ const page = () => {
                               </div>
                             </button>
                           </div>
+                          {showSaveChanges && (
+                            <button
+                              className="p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-green-500"
+                              onClick={saveChanges}
+                            >
+                              <h1 className="font-bold">Save Changes</h1>
+                            </button>
+                          )}
                         </div>
 
                         <div></div>
                         <div className=" flex">
-                          <div className=" h-[4rem]">
-                            <div className="  p-2  ml-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4  bg-green-500">
-                              <h1 className=" font-bold">
-                                <div className=" flex">
-                                  <Check className=" mr-2" />
-                                  <span>{"Your Email is Verified"}</span>
-                                </div>
-                              </h1>
+                          {personalInformation.emailVerified ? (
+                            <div className=" h-[4rem]">
+                              <div className="  p-2  ml-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4  bg-green-500">
+                                <h1 className=" font-bold">
+                                  <div className=" flex">
+                                    <Check className=" mr-2" />
+                                    <span>{"Your Email is Verified"}</span>
+                                  </div>
+                                </h1>
+                              </div>
                             </div>
-                          </div>
-                          <div className=" h-[4rem]">
-                            <button className="  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2  bg-green-500">
-                              <h1 className=" font-bold">Verify Your Email </h1>
-                            </button>
-                          </div>
+                          ) : (
+                            <div className=" h-[4rem]">
+                              <button className="  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2  bg-green-500">
+                                <h1 className=" font-bold">
+                                  {" "}
+                                  Please Verify Your Email{" "}
+                                </h1>
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </form>
@@ -623,8 +651,10 @@ const page = () => {
                 lastFourDigits: true */}
                   <div className=" mt-4">
                     {AllUserCards.map((card) => (
-                      <div 
-                      key={card.id}  className="w-[40rem] h-[4rem] mt-2 text-[1rem] leading-none p-2 border-2 border-black text-black  border-b-8 border-r-4 bg-yellow-500">
+                      <div
+                        key={card.id}
+                        className="w-[40rem] h-[4rem] mt-2 text-[1rem] leading-none p-2 border-2 border-black text-black  border-b-8 border-r-4 bg-yellow-500"
+                      >
                         <div className=" flex justify-between h-full">
                           <div className=" flex ">
                             <div className=" h-full">
@@ -700,34 +730,35 @@ const page = () => {
                     </button>
                   </div>
                   <div className="   mb-8 ">
-                  <button
-            type="button"
-            className={`w-[15rem] p-2 border-2 border-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 ml-4 ${
-              activeTab === 'debit' ? 'bg-white text-black' : 'bg-yellow-400 text-black'
-            }`}
-            onClick={() => setActiveTab('debit')}
-          >
-            <h1 className="font-bold">Debit History</h1>
-          </button>
+                    <button
+                      type="button"
+                      className={`w-[15rem] p-2 border-2 border-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 ml-4 ${
+                        activeTab === "debit"
+                          ? "bg-white text-black"
+                          : "bg-yellow-400 text-black"
+                      }`}
+                      onClick={() => setActiveTab("debit")}
+                    >
+                      <h1 className="font-bold">Debit History</h1>
+                    </button>
                   </div>
                 </div>
 
                 <div className=" bg-white h-[20rem] w-full border-black border-2">
-
-                {activeTab === 'credit' && (
-          <div>
-            {/* Credit History Content */}
-            <h2>Credit History</h2>
-            <p>Details about credit history...</p>
-          </div>
-        )}
-        {activeTab === 'debit' && (
-          <div>
-            {/* Debit History Content */}
-            <h2>Debit History</h2>
-            <p>Details about debit history...</p>
-          </div>
-        )}
+                  {activeTab === "credit" && (
+                    <div>
+                      {/* Credit History Content */}
+                      <h2>Credit History</h2>
+                      <p>Details about credit history...</p>
+                    </div>
+                  )}
+                  {activeTab === "debit" && (
+                    <div>
+                      {/* Debit History Content */}
+                      <h2>Debit History</h2>
+                      <p>Details about debit history...</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -768,7 +799,6 @@ const page = () => {
                         <h1 className="font-bold">Update</h1>
                       </button>
                     </div>
-                    
                   </div>
                 </div>
               </div>

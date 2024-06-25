@@ -67,6 +67,31 @@ export const LoginSchema = z.object({
 
 
 
+export const NameUpdateSchema = z.object({
+  firstname: z.string().min(1, {
+    message: "firstname is required",
+  }),
+  lastname: z.string().min(1, {
+    message: "lastname is required",
+  }),
+})
+
+
+
+export const EmailUpdateSchema = z.object({
+  email: z.string()
+    .trim()
+    .email({
+      message: "Invalid email format",
+    })
+    .max(320, {
+      message: "Email must be 320 characters or fewer",
+    })
+    .nonempty({
+      message: "Email is required",
+    }),
+});
+
 export const RegisterSchema = z.object({
   firstname: z.string().min(1, {
     message: "firstname is required",
