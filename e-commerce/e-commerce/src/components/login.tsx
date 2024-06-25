@@ -27,11 +27,10 @@ const Login: React.FC<LoginProps> = ({ toggleView }) => {
   const callbackUrl = searchParams.get("callbackUrl");
 
   const [showTwoFactor, setShowTwoFactor] = useState(false);
-  
+
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
-
 
   const {
     register: registerField,
@@ -45,7 +44,6 @@ const Login: React.FC<LoginProps> = ({ toggleView }) => {
       password: "",
     },
   });
-
 
   console.log("this is callback url", callbackUrl);
 
@@ -66,9 +64,9 @@ const Login: React.FC<LoginProps> = ({ toggleView }) => {
             setSuccess(data.success);
           }
 
-          // if (data?.twoFactor) {
-          //   setShowTwoFactor(true);
-          // }
+          if (data?.twoFactor) {
+            setShowTwoFactor(true);
+          }
         })
         .catch(() => setError("Something went wrong"));
     });
@@ -81,9 +79,7 @@ const Login: React.FC<LoginProps> = ({ toggleView }) => {
     if (success) {
       // alert(success);
     }
-   
   }, [error, success]);
-
 
   return (
     <div>
@@ -118,12 +114,28 @@ const Login: React.FC<LoginProps> = ({ toggleView }) => {
                 {errors.password.message}
               </span>
             )}
+
+            {showTwoFactor && (
+               <input
+              {...registerField("code")}
+              type="text"
+              placeholder="Enter 2FA code"
+              className="w-96 p-2  border-2 border-black bg-white text-black flex self-center justify-center border-b-8 border-r-4  focus:outline-none mt-4"
+            />
+          )}
+            {errors.password && (
+              <span className=" italic text-red-950  text-[1.1rem]">
+                {errors.password.message}
+              </span>
+            )}
+           
+
             <div className=" h-[4rem]">
               <button
                 type="submit"
                 className="w-80  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500"
               >
-                <h1 className=" font-bold">Login </h1>
+                <h1 className=" font-bold">{showTwoFactor ?"confirm":"Login"} </h1>
               </button>
             </div>
           </div>
@@ -133,11 +145,7 @@ const Login: React.FC<LoginProps> = ({ toggleView }) => {
             Forgot your Password ?
           </p>
           <div className=" h-[4rem]">
-            <CustomModal
-              buttonName="click here"
-              
-       
-            />
+            <CustomModal buttonName="click here" />
           </div>
         </div>
         <div className=" text-center">

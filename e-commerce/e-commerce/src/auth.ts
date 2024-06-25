@@ -1,16 +1,9 @@
 import NextAuth from "next-auth";
 import { UserRole } from "@prisma/client";
-
 import { PrismaAdapter } from "@auth/prisma-adapter";
-
 import { prismadb } from "@/lib/db";
-
-
 import authConfig from "@/auth.config";
-
-// import { getUserById } from "@/data/user";
-// import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
-// import { getAccountByUserId } from "./data/account";
+import { getTwoFactorConfirmationByUserId } from "./actions/two-factor and security related actions/twoFactorConfirmation";
 
 
 export const getUserById = async (id: string) => {
@@ -61,14 +54,14 @@ export const {
       // if (account?.provider !== "credentials") return true;
 
       // we are passing username and password and here the id is being passed here , where it is being checked if the user exists or not and accoridngly user id is being passed
-      const existingUser = await getUserById(user.id);
+      const existingUser = await getUserById(user?.id);
 
       // Prevent sign in without email verification
-      if (!existingUser?.emailVerified) return false;
+      // if (!existingUser?.emailVerified) return false;
 
         // prevent signin using two factor authentication
 
-      if (existingUser.isTwoFactorEnabled) {
+      if (existingUser?.isTwoFactorEnabled) {
         const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
           existingUser.id
         );

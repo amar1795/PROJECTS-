@@ -7,18 +7,16 @@ const page = () => {
         <div>
           <div className="flex self-center justify-center">
             <h1 className=" text-[3rem] uppercase  p-2 border-2 border-black text-black mt-4  border-b-8 border-r-4 bg-yellow-500 font-bold px-10 ">
-              Successfully updated the Password
+              Two Factor Token
             </h1>
           </div>
           <div className=" mt-10">
             <h3 className=" text-[1.5rem]  ">
-              Congractulations you have successfully updated the password for
-              your PurchasePal Account.If you haven't done this, please contact
-              us immediately.
+            Hello , Please use the following token to verify your account
             </h3>
-
-            
-            
+            <h1 className=" text-[2rem] w-[12rem] uppercase  p-2 border-2 border-black text-black mt-4  border-b-8 border-r-4 bg-yellow-500 font-bold px-10 ">
+              123456
+            </h1>
           </div>
           <div className=" mt-10">
           <h1 className=" text-[1.8rem]  font-bold" > Best Regards</h1>

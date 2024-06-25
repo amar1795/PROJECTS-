@@ -1,6 +1,6 @@
 "use server"
 
-import { sendEmail,ForgotPassword, PasswordChanged } from "@/lib/email";
+import { sendEmail,ForgotPassword, PasswordChanged, TwoFactorMailgunEmail } from "@/lib/email";
 
 export async function testEmail({last_name,first_name}) {
   // Example usage
@@ -61,3 +61,19 @@ export async function PasswordChangeSuccessfull({first_name,senders_email}:{firs
 }
 
 
+export async function TwoFactorEmail({senders_email,token,first_name}:{senders_email:string|null,token:string,first_name:string|null}) {
+  try {
+    await TwoFactorMailgunEmail({
+      senders_email: senders_email,
+      from_email: "PurchasesPal 2FA Auth <no-reply@purchaespal.shop>",
+      subject:" @2FA login Authentication",
+      token:token,
+      first_name: first_name,
+  
+    });
+    // console.log("Email sent successfully!");
+  } catch (error) {
+    console.error("Error sending email:", error);
+    // Handle error
+  }
+}

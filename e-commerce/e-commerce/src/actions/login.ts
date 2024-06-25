@@ -8,6 +8,10 @@ import { signIn } from "@/auth";
 import { LoginSchema } from "@/schemas";
 import { getUserByEmail } from "@/data/user";
 import { useSearchParams } from "next/navigation";
+import { getTwoFactorTokenByEmail } from "./two-factor and security related actions/twoFactorTokens";
+import { getTwoFactorConfirmationByUserId } from "./two-factor and security related actions/twoFactorConfirmation";
+import { generateTwoFactorToken } from "@/lib/tokens";
+import { TwoFactorEmail } from "./email/Email";
 // import { getTwoFactorTokenByEmail } from "@/data/two-factor-token";
 
 // import { sendVerificationEmail, sendTwoFactorTokenEmail } from "@/lib/mail";
@@ -62,52 +66,53 @@ export const login = async (
 
   // two factor authentication verification
 
-//   if (existingUser.isTwoFactorEnabled && existingUser.email) {
-//     if (code) {
-//       const twoFactorToken = await getTwoFactorTokenByEmail(existingUser.email);
+  if (existingUser.isTwoFactorEnabled && existingUser.email) {
+    if (code) {
+      const twoFactorToken = await getTwoFactorTokenByEmail(existingUser.email);
 
-//       if (!twoFactorToken) {
-//         return { error: "Invalid code!" };
-//       }
+      if (!twoFactorToken) {
+        return { error: "Invalid code!" };
+      }
 
-//       if (twoFactorToken.token !== code) {
-//         return { error: "Invalid code!" };
-//       }
+      if (twoFactorToken.token !== code) {
+        return { error: "Invalid code!" };
+      }
 
-//       const hasExpired = new Date(twoFactorToken.expires) < new Date();
+      const hasExpired = new Date(twoFactorToken.expires) < new Date();
 
-//       if (hasExpired) {
-//         return { error: "Code expired!" };
-//       }
+      if (hasExpired) {
+        return { error: "Code expired!" };
+      }
 
-//       await db.twoFactorToken.delete({
-//         where: { id: twoFactorToken.id },
-//       });
+      await prismadb.twoFactorToken.delete({
+        where: { id: twoFactorToken.id },
+      });
 
-//       const existingConfirmation = await getTwoFactorConfirmationByUserId(
-//         existingUser.id
-//       );
+      const existingConfirmation = await getTwoFactorConfirmationByUserId(
+        existingUser.id
+      );
 
-//       if (existingConfirmation) {
-//         await db.twoFactorConfirmation.delete({
-//           where: { id: existingConfirmation.id },
-//         });
-//       }
+      if (existingConfirmation) {
+        await prismadb.twoFactorConfirmation.delete({
+          where: { id: existingConfirmation.id },
+        });
+      }
 
-//       await db.twoFactorConfirmation.create({
-//         data: {
-//           userId: existingUser.id,
-//         },
-//       });
-//     }
+      await prismadb.twoFactorConfirmation.create({
+        data: {
+          userId: existingUser.id,
+        },
+      });
+    }
      
-//     else {
-//       const twoFactorToken = await generateTwoFactorToken(existingUser.email);
-//       await sendTwoFactorTokenEmail(twoFactorToken.email, twoFactorToken.token);
+    else {
+      const twoFactorToken = await generateTwoFactorToken(existingUser.email);
+      
+      await TwoFactorEmail({senders_email:twoFactorToken.email,token: twoFactorToken.token,first_name:existingUser.name?.split(" ")[0]});
 
-//       return { twoFactor: true };
-//     }
-//   }
+      return { twoFactor: true };
+    }
+  }
 
 
   try {
