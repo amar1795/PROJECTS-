@@ -35,7 +35,7 @@ const quantity = product.cartItems?.find(item => item.productId === product.id)?
             <h1 className=" py-2 px-2 text-[1.2rem] font-bold uppercase">{product.brand.name}</h1>
               <div className="box flex pr-4 py-2 px-2">
                 <button className=" pr-2  hover:bg-gray-200 pl-1">
-                  <Minus size={20}  onClick={()=>  handleQuantityChange(user.id, product.id,-1)} />
+                  <Minus size={20}  onClick={()=>  handleQuantityChange(user?.id, product.id,-1)} />
                 </button>
                 <div className=" text-[1.5rem] w-7  h-[2rem]">
                   <div className=" px-2  ">{product.cartQuantity}</div>
@@ -61,7 +61,7 @@ const quantity = product.cartItems?.find(item => item.productId === product.id)?
                   <Heart size={25} />
                 </button>
                 <button className="transform transition-transform duration-300 hover:scale-110" onClick={()=>
-                handleClickDelete(user.id,product.id)
+                handleClickDelete(user?.id,product.id)
                 }>
                   <Trash2 />
                 </button>

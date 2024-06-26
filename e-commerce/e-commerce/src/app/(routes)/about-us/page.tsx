@@ -56,7 +56,7 @@ const page = () => {
 // fetchOrderById("66756c6354363728fe808d27")
 // searchProductsByNameOrBrand("Tennis")
 // getUserById("6673e3d87214902e3b734de3")
-getCartDataFromCookies()
+// getCartDataFromCookies()
   return (
     <div className=" bg-pink-500 border-2 border-black px-10 ">
       <div>

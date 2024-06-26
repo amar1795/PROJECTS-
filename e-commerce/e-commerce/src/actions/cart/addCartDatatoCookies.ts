@@ -51,6 +51,7 @@ export async function getCartDataFromCookies() {
 
 // Function to remove product from cookies
 export async function removeProductFromCookies(productId) {
+  
   const cookieData = await getCartDataFromCookies(); // Load existing cart data from cookies
   const updatedCookieData = cookieData.filter((item) => item.id !== productId);
 
