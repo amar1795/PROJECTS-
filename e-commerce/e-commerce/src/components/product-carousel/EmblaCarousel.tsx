@@ -60,6 +60,7 @@ type PropType = {
 
 const EmblaCarousel: React.FC<PropType> = (props) => {
   const { slides, options, products, category } = props;
+  console.log("this is the product", products);
   const [updatedProducts, setupdatedProducts] = useState<Product[]>(products);
   const { theme } = useTheme();
   const { toast } = useToast();
@@ -93,8 +94,11 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
     }, 200);
   }, [updatedProducts, user, toast]);
 
+
+
   const handleQuantityChange = useCallback(
     (userId: string, productId: string, change: number) => {
+
       const updatedProductsList = updatedProducts.map((product) => {
         if (product.id === productId) {
 
@@ -117,8 +121,10 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
 
       setTimeout(async () => {
         if (change > 0) {
+          // alert("increase quantity is called", userId, productId)
           await increaseProductQuantity(userId, productId);
         } else {
+          // alert("decrease quantity is called")
           await decreaseProductQuantity(userId, productId);
         }
       }, 200);
@@ -214,7 +220,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                                 <Minus size={20} />
                               </button>
                               <div className="text-[1.5rem] bg-white h-[2rem]">
-                                <div className="px-2 py-2">{product.cartItems[0]?.quantity || 0}</div>
+                                <div className="px-2 py-2">{product.cartQuantity || 0}</div>
                               </div>
                               <button className="pl-2 hover:bg-gray-200 pr-1" onClick={() => handleQuantityChange(user?.id, product.id, 1)}>
                                 <Plus size={20} />

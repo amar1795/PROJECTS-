@@ -7,7 +7,7 @@ const ShoppingCart = ({mensCollectionData}) => {
              <div className=" flex text-center">
                     <div className=" flex justify-between items-center mr-5 relative">
                     <FaShoppingBag size={23}/>
-                        <span className=" font-mono bg-white w-5 h-5 rounded-full absolute top-0 left-6">{mensCollectionData[0]?.cartQuantity}</span>
+                        <span className=" font-mono bg-white w-5 h-5 rounded-full absolute top-0 left-6">{mensCollectionData[0]?.totalUniqueCartItems}</span>
                         
                         </div>
                     </div> 

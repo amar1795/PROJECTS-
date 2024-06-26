@@ -8,6 +8,7 @@ import { fetchOrderById } from "@/actions/order/fetchSingleOrder";
 import { CreateBrand, CreateCategories, CreateColour, CreateSize, Createposter, UpdateCategory, createdummyPosterFunction, deleteSize, deleteduplicatebrandnames, dummyPosterFunction, fetchCategoriesWithPosters, fetchImagesByProductId, getAllColorsWithCount, getAllDummyPosters, getAllPosters, getAllSizes, getAllUsers, getBrand, getallCategory } from "@/actions/posterAction";
 import { searchProductsByNameOrBrand } from "@/actions/product/findProductbySearch";
 import { productCreationNew } from "@/actions/product/productCreation";
+import { getUserById } from "@/auth";
 import React from "react";
 
 const page = () => {
@@ -53,6 +54,7 @@ const page = () => {
 // testEmail({last_name:"smith",first_name:"john"})
 // fetchOrderById("66756c6354363728fe808d27")
 // searchProductsByNameOrBrand("Tennis")
+// getUserById("6673e3d87214902e3b734de3")
   return (
     <div className=" bg-pink-500 border-2 border-black px-10 ">
       <div>

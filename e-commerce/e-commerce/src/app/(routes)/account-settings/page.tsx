@@ -292,11 +292,7 @@ const page = () => {
   
     signOut({ redirect: true, callbackUrl: '/'});
     await logout();
-    // window.location.href = '/';
-
-    // setIsOpen(false);
-
-    // router.push('/');
+   
   };
 
 

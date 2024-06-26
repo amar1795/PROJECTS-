@@ -604,7 +604,7 @@ export async function getProductsByCategory(
           },
         },
       }),
-      cartItems: true, // Include cart items
+      cartItems: true, // Include cart items this should only be treu when the user is logged in
       // Include any other relations you need
     },
     take: 7, // Limit to 7 products per category
@@ -629,7 +629,7 @@ export async function getProductsByCategory(
     });
     cartItems = cart ? cart.cartItems : [];
   }
-
+// console.log("this is the user cart items from serrver action", cartItems)
     // Map the cart items to products and include cart quantity
     products = products.map((product) => {
       const cartItem = cartItems.find((item) => item.productId === product.id);
@@ -639,6 +639,7 @@ export async function getProductsByCategory(
         cartQuantity: cartQuantity,
       };
     });
+    console.log("this is the user cart items from serrver action", products)
 
   const formattedProducts = products.map((product) => {
     const ratingsCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
@@ -662,6 +663,7 @@ export async function getProductsByCategory(
       totalRatingValue += rating.rating; // Sum the star counts weighted by their star value
       totalRatings += 1;
     });
+
     // Get the unique product IDs from cart items
 const uniqueProductIds = [...new Set(cartItems.map(item => item.productId))];
 
@@ -674,7 +676,7 @@ const totalUniqueCartItems = uniqueProductIds.length;
 
     // Check if the product is wishlisted by the user
     const isWishlisted = userId && product.wishlists.length > 0;
-    const cartQuantity = cartItems ? cartItems.length : 0;
+    const cartQuantity = cartItems ? product.cartQuantity : 0;
 
     return {
       ...product,

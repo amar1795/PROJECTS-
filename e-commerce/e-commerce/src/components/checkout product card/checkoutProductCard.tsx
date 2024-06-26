@@ -38,7 +38,7 @@ const quantity = product.cartItems?.find(item => item.productId === product.id)?
                   <Minus size={20}  onClick={()=>  handleQuantityChange(user.id, product.id,-1)} />
                 </button>
                 <div className=" text-[1.5rem] w-7  h-[2rem]">
-                  <div className=" px-2  ">{quantity}</div>
+                  <div className=" px-2  ">{product.cartQuantity}</div>
                 </div>
                 <button className=" pl-2  hover:bg-gray-200 pr-1">
                   <Plus size={20} onClick={()=>  handleQuantityChange( user?.id,product.id,1)}/>
