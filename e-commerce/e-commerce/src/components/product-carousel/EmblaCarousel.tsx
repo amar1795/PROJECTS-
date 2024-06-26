@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { EmblaOptionsType, EmblaCarouselType } from "embla-carousel";
 import { DotButton, useDotButton } from "./EmblaCarouselDotButton";
 import { PrevButton, NextButton, usePrevNextButtons } from "./EmblaCarouselArrowButtons";
@@ -13,6 +13,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { toggleWishlist } from "@/actions/wishlist";
 import increaseProductQuantity from "@/actions/cart/increaseProduct";
 import decreaseProductQuantity from "@/actions/cart/decreaseProduct";
+import { addCartDatatoCookies, getCartDataFromCookies } from "@/actions/cart/addCartDatatoCookies";
 
 type Brand = {
   id: string;
@@ -60,11 +61,14 @@ type PropType = {
 
 const EmblaCarousel: React.FC<PropType> = (props) => {
   const { slides, options, products, category } = props;
-  console.log("this is the product", products);
   const [updatedProducts, setupdatedProducts] = useState<Product[]>(products);
+  console.log("this is the product", updatedProducts);
   const { theme } = useTheme();
   const { toast } = useToast();
+
   const user = useCurrentUser();
+  
+
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
 
   const handleWishlistToggle = useCallback(async (userId: string, productId: string) => {
@@ -101,24 +105,18 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
 
       const updatedProductsList = updatedProducts.map((product) => {
         if (product.id === productId) {
-
-          const updatedCartItems = product.cartItems.length > 0 
-          ? product.cartItems.map((item) => {
-              if (item.productId === productId) {
-                // Ensure quantity doesn't go below 0
-                const newQuantity = Math.max(item.quantity + change, 0);
-                return { ...item, quantity: newQuantity };
-              }
-              return item;
-            })
-          : [{ productId, quantity: Math.max(change, 0) }];
-          return { ...product, cartItems: updatedCartItems };
+          // Ensure quantity doesn't go below 0
+          const currentQuantity = product?.cartQuantity ? product?.cartQuantity: 0; // Initialize to 0 if undefined or null
+          const newQuantity = Math.max(currentQuantity + change, 0);
+          return { ...product, cartQuantity: newQuantity };
         }
         return product;
       });
-
       setupdatedProducts(updatedProductsList);
 
+      console.log("these are the updated products", updatedProducts);
+
+      if(user){
       setTimeout(async () => {
         if (change > 0) {
           // alert("increase quantity is called", userId, productId)
@@ -128,9 +126,38 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
           await decreaseProductQuantity(userId, productId);
         }
       }, 200);
-    },
+    }
+  },
     [updatedProducts]
   );
+
+  
+  // useEffect to monitor changes to updatedProducts and save to cookies
+useEffect(() => {
+  async function saveToCookies() {
+    await addCartDatatoCookies(updatedProducts);
+  }
+  saveToCookies();
+}, [updatedProducts]);
+
+
+  // useEffect to load data from cookies and merge with fetched products on component mount
+  useEffect(() => {
+    async function mergeDataFromCookies() {
+      const cookieData = await getCartDataFromCookies();
+
+      const mergedProducts = updatedProducts.map((product) => {
+        const cookieProduct = cookieData.find(item => item.id === product.id);
+        return cookieProduct ? { ...product, cartQuantity: cookieProduct.cartQuantity } : product;
+      });
+
+      setupdatedProducts(mergedProducts);
+    }
+
+    mergeDataFromCookies();
+  }, []);
+
+
 
   const onNavButtonClick = useCallback((emblaApi: EmblaCarouselType) => {
     const autoplay = emblaApi?.plugins()?.autoplay;
@@ -144,6 +171,8 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
   const { prevBtnDisabled, nextBtnDisabled, onPrevButtonClick, onNextButtonClick } = usePrevNextButtons(emblaApi, onNavButtonClick);
 
   const formatPrice = (price: number): string => "₹" + price.toLocaleString("en-IN");
+
+
 
   return (
     <section className="ProductEmbla_product">

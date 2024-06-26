@@ -63,21 +63,28 @@ const page = () => {
 
   useEffect(() => {
     const cartSummary = async () => {
-      const cartSummaryData = await calculateCartSummary(user.id);
+     try {
+      const cartSummaryData = await calculateCartSummary(user?.id);
       // console.log("this is the cart summary data", cartSummaryData);
       setSummaryData(cartSummaryData);
-      const data = await getProductsInCartSummary(user.id);
+      const data = await getProductsInCartSummary(user?.id);
       setproductData(data);
       // setupdatedProducts(data);
+     } catch (error) {
+      // alert(error);
+      console.log("this is the error", error);
+     }
     };
     cartSummary();
   }, [updateTrigger]);
   console.log("this is the product data", productData);
   // console.log("this is the updated products", updatedProducts);
 
+
+  // related products useffect
   useEffect(() => {
     const relatedData = async () => {
-      const data = await getRelatedProducts(user.id);
+      const data = await getRelatedProducts(user?.id);
       setRelatedProducts(data);
     };
     relatedData();

@@ -604,7 +604,8 @@ export async function getProductsByCategory(
           },
         },
       }),
-      cartItems: true, // Include cart items this should only be treu when the user is logged in
+      // cartItems: true, 
+      // Include cart items this should only be treu when the user is logged in
       // Include any other relations you need
     },
     take: 7, // Limit to 7 products per category
