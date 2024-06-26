@@ -44,7 +44,21 @@ export async function getCartDataFromCookies() {
   const cookieStore = cookies();
   const existingDataCookie = cookieStore.get('cartProducts');
   const existingData = existingDataCookie ? JSON.parse(existingDataCookie.value) : [];
+  console.log("this is the existing data cookie", existingData);
   return existingData;
 
-console.log("this is the existing data cookie", existingData);
+}
+
+// Function to remove product from cookies
+export async function removeProductFromCookies(productId) {
+  const cookieData = await getCartDataFromCookies(); // Load existing cart data from cookies
+  const updatedCookieData = cookieData.filter((item) => item.id !== productId);
+
+  // Save updated cookie data back to cookies
+  await cookies().set({
+    name: 'cartProducts',
+    value: JSON.stringify(updatedCookieData),
+    httpOnly: true,
+    path: '/',
+  });
 }

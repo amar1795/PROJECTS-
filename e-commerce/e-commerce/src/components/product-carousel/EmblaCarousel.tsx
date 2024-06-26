@@ -13,7 +13,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { toggleWishlist } from "@/actions/wishlist";
 import increaseProductQuantity from "@/actions/cart/increaseProduct";
 import decreaseProductQuantity from "@/actions/cart/decreaseProduct";
-import { addCartDatatoCookies, getCartDataFromCookies } from "@/actions/cart/addCartDatatoCookies";
+import { addCartDatatoCookies, getCartDataFromCookies, removeProductFromCookies } from "@/actions/cart/addCartDatatoCookies";
 
 type Brand = {
   id: string;
@@ -108,6 +108,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
           // Ensure quantity doesn't go below 0
           const currentQuantity = product?.cartQuantity ? product?.cartQuantity: 0; // Initialize to 0 if undefined or null
           const newQuantity = Math.max(currentQuantity + change, 0);
+          // alert( newQuantity)
           return { ...product, cartQuantity: newQuantity };
         }
         return product;
@@ -115,6 +116,13 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
       setupdatedProducts(updatedProductsList);
 
       console.log("these are the updated products", updatedProducts);
+
+         // Save updated product information to cookies
+    if (updatedProductsList.find(product => product.id === productId)?.cartQuantity === 0) {
+       removeProductFromCookies(productId); // Remove product from cookies if cartQuantity is 0
+    } else {
+       addCartDatatoCookies(updatedProductsList); // Otherwise, save updated data to cookies
+    }
 
       if(user){
       setTimeout(async () => {
@@ -133,15 +141,16 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
 
   
   // useEffect to monitor changes to updatedProducts and save to cookies
-useEffect(() => {
-  async function saveToCookies() {
-    await addCartDatatoCookies(updatedProducts);
-  }
-  saveToCookies();
-}, [updatedProducts]);
+// useEffect(() => {
+//   async function saveToCookies() {
+//     await addCartDatatoCookies(updatedProducts);
+//   }
+//   saveToCookies();
+// }, [updatedProducts]);
 
 
   // useEffect to load data from cookies and merge with fetched products on component mount
+  // adding dependency as product was causing infinite loop
   useEffect(() => {
     async function mergeDataFromCookies() {
       const cookieData = await getCartDataFromCookies();
