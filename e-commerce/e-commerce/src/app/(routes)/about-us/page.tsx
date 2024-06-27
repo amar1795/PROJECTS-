@@ -1,6 +1,7 @@
 import { getCartDataFromCookies } from "@/actions/cart/addCartDatatoCookies";
 import { getRelatedProducts } from "@/actions/cart/categoryRelatedProduct";
 import deleteCartItem from "@/actions/cart/deleteCartProducts";
+import { fetchAllCartCookieData } from "@/actions/cart/fetchAllCartCookieData";
 import { createProduct, createProductRating, createProductReview, createProductVarient, deleteProduct, fetchAllProduct, fetchAllReviews, fetchProduct, fetchProductAllData, fetchProductVarient, fetchProductanotherversion, fetchProductsByCategory, fethChildrenCategories, getProductsByCategory } from "@/actions/createProduct";
 import { dummyUserFunction, getUserBySpecificEmail } from "@/actions/dummyUser";
 import {  testEmail } from "@/actions/email/testEmail";
@@ -12,7 +13,7 @@ import { productCreationNew } from "@/actions/product/productCreation";
 import { getUserById } from "@/auth";
 import React from "react";
 
-const page = () => {
+const page = async() => {
   // CreateColour()
   // CreateSize()
   // getAllPosters()
@@ -57,6 +58,11 @@ const page = () => {
 // searchProductsByNameOrBrand("Tennis")
 // getUserById("6673e3d87214902e3b734de3")
 // getCartDataFromCookies()
+// const { count } = await fetchAllCartCookieData();
+// const data=await getCartDataFromCookies()
+// const count=data.length;
+// console.log("this is the count", count);
+
   return (
     <div className=" bg-pink-500 border-2 border-black px-10 ">
       <div>

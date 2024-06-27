@@ -640,7 +640,7 @@ export async function getProductsByCategory(
         cartQuantity: cartQuantity,
       };
     });
-    console.log("this is the user cart items from serrver action", products)
+    // console.log("this is the user cart items from serrver action", products)
 
   const formattedProducts = products.map((product) => {
     const ratingsCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };

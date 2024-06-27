@@ -1,5 +1,7 @@
 "use server"
+import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
+import { fetchAllCartCookieData } from './fetchAllCartCookieData';
 
 export async function addCartDatatoCookies(updatedProducts) {
   const cookieStore = cookies();
@@ -29,6 +31,7 @@ export async function addCartDatatoCookies(updatedProducts) {
     }
   });
 
+
   // Save the merged data back to cookies
   cookieStore.set({
     name: 'cartProducts',
@@ -36,7 +39,7 @@ export async function addCartDatatoCookies(updatedProducts) {
     httpOnly: true,
     path: '/',
   });
-
+  fetchAllCartCookieData();
   
 }
 

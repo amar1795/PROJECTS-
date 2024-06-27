@@ -16,6 +16,7 @@ import { SessionProvider } from "next-auth/react";
 
 import { auth } from "@/auth";
 import { getProductsByCategory } from "@/actions/createProduct";
+import { getCartDataFromCookies } from "@/actions/cart/addCartDatatoCookies";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -28,12 +29,14 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
-
+  const cartCountData=0;
   const user = session?.user?.id;
   const mensCollectionData = await getProductsByCategory(
     "665a0b9f14be77720636d443",
     user
   );
+  const data=await getCartDataFromCookies()
+const count=data.length;
   // console.log("this is the menscollection wishlist count ", mensCollectionData);
 
   return (
@@ -53,7 +56,7 @@ export default async function RootLayout({
           >
             <div className=" overflow-hidden">
               <div className="fixed top-0 left-0 right-0  z-10">
-                <MainNav mensCollectionData={mensCollectionData} />
+                <MainNav mensCollectionData={mensCollectionData} cartCountData={count}/>
               </div>
               <Toaster />
               <div className=" mt-[8rem]  ">
