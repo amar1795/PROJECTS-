@@ -137,7 +137,7 @@ const formatPrice = (price: number): string => {
               </div>
               <div className="right self-center pb-7">
                 <button className="nbutton items-center border-2 border-black  px-2  justify-between hidden " onClick={()=>{
-                  handleClickAdd(user.id,product.id)
+                  handleClickAdd(user?.id,product?.id)
                 }}>
                   <div>
                     <ShoppingCart size={20} />

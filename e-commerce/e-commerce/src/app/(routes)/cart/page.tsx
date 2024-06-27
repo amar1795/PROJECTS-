@@ -31,6 +31,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { addCartDatatoCookies, getCartDataFromCookies, removeProductFromCookies } from "@/actions/cart/addCartDatatoCookies";
 import { fetchMultipleProducts } from "@/actions/cart/fetchMultipleProducts";
 import { set } from "zod";
+import { fetchSingleProduct } from "@/actions/cart/fetchSingleProduct";
 
 const page = () => {
   const user = useCurrentUser();
@@ -41,16 +42,22 @@ const page = () => {
   const [summaryData, setSummaryData] = useState([]); // [totalItems, totalAmount
   const [productData, setproductData] = useState([]);
   const [updateTrigger, setUpdateTrigger] = useState(false);
+  const [fetchnewTotal, setfetchnewTotal] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [cartCookieProducts, setCartCookieProducts] = useState([]);
   const [totalCookieAmount, setTotalCookieAmount] = useState(0);
   const [productCookieCount, setProductCookieCount] = useState(0);
-  const [updatedProducts, setupdatedProducts] = useState([]);
 
+
+const [completeMergedupdatedProducts, setCompleteMergedupdatedProducts] = useState([]);
+const[mergedTotalCount, setMergedTotalCount] = useState(0)
+const [mergedTotalAmount, setMergedTotalAmount] = useState(0)
 
   // fethcing the cookies Data
   useEffect(() => {
+
     async function getCookiesData() {
+      // alert("get cookies data is being called")
       const cookieData = await getCartDataFromCookies();
       const completedata = await fetchMultipleProducts(
         cookieData.map((product) => product.id)
@@ -65,9 +72,10 @@ const page = () => {
       });
 
       setCartCookieProducts(mergedData);
-      setupdatedProducts(mergedData);
-
       console.log("this is the cookie data", mergedData);
+      setCompleteMergedupdatedProducts(mergedData);
+
+      // console.log("this is the updated data", mergedData);
       // Calculate total amount and product count
       let total = 0;
       let count = 0;
@@ -80,11 +88,19 @@ const page = () => {
       });
 
       setTotalCookieAmount(total);
+      setMergedTotalAmount(total);
+      // alert("merged total amount is being called")
+      // alert("setTotalCookieAmount" + total)
       setProductCookieCount(count);
+      setMergedTotalCount(count);
     }
 
     getCookiesData();
-  }, [updateTrigger]);
+
+  }, [updateTrigger,fetchnewTotal]);
+
+
+
 
   useEffect(() => {
     if (cancelled) {
@@ -98,11 +114,14 @@ const page = () => {
 
   const handleClickDelete = (userID, productID) => {
 
-    if(!userID)
-      {
         cartCookieProducts.map((product) => {
           if (product?.id == productID) {
             removeProductFromCookies(productID);
+           if(userID)
+            {
+              deleteCartItem(userID, productID);
+            }
+
             setUpdateTrigger((prev) => !prev);
             setTimeout(() => {
               toast({
@@ -112,14 +131,7 @@ const page = () => {
               });
             }, 1000);
           }
-        });
-      }
-      else
-      {
-        deleteCartItem(userID, productID);
-        setUpdateTrigger((prev) => !prev);
-      }
-    
+        });  
     
   };
 
@@ -140,8 +152,14 @@ const page = () => {
     // deleteCartItem(userID, productID);
   };
 
-  const handleClickAdd = (userID, productID) => {
-    addProductToCart(userID, productID);
+  const handleClickAdd = async(userID, productID) => {
+    // alert("add to cart is being called")
+    console.log("this is the product id", productID);
+    const completedata = await fetchSingleProduct(productID)
+    console.log("this is the completed data", completedata)
+    // addProductToCart(userID, productID);
+               addCartDatatoCookies(completedata)
+
     setUpdateTrigger((prev) => !prev);
   };
 
@@ -154,18 +172,8 @@ const page = () => {
         const data = await getProductsInCartSummary(user?.id);
         console.log("this is the product data", data);
         setproductData(data);
-         // Merge cartQuantity from cookies into newData
-        //  const mergedData = data.map((product) => {
-        //   const cookieProduct = updatedProducts.find((item) => item.id === product.id);
-        //   if (cookieProduct) {
-        //     return { ...product, cartQuantity: cookieProduct.cartQuantity };
-        //   }
-        //   return product;
-        // });
-
-        // setupdatedProducts([...mergedData]);
-        // console.log("this is the updated product data", updatedProducts);
-     
+        setCompleteMergedupdatedProducts(data);
+        
       } catch (error) {
         // alert(error);
         console.log("this is the error", error);
@@ -248,11 +256,17 @@ const page = () => {
           const currentQuantity = product?.cartQuantity ? product?.cartQuantity: 0; // Initialize to 0 if undefined or null
           const newQuantity = Math.max(currentQuantity + change, 0);
           // alert( newQuantity)
+
           return { ...product, cartQuantity: newQuantity };
         }
         return product;
       });
+
+      setfetchnewTotal(prev => !prev)
       setCartCookieProducts(updatedProductsList);
+      setUpdateTrigger((prev) => !prev);
+
+      // need to add the updated products to the database as well since it is being added in the cookies already
 
       console.log("these are the updated products", cartCookieProducts);
 
@@ -273,6 +287,8 @@ const page = () => {
 
     } else {
        addCartDatatoCookies(updatedProductsList); // Otherwise, save updated data to cookies
+       setUpdateTrigger((prev) => !prev);
+
     }
 
       if(user){
@@ -300,7 +316,7 @@ const page = () => {
           <div className=" h-[4rem]">
             <h3 className="w-80 text-[2rem] leading-none p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
               TOTAL ITEMS (
-              {user ? summaryData.totalUniqueItems : productCookieCount})
+              {mergedTotalCount})
             </h3>
           </div>
 
@@ -332,13 +348,13 @@ const page = () => {
             
             <div>
               <div className=" px-4 py-4 mt-2 w-[40rem] flex-1 ">
-                {productData.map((product) => {
+                {completeMergedupdatedProducts.map((product) => {
                   return (
                     <div className=" mb-4" key={product.id}>
                       <CheckoutProductCard
                         handleClickDelete={handleClickDelete}
                         product={product}
-                        handleQuantityChange={handleQuantityChange}
+                        handleQuantityChange={handleQuantityCookieChange}
                       />
                     </div>
                   );
@@ -441,7 +457,7 @@ const page = () => {
           <div>
             <div>
               <div className=" px-4 py-4 mt-2 w-[40rem] flex-1 ">
-                {cartCookieProducts.map((product) => {
+                {completeMergedupdatedProducts.map((product) => {
                   return (
                     <div className=" mb-4" key={product?.id}>
                       <CheckoutProductCard
@@ -519,7 +535,7 @@ const page = () => {
 
                       <div className=" flex self-center py-2  w-[10rem]">
                         <h1 className=" text-[1.3rem] self-center">
-                          {item.discountedPrice?.toLocaleString("en-IN", {
+                          {(item.discountedPrice * item.cartQuantity)?.toLocaleString("en-IN", {
                             style: "currency",
                             currency: "INR",
                           })}
@@ -550,12 +566,7 @@ const page = () => {
 
                   <div className=" flex self-center py-2 font-bold">
                     <h1 className=" text-[1.3rem] self-center">
-                    {user
-                    ? summaryData?.totalAmount?.toLocaleString("en-IN", {
-                        style: "currency",
-                        currency: "INR",
-                      })
-                    : totalCookieAmount.toLocaleString("en-IN", {
+                    {mergedTotalAmount.toLocaleString("en-IN", {
                         style: "currency",
                         currency: "INR",
                       })}

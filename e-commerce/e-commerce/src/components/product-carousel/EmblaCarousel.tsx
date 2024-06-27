@@ -151,6 +151,8 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
 
   // useEffect to load data from cookies and merge with fetched products on component mount
   // adding dependency as product was causing infinite loop
+
+  // merging the cookie data with the fetched data
   useEffect(() => {
     async function mergeDataFromCookies() {
       const cookieData = await getCartDataFromCookies();
