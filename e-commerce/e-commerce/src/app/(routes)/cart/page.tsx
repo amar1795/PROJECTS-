@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 
-import React, { use, useCallback, useEffect, useState } from "react";
+import React, { use, useCallback, useEffect, useRef, useState } from "react";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import Link from "next/link";
 import {
@@ -28,7 +28,11 @@ import deleteCartItem from "@/actions/cart/deleteCartProducts";
 import { getRelatedProducts } from "@/actions/cart/categoryRelatedProduct";
 import addProductToCart from "@/actions/cart/addToProduct";
 import { useToast } from "@/components/ui/use-toast";
-import { addCartDatatoCookies, getCartDataFromCookies, removeProductFromCookies } from "@/actions/cart/addCartDatatoCookies";
+import {
+  addCartDatatoCookies,
+  getCartDataFromCookies,
+  removeProductFromCookies,
+} from "@/actions/cart/addCartDatatoCookies";
 import { fetchMultipleProducts } from "@/actions/cart/fetchMultipleProducts";
 import { set } from "zod";
 import { fetchSingleProduct } from "@/actions/cart/fetchSingleProduct";
@@ -48,14 +52,13 @@ const page = () => {
   const [totalCookieAmount, setTotalCookieAmount] = useState(0);
   const [productCookieCount, setProductCookieCount] = useState(0);
 
-
-const [completeMergedupdatedProducts, setCompleteMergedupdatedProducts] = useState([]);
-const[mergedTotalCount, setMergedTotalCount] = useState(0)
-const [mergedTotalAmount, setMergedTotalAmount] = useState(0)
+  const [completeMergedupdatedProducts, setCompleteMergedupdatedProducts] =
+    useState([]);
+  const [mergedTotalCount, setMergedTotalCount] = useState(0);
+  const [mergedTotalAmount, setMergedTotalAmount] = useState(0);
 
   // fethcing the cookies Data
   useEffect(() => {
-
     async function getCookiesData() {
       // alert("get cookies data is being called")
       const cookieData = await getCartDataFromCookies();
@@ -75,7 +78,7 @@ const [mergedTotalAmount, setMergedTotalAmount] = useState(0)
       console.log("this is the cookie data", mergedData);
       setCompleteMergedupdatedProducts(mergedData);
 
-      // console.log("this is the updated data", mergedData);
+      console.log("this is the merged data", mergedData);
       // Calculate total amount and product count
       let total = 0;
       let count = 0;
@@ -96,11 +99,7 @@ const [mergedTotalAmount, setMergedTotalAmount] = useState(0)
     }
 
     getCookiesData();
-
-  }, [updateTrigger,fetchnewTotal]);
-
-
-
+  }, [updateTrigger, fetchnewTotal]);
 
   useEffect(() => {
     if (cancelled) {
@@ -113,29 +112,35 @@ const [mergedTotalAmount, setMergedTotalAmount] = useState(0)
   }, [cancelled]);
 
   const handleClickDelete = (userID, productID) => {
+    cartCookieProducts.map((product) => {
+      if (product?.id == productID) {
+        removeProductFromCookies(productID);
 
-        cartCookieProducts.map((product) => {
-          if (product?.id == productID) {
-            removeProductFromCookies(productID);
-           if(userID)
-            {
-              deleteCartItem(userID, productID);
-            }
+        setUpdateTrigger((prev) => !prev);
+        setTimeout(() => {
+          toast({
+            title: "Item removed from cart",
+            description: "successfully removed the item from cart",
+            variant: "destructive",
+          });
+        }, 1000);
+      }
+    });
 
-            setUpdateTrigger((prev) => !prev);
-            setTimeout(() => {
-              toast({
-                title: "Item removed from cart",
-                description: "successfully removed the item from cart",
-                variant: "destructive",
-              });
-            }, 1000);
-          }
-        });  
-    
+    if (userID) {
+      // alert("delete cart item is being called")
+      deleteCartItem(userID, productID);
+      setTimeout(() => {
+        toast({
+          title: "Item removed from cart",
+          description: "successfully removed the item from cart",
+          variant: "destructive",
+        });
+      }, 1000);
+    }
   };
 
-  const handleClickCookieDelete = (userID,productID) => {
+  const handleClickCookieDelete = (userID, productID) => {
     cartCookieProducts.map((product) => {
       if (product?.id == productID) {
         removeProductFromCookies(productID);
@@ -152,13 +157,13 @@ const [mergedTotalAmount, setMergedTotalAmount] = useState(0)
     // deleteCartItem(userID, productID);
   };
 
-  const handleClickAdd = async(userID, productID) => {
+  const handleClickAdd = async (userID, productID) => {
     // alert("add to cart is being called")
     console.log("this is the product id", productID);
-    const completedata = await fetchSingleProduct(productID)
-    console.log("this is the completed data", completedata)
+    const completedata = await fetchSingleProduct(productID);
+    console.log("this is the completed data", completedata);
     // addProductToCart(userID, productID);
-               addCartDatatoCookies(completedata)
+    addCartDatatoCookies(completedata);
 
     setUpdateTrigger((prev) => !prev);
   };
@@ -166,22 +171,43 @@ const [mergedTotalAmount, setMergedTotalAmount] = useState(0)
   useEffect(() => {
     const cartSummary = async () => {
       try {
-        const cartSummaryData = await calculateCartSummary(user?.id);
-        // console.log("this is the cart summary data", cartSummaryData);
-        setSummaryData(cartSummaryData);
         const data = await getProductsInCartSummary(user?.id);
-        console.log("this is the product data", data);
-        setproductData(data);
+        console.log(
+          "this is the product data from getproductsCartSummary",
+          data
+        );
+        // setproductData(data);
+        // const cartSummaryData = await calculateCartSummary(user?.id);
+        // // console.log("this is the cart summary data", cartSummaryData);
+        // setSummaryData(cartSummaryData);
+        setMergedTotalCount(data.length);
+        // setMergedTotalAmount(cartSummaryData.totalAmount);
+
         setCompleteMergedupdatedProducts(data);
-        
       } catch (error) {
         // alert(error);
         console.log("this is the error", error);
       }
     };
     cartSummary();
-  }, [updateTrigger]);
+  }, []);
 
+  // useEffect(() => {
+  //   const cartSummary = async () => {
+  //     try {
+  //       const cartSummaryData = await calculateCartSummary(user?.id);
+  //       // alert("this is called");
+  //       // console.log("this is the cart summary data", cartSummaryData);
+  //       setSummaryData(cartSummaryData);
+  //       // setMergedTotalCount(data.length);
+  //       // setMergedTotalAmount(cartSummaryData.totalAmount);
+  //     } catch (error) {
+  //       // alert(error);
+  //       console.log("this is the error", error);
+  //     }
+  //   };
+  //   cartSummary();
+  // }, [updateTrigger]);
 
   // console.log("this is the product data", productData);
   // console.log("this is the updated products", updatedProducts);
@@ -193,8 +219,7 @@ const [mergedTotalAmount, setMergedTotalAmount] = useState(0)
       setRelatedProducts(data);
     };
     relatedData();
-  }, [updateTrigger]);
-
+  }, []);
 
   if (productData.length === 0 && !summaryData) {
     return <div>loading...</div>;
@@ -246,66 +271,97 @@ const [mergedTotalAmount, setMergedTotalAmount] = useState(0)
     [productData]
   );
 
-
   const handleQuantityCookieChange = useCallback(
     (userId: string, productId: string, change: number) => {
-      
-      const updatedProductsList = cartCookieProducts.map((product) => {
-        if (product.id === productId) {
-          // Ensure quantity doesn't go below 0
-          const currentQuantity = product?.cartQuantity ? product?.cartQuantity: 0; // Initialize to 0 if undefined or null
-          const newQuantity = Math.max(currentQuantity + change, 0);
-          // alert( newQuantity)
+      // update the change in the cookies and we will update the database when fethcning the data from the cookies
+      const updatedProductsList = completeMergedupdatedProducts.map(
+        (product) => {
+          if (product.id === productId) {
+            // Ensure quantity doesn't go below 0
+            const currentQuantity = product?.cartQuantity
+              ? product?.cartQuantity
+              : 0; // Initialize to 0 if undefined or null
+            const newQuantity = Math.max(currentQuantity + change, 0);
+            // alert( newQuantity)
 
-          return { ...product, cartQuantity: newQuantity };
+            return { ...product, cartQuantity: newQuantity };
+          }
+          return product;
         }
-        return product;
-      });
+      );
 
-      setfetchnewTotal(prev => !prev)
+      // setfetchnewTotal(prev => !prev)
+      setCompleteMergedupdatedProducts(updatedProductsList);
       setCartCookieProducts(updatedProductsList);
-      setUpdateTrigger((prev) => !prev);
+
+      // setUpdateTrigger((prev) => !prev);
 
       // need to add the updated products to the database as well since it is being added in the cookies already
 
       console.log("these are the updated products", cartCookieProducts);
 
-         // Save updated product information to cookies
-    if (updatedProductsList.find(product => product.id === productId)?.cartQuantity === 0) {
+      // Save updated product information to cookies
+      if (
+        updatedProductsList.find((product) => product.id === productId)
+          ?.cartQuantity === 0
+      ) {
+        deleteCartItem(userId, productId);
+        removeProductFromCookies(productId); // Remove product from cookies if cartQuantity is 0
 
-       removeProductFromCookies(productId); // Remove product from cookies if cartQuantity is 0
-       
-       setUpdateTrigger((prev) => !prev);
+        //  setUpdateTrigger((prev) => !prev);
 
-      setTimeout(() => {
-        toast({
-          title: "Item removed from cart",
-          description: "successfully removed the item from cart",
-          variant: "destructive",
-        });
-      }, 1000);
+        setTimeout(() => {
+          toast({
+            title: "Item removed from cart",
+            description: "successfully removed the item from cart",
+            variant: "destructive",
+          });
+        }, 1000);
+      } else {
+        addCartDatatoCookies(updatedProductsList); // Otherwise, save updated data to cookies
+        //  setUpdateTrigger((prev) => !prev);
+      }
 
-    } else {
-       addCartDatatoCookies(updatedProductsList); // Otherwise, save updated data to cookies
-       setUpdateTrigger((prev) => !prev);
-
-    }
-
-      if(user){
-      setTimeout(async () => {
-        if (change > 0) {
-          // alert("increase quantity is called", userId, productId)
-          await increaseProductQuantity(userId, productId);
-        } else {
-          // alert("decrease quantity is called")
-          await decreaseProductQuantity(userId, productId);
-        }
-      }, 200);
-    }
-  },
-    [cartCookieProducts]
+      //   if(user){
+      //   setTimeout(async () => {
+      //     if (change > 0) {
+      //       // alert("increase quantity is called", userId, productId)
+      //       await increaseProductQuantity(userId, productId);
+      //     } else {
+      //       // alert("decrease quantity is called")
+      //       await decreaseProductQuantity(userId, productId);
+      //     }
+      //   }, 200);
+      // }
+      // Update state after debounce
+      debounceUpdateTrigger();
+    },
+    [completeMergedupdatedProducts]
   );
 
+  // Debounce function implementation
+  const debounce = (func: Function, delay: number) => {
+    let timer: NodeJS.Timeout;
+    return function (this: any, ...args: any[]) {
+      clearTimeout(timer);
+      timer = setTimeout(() => func.apply(this, args), delay);
+    };
+  };
+
+  const debounceUpdateTrigger = useRef(
+    debounce(() => {
+      // setCompleteMergedupdatedProducts(updatedProductsList);
+      // setCartCookieProducts(updatedProductsList);
+      setUpdateTrigger((prev) => !prev);
+    }, 1000)
+  ).current;
+
+  // Optionally, clean up the timer if the component unmounts or dependencies change
+  useEffect(() => {
+    return () => {
+      clearTimeout(debounceUpdateTrigger.current);
+    };
+  }, []);
   // console.log("this is the summary data", summaryData);
 
   return (
@@ -315,8 +371,7 @@ const [mergedTotalAmount, setMergedTotalAmount] = useState(0)
           <h1 className=" text-[4rem] leading-none ">SHOPPING CART</h1>
           <div className=" h-[4rem]">
             <h3 className="w-80 text-[2rem] leading-none p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
-              TOTAL ITEMS (
-              {mergedTotalCount})
+              TOTAL ITEMS ({mergedTotalCount})
             </h3>
           </div>
 
@@ -325,7 +380,7 @@ const [mergedTotalAmount, setMergedTotalAmount] = useState(0)
               <div className=" flex self-center py-2  h-[3.5rem]">
                 <h1 className=" text-[2rem] self-center leading-none">
                   {user
-                    ? summaryData?.totalAmount?.toLocaleString("en-IN", {
+                    ? totalCookieAmount?.toLocaleString("en-IN", {
                         style: "currency",
                         currency: "INR",
                       })
@@ -340,12 +395,10 @@ const [mergedTotalAmount, setMergedTotalAmount] = useState(0)
         </div>
       </div>
 
-      
       {/* if the user is signed in */}
-      {summaryData?.totalUniqueItems && (
+      {(
         <div className=" bg-orange-300 flex justify-around px-30 py-4">
           <div>
-            
             <div>
               <div className=" px-4 py-4 mt-2 w-[40rem] flex-1 ">
                 {completeMergedupdatedProducts.map((product) => {
@@ -371,7 +424,7 @@ const [mergedTotalAmount, setMergedTotalAmount] = useState(0)
                   </h3>
                 </div>
 
-                {summaryData.orderSummary?.map((item) => (
+                {completeMergedupdatedProducts.map((item) => (
                   <div className="orderSummary">
                     <div className=" flex justify-between ">
                       <div className=" w-[26rem]">
@@ -386,12 +439,12 @@ const [mergedTotalAmount, setMergedTotalAmount] = useState(0)
                         <div className=" self-center">
                           <X />
                         </div>{" "}
-                        <h1 className=" text-[1.5rem] ">{item.quantity}</h1>
+                        <h1 className=" text-[1.5rem] ">{item.cartQuantity}</h1>
                       </span>
 
                       <div className=" flex self-center py-2  w-[10rem]">
                         <h1 className=" text-[1.3rem] self-center">
-                          {item.amount?.toLocaleString("en-IN", {
+                          {(item.discountedPrice * item.cartQuantity)?.toLocaleString("en-IN", {
                             style: "currency",
                             currency: "INR",
                           })}
@@ -423,7 +476,7 @@ const [mergedTotalAmount, setMergedTotalAmount] = useState(0)
 
                   <div className=" flex self-center py-2 font-bold">
                     <h1 className=" text-[1.3rem] self-center">
-                      {summaryData?.totalAmount?.toLocaleString("en-IN", {
+                      {mergedTotalAmount?.toLocaleString("en-IN", {
                         style: "currency",
                         currency: "INR",
                       })}
@@ -453,147 +506,149 @@ const [mergedTotalAmount, setMergedTotalAmount] = useState(0)
 
       {/* if the user is not signed in  */}
       {
-        !user && (<div className=" bg-orange-300 flex justify-around px-30 py-4">
-          <div>
-            <div>
-              <div className=" px-4 py-4 mt-2 w-[40rem] flex-1 ">
-                {completeMergedupdatedProducts.map((product) => {
-                  return (
-                    <div className=" mb-4" key={product?.id}>
-                      <CheckoutProductCard
-                        handleClickDelete={handleClickDelete}
-                        product={product}
-                        handleQuantityChange={handleQuantityCookieChange}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-          <div className=" w-[45rem]  border-b-8 border-r-4 border-2 border-black  mt-6">
-            <div className="   bg-opacity-20 backdrop-blur-lg border border-white/30 bg-white">
-              <div className=" px-4 py-4  ">
-                <div className=" h-[4rem] pl-6 mb-8">
-                  <h3 className=" text-[2rem] leading-none p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
-                    Order Summary
-                  </h3>
-                </div>
+      // !user && (
+      //   <div className=" bg-orange-300 flex justify-around px-30 py-4">
+      //     <div>
+      //       <div>
+      //         <div className=" px-4 py-4 mt-2 w-[40rem] flex-1 ">
+      //           {completeMergedupdatedProducts.map((product) => {
+      //             return (
+      //               <div className=" mb-4" key={product?.id}>
+      //                 <CheckoutProductCard
+      //                   handleClickDelete={handleClickDelete}
+      //                   product={product}
+      //                   handleQuantityChange={handleQuantityCookieChange}
+      //                 />
+      //               </div>
+      //             );
+      //           })}
+      //         </div>
+      //       </div>
+      //     </div>
+      //     <div className=" w-[45rem]  border-b-8 border-r-4 border-2 border-black  mt-6">
+      //       <div className="   bg-opacity-20 backdrop-blur-lg border border-white/30 bg-white">
+      //         <div className=" px-4 py-4  ">
+      //           <div className=" h-[4rem] pl-6 mb-8">
+      //             <h3 className=" text-[2rem] leading-none p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
+      //               Order Summary
+      //             </h3>
+      //           </div>
 
-                {/* if user is sigend in */}
-                {summaryData.orderSummary?.map((item) => (
-                  <div className="orderSummary">
-                    <div className=" flex justify-between ">
-                      <div className=" w-[26rem]">
-                        <h1 className=" self-center  text-[1.2rem] font-bold">
-                          {" "}
-                          {item.name.length > 36
-                            ? item.name.slice(0, 35) + "..."
-                            : item.name}
-                        </h1>
-                      </div>
-                      <span className=" flex  self-center   w-[4rem]  justify-between">
-                        <div className=" self-center">
-                          <X />
-                        </div>{" "}
-                        <h1 className=" text-[1.5rem] ">{item.quantity}</h1>
-                      </span>
+      //           {/* if user is sigend in */}
+      //           {/* {summaryData.orderSummary?.map((item) => (
+      //             <div className="orderSummary">
+      //               <div className=" flex justify-between ">
+      //                 <div className=" w-[26rem]">
+      //                   <h1 className=" self-center  text-[1.2rem] font-bold">
+      //                     {" "}
+      //                     {item.name.length > 36
+      //                       ? item.name.slice(0, 35) + "..."
+      //                       : item.name}
+      //                   </h1>
+      //                 </div>
+      //                 <span className=" flex  self-center   w-[4rem]  justify-between">
+      //                   <div className=" self-center">
+      //                     <X />
+      //                   </div>{" "}
+      //                   <h1 className=" text-[1.5rem] ">{item.quantity}</h1>
+      //                 </span>
 
-                      <div className=" flex self-center py-2  w-[10rem]">
-                        <h1 className=" text-[1.3rem] self-center">
-                          {item.amount?.toLocaleString("en-IN", {
-                            style: "currency",
-                            currency: "INR",
-                          })}
-                        </h1>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+      //                 <div className=" flex self-center py-2  w-[10rem]">
+      //                   <h1 className=" text-[1.3rem] self-center">
+      //                     {item.amount?.toLocaleString("en-IN", {
+      //                       style: "currency",
+      //                       currency: "INR",
+      //                     })}
+      //                   </h1>
+      //                 </div>
+      //               </div>
+      //             </div>
+      //           ))} */}
 
-                
+      //           <div>
+      //             {/* if user is not signed in */}
+      //             {completeMergedupdatedProducts?.map((item) => (
+      //               <div className="orderSummary">
+      //                 <div className=" flex justify-between ">
+      //                   <div className=" w-[26rem]">
+      //                     <h1 className=" self-center  text-[1.2rem] font-bold">
+      //                       {" "}
+      //                       {item.name.length > 36
+      //                         ? item.name.slice(0, 35) + "..."
+      //                         : item.name}
+      //                     </h1>
+      //                   </div>
+      //                   <span className=" flex  self-center   w-[4rem]  justify-between">
+      //                     <div className=" self-center">
+      //                       <X />
+      //                     </div>{" "}
+      //                     <h1 className=" text-[1.5rem] ">
+      //                       {item.cartQuantity}
+      //                     </h1>
+      //                   </span>
 
-                <div>
-                {/* if user is not signed in */}
-                {!user && cartCookieProducts?.map((item) => (
-                  <div className="orderSummary">
-                    <div className=" flex justify-between ">
-                      <div className=" w-[26rem]">
-                        <h1 className=" self-center  text-[1.2rem] font-bold">
-                          {" "}
-                          {item.name.length > 36
-                            ? item.name.slice(0, 35) + "..."
-                            : item.name}
-                        </h1>
-                      </div>
-                      <span className=" flex  self-center   w-[4rem]  justify-between">
-                        <div className=" self-center">
-                          <X />
-                        </div>{" "}
-                        <h1 className=" text-[1.5rem] ">{item.cartQuantity}</h1>
-                      </span>
+      //                   <div className=" flex self-center py-2  w-[10rem]">
+      //                     <h1 className=" text-[1.3rem] self-center">
+      //                       {(
+      //                         item.discountedPrice * item.cartQuantity
+      //                       )?.toLocaleString("en-IN", {
+      //                         style: "currency",
+      //                         currency: "INR",
+      //                       })}
+      //                     </h1>
+      //                   </div>
+      //                 </div>
+      //               </div>
+      //             ))}
+      //           </div>
+      //           <div className=" flex justify-between px-12 ">
+      //             <h1 className=" self-center text-[1.5rem] uppercase font-bold">
+      //               Delivery
+      //             </h1>
 
-                      <div className=" flex self-center py-2  w-[10rem]">
-                        <h1 className=" text-[1.3rem] self-center">
-                          {(item.discountedPrice * item.cartQuantity)?.toLocaleString("en-IN", {
-                            style: "currency",
-                            currency: "INR",
-                          })}
-                        </h1>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                </div>
-                <div className=" flex justify-between px-12 ">
-                  <h1 className=" self-center text-[1.5rem] uppercase font-bold">
-                    Delivery
-                  </h1>
+      //             <div className=" flex self-center py-2   mr-12">
+      //               <h1 className=" text-[1.3rem] self-center font-bold ">
+      //                 Free
+      //               </h1>
+      //             </div>
+      //           </div>
+      //           <div></div>
 
-                  <div className=" flex self-center py-2   mr-12">
-                    <h1 className=" text-[1.3rem] self-center font-bold ">
-                      Free
-                    </h1>
-                  </div>
-                </div>
-                <div></div>
+      //           <div className=" border-b-2 border-black "></div>
+      //           <div className=" flex justify-between py-8 px-8 ">
+      //             <h1 className=" self-center font-bold text-[2rem] uppercase">
+      //               Total
+      //             </h1>
 
-                <div className=" border-b-2 border-black "></div>
-                <div className=" flex justify-between py-8 px-8 ">
-                  <h1 className=" self-center font-bold text-[2rem] uppercase">
-                    Total
-                  </h1>
-
-                  <div className=" flex self-center py-2 font-bold">
-                    <h1 className=" text-[1.3rem] self-center">
-                    {mergedTotalAmount.toLocaleString("en-IN", {
-                        style: "currency",
-                        currency: "INR",
-                      })}
-                    </h1>
-                  </div>
-                </div>
-                <div></div>
-                <div className="">
-                  {!user ? (
-                    <div className=" flex justify-center">
-                      <StyledButton buttonName="Please Sign In to purchase " />
-                    </div>
-                  ) : (
-                    <Link href={"/checkout"}>
-                      <div className=" flex justify-center">
-                        <StyledButton buttonName=" Proceed to Checkout" />
-                      </div>
-                    </Link>
-                  )}
-                  {/* <StyledButton buttonName=" Proceed to Checkout" /> */}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        )
+      //             <div className=" flex self-center py-2 font-bold">
+      //               <h1 className=" text-[1.3rem] self-center">
+      //                 {mergedTotalAmount.toLocaleString("en-IN", {
+      //                   style: "currency",
+      //                   currency: "INR",
+      //                 })}
+      //               </h1>
+      //             </div>
+      //           </div>
+      //           <div></div>
+      //           <div className="">
+      //             {!user ? (
+      //               <div className=" flex justify-center">
+      //                 <StyledButton buttonName="Please Sign In to purchase " />
+      //               </div>
+      //             ) : (
+      //               <Link href={"/checkout"}>
+      //                 <div className=" flex justify-center">
+      //                   <StyledButton buttonName=" Proceed to Checkout" />
+      //                 </div>
+      //               </Link>
+      //             )}
+      //             {/* <StyledButton buttonName=" Proceed to Checkout" /> */}
+      //           </div>
+      //         </div>
+      //       </div>
+      //     </div>
+      //   </div>
+      // )
       }
 
       {relatedProducts && relatedProducts.length > 0 && (

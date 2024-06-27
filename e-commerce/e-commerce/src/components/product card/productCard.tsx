@@ -14,7 +14,7 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 
 
 
-
+// need to fix the bug for the related items used inthe shooping cart the link url is showing undefined
 const formatPrice = (price: number): string => {
   // Format the price with the Indian Rupee symbol
   return "₹" + price?.toLocaleString("en-IN");
@@ -40,16 +40,26 @@ const formatPrice = (price: number): string => {
   console.log("this is the product category name", product?.category?.name);
   // If a matching segment is found, construct the new URL
   let newUrl = completeUrl;
+
   if (matchingSegmentIndex !== -1) {
+
     // Remove the segments from the matching segment index onwards
+
     const newSegments = segments.slice(0, matchingSegmentIndex);
+
     // Add the product category name and ID to the new segments
+
     newSegments.push(removeSpaces(product?.category?.name), product?.id);
+
     // Join the new segments to form the new URL
+
     newUrl = newSegments.join("/");
   } else {
+
     // If no matching segment is found, append the product category name and ID to the end of the URL
+
     newUrl = `${completeUrl}/${removeSpaces(product?.category?.name)}/${
+      
       product?.id
     }`;
   }

@@ -95,11 +95,14 @@ export async function getProductsInCartSummary(userId: string) {
     const productIds = orderSummary.map((item) => item.productId);
 
     // need to pass the cookie product ids to the fetch multiple products function here and merge the data
+
     const cookieData = await getCartDataFromCookies();
+
     if (cookieData.length > 0) {
       const cookieProductIds = cookieData.map((item) => item.id);
       productIds.push(...cookieProductIds);
     }
+
     //  need to update the cartItems quantity as well in the cart
 
     // Fetch product details for the extracted product IDs
@@ -124,6 +127,7 @@ export async function getProductsInCartSummary(userId: string) {
 
     const cartItems = cart ? cart.cartItems : [];
     // update the cart quantity in the products array here from the cookie data
+    
     // Update the cartItems quantity in the cart based on the cookie data
     for (const cookieItem of cookieData) {
       const cartItem = cartItems.find(
