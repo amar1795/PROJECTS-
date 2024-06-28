@@ -14,35 +14,38 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { useToast } from "../ui/use-toast";
 import { Product } from "../product-carousel/EmblaCarousel";
 import { toggleWishlist } from "@/actions/wishlist";
-import { addCartDatatoCookies, getCartDataFromCookies, removeProductFromCookies } from "@/actions/cart/addCartDatatoCookies";
+import {
+  addCartDatatoCookies,
+  getCartDataFromCookies,
+  removeProductFromCookies,
+} from "@/actions/cart/addCartDatatoCookies";
 import increaseProductQuantity from "@/actions/cart/increaseProduct";
 import decreaseProductQuantity from "@/actions/cart/decreaseProduct";
-
-
-
 
 // need to fix the bug for the related items used inthe shooping cart the link url is showing undefined
 const formatPrice = (price: number): string => {
   // Format the price with the Indian Rupee symbol
   return "₹" + price?.toLocaleString("en-IN");
-  };
-  
-  // Function to remove spaces from a string
-  const removeSpaces = (name: string): string => {
-    return name?.replace(/\s+/g, "");
-    };
-    
-const ProductCard: React.FC<updatedDataResponse> = ({ product,handleClickAdd,productId,handleQuantityChange,handleWishlistToggle }) => {
-  const user = useCurrentUser();
+};
 
+// Function to remove spaces from a string
+const removeSpaces = (name: string): string => {
+  return name?.replace(/\s+/g, "");
+};
+
+const ProductCard: React.FC<updatedDataResponse> = ({
+  product,
+  handleClickAdd,
+  productId,
+  handleQuantityChange,
+  handleWishlistToggle,
+  
+}) => {
+
+  const user = useCurrentUser();
   // console.log("this is the updated products", updatedProducts);
 
-
   // console.log("this is the productID from product card", product?.category?.name);
-
-
-
-
 
   const completeUrl = typeof window !== "undefined" ? window.location.href : "";
   console.log("this is the complete url", completeUrl);
@@ -57,7 +60,6 @@ const ProductCard: React.FC<updatedDataResponse> = ({ product,handleClickAdd,pro
   let newUrl = completeUrl;
 
   if (matchingSegmentIndex !== -1) {
-
     // Remove the segments from the matching segment index onwards
 
     const newSegments = segments.slice(0, matchingSegmentIndex);
@@ -70,17 +72,12 @@ const ProductCard: React.FC<updatedDataResponse> = ({ product,handleClickAdd,pro
 
     newUrl = newSegments.join("/");
   } else {
-
     // If no matching segment is found, append the product category name and ID to the end of the URL
 
     newUrl = `${completeUrl}/${removeSpaces(product?.category?.name)}/${
-      
       product?.id
     }`;
   }
-
-
- 
 
   return (
     <div>
@@ -91,9 +88,12 @@ const ProductCard: React.FC<updatedDataResponse> = ({ product,handleClickAdd,pro
         >
           {/* top part */}
           <button>
-            <Link href={newUrl}>
+            
               <div className="ProductImageCard min-h-[19rem] relative ">
-                <button className={`heartButton z-10 hover:text-red-500`}>
+                <button
+                  className={`heartButton z-10 hover:text-red-500`}
+                  onClick={() => handleWishlistToggle(user?.id, product.id)}
+                >
                   {/* wishlist icon */}
                   <Heart
                     size={40}
@@ -102,15 +102,16 @@ const ProductCard: React.FC<updatedDataResponse> = ({ product,handleClickAdd,pro
                   />
                 </button>
                 <div className="ProductImage bg-red-400 h-full w-full absolute">
+                <Link href={newUrl}>
                   <Image
                     alt="product image"
                     fill="true"
                     objectFit="cover"
                     src={product?.images[0]?.url}
                   />
+            </Link>
                 </div>
               </div>
-            </Link>
           </button>
           {/* middle part */}
           <div className="  text-sm flex h-[2rem] justify-between bg-opacity-20 backdrop-blur-lg border border-white/30 ">
@@ -125,15 +126,21 @@ const ProductCard: React.FC<updatedDataResponse> = ({ product,handleClickAdd,pro
             <div>
               <div className="box flex pr-4">
                 {/* quantity change icons */}
-                <button className=" pr-2  hover:bg-gray-200 pl-1" onClick={() => handleQuantityChange(user?.id, product.id, -1)}>
-                <Minus size={20} />
+                <button
+                  className=" pr-2  hover:bg-gray-200 pl-1"
+                  onClick={() => handleQuantityChange(user?.id, product.id, -1)}
+                >
+                  <Minus size={20} />
                 </button>
                 <div className=" text-[1.5rem] w-7  bg-white  h-[2rem]">
-                  <div className=" px-2 py-2 ">{product?.cartQuantity || 0}</div>
+                  <div className=" px-2 py-2 ">
+                    {product?.cartQuantity || 0}
+                  </div>
                 </div>
-                <button className=" pl-2  hover:bg-gray-200 pr-1"
-                onClick={() => handleQuantityChange(user?.id, product.id, 1)}>
-                  
+                <button
+                  className=" pl-2  hover:bg-gray-200 pr-1"
+                  onClick={() => handleQuantityChange(user?.id, product.id, 1)}
+                >
                   <Plus size={20} />
                 </button>
               </div>
@@ -168,9 +175,12 @@ const ProductCard: React.FC<updatedDataResponse> = ({ product,handleClickAdd,pro
                 </div>
               </div>
               <div className="right self-center pb-7">
-                <button className="nbutton items-center border-2 border-black  px-2  justify-between hidden " onClick={()=>{
-                  handleClickAdd(user?.id,product?.id)
-                }}>
+                <button
+                  className="nbutton items-center border-2 border-black  px-2  justify-between hidden "
+                  onClick={() => {
+                    handleClickAdd(user?.id, product?.id);
+                  }}
+                >
                   <div>
                     <ShoppingCart size={20} />
                   </div>

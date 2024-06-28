@@ -8,6 +8,7 @@ import { addCartDatatoCookies, getCartDataFromCookies, removeProductFromCookies 
 import increaseProductQuantity from '@/actions/cart/increaseProduct';
 import decreaseProductQuantity from '@/actions/cart/decreaseProduct';
 import { useCurrentUser } from '@/hooks/use-current-user';
+import { fetchSingleProduct } from '@/actions/cart/fetchSingleProduct';
 
 interface CategoriesRelatedProductProps {
   relatedProduct: relatedProduct[];
@@ -27,11 +28,22 @@ const CategoriesRelatedProduct:React.FC<CategoriesRelatedProductProps>  = ({rela
 
   const { toast } = useToast();
   const user = useCurrentUser();
+  const [updateTrigger, setUpdateTrigger] = useState(false);
 
   useEffect(() => {
     setupdatedProducts(relatedProduct);
   }, [relatedProduct]);
 
+  const handleClickAdd = async (userID, productID) => {
+    // alert("add to cart is being called")
+    console.log("this is the product id", productID);
+    const completedata = await fetchSingleProduct(productID);
+    console.log("this is the completed data", completedata);
+    // addProductToCart(userID, productID);
+    addCartDatatoCookies(completedata);
+
+    setUpdateTrigger((prev) => !prev);
+  };
 
   const handleWishlistToggle = useCallback(async (userId: string, productId: string) => {
     if (!user) {
@@ -42,7 +54,6 @@ const CategoriesRelatedProduct:React.FC<CategoriesRelatedProductProps>  = ({rela
       });
       return;
     }
-  
     const updatedProductsList = updatedProducts.map((product) =>
       product.id === productId ? { ...product, isWishlisted: !product.isWishlisted } : product
     );
@@ -116,7 +127,7 @@ useEffect(() => {
   }
 
   mergeDataFromCookies();
-}, [relatedProduct]);
+}, [relatedProduct,updateTrigger]);
 
   return (
     <div>
@@ -128,7 +139,7 @@ useEffect(() => {
             .filter((product) => product.id !== ProductId) // Apply the filter here
             .map((product: relatedProduct) => (
               <div className="py-4" key={product.id}>
-                <ProductCard product={product} productId={product.id} handleQuantityChange={handleQuantityChange} handleWishlistToggle={handleWishlistToggle} />
+                <ProductCard product={product} productId={product.id} handleQuantityChange={handleQuantityChange} handleWishlistToggle={handleWishlistToggle} handleClickAdd={handleClickAdd} />
               </div>
             ))}
             </div>

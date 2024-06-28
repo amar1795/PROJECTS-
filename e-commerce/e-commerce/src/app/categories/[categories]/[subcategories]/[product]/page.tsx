@@ -91,7 +91,7 @@ const page = ({ params }: { params: { product: string } }) => {
   const [mensCollectionData, setMensCollectionData] = React.useState<any[]>([]);
 
   // this user doesn't work for some reason whereas this is meant to be used in the client side
-  const { user } = useCurrentUser();
+  // const { user } = useCurrentUser();
 
   const currentUser = session?.user?.id;
 
