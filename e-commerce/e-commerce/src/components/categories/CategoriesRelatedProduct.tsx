@@ -15,7 +15,7 @@ interface CategoriesRelatedProductProps {
   ProductId: string; // Define ProductId as string
 }
 
-const CategoriesRelatedProduct:React.FC<CategoriesRelatedProductProps>  = ({relatedProduct,ProductId}) => {
+const CategoriesRelatedProduct:React.FC<CategoriesRelatedProductProps>  = ({relatedProduct,ProductId,callToast}) => {
   if(!relatedProduct) return <div>
     Loading ...
   </div>
@@ -47,7 +47,7 @@ const CategoriesRelatedProduct:React.FC<CategoriesRelatedProductProps>  = ({rela
 
   const handleWishlistToggle = useCallback(async (userId: string, productId: string) => {
     if (!user) {
-      toast({
+      callToast({
         variant: "destructive",
         title: "Not Logged In",
         description: "Please login to wishlist this item",
@@ -62,7 +62,7 @@ const CategoriesRelatedProduct:React.FC<CategoriesRelatedProductProps>  = ({rela
   
     setTimeout(async () => {
       const message = await toggleWishlist(userId, productId);
-      toast({
+      callToast({
         variant: message.message === "added" ? "default" : "destructive",
         title: message.message === "added" ? "Added to Wishlist" : "Removed from Wishlist",
         description: message.message === "added" ? "The item has been wishlisted" : "The item has been removed from wishlist",

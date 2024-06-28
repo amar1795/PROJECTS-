@@ -5,6 +5,7 @@ import { prismadb } from "@/lib/db";
 import { NextResponse } from "next/server";
 import fs from "fs";
 import { cache } from "react";
+import { auth } from "@/auth";
 
 interface ProductParams {
   productName: string;
@@ -604,7 +605,7 @@ export async function getProductsByCategory(
           },
         },
       }),
-      // cartItems: true, 
+      // cartItems: true,
       // Include cart items this should only be treu when the user is logged in
       // Include any other relations you need
     },
@@ -630,17 +631,17 @@ export async function getProductsByCategory(
     });
     cartItems = cart ? cart.cartItems : [];
   }
-// console.log("this is the user cart items from serrver action", cartItems)
-    // Map the cart items to products and include cart quantity
-    products = products.map((product) => {
-      const cartItem = cartItems.find((item) => item.productId === product.id);
-      const cartQuantity = cartItem ? cartItem.quantity : 0;
-      return {
-        ...product,
-        cartQuantity: cartQuantity,
-      };
-    });
-    // console.log("this is the user cart items from serrver action", products)
+  // console.log("this is the user cart items from serrver action", cartItems)
+  // Map the cart items to products and include cart quantity
+  products = products.map((product) => {
+    const cartItem = cartItems.find((item) => item.productId === product.id);
+    const cartQuantity = cartItem ? cartItem.quantity : 0;
+    return {
+      ...product,
+      cartQuantity: cartQuantity,
+    };
+  });
+  // console.log("this is the user cart items from serrver action", products)
 
   const formattedProducts = products.map((product) => {
     const ratingsCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
@@ -666,10 +667,12 @@ export async function getProductsByCategory(
     });
 
     // Get the unique product IDs from cart items
-const uniqueProductIds = [...new Set(cartItems.map(item => item.productId))];
+    const uniqueProductIds = [
+      ...new Set(cartItems.map((item) => item.productId)),
+    ];
 
-// Calculate the total unique items in the cart
-const totalUniqueCartItems = uniqueProductIds.length;
+    // Calculate the total unique items in the cart
+    const totalUniqueCartItems = uniqueProductIds.length;
 
     const totalReviews = reviews.length;
     const averageRating =
@@ -706,7 +709,7 @@ const totalUniqueCartItems = uniqueProductIds.length;
   return formattedProducts;
 }
 
-// optimsed version of the getproductsbycategory 
+// optimsed version of the getproductsbycategory
 
 // export async function getProductsByCategory(
 //   categoryId: string,
@@ -800,11 +803,6 @@ const totalUniqueCartItems = uniqueProductIds.length;
 //     cart: product.cartItems, // Add cart items to the product
 //   };
 // }
-
-
-
-
-
 
 // gives all the products of a specific category and its nested subcategories using filter and pagination
 // export async function getProductsByCategoryfiltered(categoryId: string, page:number = 1, pageSize:number = 9) {
@@ -926,6 +924,9 @@ export const getProductsByCategoryFiltered = cache(
     pageSize: number = 9,
     sortBy: string = "" // 'priceAsc', 'priceDesc', 'discountAsc', 'discountDesc', 'ratingsAsc', 'ratingsDesc'
   ) => {
+    const userSession = await auth();
+    const userId = userSession?.user?.id;
+    console.log("Filtered User ID:", userId);
     // Function to format camel case or Pascal case strings to separate words
     const formatCategoryName = (name: string): string => {
       return name.replace(/([a-z])([A-Z])/g, "$1 $2");
@@ -968,17 +969,17 @@ export const getProductsByCategoryFiltered = cache(
     const filteredCategories = categories.filter(
       (category) => category?.id != parentCategory?.id
     );
-    console.log("Filtered Categories:", filteredCategories);
+    // console.log("Filtered Categories:", filteredCategories);
 
     const uniqueCategories = Array.from(
       new Set(filteredCategories.map((category) => category.name.toLowerCase()))
     );
 
-    console.log("Unique Categories:", uniqueCategories);
+    // console.log("Unique Categories:", uniqueCategories);
 
     let selectedCategory: string[] = [];
 
-    console.log("Fetched Categories:", categories);
+    // console.log("Fetched Categories:", categories);
 
     // if (categoryName == "null") {
     //   console.log("Selected Category:", selectedCategory);
@@ -992,7 +993,7 @@ export const getProductsByCategoryFiltered = cache(
     // }
 
     if (!categoryName || categoryName.length === 0) {
-      console.log("Selected Categories:", selectedCategory);
+      // console.log("Selected Categories:", selectedCategory);
     } else {
       // Initialize selectedCategories with the existing selected category names
       // selectedCategories = [...selectedCategory];
@@ -1013,7 +1014,7 @@ export const getProductsByCategoryFiltered = cache(
         }
       });
     }
-    console.log("Selected Categories:", selectedCategory);
+    // console.log("Selected Categories:", selectedCategory);
     // if (!selectedCategory) {
     //   return {
     //     products: [],
@@ -1056,7 +1057,7 @@ export const getProductsByCategoryFiltered = cache(
         //   });
         // }
       });
-      console.log("Category Ids inside the selected categories:", categoryIds);
+      // console.log("Category Ids inside the selected categories:", categoryIds);
     } else {
       // Extract all category IDs (including subcategories)
       // categoryIds = categories.flatMap((category) => [
@@ -1074,12 +1075,12 @@ export const getProductsByCategoryFiltered = cache(
         }
         return ids;
       });
-      console.log("Category Ids without the selected categories:", categoryIds);
+      // console.log("Category Ids without the selected categories:", categoryIds);
     }
 
-       // Calculate the overall minimum and maximum prices from the selected price ranges
-      //  let minDiscountedPrice = Math.min(...selectedPriceRanges.map(range => range.min)); // Added
-      //  let maxDiscountedPrice = Math.max(...selectedPriceRanges.map(range => range.max)); // Added
+    // Calculate the overall minimum and maximum prices from the selected price ranges
+    //  let minDiscountedPrice = Math.min(...selectedPriceRanges.map(range => range.min)); // Added
+    //  let maxDiscountedPrice = Math.max(...selectedPriceRanges.map(range => range.max)); // Added
 
     // Extract all category names (including subcategories)
     // const categoryNames = [selectedCategory.name, ...selectedCategory.subcategories.map(subcategory => subcategory.name)];
@@ -1139,11 +1140,7 @@ export const getProductsByCategoryFiltered = cache(
     // Calculate the skip value
     const skip = (page - 1) * pageSize;
 
-    console.log("Brand Name:", brandName);
-
-
- 
-
+    // console.log("Brand Name:", brandName);
 
     // Fetch products under the extracted category IDs and apply filters
     const products = await prismadb.product.findMany({
@@ -1179,7 +1176,13 @@ export const getProductsByCategoryFiltered = cache(
         },
         category: true, // Include the category relation
         // cartItems: true, // Include cart items to get the quantity
-
+        ...(userId && {
+          wishlists: {
+            where: {
+              userId: userId,
+            },
+          },
+        }),
         // Include any other relations you need
       },
       // skip: skip,
@@ -1238,7 +1241,7 @@ export const getProductsByCategoryFiltered = cache(
     const uniqueBrands = Array.from(
       new Set(allProducts.map((product) => product.brand.name))
     );
-    console.log("Unique Brands:", uniqueBrands);
+    // console.log("Unique Brands:", uniqueBrands);
 
     const prices = allProducts
       .map((product) => product.discountedPrice)
@@ -1305,12 +1308,14 @@ export const getProductsByCategoryFiltered = cache(
       const averageRating =
         totalRatings > 0 ? totalRatingValue / totalRatings : 0;
 
+      // Calculate cartQuantity
+      // const cartQuantity = product.cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
-        // Calculate cartQuantity
-  // const cartQuantity = product.cartItems.reduce((acc, item) => acc + item.quantity, 0);
+      const isWishlisted = userId && product.wishlists.length > 0;
 
       return {
         ...product,
+        isWishlisted: isWishlisted,
         ratings: {
           count: ratingsCount,
           reviews: reviews,

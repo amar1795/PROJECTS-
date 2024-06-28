@@ -96,9 +96,11 @@ const ProductCard: React.FC<updatedDataResponse> = ({
                 >
                   {/* wishlist icon */}
                   <Heart
+                
+                  className={`hover:fill-red-500 text-black ${product?.isWishlisted ? "fill-red-500" : ""}`}
                     size={40}
                     strokeWidth={0.8}
-                    className={` hover:fill-red-500 text-black`}
+                    // className={` hover:fill-red-500 text-black`}
                   />
                 </button>
                 <div className="ProductImage bg-red-400 h-full w-full absolute">

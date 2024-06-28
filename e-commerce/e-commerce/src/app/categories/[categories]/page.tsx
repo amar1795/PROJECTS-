@@ -17,13 +17,24 @@ import {
   getProductsByCategoryfiltered,
 } from "@/actions/createProduct";
 import CategoriesRelatedProduct from "@/components/categories/CategoriesRelatedProduct";
+import { useToast } from "@/components/ui/use-toast";
 
 const Page = ({ params }: { params: { categories: string } }) => {
   const [currentPage, setCurrentPage] = useState(() => {
     const storedPage = localStorage.getItem("currentPage");
     return storedPage ? parseInt(storedPage, 10) : 1;
   });
+  const { toast } = useToast();
 
+  const callToast = ({variant,title,description}) => {
+    // alert("toast is being  called")
+    toast({
+      variant: variant,
+      title:title,
+      description: description,
+    });
+  }
+ 
   const [paginatedData, setPaginatedData] = useState({
     products: [],
     totalPages: 0,
@@ -274,6 +285,7 @@ const { start, end } = calculateProductRange(currentPage);
                   <div>This is the categories page for {params.categories} and showing {`Displaying products ${start + 1} to ${end + 1} out of ${totalProducts} products`} </div>
                   <CategoriesRelatedProduct
                     relatedProduct={paginatedData.products}
+                    callToast={callToast}
                   />
                 </div>
               )}

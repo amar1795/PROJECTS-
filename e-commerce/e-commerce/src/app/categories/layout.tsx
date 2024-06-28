@@ -8,6 +8,8 @@ import { SessionProvider } from 'next-auth/react'
 import { auth } from '@/auth'
 import { getProductsByCategory } from "@/actions/createProduct";
 import { MainNav } from "@/components/main-nav";
+import { getCartDataFromCookies } from "@/actions/cart/addCartDatatoCookies";
+import { Toaster } from "@/components/ui/toaster";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -29,7 +31,8 @@ export default async function RootLayout({
   const user = session?.user?.id;
   const mensCollectionData = await getProductsByCategory(
     "665a0b9f14be77720636d443",user);
-
+    const data=await getCartDataFromCookies()
+    const count=data.length;
   // console.log("this is the session", session);
   return (
     <SessionProvider session={session}>
@@ -48,8 +51,9 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
             <div className="fixed top-0 left-0 right-0  z-10">
-        <MainNav mensCollectionData={mensCollectionData} />
+        <MainNav mensCollectionData={mensCollectionData} cartCountData={count}/>
       </div>
+      <Toaster />
           {children}
         </ThemeProvider>
       </body>

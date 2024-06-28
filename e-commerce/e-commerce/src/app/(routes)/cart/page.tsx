@@ -498,7 +498,7 @@ const page = () => {
                 <div className="">
                   {!user ? (
                     <div className=" flex justify-center">
-                      <StyledButton buttonName="Sign In" />
+                      <StyledButton buttonName="Please Sign In to purchase" />
                     </div>
                   ) : (
                     <Link href={"/checkout"}>
