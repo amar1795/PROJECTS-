@@ -70,7 +70,10 @@ const Page = ({ params }: { params: { categories: string } }) => {
   }, [currentPage]);
 
   useEffect(() => {
+
     const fetchPaginatedData = async () => {
+    // console.log("this is the minimum discount price", minDiscountedPrice)
+    
       const data = await getProductsByCategoryFiltered(
         parentCategoryName === "Kids" ? "KidsCategory" : parentCategoryName,
         categoryName,

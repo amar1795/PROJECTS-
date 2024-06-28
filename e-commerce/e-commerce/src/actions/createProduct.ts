@@ -919,6 +919,7 @@ export const getProductsByCategoryFiltered = cache(
     brandName: string[],
     minDiscountedPrice: number,
     maxDiscountedPrice: number,
+    // selectedPriceRanges: { min: number; max: number }[], // Updated to accept an array of selected price ranges
     minDiscountPercentage: number,
     maxDiscountPercentage: number,
     page: number = 1,
@@ -1076,6 +1077,10 @@ export const getProductsByCategoryFiltered = cache(
       console.log("Category Ids without the selected categories:", categoryIds);
     }
 
+       // Calculate the overall minimum and maximum prices from the selected price ranges
+      //  let minDiscountedPrice = Math.min(...selectedPriceRanges.map(range => range.min)); // Added
+      //  let maxDiscountedPrice = Math.max(...selectedPriceRanges.map(range => range.max)); // Added
+
     // Extract all category names (including subcategories)
     // const categoryNames = [selectedCategory.name, ...selectedCategory.subcategories.map(subcategory => subcategory.name)];
     // console.log("Category Names:", categoryNames);
@@ -1135,6 +1140,10 @@ export const getProductsByCategoryFiltered = cache(
     const skip = (page - 1) * pageSize;
 
     console.log("Brand Name:", brandName);
+
+
+ 
+
 
     // Fetch products under the extracted category IDs and apply filters
     const products = await prismadb.product.findMany({

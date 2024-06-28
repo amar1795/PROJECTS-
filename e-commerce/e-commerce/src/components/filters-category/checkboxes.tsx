@@ -27,11 +27,13 @@ const Checkboxes:React.FC<CheckboxesProps> = ({ label, value, qty,setSelectedCat
   setMaxDiscountedPrice,
   setMinDiscountPercentage,
   setMaxDiscountPercentage,
-  setBrandSelected
+  setBrandSelected,
+  setTempState
   }) => {
   const [isChecked, setIsChecked] = useState(false);
 
   const handleCheckboxClick = () => {
+    console.log("this is the maximum and the minimum value of the checkbox", min, max,value)
     // alert(`${label} checkbox clicked. New checked state: ${!isChecked} and this is the parentcategory: ${parentCategory} and this is min: ${min} and this is max: ${max}`)
     const newCheckedState = !isChecked;
     setIsChecked(!isChecked);
@@ -73,15 +75,33 @@ const Checkboxes:React.FC<CheckboxesProps> = ({ label, value, qty,setSelectedCat
       }
     } else if (parentCategory === "Price") {
       // Assuming min and max are already defined in the component state
-      if (newCheckedState) {
-        setMinDiscountedPrice(min);
-        setMaxDiscountedPrice(max);
-      } else {
-        setMinDiscountedPrice(0);
-        setMaxDiscountedPrice(100000);
-      }
+  
+
+      // if (newCheckedState) {
+      //   // alert(label)
+      
+      //   setMinDiscountedPrice(min);
+      //   setMaxDiscountedPrice(max);
+      // } else {
+      //   // alert(label)
+
+      //   setMinDiscountedPrice(0);
+      //   setMaxDiscountedPrice(100000);
+      // }
     }
-    console.log(`${label} checkbox clicked. New checked state: ${!isChecked}`);
+    setTempState(prevState => {
+      if (newCheckedState) {
+        // Add the new category if checked
+        return [...prevState, label];
+      } else {
+        // Remove the category if unchecked
+        return prevState.filter(category => category !== label);
+      }
+    });
+    // if(label ==="₹500 - ₹1500" && newCheckedState === true){
+    //   alert(1500)
+    // }
+    // console.log(`${label} checkbox clicked. New checked state: ${newCheckedState}`);
   };
 
   return (
