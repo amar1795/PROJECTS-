@@ -15,26 +15,26 @@ import increaseProductQuantity from "@/actions/cart/increaseProduct";
 import decreaseProductQuantity from "@/actions/cart/decreaseProduct";
 import { addCartDatatoCookies, getCartDataFromCookies, removeProductFromCookies } from "@/actions/cart/addCartDatatoCookies";
 
-type Brand = {
+export type Brand = {
   id: string;
   name: string;
   createdAt: Date;
   updatedAt: Date;
 };
 
-type Image = {
+export type Image = {
   url: string;
   altText?: string;
 };
 
-type Category = {
+export type Category = {
   id: string;
   name: string;
   parentId: string;
   parentName: string;
 };
 
-type Product = {
+export type Product = {
   id: string;
   name: string;
   price: number;
@@ -52,7 +52,7 @@ type Product = {
   images: Image[];
 };
 
-type PropType = {
+export type PropType = {
   slides: number[];
   options?: EmblaOptionsType;
   products: Product[];

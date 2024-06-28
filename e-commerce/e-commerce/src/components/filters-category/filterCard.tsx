@@ -92,8 +92,8 @@ const Fcard: React.FC<{ category: Category }> = ({
             max={option?.max}
             setSelectedCategoryName={setSelectedCategoryName}
             setBrandName={setBrandName}
-            setMinDiscountedPrice={setMinDiscountedPrice}
-            setMaxDiscountedPrice={setMaxDiscountedPrice}
+            // setMinDiscountedPrice={setMinDiscountedPrice}
+            // setMaxDiscountedPrice={setMaxDiscountedPrice}
             setMinDiscountPercentage={setMinDiscountPercentage}
             setMaxDiscountPercentage={setMaxDiscountPercentage}
           />

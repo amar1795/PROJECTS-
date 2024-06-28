@@ -74,34 +74,19 @@ const Checkboxes:React.FC<CheckboxesProps> = ({ label, value, qty,setSelectedCat
         setMaxDiscountPercentage(100);
       }
     } else if (parentCategory === "Price") {
-      // Assuming min and max are already defined in the component state
+     
+      setTempState(prevState => {
+        if (newCheckedState) {
+          // Add the new category if checked
+          return [...prevState, label];
+        } else {
+          // Remove the category if unchecked
+          return prevState.filter(category => category !== label);
+        }
+      });
   
-
-      // if (newCheckedState) {
-      //   // alert(label)
-      
-      //   setMinDiscountedPrice(min);
-      //   setMaxDiscountedPrice(max);
-      // } else {
-      //   // alert(label)
-
-      //   setMinDiscountedPrice(0);
-      //   setMaxDiscountedPrice(100000);
-      // }
     }
-    setTempState(prevState => {
-      if (newCheckedState) {
-        // Add the new category if checked
-        return [...prevState, label];
-      } else {
-        // Remove the category if unchecked
-        return prevState.filter(category => category !== label);
-      }
-    });
-    // if(label ==="₹500 - ₹1500" && newCheckedState === true){
-    //   alert(1500)
-    // }
-    // console.log(`${label} checkbox clicked. New checked state: ${newCheckedState}`);
+    
   };
 
   return (

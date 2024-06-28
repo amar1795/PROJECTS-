@@ -1,7 +1,7 @@
 "use client";
 
 import { Heart, Minus, Plus, ShoppingCart, StarIcon } from "lucide-react";
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./product.css";
 import Image from "next/image";
 import {
@@ -11,6 +11,13 @@ import {
 import Link from "next/link";
 import addProductToCart from "@/actions/cart/addToProduct";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import { useToast } from "../ui/use-toast";
+import { Product } from "../product-carousel/EmblaCarousel";
+import { toggleWishlist } from "@/actions/wishlist";
+import { addCartDatatoCookies, getCartDataFromCookies, removeProductFromCookies } from "@/actions/cart/addCartDatatoCookies";
+import increaseProductQuantity from "@/actions/cart/increaseProduct";
+import decreaseProductQuantity from "@/actions/cart/decreaseProduct";
+
 
 
 
@@ -25,9 +32,17 @@ const formatPrice = (price: number): string => {
     return name?.replace(/\s+/g, "");
     };
     
-    const ProductCard: React.FC<updatedDataResponse> = ({ product,handleClickAdd }) => {
+const ProductCard: React.FC<updatedDataResponse> = ({ product,handleClickAdd,productId,handleQuantityChange,handleWishlistToggle }) => {
   const user = useCurrentUser();
+
+  // console.log("this is the updated products", updatedProducts);
+
+
   // console.log("this is the productID from product card", product?.category?.name);
+
+
+
+
 
   const completeUrl = typeof window !== "undefined" ? window.location.href : "";
   console.log("this is the complete url", completeUrl);
@@ -64,6 +79,9 @@ const formatPrice = (price: number): string => {
     }`;
   }
 
+
+ 
+
   return (
     <div>
       <div className="sembla__slide_product pl-[3rem]  ">
@@ -76,6 +94,7 @@ const formatPrice = (price: number): string => {
             <Link href={newUrl}>
               <div className="ProductImageCard min-h-[19rem] relative ">
                 <button className={`heartButton z-10 hover:text-red-500`}>
+                  {/* wishlist icon */}
                   <Heart
                     size={40}
                     strokeWidth={0.8}
@@ -104,17 +123,20 @@ const formatPrice = (price: number): string => {
               </div>
             </div>
             <div>
-              {/* <div className="box flex pr-4">
-                <button className=" pr-2  hover:bg-gray-200 pl-1">
-                  <Plus size={20} />
+              <div className="box flex pr-4">
+                {/* quantity change icons */}
+                <button className=" pr-2  hover:bg-gray-200 pl-1" onClick={() => handleQuantityChange(user?.id, product.id, -1)}>
+                <Minus size={20} />
                 </button>
                 <div className=" text-[1.5rem] w-7  bg-white  h-[2rem]">
-                  <div className=" px-2 py-2 ">0</div>
+                  <div className=" px-2 py-2 ">{product?.cartQuantity || 0}</div>
                 </div>
-                <button className=" pl-2  hover:bg-gray-200 pr-1">
-                  <Minus size={20} />
+                <button className=" pl-2  hover:bg-gray-200 pr-1"
+                onClick={() => handleQuantityChange(user?.id, product.id, 1)}>
+                  
+                  <Plus size={20} />
                 </button>
-              </div> */}
+              </div>
             </div>
           </div>
           {/* Bottom part */}
