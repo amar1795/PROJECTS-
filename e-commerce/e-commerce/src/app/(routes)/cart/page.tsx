@@ -105,6 +105,7 @@ const page = () => {
   useEffect(() => {
     async function getCookiesData() {
       const { mergedData, total, count } = await fetchAllCartCookieData();
+      // create another server function to merge the dbcart data and the cookie data lenght and show it everytime the same count on the shopping cart Icon in this way the consistency will be mainted and the data will be shown without any delayed updation 
       setCompleteMergedupdatedProducts(mergedData);
       setMergedTotalAmount(total);
       setMergedTotalCount(count);

@@ -221,7 +221,7 @@ const { start, end } = calculateProductRange(currentPage);
 
             <div className=" h-[4rem] ">
               <PaginationComponent
-                currentPage={currentPage}
+                currentOrderPage={currentPage}
                 totalPages={paginatedData.totalPages}
                 onPageChange={(page) => setCurrentPage(page)}
               />

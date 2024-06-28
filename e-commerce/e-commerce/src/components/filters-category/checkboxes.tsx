@@ -54,6 +54,7 @@ const Checkboxes:React.FC<CheckboxesProps> = ({ label, value, qty,setSelectedCat
       // setSelectedCategoryName(newCheckedState ? label : "");
       setSelectedCategoryName(prevCategories => {
         if (newCheckedState) {
+          console.log("this is the new category", prevCategories);
           // Add the new category if checked
           return [...prevCategories, label];
         } else {

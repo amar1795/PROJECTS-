@@ -156,7 +156,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
   useEffect(() => {
     async function mergeDataFromCookies() {
       const cookieData = await getCartDataFromCookies();
-
+      // create another function here to merge the login usercart lenght and the cookie cart length and then update the cart length in the shopping cart Icon
       const mergedProducts = updatedProducts.map((product) => {
         const cookieProduct = cookieData.find(item => item.id === product.id);
         return cookieProduct ? { ...product, cartQuantity: cookieProduct.cartQuantity } : product;
