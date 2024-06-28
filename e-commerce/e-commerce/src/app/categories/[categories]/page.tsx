@@ -98,26 +98,6 @@ const Page = ({ params }: { params: { categories: string } }) => {
       const newFilterData = [
         {
 
-          // category: "Category",
-          // options: data.uniqueCategories.flatMap(category => {
-          //   // Check if the category exists in fetchedCategories
-          //   const fetchedCategory = data.fetchedCategories.find(item => item.name.toLowerCase() === category.toLowerCase());
-          //   if (fetchedCategory && fetchedCategory.subcategories.length > 0) {
-          //     // If subcategories exist, map them to the desired format
-          //     return fetchedCategory.subcategories.map(subcategory => ({
-          //       label: subcategory.name,
-          //       value: subcategory.name,
-          //     }));
-          //   } else {
-          //     // If no subcategories exist, use the unique category directly
-          //     return {
-          //       label: category,
-          //       value: category,
-          //     };
-          //   }
-          // }),
-
-
           category: "Category",
           options: data.uniqueCategories.filter(category => !["jewellery", "watches"].includes(category)) // Filter out categories with certain names
           .map((category) => ({

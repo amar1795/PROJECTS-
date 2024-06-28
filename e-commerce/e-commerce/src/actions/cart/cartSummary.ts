@@ -153,9 +153,12 @@ export async function getProductsInCartSummary(userId: string) {
   }
 
     // Map the cart items to products and include the cart quantity for each product
+    let totalAmount = 0;
     products = products.map((product) => {
       const cartItem = cartItems.find((item) => item.productId === product.id);
       const cartQuantity = cartItem ? cartItem.quantity : 0;
+      const discountedPrice = product.discountedPrice ;
+      totalAmount += cartQuantity * discountedPrice;
       return {
         ...product,
         cartQuantity: cartQuantity,
@@ -167,7 +170,10 @@ export async function getProductsInCartSummary(userId: string) {
     //   wierd issue here was unable to fethc the product id with the url and was shwoing undefined imracoulously it started working again  now
     //   console.log("this is the products in cart summary", products[0].images[0].url)
     // console.log("this is the products in cart summary", products)
-    return products;
+    return {
+      products,
+      totalAmount,
+    };;
   } catch (error) {
     console.error("Error fetching products in cart summary:", error);
     throw new Error("Failed to fetch products in cart summary");

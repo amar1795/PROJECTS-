@@ -18,13 +18,19 @@ const CategoriesRelatedProduct:React.FC<CategoriesRelatedProductProps>  = ({rela
   if(!relatedProduct) return <div>
     Loading ...
   </div>
+  console.log("this is the related product from related products page", relatedProduct);
   // Filter out the product with the same ID as ProductId
   // const filteredProducts = relatedProduct.filter(product => product.id !== ProductId);
   console.log("this is the product id from related products page:", ProductId);
   const [updatedProducts, setupdatedProducts] = useState<Product[]>(relatedProduct);
+  console.log("this is the updatedProducts product from related products page", updatedProducts);
 
   const { toast } = useToast();
   const user = useCurrentUser();
+
+  useEffect(() => {
+    setupdatedProducts(relatedProduct);
+  }, [relatedProduct]);
 
 
   const handleWishlistToggle = useCallback(async (userId: string, productId: string) => {
@@ -101,7 +107,7 @@ useEffect(() => {
   async function mergeDataFromCookies() {
     const cookieData = await getCartDataFromCookies();
     // create another function here to merge the login usercart lenght and the cookie cart length and then update the cart length in the shopping cart Icon
-    const mergedProducts = updatedProducts.map((product) => {
+    const mergedProducts = relatedProduct.map((product) => {
       const cookieProduct = cookieData.find(item => item.id === product.id);
       return cookieProduct ? { ...product, cartQuantity: cookieProduct.cartQuantity } : product;
     });
@@ -110,7 +116,7 @@ useEffect(() => {
   }
 
   mergeDataFromCookies();
-}, []);
+}, [relatedProduct]);
 
   return (
     <div>
@@ -118,7 +124,7 @@ useEffect(() => {
             {/* <h1 className=" pt-4 pb-4 text-[2rem]">Related products</h1> */}
 
             <div className=" flex  flex-wrap pl-3">
-            {relatedProduct
+            {updatedProducts
             .filter((product) => product.id !== ProductId) // Apply the filter here
             .map((product: relatedProduct) => (
               <div className="py-4" key={product.id}>

@@ -1178,6 +1178,7 @@ export const getProductsByCategoryFiltered = cache(
           },
         },
         category: true, // Include the category relation
+        // cartItems: true, // Include cart items to get the quantity
 
         // Include any other relations you need
       },
@@ -1304,6 +1305,10 @@ export const getProductsByCategoryFiltered = cache(
       const averageRating =
         totalRatings > 0 ? totalRatingValue / totalRatings : 0;
 
+
+        // Calculate cartQuantity
+  // const cartQuantity = product.cartItems.reduce((acc, item) => acc + item.quantity, 0);
+
       return {
         ...product,
         ratings: {
@@ -1313,6 +1318,7 @@ export const getProductsByCategoryFiltered = cache(
           totalRatings: totalRatings,
           averageRating: averageRating,
         },
+        // cartQuantity: cartQuantity,
       };
     });
 

@@ -184,19 +184,19 @@ const page = () => {
   useEffect(() => {
     const cartSummary = async () => {
       try {
-        const data = await getProductsInCartSummary(user?.id);
+        const {products, totalAmount} = await getProductsInCartSummary(user?.id);
         console.log(
           "this is the product data from getproductsCartSummary",
-          data
+          products
         );
         // setproductData(data);
         // const cartSummaryData = await calculateCartSummary(user?.id);
         // // console.log("this is the cart summary data", cartSummaryData);
         // setSummaryData(cartSummaryData);
-        setMergedTotalCount(data.length);
-        // setMergedTotalAmount(cartSummaryData.totalAmount);
-
-        setCompleteMergedupdatedProducts(data);
+        setMergedTotalCount(products.length);
+        setMergedTotalAmount(totalAmount);
+        // now merging the data from the db into the cookies data hence merge Data
+        setCompleteMergedupdatedProducts(products);
       } catch (error) {
         // alert(error);
         console.log("this is the error", error);
@@ -392,15 +392,11 @@ const page = () => {
             <div className=" text-[2rem] leading-none  border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
               <div className=" flex self-center py-2  h-[3.5rem]">
                 <h1 className=" text-[2rem] self-center leading-none">
-                  {user
-                    ? mergedTotalAmount?.toLocaleString("en-IN", {
+                  { mergedTotalAmount?.toLocaleString("en-IN", {
                         style: "currency",
                         currency: "INR",
                       })
-                    : mergedTotalAmount.toLocaleString("en-IN", {
-                        style: "currency",
-                        currency: "INR",
-                      })}
+                  }
                 </h1>
               </div>
             </div>
