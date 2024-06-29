@@ -1,5 +1,7 @@
 import { searchProductsByNameOrBrand } from "@/actions/product/findProductbySearch";
+import { getProductDetailsByID } from "@/actions/product/searchedProductData";
 import { da } from "@faker-js/faker";
+import { useRouter } from 'next/navigation'
 import React, { useState, useEffect, useRef } from "react";
 
 const CustomInput = () => {
@@ -7,15 +9,43 @@ const CustomInput = () => {
   const [debouncedValue, setDebouncedValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [isDropdownVisible, setDropdownVisible] = useState(false);
-  const [searchedData, setsearchedData] = useState([]);
+  const [searchedData, setsearchedData] = useState("");
   const containerRef = useRef(null);
   const [lastSelectedSuggestion, setLastSelectedSuggestion] = useState("");
   const [recentSearches, setRecentSearches] = useState([]);
+  const timeoutRef = useRef(null); // Ref for timeout ID
+  const router = useRouter()
 
   console.log("this is the searched value", searchedData);
+  console.log("this is the suggestions", suggestions)
+
+    
+   const fetchSearchedData = async (id) => {
+    // alert(searchedData)
+    const fetchedData = await getProductDetailsByID(id);
+    const parentCategoryIds = fetchedData?.parentCategoryIds;
+let category2 = parentCategoryIds && parentCategoryIds[2] ? parentCategoryIds[2] : parentCategoryIds && parentCategoryIds[1] ? parentCategoryIds[1] : '';
+const category0 = parentCategoryIds && parentCategoryIds[0] ? parentCategoryIds[0] : '';
+const productId = fetchedData?.productId || '';
+
+// Check and convert category2 if it is 'KidsCategory'
+if (category2 === 'Kids Category') {
+    category2 = 'Kids';
+}
+
+// Remove spaces from category names
+category2 = category2.replace(/\s+/g, '');
+const cleanedCategory0 = category0.replace(/\s+/g, '');
+
+const testUrl = `/categories/${category2}/${cleanedCategory0}/${productId}`;
+// alert(testUrl)
+router.push(testUrl);
+    console.log("this is the test url", testUrl);
+    console.log("this is the fetched data", fetchedData);
+   }
+  
 
 
-  console.log("this is the searched data", searchedData);
 
   useEffect(() => {
     // Load recent searches from localStorage
@@ -26,31 +56,47 @@ const CustomInput = () => {
 
   const handleInputChange = async (event) => {
     const value = event.target.value;
+    console.log("this is the value", value);
     setInputValue(value);
 
-    // Debounce the API call
-    setTimeout(async () => {
+        // Clear the previous timeout
+        clearTimeout(timeoutRef.current);
+
+    // Set a new timeout
+    timeoutRef.current=setTimeout(async () => {
       if (value.trim() === "") {
         setSuggestions([]);
         setDropdownVisible(false);
         return;
       }
 
+
+
       try {
         const fetchedData = await searchProductsByNameOrBrand(value);
-        setSuggestions(fetchedData.map((data) => data.name));
+        setSuggestions(fetchedData.map((data) => ({ id: data.id, name: data.name })));
         setDropdownVisible(true);
       } catch (error) {
         console.error("Error fetching suggestions:", error);
       }
-    }, 500);
-  };
+    }, 800);
+  };  
 
-  const handleSuggestionClick = async ({suggestion,recentSearch}) => {
+   // Clear timeout on component unmount
+   useEffect(() => {
+    return () => {
+      clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
+  const handleSuggestionClick = async ({suggestion,recentSearch,id}) => {
+
     if(!recentSearch)
       {
-        setsearchedData(suggestion);
+        setsearchedData(id);
+        fetchSearchedData(id);
       }
+      
     setInputValue(suggestion);    
     setDropdownVisible(false); // Close dropdown when suggestion is clicked
     setLastSelectedSuggestion(suggestion); // Remember the last selected suggestion
@@ -72,7 +118,7 @@ const CustomInput = () => {
     if(recentSearch){
     try {
       const fetchedData = await searchProductsByNameOrBrand(suggestion);
-      setSuggestions(fetchedData.map((data) => data.name));
+      setSuggestions(fetchedData.map((data) => ({ id: data.id, name: data.name })));
       setDropdownVisible(true);
     } catch (error) {
       console.error("Error fetching suggestions:", error);
@@ -154,9 +200,9 @@ const CustomInput = () => {
               <div
                 key={index}
                 className="p-2 cursor-pointer hover:bg-gray-200"
-                onClick={() => handleSuggestionClick({suggestion:suggestion,recentSearch:false})}
+                onClick={() => handleSuggestionClick({suggestion:suggestion.name,recentSearch:false,id:suggestion.id})}
               >
-                {suggestion}
+                {suggestion.name}
               </div>
             ))
           ) : (

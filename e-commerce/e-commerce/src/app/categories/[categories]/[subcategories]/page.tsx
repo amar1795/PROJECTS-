@@ -97,6 +97,19 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
         },
       ];
       setFilterData(newFilterData);
+      // Construct the query parameters
+    const queryParams = new URLSearchParams();
+
+    if (brandName) queryParams.set('brandName', brandName);
+    if (minDiscountedPrice) queryParams.set('minDiscountedPrice', minDiscountedPrice);
+    if (maxDiscountedPrice) queryParams.set('maxDiscountedPrice', maxDiscountedPrice);
+    if (minDiscountPercentage) queryParams.set('minDiscountPercentage', minDiscountPercentage);
+    if (maxDiscountPercentage) queryParams.set('maxDiscountPercentage', maxDiscountPercentage);
+
+    // Update the browser's URL with the new query parameters
+    const newUrl = `${window.location.pathname}?${queryParams.toString()}`;
+    window.history.replaceState(null, '', newUrl);
+
     };
     console.log("hello")
     fetchPaginatedData();
@@ -109,51 +122,6 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
     minDiscountPercentage,
     maxDiscountPercentage,
   ]);
-
-  // const mensCollectionData =await getProductsByCategory("665a0b9f14be77720636d443")
-  // const paginatedData =await getProductsByCategoryfiltered("665a0b9f14be77720636d443",1,10)
-
-  // const categoryColors: { [key: string]: string } = {
-  //     men: 'bg-red-500',
-  //     women: 'bg-pink-500',
-  //     kids: 'bg-green-500',
-  //     furniture: 'bg-green-500',
-  //     shoes: 'bg-green-500',
-  // };
-
-  // // Check if the entered category is valid
-  // if (!categoryColors[params.categories]) {
-  //     // Redirect to the "Not Found" page
-
-  //     redirect(`/not-found`)
-
-  // }
-  // const filteredData = [
-  //     {
-  //       category: "Category",
-  //       options: [
-  //         { label: "Category 1", value: "category1" },
-  //         { label: "Category 2", value: "category2" },
-  //         // Add more category options as needed
-  //       ]
-  //     },
-  //     {
-  //       category: "Brand",
-  //       options: [
-  //         { label: "Brand 1", value: "brand1" },
-  //         { label: "Brand 2", value: "brand2" },
-  //         // Add more brand options as needed
-  //       ]
-  //     },
-  //     {
-  //       category: "Price",
-  //       options: [
-  //         { label: "Price Range 1", value: "price1" },
-  //         { label: "Price Range 2", value: "price2" },
-  //         // Add more price range options as needed
-  //       ]
-  //     }
-  //   ];
 
   const completeUrl = typeof window !== "undefined" ? window.location.href : "";
   const segments = completeUrl.split("/");

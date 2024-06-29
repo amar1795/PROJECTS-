@@ -75,9 +75,8 @@ previousSegment = previousSegment?.split(/[?#]/)[0];
             {options.map(option => (
              
           
-           <Link  href= {
-            `http://localhost:3000/categories/${option}` 
-          } >
+           <Link href={option === 'ALL' ? '/' : `http://localhost:3000/categories/${option.replace(/\s+/g, '')}`}
+           >
             <li
             key={option}
             onClick={() => handleOptionClick(option)}

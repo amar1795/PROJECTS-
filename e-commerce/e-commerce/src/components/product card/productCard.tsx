@@ -33,6 +33,7 @@ const removeSpaces = (name: string): string => {
   return name?.replace(/\s+/g, "");
 };
 
+
 const ProductCard: React.FC<updatedDataResponse> = ({
   product,
   handleClickAdd,
@@ -47,7 +48,7 @@ const ProductCard: React.FC<updatedDataResponse> = ({
 
   // console.log("this is the productID from product card", product?.category?.name);
 
-  const completeUrl = typeof window !== "undefined" ? window.location.href : "";
+  const completeUrl = typeof window !== "undefined" ? window.location.href.split('?')[0] : "";
   console.log("this is the complete url", completeUrl);
 
   const segments = completeUrl.split("/");

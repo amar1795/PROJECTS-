@@ -55,7 +55,7 @@ const page = async() => {
 // fetchAllOrders()
 // testEmail({last_name:"smith",first_name:"john"})
 // fetchOrderById("66756c6354363728fe808d27")
-// searchProductsByNameOrBrand("Tennis")
+// searchProductsByNameOrBrand("shirt")
 // getUserById("6673e3d87214902e3b734de3")
 // getCartDataFromCookies()
 // const { count } = await fetchAllCartCookieData();

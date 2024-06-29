@@ -144,6 +144,31 @@ const Page = ({ params }: { params: { categories: string } }) => {
         },
       ];
       setFilterData(newFilterData);
+
+          // Construct the query parameters
+    const queryParams = new URLSearchParams();
+    console.log("this is the brand name", brandName)
+    if (categoryName && categoryName.length > 0) {
+      // Assuming categoryName is an array of strings, join them with a comma
+      queryParams.set('category', categoryName.join(','));
+    }
+    if (brandName && brandName.length > 0) {
+      // Assuming brandName is an array of strings, you might want to join them or handle each element individually
+      queryParams.set('brandName', brandName.join(',')); // Joining brands with a comma or another delimiter
+    }
+     if (minDiscountedPrice) queryParams.set('minDiscountedPrice', minDiscountedPrice);
+    if (maxDiscountedPrice !== 100000) queryParams.set('maxDiscountedPrice', maxDiscountedPrice);
+    if (minDiscountPercentage) queryParams.set('minDiscountPercentage', minDiscountPercentage);
+    if (maxDiscountPercentage !== 100) queryParams.set('maxDiscountPercentage', maxDiscountPercentage);
+    if (currentPage) queryParams.set('page', currentPage);
+    
+    // Update the browser's URL with the new query parameters if there are any
+    if (Array.from(queryParams).length > 0) {
+      const newUrl = `${window.location.pathname}?${queryParams.toString()}`;
+      window.history.replaceState(null, '', newUrl);
+    } else {
+      window.history.replaceState(null, '', window.location.pathname);
+    }
     };
     fetchPaginatedData();
   }, [
@@ -161,53 +186,8 @@ const Page = ({ params }: { params: { categories: string } }) => {
   const fixedBrand=paginatedData.brands.map((brand) => ({
             label: brand,
             value: brand,}))
-  // console.log("this is the fixed brand", fixedBrand);
     
-  // const mensCollectionData =await getProductsByCategory("665a0b9f14be77720636d443")
-  // const paginatedData =await getProductsByCategoryfiltered("665a0b9f14be77720636d443",1,10)
 
-  // const categoryColors: { [key: string]: string } = {
-  //     men: 'bg-red-500',
-  //     women: 'bg-pink-500',
-  //     kids: 'bg-green-500',
-  //     furniture: 'bg-green-500',
-  //     shoes: 'bg-green-500',
-  // };
-
-  // // Check if the entered category is valid
-  // if (!categoryColors[params.categories]) {
-  //     // Redirect to the "Not Found" page
-
-  //     redirect(`/not-found`)
-
-  // }
-  // const filteredData = [
-  //     {
-  //       category: "Category",
-  //       options: [
-  //         { label: "Category 1", value: "category1" },
-  //         { label: "Category 2", value: "category2" },
-  //         // Add more category options as needed
-  //       ]
-  //     },
-  //     {
-  //       category: "Brand",
-  //       options: [
-  //         { label: "Brand 1", value: "brand1" },
-  //         { label: "Brand 2", value: "brand2" },
-  //         // Add more brand options as needed
-  //       ]
-  //     },
-  //     {
-  //       category: "Price",
-  //       options: [
-  //         { label: "Price Range 1", value: "price1" },
-  //         { label: "Price Range 2", value: "price2" },
-  //         // Add more price range options as needed
-  //       ]
-  //     }
-  //   ];
-  
   const completeUrl = typeof window !== "undefined" ? window.location.href : "";
   const segments = completeUrl.split("/");
   const previousSegment = segments[segments.length - 1];

@@ -7,20 +7,23 @@ export async function searchProductsByNameOrBrand(searchTerm) {
     return { error: "Search term is required" };
   }
 
+  const trimmedSearchTerm = searchTerm.trim(); // Trim spaces from both ends
+
+
   try {
     const products = await prismadb.product.findMany({
       where: {
         OR: [
           {
             name: {
-              contains: searchTerm, // Partial match on product name
+              contains: trimmedSearchTerm, // Partial match on product name
               mode: 'insensitive', // Case insensitive
             },
           },
           {
             brand: {
               name: {
-                contains: searchTerm, // Partial match on brand name
+                contains: trimmedSearchTerm, // Partial match on brand name
                 mode: 'insensitive', // Case insensitive
               },
             },
@@ -30,6 +33,7 @@ export async function searchProductsByNameOrBrand(searchTerm) {
       include: {
         brand: true, // Include brand information in the result
       },
+      
     });
 
     console.log("Search results:", products);
