@@ -75,6 +75,9 @@ const Page = ({ params }: { params: { categories: string } }) => {
     }
   }, []);
 
+
+  
+
   // Save current page to local storage whenever it changes
   useEffect(() => {
     localStorage.setItem("currentPage", currentPage.toString());

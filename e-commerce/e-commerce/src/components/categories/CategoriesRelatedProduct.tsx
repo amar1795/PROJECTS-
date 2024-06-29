@@ -139,7 +139,7 @@ useEffect(() => {
             .filter((product) => product.id !== ProductId) // Apply the filter here
             .map((product: relatedProduct) => (
               <div className="py-4" key={product.id}>
-                <ProductCard product={product} productId={product.id} handleQuantityChange={handleQuantityChange} handleWishlistToggle={handleWishlistToggle} handleClickAdd={handleClickAdd} />
+                <ProductCard product={product} productId={product.id} handleQuantityChange={handleQuantityChange} handleWishlistToggle={handleWishlistToggle} handleClickAdd={handleClickAdd} catRelatedProduct={true} />
               </div>
             ))}
             </div>

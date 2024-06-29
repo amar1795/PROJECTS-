@@ -37,6 +37,7 @@ import { fetchMultipleProducts } from "@/actions/cart/fetchMultipleProducts";
 import { set } from "zod";
 import { fetchSingleProduct } from "@/actions/cart/fetchSingleProduct";
 import { fetchAllCartCookieData } from "@/actions/cart/fetchAllCartCookieData";
+import { toggleWishlist } from "@/actions/wishlist";
 
 const page = () => {
   const user = useCurrentUser();
@@ -47,11 +48,14 @@ const page = () => {
   const [summaryData, setSummaryData] = useState([]); // [totalItems, totalAmount
   const [productData, setproductData] = useState([]);
   const [updateTrigger, setUpdateTrigger] = useState(false);
+  const [updateRelatedTrigger, setUpdateRelatedTrigger] = useState(false);
+
   const [fetchnewTotal, setfetchnewTotal] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [cartCookieProducts, setCartCookieProducts] = useState([]);
   const [totalCookieAmount, setTotalCookieAmount] = useState(0);
   const [productCookieCount, setProductCookieCount] = useState(0);
+  const [updatedProducts, setupdatedProducts] = useState([]);
 
   const [completeMergedupdatedProducts, setCompleteMergedupdatedProducts] =
     useState([]);
@@ -130,6 +134,8 @@ const page = () => {
         removeProductFromCookies(productID);
 
         setUpdateTrigger((prev) => !prev);
+        setUpdateRelatedTrigger((prev) => !prev);
+
         setTimeout(() => {
           toast({
             title: "Item removed from cart",
@@ -179,7 +185,35 @@ const page = () => {
     addCartDatatoCookies(completedata);
 
     setUpdateTrigger((prev) => !prev);
+    setUpdateRelatedTrigger((prev) => !prev);
   };
+
+  const handleWishlistToggle = useCallback(async (userId: string, productId: string) => {
+    if (!user) {
+      toast({
+        variant: "destructive",
+        title: "Not Logged In",
+        description: "Please login to wishlist this item",
+      });
+      return;
+    }
+    const updatedProductsList = updatedProducts.map((product) =>
+      product.id === productId ? { ...product, isWishlisted: !product.isWishlisted } : product
+    );
+  
+    setupdatedProducts(updatedProductsList);
+  
+    setTimeout(async () => {
+      const message = await toggleWishlist(userId, productId);
+      toast({
+        variant: message.message === "added" ? "default" : "destructive",
+        title: message.message === "added" ? "Added to Wishlist" : "Removed from Wishlist",
+        description: message.message === "added" ? "The item has been wishlisted" : "The item has been removed from wishlist",
+        
+      });
+    }, 200);
+  }, [updatedProducts, user, toast]);
+  
 
   useEffect(() => {
     const cartSummary = async () => {
@@ -205,34 +239,16 @@ const page = () => {
     cartSummary();
   }, []);
 
-  // useEffect(() => {
-  //   const cartSummary = async () => {
-  //     try {
-  //       const cartSummaryData = await calculateCartSummary(user?.id);
-  //       // alert("this is called");
-  //       // console.log("this is the cart summary data", cartSummaryData);
-  //       setSummaryData(cartSummaryData);
-  //       // setMergedTotalCount(data.length);
-  //       // setMergedTotalAmount(cartSummaryData.totalAmount);
-  //     } catch (error) {
-  //       // alert(error);
-  //       console.log("this is the error", error);
-  //     }
-  //   };
-  //   cartSummary();
-  // }, [updateTrigger]);
 
-  // console.log("this is the product data", productData);
-  // console.log("this is the updated products", updatedProducts);
 
   // related products useffect
   useEffect(() => {
     const relatedData = async () => {
       const data = await getRelatedProducts(user?.id);
-      setRelatedProducts(data);
+      setupdatedProducts(data);
     };
     relatedData();
-  }, []);
+  }, [updateRelatedTrigger]);
 
   if (productData.length === 0 && !summaryData) {
     return <div>loading...</div>;
@@ -286,6 +302,7 @@ const page = () => {
 
   const handleQuantityCookieChange = useCallback(
     (userId: string, productId: string, change: number) => {
+      
       // update the change in the cookies and we will update the database when fethcning the data from the cookies
       const updatedProductsList = completeMergedupdatedProducts.map(
         (product) => {
@@ -515,147 +532,10 @@ const page = () => {
         </div>
       }
 
-      {/* if the user is not signed in  */}
-      {
-        // !user && (
-        //   <div className=" bg-orange-300 flex justify-around px-30 py-4">
-        //     <div>
-        //       <div>
-        //         <div className=" px-4 py-4 mt-2 w-[40rem] flex-1 ">
-        //           {completeMergedupdatedProducts.map((product) => {
-        //             return (
-        //               <div className=" mb-4" key={product?.id}>
-        //                 <CheckoutProductCard
-        //                   handleClickDelete={handleClickDelete}
-        //                   product={product}
-        //                   handleQuantityChange={handleQuantityCookieChange}
-        //                 />
-        //               </div>
-        //             );
-        //           })}
-        //         </div>
-        //       </div>
-        //     </div>
-        //     <div className=" w-[45rem]  border-b-8 border-r-4 border-2 border-black  mt-6">
-        //       <div className="   bg-opacity-20 backdrop-blur-lg border border-white/30 bg-white">
-        //         <div className=" px-4 py-4  ">
-        //           <div className=" h-[4rem] pl-6 mb-8">
-        //             <h3 className=" text-[2rem] leading-none p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
-        //               Order Summary
-        //             </h3>
-        //           </div>
-        //           {/* if user is sigend in */}
-        //           {/* {summaryData.orderSummary?.map((item) => (
-        //             <div className="orderSummary">
-        //               <div className=" flex justify-between ">
-        //                 <div className=" w-[26rem]">
-        //                   <h1 className=" self-center  text-[1.2rem] font-bold">
-        //                     {" "}
-        //                     {item.name.length > 36
-        //                       ? item.name.slice(0, 35) + "..."
-        //                       : item.name}
-        //                   </h1>
-        //                 </div>
-        //                 <span className=" flex  self-center   w-[4rem]  justify-between">
-        //                   <div className=" self-center">
-        //                     <X />
-        //                   </div>{" "}
-        //                   <h1 className=" text-[1.5rem] ">{item.quantity}</h1>
-        //                 </span>
-        //                 <div className=" flex self-center py-2  w-[10rem]">
-        //                   <h1 className=" text-[1.3rem] self-center">
-        //                     {item.amount?.toLocaleString("en-IN", {
-        //                       style: "currency",
-        //                       currency: "INR",
-        //                     })}
-        //                   </h1>
-        //                 </div>
-        //               </div>
-        //             </div>
-        //           ))} */}
-        //           <div>
-        //             {/* if user is not signed in */}
-        //             {completeMergedupdatedProducts?.map((item) => (
-        //               <div className="orderSummary">
-        //                 <div className=" flex justify-between ">
-        //                   <div className=" w-[26rem]">
-        //                     <h1 className=" self-center  text-[1.2rem] font-bold">
-        //                       {" "}
-        //                       {item.name.length > 36
-        //                         ? item.name.slice(0, 35) + "..."
-        //                         : item.name}
-        //                     </h1>
-        //                   </div>
-        //                   <span className=" flex  self-center   w-[4rem]  justify-between">
-        //                     <div className=" self-center">
-        //                       <X />
-        //                     </div>{" "}
-        //                     <h1 className=" text-[1.5rem] ">
-        //                       {item.cartQuantity}
-        //                     </h1>
-        //                   </span>
-        //                   <div className=" flex self-center py-2  w-[10rem]">
-        //                     <h1 className=" text-[1.3rem] self-center">
-        //                       {(
-        //                         item.discountedPrice * item.cartQuantity
-        //                       )?.toLocaleString("en-IN", {
-        //                         style: "currency",
-        //                         currency: "INR",
-        //                       })}
-        //                     </h1>
-        //                   </div>
-        //                 </div>
-        //               </div>
-        //             ))}
-        //           </div>
-        //           <div className=" flex justify-between px-12 ">
-        //             <h1 className=" self-center text-[1.5rem] uppercase font-bold">
-        //               Delivery
-        //             </h1>
-        //             <div className=" flex self-center py-2   mr-12">
-        //               <h1 className=" text-[1.3rem] self-center font-bold ">
-        //                 Free
-        //               </h1>
-        //             </div>
-        //           </div>
-        //           <div></div>
-        //           <div className=" border-b-2 border-black "></div>
-        //           <div className=" flex justify-between py-8 px-8 ">
-        //             <h1 className=" self-center font-bold text-[2rem] uppercase">
-        //               Total
-        //             </h1>
-        //             <div className=" flex self-center py-2 font-bold">
-        //               <h1 className=" text-[1.3rem] self-center">
-        //                 {mergedTotalAmount.toLocaleString("en-IN", {
-        //                   style: "currency",
-        //                   currency: "INR",
-        //                 })}
-        //               </h1>
-        //             </div>
-        //           </div>
-        //           <div></div>
-        //           <div className="">
-        //             {!user ? (
-        //               <div className=" flex justify-center">
-        //                 <StyledButton buttonName="Please Sign In to purchase " />
-        //               </div>
-        //             ) : (
-        //               <Link href={"/checkout"}>
-        //                 <div className=" flex justify-center">
-        //                   <StyledButton buttonName=" Proceed to Checkout" />
-        //                 </div>
-        //               </Link>
-        //             )}
-        //             {/* <StyledButton buttonName=" Proceed to Checkout" /> */}
-        //           </div>
-        //         </div>
-        //       </div>
-        //     </div>
-        //   </div>
-        // )
-      }
+    
+      
 
-      {relatedProducts && relatedProducts.length > 0 && (
+      {updatedProducts && updatedProducts.length > 0 && (
         <div className=" bg-teal-600 min-h-[37rem] ">
           <div className="px-5">
             <div className=" pt-10 mb-8 ">
@@ -666,11 +546,14 @@ const page = () => {
 
             <div className=" flex  flex-wrap pl-3">
               <div className=" pr-10 py-4 flex  flex-wrap">
-                {relatedProducts.map((product) => (
-                  <div className=" mb-4" key={product.id}>
+                {updatedProducts.map((product) => (
+                  <div className=" mb-4" key={product?.id}>
                     <ProductCard
                       product={product}
                       handleClickAdd={handleClickAdd}
+                      handleQuantityChange={handleQuantityCookieChange} 
+                      handleWishlistToggle={handleWishlistToggle}
+                      productId={product?.id}
                     />
                   </div>
                 ))}

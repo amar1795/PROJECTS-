@@ -4,9 +4,10 @@ import { prismadb } from "@/lib/db";
 import { tr } from "@faker-js/faker";
 import { revalidatePath } from "next/cache";
 
-
+// let count=0;
 // Function to get related products
 export async function getRelatedProducts(userId: string) {
+  // console.log("get related products function  has been called", count++);
   // Fetch the user's cart
   const cart = await prismadb.cart.findFirst({
     where: { userId },
@@ -85,7 +86,14 @@ export async function getRelatedProducts(userId: string) {
          select: { url: true },
          take: 1
        },
-       ratings: true
+       ratings: true,
+       ...(userId && {
+        wishlists: {
+          where: {
+            userId: userId,
+          },
+        },
+      }),
      }
    });
    potentialProducts.push(...products);
@@ -114,8 +122,11 @@ export async function getRelatedProducts(userId: string) {
     const averageRating =
       totalRatings > 0 ? totalRatingValue / totalRatings : 0;
 
+      const isWishlisted = userId && product.wishlists.length > 0;
+
     return {
       ...product,
+      isWishlisted: isWishlisted,
       ratings: {
         count: ratingsCount,
         reviews: reviews,

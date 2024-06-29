@@ -37,7 +37,7 @@ const removeSpaces = (name: string): string => {
 const ProductCard: React.FC<updatedDataResponse> = ({
   product,
   handleClickAdd,
-  productId,
+  catRelatedProduct,
   handleQuantityChange,
   handleWishlistToggle,
   
@@ -127,7 +127,7 @@ const ProductCard: React.FC<updatedDataResponse> = ({
               </div>
             </div>
             <div>
-              <div className="box flex pr-4">
+              {catRelatedProduct && (  <div className="box flex pr-4">
                 {/* quantity change icons */}
                 <button
                   className=" pr-2  hover:bg-gray-200 pl-1"
@@ -146,7 +146,8 @@ const ProductCard: React.FC<updatedDataResponse> = ({
                 >
                   <Plus size={20} />
                 </button>
-              </div>
+              </div>)}
+            
             </div>
           </div>
           {/* Bottom part */}
