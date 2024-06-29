@@ -6,7 +6,7 @@ import { getUserWishlist } from "@/actions/wishlist";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import WishlistedProductCard from "@/components/Wishlisted product card/productCard";
 import { toast } from "@/components/ui/use-toast";
-// import RemoveFromWishlist from "@/components/removeFromWishlist/RemoveFromWishlist";
+import RemoveFromWishlist from "@/components/removeFromWishlist/RemoveFromWishlist";
 import { auth } from "@/auth";
 
 
@@ -15,28 +15,8 @@ const page = async() => {
 
   const user = session?.user?.id;
 
-  const wishlist = await getUserWishlist(user?.id);
-  // const user = useCurrentUser();
-
-//   const [wishlist, setWishlist] = useState([]);
-// const [data, setData] = useState(false);
-//   useEffect(() => {
-//     const fetchWishlist = async () => {
-//       try {
-//         if (user?.id) {
-//           const response = await getUserWishlist(user?.id);
-//           setWishlist(response);
-//         }
-//       } catch (error) {
-//         console.error("Error fetching wishlist:", error);
-//       }
-//     };
-
-//     fetchWishlist();
-//   }, [user?.id,data]);
-
-  // console.log("this is the wishlist count", wishlist.length);
-  // setData={setData}
+  const wishlist = await getUserWishlist(user);
+ 
   return (
     <div>
 

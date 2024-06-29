@@ -27,31 +27,7 @@ const removeSpaces = (name: string): string => {
 const WishlistedProductCard: React.FC<updatedDataResponse> = ({ product,setData }) => {
   const user = useCurrentUser();
 
-  // console.log("this is the productID from product card", product?.category?.name);
-
-  //  const completeUrl = typeof window !== "undefined" ? window.location.href : "";
-  //  console.log("this is the complete url", completeUrl);
-
-  //  const segments = completeUrl.split("/");
-
-  //  const matchingSegmentIndex = segments.findIndex(segment => removeSpaces(segment) === removeSpaces(product?.category?.name));
-  //   console.log("this is the product category name", product?.category?.name);
-  //  // If a matching segment is found, construct the new URL
-  //  let newUrl = completeUrl;
-  //  if (matchingSegmentIndex !== -1) {
-  //    // Remove the segments from the matching segment index onwards
-  //    const newSegments = segments.slice(0, matchingSegmentIndex);
-  //    // Add the product category name and ID to the new segments
-  //    newSegments.push(removeSpaces(product?.category?.name), product?.id);
-  //    // Join the new segments to form the new URL
-  //    newUrl = newSegments.join('/');
-  //  }
-  //  else
-  //  {
-  //  // If no matching segment is found, append the product category name and ID to the end of the URL
-  //  newUrl = `${completeUrl}/${removeSpaces(product?.category?.name)}/${product?.id}`;
-  //  }
-
+ 
 
   const handleRemoveClick = async (userId, productId) => {
     await removeFromWishlist(userId, productId);

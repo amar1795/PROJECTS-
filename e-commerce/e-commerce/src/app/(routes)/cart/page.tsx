@@ -182,7 +182,12 @@ const page = () => {
     const completedata = await fetchSingleProduct(productID);
     console.log("this is the completed data", completedata);
     // addProductToCart(userID, productID);
+    toast({
+      title: "Item Added to cart",
+      description: "successfully added the item to cart",
+    });
     addCartDatatoCookies(completedata);
+
 
     setUpdateTrigger((prev) => !prev);
     setUpdateRelatedTrigger((prev) => !prev);
