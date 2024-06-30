@@ -8,10 +8,11 @@ export async function getProductReviews(productId: string) {
 
     const userSession = await auth();
     const user = userSession?.user?.id;
-
-    if(!user){
-        return  {error:"User not Signed in"}
-    }
+    
+// user does not need to be signed in to view all the reviews
+    // if(!user){
+    //     return  {error:"User not Signed in"}
+    // }
 
     try {
       // Fetch all reviews for a specific product
@@ -21,10 +22,27 @@ export async function getProductReviews(productId: string) {
         },
         include: {
           images: true, // Include associated images
+          user: {       // Include the user who wrote the review
+            select: {
+                name: true, // Only fetch the name of the user
+            },
+        },
         },
       });
+
+      // Count the verified purchases
+      const verifiedPurchaseCount = await prismadb.rating.count({
+        where: {
+            productId: productId,
+            verifiedPurchase: true,
+        },
+    });
+
   
-      return reviews;
+    return {
+      reviews,
+      verifiedPurchaseCount,
+  };
       
     } catch (error) {
       console.error("Error fetching product reviews:", error);
