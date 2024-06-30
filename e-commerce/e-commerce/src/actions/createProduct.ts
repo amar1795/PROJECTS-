@@ -1383,6 +1383,8 @@ export async function fetchAllReviews() {
 }
 
 export const fetchProductAllData = cache(async (productdata: string) => {
+  const session = await auth();
+  const userId = session?.user?.id;
   const productId = productdata; // Replace with the actual product ID
   // Fetch the product with its category, brand, images, and product variants
   const product = await prismadb.product.findUnique({
@@ -1408,6 +1410,13 @@ export const fetchProductAllData = cache(async (productdata: string) => {
           images: true, // Assuming `reviewImages` is the relation name for review images
         },
       },
+      ...(userId && {
+        wishlists: {
+          where: {
+            userId: userId,
+          },
+        },
+      }),
     },
   });
 
@@ -1431,6 +1440,8 @@ export const fetchProductAllData = cache(async (productdata: string) => {
   //     // Include any other relations you need
   //   },
   // });
+
+
   // Format the productVariants to include color and size names directly
   const formattedProductVariants = product.productVariants.map((variant) => ({
     id: variant.id,
@@ -1440,6 +1451,7 @@ export const fetchProductAllData = cache(async (productdata: string) => {
     createdAt: variant.createdAt,
     updatedAt: variant.updatedAt,
   }));
+      const isWishlisted = userId && product.wishlists.length > 0;
 
   // Format the ratings
   const ratingsCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
@@ -1497,6 +1509,7 @@ export const fetchProductAllData = cache(async (productdata: string) => {
       totalRatings: totalRatings, // Add totalRatings to the ratings object
       averageRating: averageRating, // Add averageRating to the ratings object
     },
+    isWishlisted: isWishlisted,
     createdAt: product.createdAt,
     updatedAt: product.updatedAt,
     // parentCategoryId: parentCategory.id, // Add parent category ID to the organizedProduct

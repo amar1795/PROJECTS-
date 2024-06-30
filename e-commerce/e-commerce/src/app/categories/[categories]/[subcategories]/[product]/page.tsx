@@ -2,7 +2,7 @@
 import { BreadcrumbWithCustomSeparator } from "@/components/breadcrumb";
 import MainFooter from "@/components/footer";
 import { MainNav } from "@/components/main-nav";
-import React, { useEffect } from "react";
+import React, { use, useCallback, useEffect, useState } from "react";
 import {
   DollarSign,
   Heart,
@@ -23,6 +23,12 @@ import CategoriesRight from "@/components/categories/CategoriesRight";
 import CategoriesRelatedProduct from "@/components/categories/CategoriesRelatedProduct";
 import { fetchProductAllData, getProductsByCategory, getProductsByCategoryOriginal } from "@/actions/createProduct";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import { useToast } from "@/components/ui/use-toast";
+import { toggleWishlist } from "@/actions/wishlist";
+import { addCartDatatoCookies, getCartDataFromCookies, removeProductFromCookies } from "@/actions/cart/addCartDatatoCookies";
+import { fetchSingleProduct } from "@/actions/cart/fetchSingleProduct";
+import increaseProductQuantity from "@/actions/cart/increaseProduct";
+import decreaseProductQuantity from "@/actions/cart/decreaseProduct";
 //meta data generation
 // export async function generateMetadata({ params }: { params: { product: string}}) {
 
@@ -32,6 +38,9 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 //     description: post?.description,
 //   };
 // }
+
+
+
 
 export type relatedProduct = {
   id: string;
@@ -80,37 +89,188 @@ export type updatedDataResponse = {
 
 const page = ({ params }: { params: { product: string } }) => {
   const { data: session } = useSession();
+  const { toast } = useToast();
+  const user = useCurrentUser();
+
   console.log("this is the session",session?.user?.id)
 
   
   const [outOfStock, setoutOfStock] = React.useState(false);
 
-  const [data, setData] = React.useState<updatedDataResponse | null>(null);  
+  const [data, setData] = React.useState<updatedDataResponse | null>(null);
+    
   const [relatedProducts, setRelatedProducts] = React.useState<relatedProduct[] | null>(null);
   const [parentCategory, setParentCategory] = React.useState<string>("");
   const [mensCollectionData, setMensCollectionData] = React.useState<any[]>([]);
+  const [updateTrigger, setUpdateTrigger] = useState(false);
 
+
+  const [updatedProducts, setupdatedProducts] = useState([]);
+  console.log("this is the updatedProducts product from related products page", updatedProducts);
   // this user doesn't work for some reason whereas this is meant to be used in the client side
   // const { user } = useCurrentUser();
 
   const currentUser = session?.user?.id;
 
- 
+  const callToast = ({variant,title,description}) => {
+    // alert("toast is being  called")
+    toast({
+      variant: variant,
+      title:title,
+      description: description,
+    });
+  }
 
-  React.useEffect(() => {
+  useEffect(() => {
     const updateData = async () => {
+      // alert("I am being called")
         const updatedData: updatedDataResponse | undefined = await fetchProductAllData(params.product);
-        // console.log("this is the response:", updatedData);
-        setData(updatedData || null);
+        console.log("this is the updatedData:", updatedData);
+        setupdatedProducts(updatedData || null);
         // const relatedProducts = await getProductsByCategoryOriginal(updatedData?.category?.parentId)
         const relatedProducts = await getProductsByCategory(updatedData?.category?.id)
+        
         setRelatedProducts(relatedProducts);
         setParentCategory(updatedData?.category?.parentName || "");
         // console.log("these are the related products:", relatedProducts);
     };
 
     updateData();
-}, [params]);
+}, []);
+
+// useEffect(() => {
+//   const updateData = async () => {
+     
+//     // alert("I am being called")
+//         const relatedProducts = await getProductsByCategory(updatedProducts?.id)
+//       setRelatedProducts(relatedProducts);
+      
+//       // console.log("these are the related products:", relatedProducts);
+//   };
+
+//   updateData();
+
+// }, [updateTrigger]);
+
+
+const handleWishlistToggle = useCallback(async (userId: string, productId: string) => {
+  if (!user) {
+    callToast({
+      variant: "destructive",
+      title: "Not Logged In",
+      description: "Please login to wishlist this item",
+    });
+    return;
+  }
+
+  if( updatedProducts.id === productId )
+    {
+
+    const updatedProductsList= { ...updatedProducts, isWishlisted: !updatedProducts.isWishlisted } 
+      
+    setupdatedProducts(updatedProductsList);
+    }
+  
+
+
+  setTimeout(async () => {
+    const message = await toggleWishlist(userId, productId);
+    callToast({
+      variant: message.message === "added" ? "default" : "destructive",
+      title: message.message === "added" ? "Added to Wishlist" : "Removed from Wishlist",
+      description: message.message === "added" ? "The item has been wishlisted" : "The item has been removed from wishlist",
+      
+    });
+  }, 200);
+}, [updatedProducts, user, toast]);
+
+
+const handleClickAdd = async (userID, productID) => {
+  // alert("add to cart is being called")
+  console.log("this is the product id", productID);
+  const completedata = await fetchSingleProduct(productID);
+  completedata.map((item) => {
+    if(item.id === productID){
+      
+      const newData= {...item, cartQuantity: 1}
+      console.log("this is the new data", newData);
+      addCartDatatoCookies([newData]);
+    }});
+
+    if(user){
+      setTimeout(async () => {
+        
+          // alert("increase quantity is called", userID, productId)
+          await increaseProductQuantity(userID, productID);
+        
+      }, 200);
+    }
+
+  // addProductToCart(userID, productID);
+  
+  setUpdateTrigger((prev) => !prev);
+};
+
+const handleQuantityChange = useCallback(
+  (userId: string, productId: string, change: number) => {
+    // alert("i have been called")
+
+    // let updatedProductsList;
+      if (updatedProducts.id === productId) {
+        // Ensure quantity doesn't go below 0
+        const currentQuantity = updatedProducts?.cartQuantity ? updatedProducts?.cartQuantity: 0; // Initialize to 0 if undefined or null
+        const newQuantity = Math.max(currentQuantity + change, 0);
+        // alert( newQuantity)
+        const updatedProductsList= { ...updatedProducts, cartQuantity: newQuantity };
+        setupdatedProducts(updatedProductsList);
+        console.log("this is the updated products", updatedProductsList);
+
+        if (updatedProductsList?.cartQuantity === 0) {
+          // alert(updatedProductsList?.cartQuantity)
+           removeProductFromCookies(productId); // Remove product from cookies if cartQuantity is 0
+        } else {
+           addCartDatatoCookies([updatedProductsList]); // Otherwise, save updated data to cookies
+        }
+      }
+     
+       // Save updated product information to cookies
+  
+
+    if(user){
+    setTimeout(async () => {
+      if (change > 0) {
+        // alert("increase quantity is called", userId, productId)
+        await increaseProductQuantity(userId, productId);
+      } else {
+        // alert("decrease quantity is called")
+        await decreaseProductQuantity(userId, productId);
+      }
+    }, 200);
+  }
+},
+  [updatedProducts]
+);
+
+useEffect(() => {
+  async function mergeDataFromCookies() {
+    const cookieData = await getCartDataFromCookies();
+    // create another function here to merge the login usercart lenght and the cookie cart length and then update the cart length in the shopping cart Icon
+      // alert("Merge data from cookie called")
+      const updatedData: updatedDataResponse | undefined = await fetchProductAllData(params.product);
+      console.log("this is the updatedData:", updatedData);
+
+      const cookieProduct = cookieData.find(item => item.id === updatedData?.id);
+      if(cookieProduct) {
+       const  mergedProducts = { ...updatedData, cartQuantity: cookieProduct.cartQuantity }
+       
+       setupdatedProducts(mergedProducts);
+      
+    }
+
+  }
+
+  mergeDataFromCookies();
+}, [updateTrigger]);
 
 const ProductId=data?.id;
 // console.log("this is the product id:", ProductId);
@@ -154,13 +314,14 @@ const ProductId=data?.id;
 
           <div className=" bg-orange-300 h-auto flex ">
             <div className=" bg-orange-300 flex-1 h-auto">
-              <PhotoViewer images={data?.images} />
+              <PhotoViewer images={updatedProducts?.images} />
             </div>
             <div className="flex-1 h-[115rem]">
               {/* right component */}
               {/* brand:string */}
 
-               <CategoriesRight data={data} /> 
+               <CategoriesRight data={updatedProducts} handleWishlistToggle={handleWishlistToggle}
+               handleClickAdd={handleClickAdd} handleQuantityChange={handleQuantityChange}/> 
                {/* <h1 className=" text-[2rem]">{data?.brand.name}</h1>  */}
               
             </div>
@@ -172,7 +333,7 @@ const ProductId=data?.id;
               Related Products
             </h3>
             </div>
-            <CategoriesRelatedProduct relatedProduct={relatedProducts} ProductId={ProductId} />
+            <CategoriesRelatedProduct relatedProduct={relatedProducts} ProductId={ProductId} callToast={callToast} filteredId={params.product}/>
           </div>
           <MainFooter />
         </div>

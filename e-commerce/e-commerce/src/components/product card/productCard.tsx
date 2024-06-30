@@ -33,22 +33,20 @@ const removeSpaces = (name: string): string => {
   return name?.replace(/\s+/g, "");
 };
 
-
 const ProductCard: React.FC<updatedDataResponse> = ({
   product,
   handleClickAdd,
   catRelatedProduct,
   handleQuantityChange,
   handleWishlistToggle,
-  
 }) => {
-
   const user = useCurrentUser();
   // console.log("this is the updated products", updatedProducts);
 
   // console.log("this is the productID from product card", product?.category?.name);
 
-  const completeUrl = typeof window !== "undefined" ? window.location.href.split('?')[0] : "";
+  const completeUrl =
+    typeof window !== "undefined" ? window.location.href.split("?")[0] : "";
   console.log("this is the complete url", completeUrl);
 
   const segments = completeUrl.split("/");
@@ -89,22 +87,22 @@ const ProductCard: React.FC<updatedDataResponse> = ({
         >
           {/* top part */}
           <button>
-            
-              <div className="ProductImageCard min-h-[19rem] relative ">
-                <button
-                  className={`heartButton z-10 hover:text-red-500`}
-                  onClick={() => handleWishlistToggle(user?.id, product.id)}
-                >
-                  {/* wishlist icon */}
-                  <Heart
-                
-                  className={`hover:fill-red-500 text-black ${product?.isWishlisted ? "fill-red-500" : ""}`}
-                    size={40}
-                    strokeWidth={0.8}
-                    // className={` hover:fill-red-500 text-black`}
-                  />
-                </button>
-                <div className="ProductImage bg-red-400 h-full w-full absolute">
+            <div className="ProductImageCard min-h-[19rem] relative ">
+              <button
+                className={`heartButton z-10 hover:text-red-500`}
+                onClick={() => handleWishlistToggle(user?.id, product.id)}
+              >
+                {/* wishlist icon */}
+                <Heart
+                  className={`hover:fill-red-500 text-black ${
+                    product?.isWishlisted ? "fill-red-500" : ""
+                  }`}
+                  size={40}
+                  strokeWidth={0.8}
+                  // className={` hover:fill-red-500 text-black`}
+                />
+              </button>
+              <div className="ProductImage bg-red-400 h-full w-full absolute">
                 <Link href={newUrl}>
                   <Image
                     alt="product image"
@@ -112,9 +110,9 @@ const ProductCard: React.FC<updatedDataResponse> = ({
                     objectFit="cover"
                     src={product?.images[0]?.url}
                   />
-            </Link>
-                </div>
+                </Link>
               </div>
+            </div>
           </button>
           {/* middle part */}
           <div className="  text-sm flex h-[2rem] justify-between bg-opacity-20 backdrop-blur-lg border border-white/30 ">
@@ -127,27 +125,32 @@ const ProductCard: React.FC<updatedDataResponse> = ({
               </div>
             </div>
             <div>
-              {catRelatedProduct && (  <div className="box flex pr-4">
-                {/* quantity change icons */}
-                <button
-                  className=" pr-2  hover:bg-gray-200 pl-1"
-                  onClick={() => handleQuantityChange(user?.id, product.id, -1)}
-                >
-                  <Minus size={20} />
-                </button>
-                <div className=" text-[1.5rem] w-7  bg-white  h-[2rem]">
-                  <div className=" px-2 py-2 ">
-                    {product?.cartQuantity || 0}
+              {catRelatedProduct && (
+                <div className="box flex pr-4">
+                  {/* quantity change icons */}
+                  <button
+                    className=" pr-2  hover:bg-gray-200 pl-1"
+                    onClick={() =>
+                      handleQuantityChange(user?.id, product.id, -1)
+                    }
+                  >
+                    <Minus size={20} />
+                  </button>
+                  <div className=" text-[1.5rem] w-7  bg-white  h-[2rem]">
+                    <div className=" px-2 py-2 ">
+                      {product?.cartQuantity || 0}
+                    </div>
                   </div>
+                  <button
+                    className=" pl-2  hover:bg-gray-200 pr-1"
+                    onClick={() =>
+                      handleQuantityChange(user?.id, product.id, 1)
+                    }
+                  >
+                    <Plus size={20} />
+                  </button>
                 </div>
-                <button
-                  className=" pl-2  hover:bg-gray-200 pr-1"
-                  onClick={() => handleQuantityChange(user?.id, product.id, 1)}
-                >
-                  <Plus size={20} />
-                </button>
-              </div>)}
-            
+              )}
             </div>
           </div>
           {/* Bottom part */}
