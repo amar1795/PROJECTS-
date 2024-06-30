@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use, useEffect, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -11,41 +11,61 @@ import {
 
 
 
-const data = [
-  {
-    name: "5 Stars",
-    uv: 5,
-    stars: 800,
-    amt: 200
-  },
-  {
-    name: "4 Stars",
-    uv: 4,
-    stars: 121,
-    amt: 2000
-  },
-  {
-    name: "3 Stars",
-    uv: 3,
-    stars: 70,
-    amt: 2000
-  },
-  {
-    name: "2 Stars",
-    uv: 2,
-    stars: 51,
-    amt: 2000
-  },
-  {
-    name: "1 Stars",
-    uv: 1,
-    stars: 1157,
-    amt: 2000
-  },
-  
-];
 
-export default function StarChart() {
+export default function StarChart(barChartData,initialCount) {
+// console.log("this is the initialCount", initialCount);
+  console.log("this is the barchart data:", barChartData.barChartData);
+
+//   const initialData = [
+//     {
+//       name: "5 Stars",
+//       uv: 5,
+//       stars:initialCount[5] ,
+//       amt: 2000
+//     },
+//     {
+//       name: "4 Stars",
+//       uv: 4,
+//       stars: 0,
+//       amt: 2000
+//     },
+//     {
+//       name: "3 Stars",
+//       uv: 3,
+//       stars: 0,
+//       amt: 2000
+//     },
+//     {
+//       name: "2 Stars",
+//       uv: 2,
+//       stars: 0,
+//       amt: 2000
+//     },
+//     {
+//       name: "1 Stars",
+//       uv: 1,
+//       stars: 0,
+//       amt: 2000
+//     },
+    
+//   ];
+//   const [data, setData] = useState(initialData);
+
+// useEffect(() => {
+//   const data = initialData.map((item, index) => ({
+//     ...item,
+//     stars: initialCount[index+1] || item.stars,
+//   }));
+//   setData(data);
+
+//   console.log("this is the new initial data", data);
+// }, [initialCount]);
+const [data, setData] = useState([]);
+useEffect(() => {
+  const data1= barChartData.barChartData;
+  setData(data1);
+
+},[barChartData.barChartData] )
   return (
     <BarChart
       width={200}

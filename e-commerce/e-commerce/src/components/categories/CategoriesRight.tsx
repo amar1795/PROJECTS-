@@ -41,15 +41,54 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
   handleWishlistToggle,
   handleClickAdd,
   handleQuantityChange,
-  callToast
+  callToast,
+  setUpdateChart
 }) => {
   const user = useCurrentUser();
 
+
+
+  
+  const initialData = [
+    {
+      name: "5 Stars",
+      uv: 5,
+      stars:data?.ratings?.count[5] ,
+      amt: 2000
+    },
+    {
+      name: "4 Stars",
+      uv: 4,
+      stars: data?.ratings?.count[4],
+      amt: 2000
+    },
+    {
+      name: "3 Stars",
+      uv: 3,
+      stars: data?.ratings?.count[3],
+      amt: 2000
+    },
+    {
+      name: "2 Stars",
+      uv: 2,
+      stars: data?.ratings?.count[2],
+      amt: 2000
+    },
+    {
+      name: "1 Stars",
+      uv: 1,
+      stars: data?.ratings?.count[1],
+      amt: 2000
+    },
+    
+  ];
+console.log("this is the initial data", initialData)
   const [reviews, setReviews] = useState([]);
   const [verifiedPurchaseCount, setVerifiedPurchaseCount] = useState("");
   const [reviewData, setReviewData] = useState(null);
   const [newData, setNewData] = useState(true);
-
+  const [barChartData, setbarChartData] = useState(initialData);
+  console.log("this is the chart data", barChartData);
   if (!data) {
     return <div>Loading...</div>;
   }
@@ -75,15 +114,29 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
           `this is the reviews data for the product ID ${data?.id} ${verifiedPurchaseCount}`,
           value
         );
+
+        setUpdateChart(prev => !prev )
       }
     };
     getReviews();
   }, [data, newData]);
   // brand cannot be destructured from data issue arised because the data  was null , so i added a check to see if data is null or not and display the loading message if it is null
   console.log("this is the data from categories right", data);
+  // data.ratings.count
   const { brand, price, discountedPrice, description } = data;
 
   const [outOfStock, setoutOfStock] = React.useState(false);
+
+ 
+
+    // Effect to update data based on ratingsCount
+    useEffect(() => {
+      const updatedData = initialData.map((item, index) => ({
+        ...item,
+        stars: data?.ratings?.count[index] || item.stars,
+      }));
+      setbarChartData(updatedData);
+    }, [data,newData]);
 
   return (
     <div>
@@ -288,15 +341,15 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
 
                 <div className="right flex-1 pl-[14rem]  z-0">
                   <div className="  rotate-90 w-[5.5rem] h-[2rem] ">
-                    <StarChart />
+                    <StarChart barChartData={initialData} initialCount={data?.ratings?.count} />
                   </div>
                 </div>
                 <div className=" text-black w-[5rem]   flex flex-col justify-between">
-                  <p className=" flex w-5 pl-0">322 </p>
-                  <p className=" flex w-5">21 </p>
-                  <p className=" flex w-5">15 </p>
-                  <p className=" flex w-5">75 </p>
-                  <p className=" flex w-5">51 </p>
+                  <p className=" flex w-5 pl-0">{data?.ratings?.count[5]} </p>
+                  <p className=" flex w-5">{data?.ratings?.count[4]} </p>
+                  <p className=" flex w-5">{data?.ratings?.count[3]} </p>
+                  <p className=" flex w-5">{data?.ratings?.count[2]} </p>
+                  <p className=" flex w-5">{data?.ratings?.count[1]} </p>
                 </div>
               </div>
             </div>

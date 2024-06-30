@@ -103,7 +103,7 @@ const page = ({ params }: { params: { product: string } }) => {
   const [parentCategory, setParentCategory] = React.useState<string>("");
   const [mensCollectionData, setMensCollectionData] = React.useState<any[]>([]);
   const [updateTrigger, setUpdateTrigger] = useState(false);
-
+  const[updateChart,setUpdateChart] =useState(false)
 
   const [updatedProducts, setupdatedProducts] = useState([]);
   console.log("this is the updatedProducts product from related products page", updatedProducts);
@@ -124,6 +124,7 @@ const page = ({ params }: { params: { product: string } }) => {
   useEffect(() => {
     const updateData = async () => {
       // alert("I am being called")
+      // this needs to be revalidated via polling every 30 minutes because if everyone starts rating it simulteneously it will hit the backend mulitple times
         const updatedData: updatedDataResponse | undefined = await fetchProductAllData(params.product);
         console.log("this is the updatedData:", updatedData);
         setupdatedProducts(updatedData || null);
@@ -132,6 +133,7 @@ const page = ({ params }: { params: { product: string } }) => {
         
         setRelatedProducts(relatedProducts);
         setParentCategory(updatedData?.category?.parentName || "");
+        // alert("update Data is being called")
         // console.log("these are the related products:", relatedProducts);
     };
 
@@ -322,7 +324,7 @@ const ProductId=data?.id;
 
                <CategoriesRight data={updatedProducts} handleWishlistToggle={handleWishlistToggle}
                handleClickAdd={handleClickAdd} handleQuantityChange={handleQuantityChange}
-               callToast={callToast}/> 
+               callToast={callToast} setUpdateChart={setUpdateChart}/> 
                {/* <h1 className=" text-[2rem]">{data?.brand.name}</h1>  */}
               
             </div>
