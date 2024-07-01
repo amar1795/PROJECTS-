@@ -3,6 +3,9 @@
 import { fetchProductAllData, getProductsByCategory } from "@/actions/createProduct";
 import { fetchAllOrders } from "@/actions/order/fetchAllOrder";
 import { fetchReview } from "@/actions/productRating/fetchReview";
+import { getProductReviews } from "@/actions/productRating/getProductReview";
+import { productDislike } from "@/actions/productReview/productDislike";
+import { productLike } from "@/actions/productReview/productLike";
 import { updatedDataResponse } from "@/app/categories/[categories]/[subcategories]/[product]/page";
 import CustomButton from "@/components/CustomButton";
 import CustomOrderSortButton from "@/components/CustomOrderSortButton";
@@ -11,11 +14,26 @@ import OrderSummaryComponent from "@/components/order summary component/OrderSum
 import { PaginationComponent } from "@/components/pagination";
 import MiniStarRatingComponent from "@/components/rating star component/MiniStarRatingComponent";
 import StarChart from "@/components/star charts/starChart";
+import { useToast } from "@/components/ui/use-toast";
 import { useCurrentUser } from "@/hooks/use-current-user";
-import { DollarSign, IndianRupee, Star } from "lucide-react";
+import { DollarSign, IndianRupee, Star, StarIcon, ThumbsDown, ThumbsUp } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import React, { use, useEffect, useState } from "react";
 
+
+// Utility function to format date
+const formatDate = (dateString: string) => {
+  const options: Intl.DateTimeFormatOptions = {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  };
+  return new Date(dateString).toLocaleDateString("en-US", options);
+};
+
 const page = ({ params }: { params: { productID: string } }) => {
+
   const [sortOrder, setSortOrder] = useState("desc");
   const [data, setData] = useState([]);
   const [relatedProducts, setRelatedProducts] = useState(null);
@@ -24,6 +42,39 @@ const page = ({ params }: { params: { productID: string } }) => {
   const [reviewData, setReviewData] = useState(null);
   const [newData, setNewData] = useState(true);
   const user = useCurrentUser();
+  const [reviews, setReviews] = useState([]);
+const [like, setLike] = useState(false);
+const [dislike, setDislike] = useState(false);
+
+const { toast } = useToast();
+
+const callToast = ({variant,title,description}) => {
+  // alert("toast is being  called")
+  toast({
+    variant: variant,
+    title:title,
+    description: description,
+  });
+}
+
+  const handlelike = async (ratingId: string) => {
+    // alert("I am being called")
+   const {error,message,like}=await productLike(ratingId)
+   const likedData=like ? true : false
+   setLike(likedData)
+   callToast({title:`${message}` ,description :"You have succesfully liked the Comment"})
+   console.log("this is the liked data response",error,message,like)
+  };
+
+  const handleDislike = async (ratingId: string) => {
+    // alert("I am being called")
+   const {error,message,dislike}=await productDislike(ratingId)
+   const dislikedData=dislike ? true : false
+   setDislike(dislikedData)
+   callToast({title:`${message}` ,description :"You have succesfully disliked the Comment",variant:"destructive"})
+
+   console.log("this is the disliked data response",error,message,dislike)
+  };
 
   useEffect(() => {
     const updateData = async () => {
@@ -56,6 +107,25 @@ const page = ({ params }: { params: { productID: string } }) => {
     };
     fetchReviewData();
   }, [data, newData]);
+
+  useEffect(() => {
+    const getReviews = async () => {
+      if (data?.id) {
+        const { reviews, verifiedPurchaseCount, error } =
+          await getProductReviews(data?.id);
+        const value = reviews;
+        setVerifiedPurchaseCount(verifiedPurchaseCount);
+        setReviews(value);
+        console.log(
+          `this is the reviews data for the product ID ${data?.id} ${verifiedPurchaseCount}`,
+          value
+        );
+
+        // setUpdateChart((prev) => !prev);
+      }
+    };
+    getReviews();
+  }, [data, newData,like,dislike]);
 
   const initialData = [
     {
@@ -100,7 +170,7 @@ const page = ({ params }: { params: { productID: string } }) => {
           <div className=" pr-11">
             <CustomOrderSortButton
               initialButtonName="SORTBY"
-              initialOptions={["New to Old", "Old to New"]}
+              initialOptions={["5 Star Rating", "4 Star Rating","3 Star Rating","2 Star Rating","1 Star Rating",]}
               setSortOrder={setSortOrder}
             />
           </div>
@@ -334,6 +404,124 @@ const page = ({ params }: { params: { productID: string } }) => {
         </div>
         <div className=" px-8 mt-4">
           <div className=" border-black border-b-4 "></div>
+        </div>
+
+        <div className=" flex">
+          <div className=" w-[30vw]">
+
+          </div>
+
+          <div className=" flex-1">
+          <div className=" cxreviews   mb-4  px-4 pt-4">
+                <div className="">
+                  <h1 className=" text-[1.2rem] font-semibold mb-4">
+                    CUSTOMER REVIEWS({data?.ratings?.totalReviews})
+                  </h1>
+                  {/* review component */}
+                  {reviews?.length > 0 ? (
+                    reviews
+                      .filter((review) => review?.review !== null)
+                      .map((review ) => (
+                        <div className=" flex border-2 border-black  bg-teal-600  min-h-28 mt-6">
+                          <div className=" w-[3rem] border-r-2 border-black ">
+                            <div className=" flex justify-between px-2 pt-1">
+                              <div>{review?.rating}</div>
+                              <div className=" self-center">
+                                <StarIcon size={20} stroke="" fill="white" />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="  w-full flex flex-col ">
+                            {review?.reviewTitle && (
+                              <p className="  h-auto px-2 py-2 border-b-2 border-black font-bold uppercase">
+                                TITLE: {review?.reviewTitle}
+                              </p>
+                            )}
+
+                            <p className="  h-auto px-2 py-2 border-b-2 border-black">
+                              {review?.review}
+                            </p>
+
+                            {review?.images && review?.images.length > 0 && (
+                              <div className=" px-2 py-2 ImageComponent">
+                                <Image
+                                  src=""
+                                  alt="test image"
+                                  width={100}
+                                  height={100}
+                                  className=" bg-green-600 mr-3"
+                                />
+                              </div>
+                            )}
+
+                            <div className="  h-[3rem] flex justify-between px-2 py-2  mt-5">
+                              <div className=" bg-white border-2 border-black flex self-center py-1 px-4    ">
+                                <p className="border-gray-500 border-r-2 pr-2 ">
+                                  {review?.user?.name}
+                                </p>
+
+                                <p className=" pl-2 ">
+                                  {formatDate(review?.createdAt)}{" "}
+                                </p>
+                              </div>
+                              {review?.verifiedPurchase && (
+                                <div className=" bg-white border-2 border-black flex self-center py-1 px-4    ">
+                                  <p className="border-gray-500  pr-2 ">
+                                    {"Verified "}
+                                  </p>
+                                </div>
+                              )}
+
+                              <div>
+                                <div className=" bg-white border-2 border-black flex px-2 py-1 w-[8rem] h-full self-center justify-between ">
+                                  <div className=" flex ">
+                                    <button onClick={()=> handlelike(review?.id)}>
+                                      <div className=" self-center">
+                                        <ThumbsUp
+                                          size={20}
+                                          fill={`${review?.likedByUser ==true ? "green":"white"}`}
+                                          strokeWidth={0.5}
+                                        />
+                                      </div>
+                                    </button>
+                                    <p className=" pl-1  text-[12px] mt-1  ">
+                                    {review?.totalLikes}
+
+                                    </p>
+                                  </div>
+
+                                  <div className=" flex">
+                                    <button  onClick={()=> handleDislike(review?.id)}>
+                                      <div className=" self-center">
+                                        <ThumbsDown
+                                          size={20}
+                                          fill={`${review?.dislikedByUser ==true ? "red":"white"}`}
+                                          strokeWidth={0.5}
+                                        />{" "}
+                                      </div>
+                                    </button>
+                                    <p className=" pl-1  text-[12px] mt-1  ">
+                                      {review?.totalDislikes}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                  ) : (
+                    <div>
+                      <h1 className=" text-[1.2rem] font-semibold">
+                        No reviews yet
+                      </h1>
+                    </div>
+                  )}
+
+                 
+                </div>
+              </div>
+          </div>
         </div>
         <div className="px-8  mt-[5rem] ml-[50rem]">
           {/* <PaginationComponent

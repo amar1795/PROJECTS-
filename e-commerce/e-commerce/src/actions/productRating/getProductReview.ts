@@ -30,10 +30,29 @@ export async function getProductReviews(productId: string ,fetchLimit: number) {
                 name: true, // Only fetch the name of the user
             },
         },
+        likes: true,    // Include likes
+        dislikes: true, // Include dislikes
         },
         take: fetchLimit || undefined, // Use fetchLimit if provided, otherwise fetch all reviews
 
       });
+
+         // Process reviews to include total likes, dislikes, and user-specific like/dislike status
+    const processedReviews = reviews.map(review => {
+      const totalLikes = review.likes.length;
+      const totalDislikes = review.dislikes.length;
+      const likedByUser = user ? review.likes.some(like => like.userId === user) : false;
+      const dislikedByUser = user ? review.dislikes.some(dislike => dislike.userId === user) : false;
+
+      return {
+        ...review,
+        totalLikes,
+        totalDislikes,
+        likedByUser,
+        dislikedByUser,
+      };
+    });
+
 
       // Count the verified purchases
       const verifiedPurchaseCount = await prismadb.rating.count({
@@ -45,7 +64,7 @@ export async function getProductReviews(productId: string ,fetchLimit: number) {
 
   
     return {
-      reviews,
+      reviews: processedReviews,
       verifiedPurchaseCount,
   };
       
