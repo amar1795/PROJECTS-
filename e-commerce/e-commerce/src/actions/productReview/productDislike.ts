@@ -2,6 +2,7 @@
 
 import { auth } from "@/auth";
 import { prismadb } from "@/lib/db";
+import { revalidatePath } from "next/cache";
 
 export async function productDislike(reviewId: string) {
   const userSession = await auth();
@@ -47,6 +48,7 @@ export async function productDislike(reviewId: string) {
         userId: user,
       },
     });
+    revalidatePath("/")
 
     return { message: "Review disliked", dislike: newDislike };
   } catch (error) {

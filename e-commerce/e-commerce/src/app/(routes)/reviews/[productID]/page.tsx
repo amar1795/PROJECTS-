@@ -10,6 +10,7 @@ import { updatedDataResponse } from "@/app/categories/[categories]/[subcategorie
 import CustomButton from "@/components/CustomButton";
 import CustomOrderSortButton from "@/components/CustomOrderSortButton";
 import { ReviewModal } from "@/components/ReviewModal";
+import LikeAndDislikeButton from "@/components/likeAndDislikeButton";
 import OrderSummaryComponent from "@/components/order summary component/OrderSummaryComponent";
 import { PaginationComponent } from "@/components/pagination";
 import MiniStarRatingComponent from "@/components/rating star component/MiniStarRatingComponent";
@@ -60,18 +61,18 @@ const callToast = ({variant,title,description}) => {
   const handlelike = async (ratingId: string) => {
     // alert("I am being called")
    const {error,message,like}=await productLike(ratingId)
-   const likedData=like ? true : false
-   setLike(likedData)
-   callToast({title:`${message}` ,description :"You have succesfully liked the Comment"})
+  //  const likedData=like ? true : false
+  //  setLike(likedData)
+  //  callToast({title:`${message}` ,description :"You have succesfully liked the Comment"})
    console.log("this is the liked data response",error,message,like)
   };
 
   const handleDislike = async (ratingId: string) => {
     // alert("I am being called")
    const {error,message,dislike}=await productDislike(ratingId)
-   const dislikedData=dislike ? true : false
-   setDislike(dislikedData)
-   callToast({title:`${message}` ,description :"You have succesfully disliked the Comment",variant:"destructive"})
+  //  const dislikedData=dislike ? true : false
+  //  setDislike(dislikedData)
+  //  callToast({title:`${message}` ,description :"You have succesfully disliked the Comment",variant:"destructive"})
 
    console.log("this is the disliked data response",error,message,dislike)
   };
@@ -472,40 +473,16 @@ const callToast = ({variant,title,description}) => {
                                 </div>
                               )}
 
-                              <div>
-                                <div className=" bg-white border-2 border-black flex px-2 py-1 w-[8rem] h-full self-center justify-between ">
-                                  <div className=" flex ">
-                                    <button onClick={()=> handlelike(review?.id)}>
-                                      <div className=" self-center">
-                                        <ThumbsUp
-                                          size={20}
-                                          fill={`${review?.likedByUser ==true ? "green":"white"}`}
-                                          strokeWidth={0.5}
-                                        />
-                                      </div>
-                                    </button>
-                                    <p className=" pl-1  text-[12px] mt-1  ">
-                                    {review?.totalLikes}
+                                {/* like and dislike buttons */}
 
-                                    </p>
-                                  </div>
-
-                                  <div className=" flex">
-                                    <button  onClick={()=> handleDislike(review?.id)}>
-                                      <div className=" self-center">
-                                        <ThumbsDown
-                                          size={20}
-                                          fill={`${review?.dislikedByUser ==true ? "red":"white"}`}
-                                          strokeWidth={0.5}
-                                        />{" "}
-                                      </div>
-                                    </button>
-                                    <p className=" pl-1  text-[12px] mt-1  ">
-                                      {review?.totalDislikes}
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
+                             <div>
+                             <LikeAndDislikeButton
+                                handlelike={handlelike}
+                                handleDislike={handleDislike}
+                                review={review}
+                                callToast={callToast}
+                              />
+                             </div>
                             </div>
                           </div>
                         </div>

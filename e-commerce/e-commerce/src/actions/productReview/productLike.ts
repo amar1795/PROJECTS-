@@ -2,6 +2,7 @@
 
 import { auth } from "@/auth";
 import { prismadb } from "@/lib/db";
+import { revalidatePath } from "next/cache";
 
 export async function productLike(reviewId: string) {
   const userSession = await auth();
@@ -46,6 +47,8 @@ export async function productLike(reviewId: string) {
         userId: user,
       },
     });
+
+    revalidatePath("/")
 
     return { message: "Review liked", like: newLike };
   } catch (error) {
