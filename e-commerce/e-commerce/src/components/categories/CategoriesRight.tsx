@@ -21,6 +21,7 @@ import { set } from "zod";
 import MiniStarRatingComponent from "../rating star component/MiniStarRatingComponent";
 import { ReviewModal } from "../ReviewModal";
 import { fetchReview } from "@/actions/productRating/fetchReview";
+import Link from "next/link";
 
 type CategoriesRightProps = {
   data: updatedDataResponse;
@@ -42,47 +43,44 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
   handleClickAdd,
   handleQuantityChange,
   callToast,
-  setUpdateChart
+  setUpdateChart,
 }) => {
   const user = useCurrentUser();
 
-
-
-  
   const initialData = [
     {
       name: "5 Stars",
       uv: 5,
-      stars:data?.ratings?.count[5] ,
-      amt: 2000
+      stars: data?.ratings?.count[5],
+      amt: 2000,
     },
     {
       name: "4 Stars",
       uv: 4,
       stars: data?.ratings?.count[4],
-      amt: 2000
+      amt: 2000,
     },
     {
       name: "3 Stars",
       uv: 3,
       stars: data?.ratings?.count[3],
-      amt: 2000
+      amt: 2000,
     },
     {
       name: "2 Stars",
       uv: 2,
       stars: data?.ratings?.count[2],
-      amt: 2000
+      amt: 2000,
     },
     {
       name: "1 Stars",
       uv: 1,
       stars: data?.ratings?.count[1],
-      amt: 2000
+      amt: 2000,
     },
-    
   ];
-console.log("this is the initial data", initialData)
+
+  console.log("this is the initial data", initialData);
   const [reviews, setReviews] = useState([]);
   const [verifiedPurchaseCount, setVerifiedPurchaseCount] = useState("");
   const [reviewData, setReviewData] = useState(null);
@@ -106,7 +104,7 @@ console.log("this is the initial data", initialData)
     const getReviews = async () => {
       if (data?.id) {
         const { reviews, verifiedPurchaseCount, error } =
-          await getProductReviews(data?.id);
+          await getProductReviews(data?.id, 1);
         const value = reviews;
         setVerifiedPurchaseCount(verifiedPurchaseCount);
         setReviews(value);
@@ -115,7 +113,7 @@ console.log("this is the initial data", initialData)
           value
         );
 
-        setUpdateChart(prev => !prev )
+        setUpdateChart((prev) => !prev);
       }
     };
     getReviews();
@@ -127,16 +125,14 @@ console.log("this is the initial data", initialData)
 
   const [outOfStock, setoutOfStock] = React.useState(false);
 
- 
-
-    // Effect to update data based on ratingsCount
-    useEffect(() => {
-      const updatedData = initialData.map((item, index) => ({
-        ...item,
-        stars: data?.ratings?.count[index] || item.stars,
-      }));
-      setbarChartData(updatedData);
-    }, [data,newData]);
+  // Effect to update data based on ratingsCount
+  useEffect(() => {
+    const updatedData = initialData.map((item, index) => ({
+      ...item,
+      stars: data?.ratings?.count[index] || item.stars,
+    }));
+    setbarChartData(updatedData);
+  }, [data, newData]);
 
   return (
     <div>
@@ -307,41 +303,44 @@ console.log("this is the initial data", initialData)
                   </div>
                 </div>
                 <div className=" text-black w-[5rem] pl-5  flex flex-col justify-between">
-                  <p className=" flex w-5">
+                  <div className=" flex w-5">
                     5{" "}
                     <div className=" self-center pl-2 ">
                       <Star stroke="2" fill="aqua" size={15} />
                     </div>
-                  </p>
-                  <p className=" flex w-5">
+                  </div>
+                  <div className=" flex w-5">
                     4{" "}
                     <div className=" self-center pl-2 ">
                       <Star stroke="2" fill="yellow" size={15} />
                     </div>
-                  </p>
-                  <p className=" flex w-5">
+                  </div>
+                  <div className=" flex w-5">
                     3{" "}
                     <div className=" self-center pl-2 ">
                       <Star stroke="2" fill="green" size={15} />
                     </div>
-                  </p>
-                  <p className=" flex w-5">
+                  </div>
+                  <div className=" flex w-5">
                     2{" "}
                     <div className=" self-center pl-2 ">
                       <Star stroke="2" fill="orange" size={15} />
                     </div>
-                  </p>
-                  <p className=" flex w-5">
+                  </div>
+                  <div className=" flex w-5">
                     1{" "}
                     <div className=" self-center pl-2 ">
                       <Star stroke="2" fill="red" size={15} />
                     </div>
-                  </p>
+                  </div>
                 </div>
 
                 <div className="right flex-1 pl-[14rem]  z-0">
                   <div className="  rotate-90 w-[5.5rem] h-[2rem] ">
-                    <StarChart barChartData={initialData} initialCount={data?.ratings?.count} />
+                    <StarChart
+                      barChartData={initialData}
+                      initialCount={data?.ratings?.count}
+                    />
                   </div>
                 </div>
                 <div className=" text-black w-[5rem]   flex flex-col justify-between">
@@ -372,12 +371,12 @@ console.log("this is the initial data", initialData)
                       setNewData={setNewData}
                       buttonName="Add your Review"
                       reviewId={reviewData?.review?.id}
-                      // ProductImage={data?.images[0]?.url}
                       ProductName={data?.name}
                       ProductId={data?.id}
                       reviewStars={reviewData?.review?.rating}
                       reviewTitle={reviewData?.review?.reviewTitle}
                       reviewMessage={reviewData?.review?.review}
+                      ProductImage={data?.images ? data?.images[0]?.url : ""}
                       isPaid={false}
                     />
                   ) : (
@@ -391,9 +390,9 @@ console.log("this is the initial data", initialData)
                         reviewStars={reviewData?.review?.rating}
                         reviewTitle={reviewData?.review?.reviewTitle}
                         reviewMessage={reviewData?.review?.review}
-                        // ProductImage={data?.images[0]?.url}
                         ProductName={data?.name}
                         ProductId={data?.id}
+                        ProductImage={data?.images ? data?.images[0]?.url : ""}
                         isPaid={false}
                       />
                     </div>
@@ -405,9 +404,9 @@ console.log("this is the initial data", initialData)
                     setNewData={setNewData}
                     buttonName="Rate the product"
                     reviewId={reviewData?.review?.id}
-                    // ProductImage={data?.images[0]?.url}
                     ProductName={data?.name}
                     ProductId={data?.id}
+                    ProductImage={data?.images ? data?.images[0]?.url : ""}
                     reviewStars={reviewData?.review?.rating}
                     reviewTitle={reviewData?.review?.reviewTitle}
                     reviewMessage={reviewData?.review?.review}
@@ -419,21 +418,21 @@ console.log("this is the initial data", initialData)
                   <button
                     type="submit"
                     className="w-80  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500"
-                    onClick={() => callToast({
-                      variant: "destructive",
-                      title: "Not Logged In",
-                      description: "Please login to add the review",
-                    })}
+                    onClick={() =>
+                      callToast({
+                        variant: "destructive",
+                        title: "Not Logged In",
+                        description: "Please login to add the review",
+                      })
+                    }
                   >
-                    <h1 className=" font-bold">
-                      {"please log in to give review"}{" "}
-                    </h1>
+                    <h1 className=" font-bold">{"Add review"} </h1>
                   </button>
                 </div>
               )}
             </div>
 
-            <div className="reviews border-2 border-black ">
+            <div className="reviews border-2 border-black mt-11 ">
               <div className=" cxphotos   px-4 pt-4 border-b-2 border-black">
                 <div>
                   <h1 className=" text-[1.2rem] font-semibold">
@@ -466,80 +465,96 @@ console.log("this is the initial data", initialData)
                   </h1>
                   {/* review component */}
                   {reviews?.length > 0 ? (
-                    reviews.map((review) => (
-                      <div className=" flex border-2 border-black  bg-teal-600  min-h-28">
-                        <div className=" w-[3rem] border-r-2 border-black ">
-                          <div className=" flex justify-between px-2 pt-1">
-                            <div>{review?.rating}</div>
-                            <div className=" self-center">
-                              <StarIcon size={20} stroke="" fill="white" />
+                    reviews
+                      .filter((review) => review?.review !== null)
+                      .map((review) => (
+                        <div className=" flex border-2 border-black  bg-teal-600  min-h-28 mt-6">
+                          <div className=" w-[3rem] border-r-2 border-black ">
+                            <div className=" flex justify-between px-2 pt-1">
+                              <div>{review?.rating}</div>
+                              <div className=" self-center">
+                                <StarIcon size={20} stroke="" fill="white" />
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="  w-full flex flex-col ">
-                          <p className="  h-auto px-2 py-2 border-b-2 border-black">
-                            {review?.review}
-                          </p>
-
-                          {review?.images && review?.images.length > 0 && (
-                            <div className=" px-2 py-2 ImageComponent">
-                              <Image
-                                src=""
-                                alt="test image"
-                                width={100}
-                                height={100}
-                                className=" bg-green-600 mr-3"
-                              />
-                            </div>
-                          )}
-
-                          <div className="  h-[3rem] flex justify-between px-2 py-2  mt-5">
-                            <div className=" bg-white border-2 border-black flex self-center py-1 px-4    ">
-                              <p className="border-gray-500 border-r-2 pr-2 ">
-                                {review?.user?.name}
+                          <div className="  w-full flex flex-col ">
+                            {review?.reviewTitle && (
+                              <p className="  h-auto px-2 py-2 border-b-2 border-black font-bold uppercase">
+                                TITLE: {review?.reviewTitle}
                               </p>
+                            )}
 
-                              <p className=" pl-2 ">
-                                {formatDate(review?.createdAt)}{" "}
-                              </p>
-                            </div>
-                            {review?.verifiedPurchase && (
-                              <div className=" bg-white border-2 border-black flex self-center py-1 px-4    ">
-                                <p className="border-gray-500  pr-2 ">
-                                  {"Verified "}
-                                </p>
+                            <p className="  h-auto px-2 py-2 border-b-2 border-black">
+                              {review?.review}
+                            </p>
+
+                            {review?.images && review?.images.length > 0 && (
+                              <div className=" px-2 py-2 ImageComponent">
+                                <Image
+                                  src=""
+                                  alt="test image"
+                                  width={100}
+                                  height={100}
+                                  className=" bg-green-600 mr-3"
+                                />
                               </div>
                             )}
 
-                            <div>
-                              <div className=" bg-white border-2 border-black flex px-2 py-1 w-[8rem] h-full self-center justify-between ">
-                                <div className=" flex ">
-                                  <button>
-                                    <div className=" self-center">
-                                      <ThumbsUp size={20} fill=" green" />
-                                    </div>
-                                  </button>
-                                  <p className=" pl-1  text-[12px] mt-1  ">
-                                    209
+                            <div className="  h-[3rem] flex justify-between px-2 py-2  mt-5">
+                              <div className=" bg-white border-2 border-black flex self-center py-1 px-4    ">
+                                <p className="border-gray-500 border-r-2 pr-2 ">
+                                  {review?.user?.name}
+                                </p>
+
+                                <p className=" pl-2 ">
+                                  {formatDate(review?.createdAt)}{" "}
+                                </p>
+                              </div>
+                              {review?.verifiedPurchase && (
+                                <div className=" bg-white border-2 border-black flex self-center py-1 px-4    ">
+                                  <p className="border-gray-500  pr-2 ">
+                                    {"Verified "}
                                   </p>
                                 </div>
+                              )}
 
-                                <div className=" flex">
-                                  <button>
-                                    <div className=" self-center">
-                                      <ThumbsDown size={20} fill=" red" />{" "}
-                                    </div>
-                                  </button>
-                                  <p className=" pl-1  text-[12px] mt-1  ">
-                                    50
-                                  </p>
+                              <div>
+                                <div className=" bg-white border-2 border-black flex px-2 py-1 w-[8rem] h-full self-center justify-between ">
+                                  <div className=" flex ">
+                                    <button>
+                                      <div className=" self-center">
+                                        <ThumbsUp
+                                          size={20}
+                                          fill=" green"
+                                          strokeWidth={0.5}
+                                        />
+                                      </div>
+                                    </button>
+                                    <p className=" pl-1  text-[12px] mt-1  ">
+                                      209
+                                    </p>
+                                  </div>
+
+                                  <div className=" flex">
+                                    <button>
+                                      <div className=" self-center">
+                                        <ThumbsDown
+                                          size={20}
+                                          fill=" red"
+                                          strokeWidth={0.5}
+                                        />{" "}
+                                      </div>
+                                    </button>
+                                    <p className=" pl-1  text-[12px] mt-1  ">
+                                      50
+                                    </p>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))
+                      ))
                   ) : (
                     <div>
                       <h1 className=" text-[1.2rem] font-semibold">
@@ -547,6 +562,24 @@ console.log("this is the initial data", initialData)
                       </h1>
                     </div>
                   )}
+
+                  {reviews?.length > 0 &&
+                    reviews?.length < data?.ratings?.totalReviews && (
+                      <div className=" ">
+                        <div className=" h-[4rem] mt-5  flex flex-row-reverse ">
+                          <Link href={`/reviews/${data?.id}`}>
+                            <button
+                              type="submit"
+                              className="w-80  p-2  border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500"
+                            >
+                              <h1 className=" font-bold">
+                                {"Read all the reviews"}{" "}
+                              </h1>
+                            </button>
+                          </Link>
+                        </div>
+                      </div>
+                    )}
                 </div>
               </div>
             </div>

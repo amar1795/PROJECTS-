@@ -1,0 +1,350 @@
+"use client";
+
+import { fetchProductAllData, getProductsByCategory } from "@/actions/createProduct";
+import { fetchAllOrders } from "@/actions/order/fetchAllOrder";
+import { fetchReview } from "@/actions/productRating/fetchReview";
+import { updatedDataResponse } from "@/app/categories/[categories]/[subcategories]/[product]/page";
+import CustomButton from "@/components/CustomButton";
+import CustomOrderSortButton from "@/components/CustomOrderSortButton";
+import { ReviewModal } from "@/components/ReviewModal";
+import OrderSummaryComponent from "@/components/order summary component/OrderSummaryComponent";
+import { PaginationComponent } from "@/components/pagination";
+import MiniStarRatingComponent from "@/components/rating star component/MiniStarRatingComponent";
+import StarChart from "@/components/star charts/starChart";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { DollarSign, IndianRupee, Star } from "lucide-react";
+import React, { use, useEffect, useState } from "react";
+
+const page = ({ params }: { params: { productID: string } }) => {
+  const [sortOrder, setSortOrder] = useState("desc");
+  const [data, setData] = useState([]);
+  const [relatedProducts, setRelatedProducts] = useState(null);
+  const [parentCategory, setParentCategory] = useState("");
+  const [verifiedPurchaseCount, setVerifiedPurchaseCount] = useState("");
+  const [reviewData, setReviewData] = useState(null);
+  const [newData, setNewData] = useState(true);
+  const user = useCurrentUser();
+
+  useEffect(() => {
+    const updateData = async () => {
+      // alert("I am being called")
+      // this needs to be revalidated via polling every 30 minutes because if everyone starts rating it simulteneously it will hit the backend mulitple times
+      const updatedData: updatedDataResponse | undefined =
+        await fetchProductAllData(params.productID);
+      console.log("this is the updatedData:", updatedData);
+      setData(updatedData || null);
+      // const relatedProducts = await getProductsByCategoryOriginal(updatedData?.category?.parentId)
+      const relatedProducts = await getProductsByCategory(
+        updatedData?.category?.id
+      );
+
+      setRelatedProducts(relatedProducts);
+      setParentCategory(updatedData?.category?.parentName || "");
+      // alert("update Data is being called")
+      // console.log("these are the related products:", relatedProducts);
+    };
+
+    updateData();
+  }, []);
+
+  useEffect(() => {
+    const fetchReviewData = async () => {
+      const Data = await fetchReview({ productId: data?.id });
+      // alert("fethcreviewdata is  been called")
+      console.log("this is the fetchreview data", Data);
+      setReviewData(Data);
+    };
+    fetchReviewData();
+  }, [data, newData]);
+
+  const initialData = [
+    {
+      name: "5 Stars",
+      uv: 5,
+      stars: data?.ratings?.count[5],
+      amt: 2000,
+    },
+    {
+      name: "4 Stars",
+      uv: 4,
+      stars: data?.ratings?.count[4],
+      amt: 2000,
+    },
+    {
+      name: "3 Stars",
+      uv: 3,
+      stars: data?.ratings?.count[3],
+      amt: 2000,
+    },
+    {
+      name: "2 Stars",
+      uv: 2,
+      stars: data?.ratings?.count[2],
+      amt: 2000,
+    },
+    {
+      name: "1 Stars",
+      uv: 1,
+      stars: data?.ratings?.count[1],
+      amt: 2000,
+    },
+  ];
+  const [barChartData, setbarChartData] = useState(initialData);
+
+  return (
+    <div>
+      <div className=" min-h-[95vh] bg-teal-600 ">
+        <div className=" flex justify-between ">
+          <div>
+          </div>
+          <div className=" pr-11">
+            <CustomOrderSortButton
+              initialButtonName="SORTBY"
+              initialOptions={["New to Old", "Old to New"]}
+              setSortOrder={setSortOrder}
+            />
+          </div>
+        </div>
+        <div className=" px-8">
+          <div className=" border-black border-b-4 "></div>
+        </div>
+
+        <div className=" flex justify-between px-8 mt-4 ">
+          <div className=" flex  ">
+            <div className="flex  w-[48vw]">
+
+            
+            <div className="border-2 border-black overflow-hidden">
+              <img
+                src={data?.images && data?.images[0]?.url}
+                alt=""
+                className=" h-[30rem] w-[22rem] object-cover  "
+              />
+            </div>
+            <div>
+              <div>
+                <div className=" px-4">
+                  <h1 className=" text-[4rem] font-bold">
+                    {data?.brand?.name}
+                  </h1>
+                  <h2 className=" text-[1.2rem]">{data?.name}</h2>
+                </div>
+              </div>
+
+              <div>
+                <div className=" flex  mb-2 ml-4">
+                  <h1 className=" self-center text-[2rem]">MRP</h1>
+
+                  <div className=" flex  self-center">
+                    <div className=" self-center ">
+                      <IndianRupee size={20} />
+                    </div>
+                    <h1
+                      className=" text-[1.5rem] font-bold"
+                      style={{ textDecoration: "line-through" }}
+                    >
+                      {data?.price}
+                    </h1>
+                    <h1 className=" text-[1.5rem] font-bold ml-5">
+                      {data?.discountedPrice?.toFixed(2)}
+                    </h1>
+                    <h1 className=" text-[1.5rem] font-bold ml-5 text-yellow-400">
+                      ({data?.discount}%OFF)
+                    </h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+          <div className=" border-l-2 border-black">
+          {/* ratings component */}
+            <div className=" text-white  mb-14 flex flex-col ">
+              <div className=" flex  pl-8">
+                <div>
+                  <h1 className=" text-[3rem]"> RATINGS </h1>
+                </div>
+                <div className=" px-5">
+                  <Star
+                    fill="yellow"
+                    strokeWidth={0.5}
+                    size={65}
+                    stroke="black"
+                  />
+                </div>
+              </div>
+
+              <div className=" flex mt-6">
+                <div className="left flex-1 border-r-2 border-gray-600 pl-8 pr-4 ">
+                  <div className="">
+                    <div className="top flex mt-5 mb-2">
+                      <p className=" text-[5rem] leading-none m-0 p-0 font-thin ">
+                        {data?.ratings?.averageRating.toFixed(1)}
+                      </p>
+                      <div className=" self-center ml-5">
+                        <Star
+                          fill="yellow"
+                          size={38}
+                          stroke="black"
+                          strokeWidth={0.5}
+                        />
+                      </div>
+                    </div>
+                    <div className="Bottom">
+                      {verifiedPurchaseCount} Verified Buyers
+                    </div>
+                  </div>
+                </div>
+                <div className=" text-black w-[5rem] pl-5  flex flex-col justify-between">
+                  <div className=" flex w-5">
+                    5{" "}
+                    <div className=" self-center pl-2 ">
+                      <Star stroke="2" fill="aqua" size={15} />
+                    </div>
+                  </div>
+                  <div className=" flex w-5">
+                    4{" "}
+                    <div className=" self-center pl-2 ">
+                      <Star stroke="2" fill="yellow" size={15} />
+                    </div>
+                  </div>
+                  <div className=" flex w-5">
+                    3{" "}
+                    <div className=" self-center pl-2 ">
+                      <Star stroke="2" fill="green" size={15} />
+                    </div>
+                  </div>
+                  <div className=" flex w-5">
+                    2{" "}
+                    <div className=" self-center pl-2 ">
+                      <Star stroke="2" fill="orange" size={15} />
+                    </div>
+                  </div>
+                  <div className=" flex w-5">
+                    1{" "}
+                    <div className=" self-center pl-2 ">
+                      <Star stroke="2" fill="red" size={15} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="right flex-1 pl-[14rem]  z-0">
+                  <div className="  rotate-90 w-[5.5rem] h-[2rem] ">
+                    <StarChart
+                      barChartData={initialData}
+                      initialCount={data?.ratings?.count}
+                    />
+                  </div>
+                </div>
+                <div className=" text-black w-[5rem]   flex flex-col justify-between">
+                  <p className=" flex w-5 pl-0">{data?.ratings?.count[5]} </p>
+                  <p className=" flex w-5">{data?.ratings?.count[4]} </p>
+                  <p className=" flex w-5">{data?.ratings?.count[3]} </p>
+                  <p className=" flex w-5">{data?.ratings?.count[2]} </p>
+                  <p className=" flex w-5">{data?.ratings?.count[1]} </p>
+                </div>
+              </div>
+            </div>
+
+            <div className=" ml-8">
+              {/* review component */}
+            <div>
+              {reviewData?.review?.rating ? (
+                <div className="mr-11">
+                  <div className=" flex ">
+                    <p>You Rated {reviewData?.review?.rating} Stars </p>
+                    <div className=" self-center ml-2">
+                      <MiniStarRatingComponent
+                        reviewStars={reviewData?.review?.rating}
+                      />
+                    </div>
+                  </div>
+
+                  {reviewData?.review?.review === "" ? (
+                    <ReviewModal
+                    buttonColour={"bg-yellow-500"}
+                      setNewData={setNewData}
+                      buttonName="Add your Review"
+                      reviewId={reviewData?.review?.id}
+                      ProductName={data?.name}
+                      ProductId={data?.id}
+                      reviewStars={reviewData?.review?.rating}
+                      reviewTitle={reviewData?.review?.reviewTitle}
+                      reviewMessage={reviewData?.review?.review}
+                      ProductImage={data?.images ? data?.images[0]?.url : ""}
+                      isPaid={false}
+                    />
+                  ) : (
+                    <div>
+                      <p>Your Review is :</p>
+                      <p>{reviewData?.review?.review}</p>
+                      <ReviewModal
+                      buttonColour={"bg-yellow-500"}
+                        setNewData={setNewData}
+                        reviewId={reviewData?.review?.id}
+                        buttonName="Edit your Review"
+                        reviewStars={reviewData?.review?.rating}
+                        reviewTitle={reviewData?.review?.reviewTitle}
+                        reviewMessage={reviewData?.review?.review}
+                        ProductName={data?.name}
+                        ProductId={data?.id}
+                        ProductImage={data?.images ? data?.images[0]?.url : ""}
+                        isPaid={false}
+                      />
+                    </div>
+                  )}
+                </div>
+              ) : user ? (
+                <div className="mr-11">
+                  <ReviewModal
+                    buttonColour={"bg-yellow-500"}
+
+                    setNewData={setNewData}
+                    buttonName="Rate the product"
+                    reviewId={reviewData?.review?.id}
+                    ProductName={data?.name}
+                    ProductId={data?.id}
+                    ProductImage={data?.images ? data?.images[0]?.url : ""}
+                    reviewStars={reviewData?.review?.rating}
+                    reviewTitle={reviewData?.review?.reviewTitle}
+                    reviewMessage={reviewData?.review?.review}
+                    isPaid={false}
+                  />
+                </div>
+              ) : (
+                <div className=" h-[4rem]">
+                  <button
+                    type="submit"
+                    className="w-80  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500"
+                    onClick={() =>
+                      callToast({
+                        variant: "destructive",
+                        title: "Not Logged In",
+                        description: "Please login to add the review",
+                      })
+                    }
+                  >
+                    <h1 className=" font-bold">{"Add review"} </h1>
+                  </button>
+                </div>
+              )}
+            </div>
+            </div>
+          </div>
+        </div>
+        <div className=" px-8 mt-4">
+          <div className=" border-black border-b-4 "></div>
+        </div>
+        <div className="px-8  mt-[5rem] ml-[50rem]">
+          {/* <PaginationComponent
+            currentOrderPage={currentPage}
+            totalPages={orders[0]?.totalPages}
+            onPageChange={(page) => setCurrentPage(page)}
+          /> */}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default page;

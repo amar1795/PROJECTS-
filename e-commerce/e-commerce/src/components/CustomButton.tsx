@@ -19,7 +19,7 @@ let previousSegment = segments.length >= 3 ? segments[4] : '';
 previousSegment = previousSegment?.split(/[?#]/)[0];
   // Check if the last character of previousSegment is '?' and remove it if true
   let sanitizedSegment;
-  if(removeSegment === "orders"){
+  if(removeSegment === "orders" || removeSegment === "reviews"){
     sanitizedSegment=null;
   }else{
     sanitizedSegment = previousSegment?.endsWith('?') 

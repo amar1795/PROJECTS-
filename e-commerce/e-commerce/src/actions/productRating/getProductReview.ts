@@ -4,7 +4,7 @@ import { auth } from "@/auth";
 import { prismadb } from "@/lib/db";
 
 
-export async function getProductReviews(productId: string) {
+export async function getProductReviews(productId: string ,fetchLimit: number) {
 
     const userSession = await auth();
     const user = userSession?.user?.id;
@@ -19,6 +19,9 @@ export async function getProductReviews(productId: string) {
       const reviews = await prismadb.rating.findMany({
         where: {
           productId: productId,
+          review: {
+            not: null, // Include only reviews where 'review' is not null
+        },
         },
         include: {
           images: true, // Include associated images
@@ -28,6 +31,8 @@ export async function getProductReviews(productId: string) {
             },
         },
         },
+        take: fetchLimit || undefined, // Use fetchLimit if provided, otherwise fetch all reviews
+
       });
 
       // Count the verified purchases
