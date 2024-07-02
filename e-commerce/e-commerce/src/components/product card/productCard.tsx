@@ -41,6 +41,7 @@ const ProductCard: React.FC<updatedDataResponse> = ({
   handleWishlistToggle,
 }) => {
   const user = useCurrentUser();
+  console.log("this is the product card ", product);
   // console.log("this is the updated products", updatedProducts);
 
   // console.log("this is the productID from product card", product?.category?.name);

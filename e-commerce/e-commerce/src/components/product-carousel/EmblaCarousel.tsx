@@ -14,6 +14,7 @@ import { toggleWishlist } from "@/actions/wishlist";
 import increaseProductQuantity from "@/actions/cart/increaseProduct";
 import decreaseProductQuantity from "@/actions/cart/decreaseProduct";
 import { addCartDatatoCookies, getCartDataFromCookies, removeProductFromCookies } from "@/actions/cart/addCartDatatoCookies";
+import WishlistButton from "../animated_heart/heart";
 
 export type Brand = {
   id: string;
@@ -231,15 +232,17 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                       <div className="embla__slide__number__product">
                         <div className="ProductImageCard h-60 over">
                           <div className="ProductImage bg-red-400 h-full w-full">
-                            <button
+                            <div
                               className={`heartButton hover:text-red-500`}
                               onClick={() => handleWishlistToggle(user?.id, product.id)}
                             >
-                              <Heart
+                              {/* <Heart
                                 size={40}
+                                strokeWidth={0.7}
                                 className={`hover:fill-red-500 text-black ${product?.isWishlisted ? "fill-red-500" : ""}`}
-                              />
-                            </button>
+                              /> */}
+                              <WishlistButton isWishlisted={product.isWishlisted} />
+                            </div>
                             <Link href={`categories/${category}/${product.category.name.replace(/\s+/g, "")}/${product.id}`}>
                               <img src={product.images[0]?.url} alt={product.images[0].altText || "Product Image"} />
                             </Link>

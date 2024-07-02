@@ -548,9 +548,12 @@ export async function getProductsByCategoryOriginal(categoryId: string) {
 
 // gives all the products of a specific category and its nested subcategories
 export async function getProductsByCategory(
-  categoryId: string,
-  userId: string = ""
+  categoryId: string
 ) {
+
+     
+  const userSession = await auth();
+  const userId = userSession?.user?.id;
   // Fetch the category and its nested children categories
   const categories = await prismadb.category.findMany({
     where: {

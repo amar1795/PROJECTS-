@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { use, useCallback, useEffect, useState } from "react";
 import ProductCard from "../product card/productCard";
-import {
-  relatedProduct,
-  updatedDataResponse,
-} from "@/app/categories/[categories]/[product]/page";
+// import {
+//   relatedProduct,
+//   updatedDataResponse,
+// } from "@/app/categories/[categories]/[product]/page";
+
 import { useToast } from "../ui/use-toast";
 import { Product } from "../product-carousel/EmblaCarousel";
 import { toggleWishlist } from "@/actions/wishlist";
@@ -27,18 +28,42 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
   ProductId,
   callToast,
   filteredId,
+  categoryPageData,
 }) => {
   if (!relatedProduct) return <div>Loading ...</div>;
+
+  const testData= relatedProduct;
+  console.log("this is the test related Data for wishlist", relatedProduct);
   console.log(
     "this is the related product from related products page",
     relatedProduct
   );
   // Filter out the product with the same ID as ProductId
-  const filteredProducts = relatedProduct.filter(product => product.id !== filteredId);
-  // console.log("this is the filtred id from filteredProducts products page:", filteredProducts);
+  const filteredProducts = relatedProduct.filter(
+    (product) => product.id !== filteredId
+  );
+  console.log("this is the filtered test ", filteredProducts);
   // console.log("this is the product id from related products page:", filteredId);
   const [updatedProducts, setupdatedProducts] =
     useState<Product[]>(filteredProducts);
+console.log("this is the updated test products", updatedProducts);
+    // Initialize a state to control the merging process
+const [isMerged, setIsMerged] = useState(false);
+
+    const [updatedRelatedProducts, setupdatedRelatedProducts] =
+    useState(relatedProduct);
+
+    useEffect(() => {
+      const updatefunction = () => {
+        
+        setupdatedRelatedProducts(relatedProduct)
+        console.log("this is the related product from categories products page", relatedProduct)
+        setIsMerged(false);
+
+      }
+      updatefunction()
+    }, [relatedProduct]);
+
   console.log(
     "this is the updatedProducts product from related products page",
     updatedProducts
@@ -58,13 +83,13 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
   // }, [relatedProduct,filteredId]);
 
   const handleClickAdd = async (userID, productID) => {
-    // alert("add to cart is being called")
+    alert("add to cart is being called")
     console.log("this is the product id", productID);
     const completedata = await fetchSingleProduct(productID);
     console.log("this is the completed data", completedata);
     // addProductToCart(userID, productID);
     addCartDatatoCookies(completedata);
-
+  
     setUpdateTrigger((prev) => !prev);
   };
 
@@ -83,8 +108,17 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
           ? { ...product, isWishlisted: !product.isWishlisted }
           : product
       );
-
+      console.log("this is the updated test products list", updatedProductsList);
       setupdatedProducts(updatedProductsList);
+
+      const updatedRelatedProductsList = updatedRelatedProducts.map((product) =>
+        product.id === productId
+          ? { ...product, isWishlisted: !product.isWishlisted }
+          : product
+      );
+      setupdatedRelatedProducts(updatedRelatedProductsList);
+
+
 
       setTimeout(async () => {
         const message = await toggleWishlist(userId, productId);
@@ -101,7 +135,7 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
         });
       }, 200);
     },
-    [updatedProducts, user, toast]
+    [updatedProducts, user, toast,updatedRelatedProducts]
   );
 
   const handleQuantityChange = useCallback(
@@ -120,10 +154,42 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
         }
         return product;
       });
+      console.log("this is the updated products test handliclick list", updatedProductsList);
       setupdatedProducts(updatedProductsList);
 
+
+      const updatedProductsListRelated = updatedRelatedProducts.map((product) => {
+        // alert("handlequantity changed is called")
+        if (product.id === productId) {
+          // Ensure quantity doesn't go below 0
+          const currentQuantity = product?.cartQuantity
+            ? product?.cartQuantity
+            : 0; // Initialize to 0 if undefined or null
+          const newQuantity = Math.max(currentQuantity + change, 0);
+          // alert( newQuantity)
+          return { ...product, cartQuantity: newQuantity };
+        }
+        return product;
+      });
+      setupdatedRelatedProducts(updatedProductsListRelated);
       console.log("these are the updated products", updatedProducts);
 
+      if(categoryPageData == true){
+        // Save updated product information to cookies
+      if (
+        updatedProductsListRelated.find((product) => product.id === productId)
+          ?.cartQuantity === 0
+      ) {
+        removeProductFromCookies(productId); // Remove product from cookies if cartQuantity is 0
+      } else {
+        // alert("addCartDatatoCookies is called")
+        addCartDatatoCookies(updatedProductsListRelated); // Otherwise, save updated data to cookies
+      }
+      }
+      else
+      {
+
+     
       // Save updated product information to cookies
       if (
         updatedProductsList.find((product) => product.id === productId)
@@ -131,8 +197,11 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
       ) {
         removeProductFromCookies(productId); // Remove product from cookies if cartQuantity is 0
       } else {
+        // alert("addCartDatatoCookies is called")
         addCartDatatoCookies(updatedProductsList); // Otherwise, save updated data to cookies
       }
+
+    }
 
       if (user) {
         setTimeout(async () => {
@@ -146,10 +215,11 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
         }, 200);
       }
     },
-    [updatedProducts]
+    [updatedProducts , updatedRelatedProducts]
   );
 
   useEffect(() => {
+    if (!isMerged) {
     async function mergeDataFromCookies() {
       const cookieData = await getCartDataFromCookies();
       // create another function here to merge the login usercart lenght and the cookie cart length and then update the cart length in the shopping cart Icon
@@ -159,33 +229,65 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
           ? { ...product, cartQuantity: cookieProduct.cartQuantity }
           : product;
       });
-
+      console.log("this is the meregedproduct inside the merged cookies", mergedProducts);
       setupdatedProducts(mergedProducts);
+      console.log("this is the updated related inside the useeffect products", updatedRelatedProducts);
+
+      const mergedRelatedProducts = updatedRelatedProducts.map((product) => {
+        const cookieProduct = cookieData.find((item) => item.id === product.id);
+        return cookieProduct
+          ? { ...product, cartQuantity: cookieProduct.cartQuantity }
+          : product;
+      });
+
+      setupdatedRelatedProducts(mergedRelatedProducts);
+      console.log("Merged related products with cookies:", mergedRelatedProducts);
+
+      // Set isMerged to true to avoid re-running the effect unnecessarily
+     setIsMerged(true);
     }
-
     mergeDataFromCookies();
-  }, [relatedProduct, updateTrigger]);
+    }
+     
 
+  }, [ updateTrigger,relatedProduct,isMerged]);
+
+  console.log("this is the updated related products", updatedRelatedProducts);
   return (
     <div>
       <div className="  bg-teal-600 min-h-[30rem] px-5">
         {/* <h1 className=" pt-4 pb-4 text-[2rem]">Related products</h1> */}
-
+        {/* relatedProduct */}
         <div className=" flex  flex-wrap pl-3">
-          {updatedProducts
-            .filter((product) => product.id !== ProductId) // Apply the filter here
-            .map((product: relatedProduct) => (
-              <div className="py-4" key={product.id}>
-                <ProductCard
-                  product={product}
-                  productId={product.id}
-                  handleQuantityChange={handleQuantityChange}
-                  handleWishlistToggle={handleWishlistToggle}
-                  handleClickAdd={handleClickAdd}
-                  catRelatedProduct={true}
-                />
-              </div>
-            ))}
+          {categoryPageData
+            ? updatedRelatedProducts
+                .filter((product) => product.id !== ProductId)
+                .map((product) => (
+                  <div className="py-4" key={product.id}>
+                    <ProductCard
+                      product={product}
+                      productId={product.id}
+                      handleQuantityChange={handleQuantityChange}
+                      handleWishlistToggle={handleWishlistToggle}
+                      handleClickAdd={handleClickAdd}
+                      catRelatedProduct={true} 
+                    />
+                  </div>
+                ))
+            : updatedProducts
+                .filter((product) => product.id !== ProductId)
+                .map((product) => (
+                  <div className="py-4" key={product.id}>
+                    <ProductCard
+                      product={product}
+                      productId={product.id}
+                      handleQuantityChange={handleQuantityChange}
+                      handleWishlistToggle={handleWishlistToggle}
+                      handleClickAdd={handleClickAdd}
+                      catRelatedProduct={true} 
+                    />
+                  </div>
+                ))}
         </div>
       </div>
     </div>

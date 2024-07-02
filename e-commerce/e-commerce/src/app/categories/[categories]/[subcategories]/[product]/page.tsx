@@ -130,7 +130,8 @@ const page = ({ params }: { params: { product: string } }) => {
         setupdatedProducts(updatedData || null);
         // const relatedProducts = await getProductsByCategoryOriginal(updatedData?.category?.parentId)
         const relatedProducts = await getProductsByCategory(updatedData?.category?.id)
-        
+        // issue is here the wihsliost is coming to be empty "" string hence unable to update the wishlist properly 
+        console.log("this is the related products test", relatedProducts);
         setRelatedProducts(relatedProducts);
         setParentCategory(updatedData?.category?.parentName || "");
         // alert("update Data is being called")

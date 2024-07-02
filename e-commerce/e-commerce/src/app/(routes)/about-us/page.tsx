@@ -1,3 +1,5 @@
+"use client";
+
 import { getCartDataFromCookies } from "@/actions/cart/addCartDatatoCookies";
 import { getRelatedProducts } from "@/actions/cart/categoryRelatedProduct";
 import deleteCartItem from "@/actions/cart/deleteCartProducts";
@@ -12,7 +14,7 @@ import { searchProductsByNameOrBrand } from "@/actions/product/findProductbySear
 import { productCreationNew } from "@/actions/product/productCreation";
 import { getUserById } from "@/auth";
 import React from "react";
-
+import WishlistButton from "@/components/animated_heart/heart"
 const page = async() => {
   // CreateColour()
   // CreateSize()
@@ -74,6 +76,7 @@ const page = async() => {
 
         <div className=" mt-10">
           <div>
+            <WishlistButton />
             <p className=" text-4xl">
               <strong>
                 Welcome to Purchase Pal - Your Trusted Companion in Online
