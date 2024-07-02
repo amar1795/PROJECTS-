@@ -5,6 +5,7 @@ import {
   getProductsByCategory,
 } from "@/actions/createProduct";
 import { fetchAllOrders } from "@/actions/order/fetchAllOrder";
+import { findAllParentCategories } from "@/actions/product/searchedProductData";
 import { fetchReview } from "@/actions/productRating/fetchReview";
 import { getProductReviews } from "@/actions/productRating/getProductReview";
 import { productDislike } from "@/actions/productReview/productDislike";
@@ -50,6 +51,7 @@ const page = ({ params }: { params: { productID: string } }) => {
   const [data, setData] = useState([]);
   const [relatedProducts, setRelatedProducts] = useState(null);
   const [parentCategory, setParentCategory] = useState("");
+  const [topmostParentCategory, setTopmostParentCategory] = useState("");
   const [verifiedPurchaseCount, setVerifiedPurchaseCount] = useState("");
   const [reviewData, setReviewData] = useState(null);
   const [newData, setNewData] = useState(true);
@@ -62,6 +64,14 @@ const page = ({ params }: { params: { productID: string } }) => {
     const storedPage = localStorage.getItem("currentOrdersPage");
     return storedPage ? parseInt(storedPage, 10) : 1;
   });
+
+  
+// Function to remove spaces from a string
+const removeSpaces = (name: string): string => {
+  return name?.replace(/\s+/g, "");
+};
+
+
 
   // Save current page to local storage whenever it changes
   useEffect(() => {
@@ -117,6 +127,7 @@ const page = ({ params }: { params: { productID: string } }) => {
       // this needs to be revalidated via polling every 30 minutes because if everyone starts rating it simulteneously it will hit the backend mulitple times
       const updatedData: updatedDataResponse | undefined =
         await fetchProductAllData(params.productID);
+        console.log("this is the category",updatedData?.category?.id)
       console.log("this is the updatedData:", updatedData);
       setData(updatedData || null);
       // const relatedProducts = await getProductsByCategoryOriginal(updatedData?.category?.parentId)
@@ -126,8 +137,12 @@ const page = ({ params }: { params: { productID: string } }) => {
 
       setRelatedProducts(relatedProducts);
       setParentCategory(updatedData?.category?.parentName || "");
+      console.log("this is the parent category", updatedData?.category?.parentName);
       // alert("update Data is being called")
       // console.log("these are the related products:", relatedProducts);
+      const {topmostParentCategory} = await findAllParentCategories(updatedData?.category?.id)
+      setTopmostParentCategory(topmostParentCategory)
+      console.log("this is the parent categories",topmostParentCategory)
     };
 
     updateData();
@@ -209,15 +224,30 @@ const page = ({ params }: { params: { productID: string } }) => {
   ];
   const [barChartData, setbarChartData] = useState(initialData);
 
+
+  const url=`http://localhost:3000/categories/${removeSpaces(topmostParentCategory)}/${removeSpaces(parentCategory)}/${data?.id}`
+
+
   return (
     <div>
       <div className=" min-h-[95vh] bg-teal-600 ">
         <div className=" flex justify-between ">
           <div >
             <div className=" flex ml-20">
+            <div className=" h-[4rem]">
+            <Link href={url}>
+            <button
+                      type="submit"
+                      className=" px-5 p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500"
+                      onClick={clearSort}
+                    >
+                      <h1 className=" font-bold">{"Back to Order  "} </h1>
+                    </button>
+                  </Link>
+                  </div>
 
               {filterRating && (
-                 <div className=" h-[4rem] mr-8">
+                 <div className=" h-[4rem] ml-8">
                  <button
                    type="submit"
                    className=" px-5 p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-pink-500" 
