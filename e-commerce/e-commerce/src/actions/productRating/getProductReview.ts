@@ -26,11 +26,10 @@ export async function getProductReviews({
     try {
 
       let pageSize = fetchLimit || 10; // Default page size if fetchLimit is not provided
-    //   let skip = 0;
 
     
         // Calculate number of reviews to skip based on page number
-        let skip = fetchLimit ? (page || 0) * pageSize : 0;
+        let skip = fetchLimit ? ((page && page > 1 ? page - 1 : 0) * pageSize) : 0;
 
       
       let baseWhere: any = {

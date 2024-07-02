@@ -43,7 +43,10 @@ const formatDate = (dateString: string) => {
 };
 
 const page = ({ params }: { params: { productID: string } }) => {
-  const [sortOrder, setSortOrder] = useState("asc");
+  const [sortOrder, setSortOrder] = useState("desc");
+  const [resetSort, setResetSort] = useState(false);
+  const [filterRating, setFilterRating] = useState(null);
+  const [resetFilter, setResetFilter] = useState(false);
   const [data, setData] = useState([]);
   const [relatedProducts, setRelatedProducts] = useState(null);
   const [parentCategory, setParentCategory] = useState("");
@@ -77,6 +80,18 @@ const page = ({ params }: { params: { productID: string } }) => {
     });
   };
 
+  const clearFilter = () => {
+    // alert("clearFilter being called")
+    setFilterRating(null);
+    setResetFilter(true);
+  }
+
+  const clearSort = () => {
+    // alert("clearSort being called")
+
+    setSortOrder("desc");
+  }
+  
   const handlelike = async (ratingId: string) => {
     // alert("I am being called")
     const { error, message, like } = await productLike(ratingId);
@@ -137,7 +152,7 @@ const page = ({ params }: { params: { productID: string } }) => {
             productId: data?.id,
             fetchLimit: 10,
             page: currentPage,
-            // starRating: 5,
+            starRating: filterRating  || null,
             sortDirection: sortOrder as "asc" | "desc",
           });
 
@@ -158,7 +173,7 @@ const page = ({ params }: { params: { productID: string } }) => {
       }
     };
     getReviews();
-  }, [data, newData, like, dislike, currentPage]);
+  }, [data, newData, like, dislike, currentPage,sortOrder,filterRating]);
 
   const initialData = [
     {
@@ -198,10 +213,49 @@ const page = ({ params }: { params: { productID: string } }) => {
     <div>
       <div className=" min-h-[95vh] bg-teal-600 ">
         <div className=" flex justify-between ">
-          <div></div>
+          <div >
+            <div className=" flex ml-20">
+
+              {filterRating && (
+                 <div className=" h-[4rem] mr-8">
+                 <button
+                   type="submit"
+                   className=" px-5 p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-pink-500" 
+                   onClick={clearFilter}
+                 >
+                   <h1 className=" font-bold">{"Clear Filter"} </h1>
+                 </button>
+               </div>
+                )}
+
+                {/* {
+                  resetSort && (
+                    <div className=" h-[4rem]">
+                    <button
+                      type="submit"
+                      className=" px-5 p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-pink-500"
+                      onClick={clearSort}
+                    >
+                      <h1 className=" font-bold">{"Clear Sort"} </h1>
+                    </button>
+                  </div>
+
+                  )
+                  
+                } */}
+           
+           
+            </div>
+          </div>
+          <div className=" flex">
+
+          {/* filter by rating */}
           <div className=" pr-11">
             <CustomOrderSortButton
-              initialButtonName="SORTBY"
+            resetFilter={resetFilter}
+            setResetFilter={setResetFilter}
+            Rating={true}
+              initialButtonName="FILTER BY RATING"
               initialOptions={[
                 "5 Star Rating",
                 "4 Star Rating",
@@ -209,8 +263,23 @@ const page = ({ params }: { params: { productID: string } }) => {
                 "2 Star Rating",
                 "1 Star Rating",
               ]}
+              setFilterRating={setFilterRating}
+            />
+          </div>
+          {/* sorting by latest ratings */}
+          
+          <div className=" pr-11">
+            <CustomOrderSortButton
+            resetSort={resetSort}
+            setResetSort={setResetSort}
+              initialButtonName="SORTBY"
+              initialOptions={[
+                "Newest",
+                "Oldest",
+              ]}
               setSortOrder={setSortOrder}
             />
+          </div>
           </div>
         </div>
         <div className=" px-8">

@@ -7,8 +7,17 @@ interface CustomButtonProps {
   
 }
 
-const CustomOrderSortButton: React.FC<CustomButtonProps> = ({ initialButtonName, initialOptions,setSortOrder }) => {
+const CustomOrderSortButton: React.FC<CustomButtonProps> = ({ initialButtonName, initialOptions,setSortOrder,setFilterRating,Rating,resetFilter,resetSort,setResetFilter, }) => {
 
+  useEffect(() => {
+    if (resetFilter) {
+      setButtonName(initialButtonName);
+      setFilterRating(null);
+      setResetFilter(false);
+    }
+
+    
+  }, [resetFilter]); 
 
   const completeUrl = typeof window !== "undefined" ? window.location.href : "";
 
@@ -63,14 +72,54 @@ previousSegment = previousSegment?.split(/[?#]/)[0];
   }, [isOpen]);
 
   const handleOptionClick = (option: string) => {
-    setButtonName(`Sort by: ${option}`);
-    if (option === "New to Old") {
-      setSortOrder("desc");
-    } else if (option === "Old to New") {
-      setSortOrder("asc");
+    if(Rating == true)
+      {
+        if (resetFilter) {
+          // alert("resetFilter");
+          // // setFilterRating(null);
+          // setButtonName(`Filter by: RATING`);
+        }
+        else
+        {
+          setButtonName(`Filter by: ${option}`);
+          if (option === "5 Star Rating") {
+            setFilterRating(5);
+        } else if (option === "4 Star Rating") {
+            setFilterRating(4);
+        } else if (option === "3 Star Rating") {
+            setFilterRating(3);
+        } else if (option === "2 Star Rating") {
+            setFilterRating(2);
+        } else if (option === "1 Star Rating") {
+            setFilterRating(1);
+        }
+      
+        }
+
+      }
+    else{
+
+      if(resetSort)
+        {
+          // setSortOrder("desc");
+          // setButtonName(`Sort by: ${option}`);
+          
+        }
+     else
+     {
+      setButtonName(`Sort by: ${option}`);
+      if (option === "New to Old"|| option === "Newest") {
+        setSortOrder("desc");
+      } else if (option === "Old to New" || option === "Oldest") {
+        setSortOrder("asc");
+      }
+     }
+    
     }
     setIsOpen(false);
   };
+
+
 
   return (
     <div className="h-[4rem] relative" ref={dropdownRef}>
@@ -83,10 +132,7 @@ previousSegment = previousSegment?.split(/[?#]/)[0];
       {isOpen && (
         <div className="absolute mt-2 w-[15rem] bg-white border border-black text-black z-10">
           <ul>
-            {options.map(option => (
-             
-          
-           
+            {options.map(option => (      
             <li
             key={option}
             onClick={() => handleOptionClick(option)}
