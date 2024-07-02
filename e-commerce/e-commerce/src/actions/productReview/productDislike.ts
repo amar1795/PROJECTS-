@@ -38,7 +38,12 @@ export async function productDislike(reviewId: string) {
     });
 
     if (existingDislike) {
-      return { message: "You have already disliked this review." };
+      // Remove the dislike
+      await prismadb.dislike.delete({
+        where: { id: existingDislike.id },
+      });
+
+      return { message: "Dislike removed", dislike: null };
     }
 
     // Create a new dislike

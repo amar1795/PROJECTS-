@@ -318,7 +318,7 @@ const ProductId=data?.id;
             <div className=" bg-orange-300 flex-1 h-auto">
               <PhotoViewer images={updatedProducts?.images} />
             </div>
-            <div className="flex-1 h-[115rem]">
+            <div className="flex-1 h-[100rem]">
               {/* right component */}
               {/* brand:string */}
 

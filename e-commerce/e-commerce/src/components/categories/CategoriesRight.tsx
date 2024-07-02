@@ -22,6 +22,13 @@ import MiniStarRatingComponent from "../rating star component/MiniStarRatingComp
 import { ReviewModal } from "../ReviewModal";
 import { fetchReview } from "@/actions/productRating/fetchReview";
 import Link from "next/link";
+import LikeAndDislikeButton from "../likeAndDislikeButton";
+import { productLike } from "@/actions/productReview/productLike";
+import { productDislike } from "@/actions/productReview/productDislike";
+import { toast } from "../ui/use-toast";
+
+
+
 
 type CategoriesRightProps = {
   data: updatedDataResponse;
@@ -35,6 +42,16 @@ const formatDate = (dateString: string) => {
     year: "numeric",
   };
   return new Date(dateString).toLocaleDateString("en-US", options);
+};
+
+const handlelike = async (ratingId: string) => {
+ const {error,message,like}=await productLike(ratingId)
+ console.log("this is the liked data response",error,message,like)
+};
+
+const handleDislike = async (ratingId: string) => {
+ const {error,message,dislike}=await productDislike(ratingId)
+ console.log("this is the disliked data response",error,message,dislike)
 };
 
 const CategoriesRight: React.FC<CategoriesRightProps> = ({
@@ -103,8 +120,9 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
   useEffect(() => {
     const getReviews = async () => {
       if (data?.id) {
+    
         const { reviews, verifiedPurchaseCount, error } =
-          await getProductReviews(data?.id, 1);
+          await getProductReviews({ productId: data?.id, fetchLimit: 1,sortDirection:"asc"});
         const value = reviews;
         setVerifiedPurchaseCount(verifiedPurchaseCount);
         setReviews(value);
@@ -518,39 +536,12 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
                                 </div>
                               )}
 
-                              <div>
-                                <div className=" bg-white border-2 border-black flex px-2 py-1 w-[8rem] h-full self-center justify-between ">
-                                  <div className=" flex ">
-                                    <button>
-                                      <div className=" self-center">
-                                        <ThumbsUp
-                                          size={20}
-                                          fill=" green"
-                                          strokeWidth={0.5}
-                                        />
-                                      </div>
-                                    </button>
-                                    <p className=" pl-1  text-[12px] mt-1  ">
-                                      209
-                                    </p>
-                                  </div>
-
-                                  <div className=" flex">
-                                    <button>
-                                      <div className=" self-center">
-                                        <ThumbsDown
-                                          size={20}
-                                          fill=" red"
-                                          strokeWidth={0.5}
-                                        />{" "}
-                                      </div>
-                                    </button>
-                                    <p className=" pl-1  text-[12px] mt-1  ">
-                                      50
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
+                              <LikeAndDislikeButton
+                                handlelike={handlelike}
+                                handleDislike={handleDislike}
+                                review={review}
+                                callToast={callToast}
+                              />
                             </div>
                           </div>
                         </div>

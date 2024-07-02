@@ -1,6 +1,9 @@
 "use client";
 
-import { fetchProductAllData, getProductsByCategory } from "@/actions/createProduct";
+import {
+  fetchProductAllData,
+  getProductsByCategory,
+} from "@/actions/createProduct";
 import { fetchAllOrders } from "@/actions/order/fetchAllOrder";
 import { fetchReview } from "@/actions/productRating/fetchReview";
 import { getProductReviews } from "@/actions/productRating/getProductReview";
@@ -17,11 +20,17 @@ import MiniStarRatingComponent from "@/components/rating star component/MiniStar
 import StarChart from "@/components/star charts/starChart";
 import { useToast } from "@/components/ui/use-toast";
 import { useCurrentUser } from "@/hooks/use-current-user";
-import { DollarSign, IndianRupee, Star, StarIcon, ThumbsDown, ThumbsUp } from "lucide-react";
+import {
+  DollarSign,
+  IndianRupee,
+  Star,
+  StarIcon,
+  ThumbsDown,
+  ThumbsUp,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { use, useEffect, useState } from "react";
-
 
 // Utility function to format date
 const formatDate = (dateString: string) => {
@@ -34,8 +43,7 @@ const formatDate = (dateString: string) => {
 };
 
 const page = ({ params }: { params: { productID: string } }) => {
-
-  const [sortOrder, setSortOrder] = useState("desc");
+  const [sortOrder, setSortOrder] = useState("asc");
   const [data, setData] = useState([]);
   const [relatedProducts, setRelatedProducts] = useState(null);
   const [parentCategory, setParentCategory] = useState("");
@@ -44,37 +52,48 @@ const page = ({ params }: { params: { productID: string } }) => {
   const [newData, setNewData] = useState(true);
   const user = useCurrentUser();
   const [reviews, setReviews] = useState([]);
-const [like, setLike] = useState(false);
-const [dislike, setDislike] = useState(false);
-
-const { toast } = useToast();
-
-const callToast = ({variant,title,description}) => {
-  // alert("toast is being  called")
-  toast({
-    variant: variant,
-    title:title,
-    description: description,
+  const [like, setLike] = useState(false);
+  const [dislike, setDislike] = useState(false);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(() => {
+    const storedPage = localStorage.getItem("currentOrdersPage");
+    return storedPage ? parseInt(storedPage, 10) : 1;
   });
-}
+
+  // Save current page to local storage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("currentOrdersPage", currentPage.toString());
+  }, [currentPage]);
+
+
+  const { toast } = useToast();
+
+  const callToast = ({ variant, title, description }) => {
+    // alert("toast is being  called")
+    toast({
+      variant: variant,
+      title: title,
+      description: description,
+    });
+  };
 
   const handlelike = async (ratingId: string) => {
     // alert("I am being called")
-   const {error,message,like}=await productLike(ratingId)
-  //  const likedData=like ? true : false
-  //  setLike(likedData)
-  //  callToast({title:`${message}` ,description :"You have succesfully liked the Comment"})
-   console.log("this is the liked data response",error,message,like)
+    const { error, message, like } = await productLike(ratingId);
+    //  const likedData=like ? true : false
+    //  setLike(likedData)
+    //  callToast({title:`${message}` ,description :"You have succesfully liked the Comment"})
+    console.log("this is the liked data response", error, message, like);
   };
 
   const handleDislike = async (ratingId: string) => {
     // alert("I am being called")
-   const {error,message,dislike}=await productDislike(ratingId)
-  //  const dislikedData=dislike ? true : false
-  //  setDislike(dislikedData)
-  //  callToast({title:`${message}` ,description :"You have succesfully disliked the Comment",variant:"destructive"})
+    const { error, message, dislike } = await productDislike(ratingId);
+    //  const dislikedData=dislike ? true : false
+    //  setDislike(dislikedData)
+    //  callToast({title:`${message}` ,description :"You have succesfully disliked the Comment",variant:"destructive"})
 
-   console.log("this is the disliked data response",error,message,dislike)
+    console.log("this is the disliked data response", error, message, dislike);
   };
 
   useEffect(() => {
@@ -111,22 +130,35 @@ const callToast = ({variant,title,description}) => {
 
   useEffect(() => {
     const getReviews = async () => {
-      if (data?.id) {
-        const { reviews, verifiedPurchaseCount, error } =
-          await getProductReviews(data?.id);
+      if (data?.id ) {
+        // alert(currentPage)
+        const { reviews, verifiedPurchaseCount, totalPages } =
+          await getProductReviews({
+            productId: data?.id,
+            fetchLimit: 10,
+            page: currentPage,
+            // starRating: 5,
+            sortDirection: sortOrder as "asc" | "desc",
+          });
+
+        setTotalPages(totalPages);
         const value = reviews;
         setVerifiedPurchaseCount(verifiedPurchaseCount);
         setReviews(value);
+        // console.log(
+        //   `this is the reviews data for the product ID ${data?.id} ${verifiedPurchaseCount}`,
+        //   reviews
+        // );
+
         console.log(
-          `this is the reviews data for the product ID ${data?.id} ${verifiedPurchaseCount}`,
-          value
-        );
+          `these are the reviews data `
+         , reviews  );
 
         // setUpdateChart((prev) => !prev);
       }
     };
     getReviews();
-  }, [data, newData,like,dislike]);
+  }, [data, newData, like, dislike, currentPage]);
 
   const initialData = [
     {
@@ -166,12 +198,17 @@ const callToast = ({variant,title,description}) => {
     <div>
       <div className=" min-h-[95vh] bg-teal-600 ">
         <div className=" flex justify-between ">
-          <div>
-          </div>
+          <div></div>
           <div className=" pr-11">
             <CustomOrderSortButton
               initialButtonName="SORTBY"
-              initialOptions={["5 Star Rating", "4 Star Rating","3 Star Rating","2 Star Rating","1 Star Rating",]}
+              initialOptions={[
+                "5 Star Rating",
+                "4 Star Rating",
+                "3 Star Rating",
+                "2 Star Rating",
+                "1 Star Rating",
+              ]}
               setSortOrder={setSortOrder}
             />
           </div>
@@ -183,53 +220,51 @@ const callToast = ({variant,title,description}) => {
         <div className=" flex justify-between px-8 mt-4 ">
           <div className=" flex  ">
             <div className="flex  w-[48vw]">
-
-            
-            <div className="border-2 border-black overflow-hidden">
-              <img
-                src={data?.images && data?.images[0]?.url}
-                alt=""
-                className=" h-[30rem] w-[22rem] object-cover  "
-              />
-            </div>
-            <div>
-              <div>
-                <div className=" px-4">
-                  <h1 className=" text-[4rem] font-bold">
-                    {data?.brand?.name}
-                  </h1>
-                  <h2 className=" text-[1.2rem]">{data?.name}</h2>
-                </div>
+              <div className="border-2 border-black overflow-hidden">
+                <img
+                  src={data?.images && data?.images[0]?.url}
+                  alt=""
+                  className=" h-[30rem] w-[22rem] object-cover  "
+                />
               </div>
-
               <div>
-                <div className=" flex  mb-2 ml-4">
-                  <h1 className=" self-center text-[2rem]">MRP</h1>
+                <div>
+                  <div className=" px-4">
+                    <h1 className=" text-[4rem] font-bold">
+                      {data?.brand?.name}
+                    </h1>
+                    <h2 className=" text-[1.2rem]">{data?.name}</h2>
+                  </div>
+                </div>
 
-                  <div className=" flex  self-center">
-                    <div className=" self-center ">
-                      <IndianRupee size={20} />
+                <div>
+                  <div className=" flex  mb-2 ml-4">
+                    <h1 className=" self-center text-[2rem]">MRP</h1>
+
+                    <div className=" flex  self-center">
+                      <div className=" self-center ">
+                        <IndianRupee size={20} />
+                      </div>
+                      <h1
+                        className=" text-[1.5rem] font-bold"
+                        style={{ textDecoration: "line-through" }}
+                      >
+                        {data?.price}
+                      </h1>
+                      <h1 className=" text-[1.5rem] font-bold ml-5">
+                        {data?.discountedPrice?.toFixed(2)}
+                      </h1>
+                      <h1 className=" text-[1.5rem] font-bold ml-5 text-yellow-400">
+                        ({data?.discount}%OFF)
+                      </h1>
                     </div>
-                    <h1
-                      className=" text-[1.5rem] font-bold"
-                      style={{ textDecoration: "line-through" }}
-                    >
-                      {data?.price}
-                    </h1>
-                    <h1 className=" text-[1.5rem] font-bold ml-5">
-                      {data?.discountedPrice?.toFixed(2)}
-                    </h1>
-                    <h1 className=" text-[1.5rem] font-bold ml-5 text-yellow-400">
-                      ({data?.discount}%OFF)
-                    </h1>
                   </div>
                 </div>
               </div>
             </div>
-            </div>
           </div>
           <div className=" border-l-2 border-black">
-          {/* ratings component */}
+            {/* ratings component */}
             <div className=" text-white  mb-14 flex flex-col ">
               <div className=" flex  pl-8">
                 <div>
@@ -319,87 +354,88 @@ const callToast = ({variant,title,description}) => {
 
             <div className=" ml-8">
               {/* review component */}
-            <div>
-              {reviewData?.review?.rating ? (
-                <div className="mr-11">
-                  <div className=" flex ">
-                    <p>You Rated {reviewData?.review?.rating} Stars </p>
-                    <div className=" self-center ml-2">
-                      <MiniStarRatingComponent
-                        reviewStars={reviewData?.review?.rating}
-                      />
+              <div>
+                {reviewData?.review?.rating ? (
+                  <div className="mr-11">
+                    <div className=" flex ">
+                      <p>You Rated {reviewData?.review?.rating} Stars </p>
+                      <div className=" self-center ml-2">
+                        <MiniStarRatingComponent
+                          reviewStars={reviewData?.review?.rating}
+                        />
+                      </div>
                     </div>
-                  </div>
 
-                  {reviewData?.review?.review === "" ? (
-                    <ReviewModal
-                    buttonColour={"bg-yellow-500"}
-                      setNewData={setNewData}
-                      buttonName="Add your Review"
-                      reviewId={reviewData?.review?.id}
-                      ProductName={data?.name}
-                      ProductId={data?.id}
-                      reviewStars={reviewData?.review?.rating}
-                      reviewTitle={reviewData?.review?.reviewTitle}
-                      reviewMessage={reviewData?.review?.review}
-                      ProductImage={data?.images ? data?.images[0]?.url : ""}
-                      isPaid={false}
-                    />
-                  ) : (
-                    <div>
-                      <p>Your Review is :</p>
-                      <p>{reviewData?.review?.review}</p>
+                    {reviewData?.review?.review === "" ? (
                       <ReviewModal
-                      buttonColour={"bg-yellow-500"}
+                        buttonColour={"bg-yellow-500"}
                         setNewData={setNewData}
+                        buttonName="Add your Review"
                         reviewId={reviewData?.review?.id}
-                        buttonName="Edit your Review"
+                        ProductName={data?.name}
+                        ProductId={data?.id}
                         reviewStars={reviewData?.review?.rating}
                         reviewTitle={reviewData?.review?.reviewTitle}
                         reviewMessage={reviewData?.review?.review}
-                        ProductName={data?.name}
-                        ProductId={data?.id}
                         ProductImage={data?.images ? data?.images[0]?.url : ""}
                         isPaid={false}
                       />
-                    </div>
-                  )}
-                </div>
-              ) : user ? (
-                <div className="mr-11">
-                  <ReviewModal
-                    buttonColour={"bg-yellow-500"}
-
-                    setNewData={setNewData}
-                    buttonName="Rate the product"
-                    reviewId={reviewData?.review?.id}
-                    ProductName={data?.name}
-                    ProductId={data?.id}
-                    ProductImage={data?.images ? data?.images[0]?.url : ""}
-                    reviewStars={reviewData?.review?.rating}
-                    reviewTitle={reviewData?.review?.reviewTitle}
-                    reviewMessage={reviewData?.review?.review}
-                    isPaid={false}
-                  />
-                </div>
-              ) : (
-                <div className=" h-[4rem]">
-                  <button
-                    type="submit"
-                    className="w-80  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500"
-                    onClick={() =>
-                      callToast({
-                        variant: "destructive",
-                        title: "Not Logged In",
-                        description: "Please login to add the review",
-                      })
-                    }
-                  >
-                    <h1 className=" font-bold">{"Add review"} </h1>
-                  </button>
-                </div>
-              )}
-            </div>
+                    ) : (
+                      <div>
+                        <p>Your Review is :</p>
+                        <p>{reviewData?.review?.review}</p>
+                        <ReviewModal
+                          buttonColour={"bg-yellow-500"}
+                          setNewData={setNewData}
+                          reviewId={reviewData?.review?.id}
+                          buttonName="Edit your Review"
+                          reviewStars={reviewData?.review?.rating}
+                          reviewTitle={reviewData?.review?.reviewTitle}
+                          reviewMessage={reviewData?.review?.review}
+                          ProductName={data?.name}
+                          ProductId={data?.id}
+                          ProductImage={
+                            data?.images ? data?.images[0]?.url : ""
+                          }
+                          isPaid={false}
+                        />
+                      </div>
+                    )}
+                  </div>
+                ) : user ? (
+                  <div className="mr-11">
+                    <ReviewModal
+                      buttonColour={"bg-yellow-500"}
+                      setNewData={setNewData}
+                      buttonName="Rate the product"
+                      reviewId={reviewData?.review?.id}
+                      ProductName={data?.name}
+                      ProductId={data?.id}
+                      ProductImage={data?.images ? data?.images[0]?.url : ""}
+                      reviewStars={reviewData?.review?.rating}
+                      reviewTitle={reviewData?.review?.reviewTitle}
+                      reviewMessage={reviewData?.review?.review}
+                      isPaid={false}
+                    />
+                  </div>
+                ) : (
+                  <div className=" h-[4rem]">
+                    <button
+                      type="submit"
+                      className="w-80  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500"
+                      onClick={() =>
+                        callToast({
+                          variant: "destructive",
+                          title: "Not Logged In",
+                          description: "Please login to add the review",
+                        })
+                      }
+                    >
+                      <h1 className=" font-bold">{"Add review"} </h1>
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -408,104 +444,101 @@ const callToast = ({variant,title,description}) => {
         </div>
 
         <div className=" flex">
-          <div className=" w-[30vw]">
-
-          </div>
+          <div className=" w-[30vw]"></div>
 
           <div className=" flex-1">
-          <div className=" cxreviews   mb-4  px-4 pt-4">
-                <div className="">
-                  <h1 className=" text-[1.2rem] font-semibold mb-4">
-                    CUSTOMER REVIEWS({data?.ratings?.totalReviews})
-                  </h1>
-                  {/* review component */}
-                  {reviews?.length > 0 ? (
-                    reviews
-                      .filter((review) => review?.review !== null)
-                      .map((review ) => (
-                        <div className=" flex border-2 border-black  bg-teal-600  min-h-28 mt-6">
-                          <div className=" w-[3rem] border-r-2 border-black ">
-                            <div className=" flex justify-between px-2 pt-1">
-                              <div>{review?.rating}</div>
-                              <div className=" self-center">
-                                <StarIcon size={20} stroke="" fill="white" />
-                              </div>
+            <div className=" cxreviews   mb-4  px-4 pt-4">
+              <div className="">
+                <h1 className=" text-[1.2rem] font-semibold mb-4">
+                  CUSTOMER REVIEWS({data?.ratings?.totalReviews})
+                </h1>
+                {/* review component */}
+                {reviews?.length > 0 ? (
+                  reviews
+                    .filter((review) => review?.review !== null)
+                    .map((review) => (
+                      <div className=" flex border-2 border-black  bg-teal-600  min-h-28 mt-6">
+                        <div className=" w-[3rem] border-r-2 border-black ">
+                          <div className=" flex justify-between px-2 pt-1">
+                            <div>{review?.rating}</div>
+                            <div className=" self-center">
+                              <StarIcon size={20} stroke="" fill="white" />
                             </div>
                           </div>
-                          <div className="  w-full flex flex-col ">
-                            {review?.reviewTitle && (
-                              <p className="  h-auto px-2 py-2 border-b-2 border-black font-bold uppercase">
-                                TITLE: {review?.reviewTitle}
-                              </p>
-                            )}
-
-                            <p className="  h-auto px-2 py-2 border-b-2 border-black">
-                              {review?.review}
+                        </div>
+                        <div className="  w-full flex flex-col ">
+                          {review?.reviewTitle && (
+                            <p className="  h-auto px-2 py-2 border-b-2 border-black font-bold uppercase">
+                              TITLE: {review?.reviewTitle}
                             </p>
+                          )}
 
-                            {review?.images && review?.images.length > 0 && (
-                              <div className=" px-2 py-2 ImageComponent">
-                                <Image
-                                  src=""
-                                  alt="test image"
-                                  width={100}
-                                  height={100}
-                                  className=" bg-green-600 mr-3"
-                                />
+                          <p className="  h-auto px-2 py-2 border-b-2 border-black">
+                            {review?.review}
+                          </p>
+
+                          {review?.images && review?.images.length > 0 && (
+                            <div className=" px-2 py-2 ImageComponent">
+                              <Image
+                                src=""
+                                alt="test image"
+                                width={100}
+                                height={100}
+                                className=" bg-green-600 mr-3"
+                              />
+                            </div>
+                          )}
+
+                          <div className="  h-[3rem] flex justify-between px-2 py-2  mt-5">
+                            <div className=" bg-white border-2 border-black flex self-center py-1 px-4    ">
+                              <p className="border-gray-500 border-r-2 pr-2 ">
+                                {review?.user?.name}
+                              </p>
+
+                              <p className=" pl-2 ">
+                                {formatDate(review?.createdAt)}{" "}
+                              </p>
+                            </div>
+                            {review?.verifiedPurchase && (
+                              <div className=" bg-white border-2 border-black flex self-center py-1 px-4    ">
+                                <p className="border-gray-500  pr-2 ">
+                                  {"Verified "}
+                                </p>
                               </div>
                             )}
 
-                            <div className="  h-[3rem] flex justify-between px-2 py-2  mt-5">
-                              <div className=" bg-white border-2 border-black flex self-center py-1 px-4    ">
-                                <p className="border-gray-500 border-r-2 pr-2 ">
-                                  {review?.user?.name}
-                                </p>
+                            {/* like and dislike buttons */}
 
-                                <p className=" pl-2 ">
-                                  {formatDate(review?.createdAt)}{" "}
-                                </p>
-                              </div>
-                              {review?.verifiedPurchase && (
-                                <div className=" bg-white border-2 border-black flex self-center py-1 px-4    ">
-                                  <p className="border-gray-500  pr-2 ">
-                                    {"Verified "}
-                                  </p>
-                                </div>
-                              )}
-
-                                {/* like and dislike buttons */}
-
-                             <div>
-                             <LikeAndDislikeButton
+                            <div>
+                              <LikeAndDislikeButton
+                              key={`${review?.id}-${currentPage}`} // Ensure re-render on page change
                                 handlelike={handlelike}
                                 handleDislike={handleDislike}
                                 review={review}
                                 callToast={callToast}
                               />
-                             </div>
                             </div>
                           </div>
                         </div>
-                      ))
-                  ) : (
-                    <div>
-                      <h1 className=" text-[1.2rem] font-semibold">
-                        No reviews yet
-                      </h1>
-                    </div>
-                  )}
-
-                 
-                </div>
+                      </div>
+                    ))
+                ) : (
+                  <div>
+                    <h1 className=" text-[1.2rem] font-semibold">
+                      No reviews yet
+                    </h1>
+                  </div>
+                )}
               </div>
+            </div>
           </div>
         </div>
         <div className="px-8  mt-[5rem] ml-[50rem]">
-          {/* <PaginationComponent
+          <PaginationComponent
             currentOrderPage={currentPage}
-            totalPages={orders[0]?.totalPages}
+            totalPages={totalPages}
             onPageChange={(page) => setCurrentPage(page)}
-          /> */}
+          />
         </div>
       </div>
     </div>

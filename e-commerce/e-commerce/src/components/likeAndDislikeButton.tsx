@@ -12,7 +12,7 @@ const LikeAndDislikeButton = ({
   const [dislike, setDislike] = useState(review?.dislikedByUser);
   const [totalLikes, setTotalLikes] = useState(review?.totalLikes);
   const [totalDislikes, setTotalDislikes] = useState(review?.totalDislikes);
-
+  console.log("this is the review data for the like and dislike button:", review);
   const user = useCurrentUser();
 
   // const debouncedLikeDislikeLogic = debounce(likeDislikeLogic, 2000);
@@ -28,11 +28,15 @@ const LikeAndDislikeButton = ({
 
       }
     // const response = await productLike(reviewId);
-    const response = { sucess: "true" };
     if (like == true) {
+      setLike(false);
+      // setDislike(true);
+      setTotalLikes(totalLikes - 1);
+
       callToast({
-        title: `You have already liked the review`,
-        description: "You have succesfully liked the review",
+        variant: "destructive",
+        title: `Liked removed from the review`,
+        description: "You have succesfully removed liked from the review",
       });
     } else {
       setLike(true);
@@ -40,12 +44,12 @@ const LikeAndDislikeButton = ({
       setTotalLikes(totalLikes + 1);
       setTotalDislikes(dislike ? totalDislikes - 1 : totalDislikes);
       callToast({
-        title: `You have already liked the review`,
+        title: `You have  liked the review`,
         description: "You have succesfully liked the review",
       });
 
-      handlelike(reviewId, "like");
     }
+    handlelike(reviewId);
   };
 
   const handleDislikeFunc = async (reviewId) => {
@@ -59,10 +63,13 @@ const LikeAndDislikeButton = ({
       }
 
     if (dislike == true) {
+      // setLike(false);
+      setDislike(false);
+      setTotalDislikes(totalDislikes - 1);
       callToast({
         variant: "destructive",
-        title: `You have already disliked the review`,
-        description: "You have succesfully disliked the review",
+        title: `disliked removed from the review`,
+        description: "You have succesfully removed disliked from the review",
       });
     } else {
       setLike(false);
@@ -76,8 +83,8 @@ const LikeAndDislikeButton = ({
         description: "You have succesfully disliked the review",
       });
 
-      handleDislike(reviewId, "dislike");
     }
+    handleDislike(reviewId);
   };
   return (
     <div>

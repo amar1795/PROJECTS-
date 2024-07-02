@@ -37,9 +37,13 @@ export async function productLike(reviewId: string) {
     });
 
     if (existingLike) {
-      return { message: "You have already liked this review." };
-    }
+      // Remove the like
+      await prismadb.like.delete({
+        where: { id: existingLike.id },
+      });
 
+      return { message: "Like removed", like: null };
+    }
     // Create a new like
     const newLike = await prismadb.like.create({
       data: {
