@@ -1,4 +1,4 @@
-"use client";
+
 
 import { getCartDataFromCookies } from "@/actions/cart/addCartDatatoCookies";
 import { getRelatedProducts } from "@/actions/cart/categoryRelatedProduct";
@@ -76,7 +76,7 @@ const page = async() => {
 
         <div className=" mt-10">
           <div>
-            <WishlistButton />
+            {/* <WishlistButton /> */}
             <p className=" text-4xl">
               <strong>
                 Welcome to Purchase Pal - Your Trusted Companion in Online

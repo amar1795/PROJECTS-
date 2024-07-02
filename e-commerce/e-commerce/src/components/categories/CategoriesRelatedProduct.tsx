@@ -83,14 +83,53 @@ const [isMerged, setIsMerged] = useState(false);
   // }, [relatedProduct,filteredId]);
 
   const handleClickAdd = async (userID, productID) => {
-    alert("add to cart is being called")
+    // alert("add to cart is being called")
     console.log("this is the product id", productID);
-    const completedata = await fetchSingleProduct(productID);
-    console.log("this is the completed data", completedata);
-    // addProductToCart(userID, productID);
-    addCartDatatoCookies(completedata);
+    // const completedata = await fetchSingleProduct(productID);
+    // console.log("this is the completed data", completedata);
+    // // addProductToCart(userID, productID);
+    // addCartDatatoCookies(completedata);
   
-    setUpdateTrigger((prev) => !prev);
+    if(categoryPageData == true){
+
+      const updatedRelatedProductsList = updatedRelatedProducts.map((product) => {
+        if (product.id === productID) {
+          return { ...product, cartQuantity: 1 };
+        }
+        return product;
+      });
+      console.log("this is the updated products test handliclick list", updatedRelatedProductsList);
+  
+      setupdatedRelatedProducts(updatedRelatedProductsList);
+      addCartDatatoCookies(updatedRelatedProductsList); // Otherwise, save updated data to cookies
+  
+   
+    }
+    else
+    {  
+      
+      const updatedProductsList = updatedProducts.map((product) => {
+      if (product.id === productID) {
+        return { ...product, cartQuantity: 1 };
+      }
+      return product;
+    });
+    console.log("this is the updated products test handliclick list", updatedProductsList);
+
+    setupdatedProducts(updatedProductsList);
+    addCartDatatoCookies(updatedProductsList); // Otherwise, save updated data to cookies
+
+    }
+
+    
+    if(userID){
+      await increaseProductQuantity(userID, productID);
+
+    }
+
+  
+    // setUpdateTrigger((prev) => !prev);
+
   };
 
   const handleWishlistToggle = useCallback(
