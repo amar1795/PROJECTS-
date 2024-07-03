@@ -9,6 +9,7 @@ import { ConfettiComponent2 } from "@/components/confett2";
 import { ConfettiComponent } from "@/components/confetti";
 import OrderDetailsComponent from "@/components/order summary component/OrderDetailsComponent";
 import SummaryCard from "@/components/summary product card/SummaryCard";
+import TickAnimation from "@/components/tick animation/tickAnimation";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { CircleCheck, CircleCheckBig, DollarSign, X } from "lucide-react";
 import React, { use, useEffect, useState } from "react";
@@ -89,14 +90,17 @@ const page = () => {
         </div>
         <div className=" bg-teal-500 flex-1 border-2 border-black">
           <div className=" flex flex-col  justify-center ">
-            <div className=" flex flex-col items-center mt-[10rem]">
-              <CircleCheck size={140} />
+            <div className=" flex flex-col items-center ">
+              {/* <CircleCheck size={140} strokeWidth={0.6} /> */}
+              <div className=" ">
+              <TickAnimation />
+              </div>
               <h1 className=" text-2xl font-bold mt-4"> Thank you</h1>
               <h1 className=" text-4xl font-bold mt-2">
                 {" "}
-                Your Order has been Confirmed
+               Congractulations! Your Order has been Confirmed
               </h1>
-              <h1 className=" text-1xl mt-4">
+              <h1 className=" text-[1.2rem] mt-4">
                 {" "}
               Hey,{user?.name?.split(" ")[0]}  We will send you an email Shortly to {user?.email} please check
                 your email
@@ -137,12 +141,14 @@ const page = () => {
               <div className=" flex flex-wrap   pt-4 pr-4">
                 <div className=" py-1 mt-2 mb-2   w-full ">
                   {orderItems.map((item) => (
-                    <CheckOutOrderSuccessCard
+                   <div className=" mb-4">
+                     <CheckOutOrderSuccessCard
                       // handleClickDelete={handleClickDelete}
                       product={item?.product}
                       quantity={item?.quantity}
                       // handleQuantityChange={handleQuantityCookieChange}
                     />
+                   </div>
                   ))}
                 </div>
               </div>
