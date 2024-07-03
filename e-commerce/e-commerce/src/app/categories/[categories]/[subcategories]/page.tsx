@@ -17,6 +17,7 @@ import {
   getProductsByCategoryfiltered,
 } from "@/actions/createProduct";
 import CategoriesRelatedProduct from "@/components/categories/CategoriesRelatedProduct";
+import { useToast } from "@/components/ui/use-toast";
 
 const Page = ({ params }: { params: { subcategories: string } }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,10 +27,12 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
     totalProductsCount: 0,
     currentProductsCount: 0,
   });
-  const [categoryName, setSelectedCategoryName] = useState("");
+  const [categoryName, setSelectedCategoryName] = useState([]);
   const [parentCategoryName, setparentCategoryName] = useState(
     params.subcategories
   );
+  const [brandSelected, setBrandSelected] = useState(false);
+
   const [brandName, setBrandName] = useState([]);
   // console.log("this is brand name", brandName)
   const [minDiscountedPrice, setMinDiscountedPrice] = useState(0);
@@ -37,14 +40,16 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
   const [minDiscountPercentage, setMinDiscountPercentage] = useState(0);
   const [maxDiscountPercentage, setMaxDiscountPercentage] = useState(100);
   const [filterData, setFilterData] = useState([]);
-  // console.log("this is the parent category name", parentCategoryName);
+  const [sortBy, setSortBy] = useState("");
+
+  console.log("this is the parent category name", parentCategoryName);
   
   useEffect(() => {
     const fetchPaginatedData = async () => {
       
       console.log("this is the minimum discount price", minDiscountedPrice)
       const data = await getProductsByCategoryFiltered(
-        parentCategoryName,
+        parentCategoryName ,
         categoryName,
         brandName,
         minDiscountedPrice,
@@ -54,6 +59,7 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
         currentPage,
         9
       );
+      console.log("this is the data", data)
       setPaginatedData({
         products: data.products,
         totalPages: data.totalPages,
@@ -64,17 +70,21 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
       const newFilterData = [
         {
           category: "Category",
-          options: data.uniqueCategories.map((category) => ({
-            label: category,
-            value: category,
-          })),
+          options: data.uniqueCategories
+            .filter((category) => !["jewellery", "watches"].includes(category)) // Filter out categories with certain names
+            .map((category) => ({
+              label: category,
+              value: category,
+            })),
         },
         {
           category: "Brand",
-          options: data.uniqueBrands.map((brand) => ({
-            label: brand,
-            value: brand,
-          })),
+          options: !brandSelected
+            ? data.uniqueBrands.map((brand) => ({
+                label: brand,
+                value: brand,
+              }))
+            : filterData.find((item) => item.category === "Brand").options,
         },
         {
           category: "Price",
@@ -90,7 +100,6 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
           options: data.discountRanges.map((range) => ({
             label: range.label,
             value: range.value,
-           
             min: range.min,
             max: range.max,
           })),
@@ -121,6 +130,7 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
     maxDiscountedPrice,
     minDiscountPercentage,
     maxDiscountPercentage,
+    sortBy
   ]);
 
   const completeUrl = typeof window !== "undefined" ? window.location.href : "";
@@ -148,6 +158,17 @@ const calculateProductRange = (currentPage) => {
 };
 const { start, end } = calculateProductRange(currentPage);
 
+const { toast } = useToast();
+
+const callToast = ({ variant, title, description }) => {
+  // alert("toast is being  called")
+  toast({
+    variant: variant,
+    title: title,
+    description: description,
+  });
+};
+
   return (
     <div className=" overflow-hidden ">
       {/* <div className="fixed top-0 left-0 right-0  z-10">
@@ -160,7 +181,7 @@ const { start, end } = calculateProductRange(currentPage);
           <div className=" self-center font-bold">FILTERS</div>
           <div className=" px-5 py-5 flex w-[19rem] justify-between ">
             <h1 className=" self-center font-bold">SORT BY :</h1>
-            <SelectDemo />
+            <SelectDemo setSortBy={setSortBy} />
           </div>
         </div>
         <Separator />
@@ -173,6 +194,7 @@ const { start, end } = calculateProductRange(currentPage);
               .map((category, index) => (
                 <Fcard key={index} 
                 category={category}
+                setBrandSelected={setBrandSelected}
                 setSelectedCategoryName={setSelectedCategoryName}
                 setBrandName={setBrandName}
                 setMinDiscountedPrice={setMinDiscountedPrice}
@@ -186,7 +208,9 @@ const { start, end } = calculateProductRange(currentPage);
             <div className={`min-h-[90vh] `}>
             <div>This is the categories page for {params.subcategories} and showing {`Displaying products ${start + 1} to ${end + 1} out of ${totalProducts} products`} </div>
               <CategoriesRelatedProduct
+              key={paginatedData.products.id}
                 relatedProduct={paginatedData.products}
+                callToast={callToast}
               />
             </div>
 

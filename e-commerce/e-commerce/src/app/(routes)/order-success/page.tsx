@@ -40,7 +40,6 @@ const page = () => {
   const [orderData, setOrderData] = useState([]);
   const [orderItems, setOrderItems] = useState([]);
   const [deliveryDate, setDeliveryDate] = useState([]);
-  const [ShowConfetti, setShowConfetti] = useState(true);
   
   console.log("this is hte delviery Date ", deliveryDate)
   const user = useCurrentUser();
@@ -62,11 +61,9 @@ const page = () => {
         if (orderId) {
           await updateOrderPaymentStatus({ orderId: orderId });
         }
-        setTimeout(() => {
-          setShowConfetti(false);
-          
-        }, 2000);
+
       } else {
+        // this needs to be used in if block
         console.error("Missing success parameter");
         const orderData = await fetchOrderById("666C0B82F6EF578CBE3C4965");
         setOrderData(orderData?.order);

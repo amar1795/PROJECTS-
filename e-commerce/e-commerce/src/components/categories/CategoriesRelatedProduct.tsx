@@ -33,7 +33,7 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
   if (!relatedProduct) return <div>Loading ...</div>;
 
   const testData= relatedProduct;
-  console.log("this is the test related Data for wishlist", relatedProduct);
+  console.log("this is the test related Data for wishlist", testData);
   console.log(
     "this is the related product from related products page",
     relatedProduct
@@ -46,6 +46,8 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
   // console.log("this is the product id from related products page:", filteredId);
   const [updatedProducts, setupdatedProducts] =
     useState<Product[]>(filteredProducts);
+    
+    
 console.log("this is the updated test products", updatedProducts);
     // Initialize a state to control the merging process
 const [isMerged, setIsMerged] = useState(false);
@@ -57,6 +59,7 @@ const [isMerged, setIsMerged] = useState(false);
       const updatefunction = () => {
         
         setupdatedRelatedProducts(relatedProduct)
+        setupdatedProducts(relatedProduct)
         console.log("this is the related product from categories products page", relatedProduct)
         setIsMerged(false);
 
@@ -261,6 +264,7 @@ const [isMerged, setIsMerged] = useState(false);
     if (!isMerged) {
     async function mergeDataFromCookies() {
       const cookieData = await getCartDataFromCookies();
+      console.log("this is the updatedProducts data", updatedProducts);
       // create another function here to merge the login usercart lenght and the cookie cart length and then update the cart length in the shopping cart Icon
       const mergedProducts = updatedProducts.map((product) => {
         const cookieProduct = cookieData.find((item) => item.id === product.id);
