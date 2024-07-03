@@ -1,14 +1,48 @@
 "use client";
 import emptyCart from "@/actions/cart/emptyCart";
+import { fetchOrderById } from "@/actions/order/fetchSingleOrder";
 import { updateOrderPaymentStatus } from "@/actions/order/orderUpdate";
 import StepProgress from "@/components/StepProgress";
-import ConfettiComponent from "@/components/confetti";
+import CheckOutOrderSuccessCard from "@/components/checkout product card/checkoutOrderSuccessCard";
+import CheckoutProductCard from "@/components/checkout product card/checkoutProductCard";
+import { ConfettiComponent2 } from "@/components/confett2";
+import { ConfettiComponent } from "@/components/confetti";
+import OrderDetailsComponent from "@/components/order summary component/OrderDetailsComponent";
 import SummaryCard from "@/components/summary product card/SummaryCard";
-import { CircleCheck, CircleCheckBig, DollarSign } from "lucide-react";
-import React, { use, useEffect } from "react";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { CircleCheck, CircleCheckBig, DollarSign, X } from "lucide-react";
+import React, { use, useEffect, useState } from "react";
+
+
+// Utility function to format date
+ const formatDate = (dateString: string) => {
+  const options: Intl.DateTimeFormatOptions = {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  };
+  return new Date(dateString).toLocaleDateString("en-US", options);
+};
+
+
+const getRandomFutureDate = (baseDateString) => {
+  const baseDate = new Date(baseDateString);
+  const randomDaysAhead = Math.floor(Math.random() * 3) + 2; // Generates a random number between 2 and 4
+  baseDate.setDate(baseDate.getDate() + randomDaysAhead);
+
+  const options = { day: '2-digit', month: 'long', year: 'numeric' };
+  return baseDate.toLocaleDateString('en-GB', options);
+};
+
 
 const page = () => {
-
+  const [orderData, setOrderData] = useState([]);
+  const [orderItems, setOrderItems] = useState([]);
+  const [deliveryDate, setDeliveryDate] = useState([]);
+  const [ShowConfetti, setShowConfetti] = useState(true);
+  
+  console.log("this is hte delviery Date ", deliveryDate)
+  const user = useCurrentUser();
 
   useEffect(() => {
     const processOrder = async () => {
@@ -16,7 +50,7 @@ const page = () => {
       const successParam = queryParams.get("success");
 
       if (successParam) {
-        const [success, orderId] = successParam.split('/orderId=');
+        const [success, orderId] = successParam.split("/orderId=");
 
         // Empty the cart if the success parameter is true
         if (success) {
@@ -25,21 +59,35 @@ const page = () => {
 
         // Update the order payment status if the orderId parameter is present
         if (orderId) {
-          await updateOrderPaymentStatus({ orderId: orderId }); 
+          await updateOrderPaymentStatus({ orderId: orderId });
         }
+        setTimeout(() => {
+          setShowConfetti(false);
+          
+        }, 2000);
       } else {
         console.error("Missing success parameter");
+        const orderData = await fetchOrderById("666C0B82F6EF578CBE3C4965");
+        setOrderData(orderData?.order);
+        setOrderItems(orderData?.order?.orderItems);
+        setDeliveryDate(getRandomFutureDate(orderData?.order?.createdAt));
+        console.log("this is the orderData ", orderData?.order);
       }
     };
 
     processOrder();
   }, []);
-  
+
   return (
     <div className=" overflow-hidden border-2 border-black">
       <div className=" flex ">
+
+        
+        <div>
         <ConfettiComponent />
-        <div className=" bg-violet-500 flex-1 border-2 border-black">
+        <ConfettiComponent2  />
+        </div>
+        <div className=" bg-teal-500 flex-1 border-2 border-black">
           <div className=" flex flex-col  justify-center ">
             <div className=" flex flex-col items-center mt-[10rem]">
               <CircleCheck size={140} />
@@ -50,7 +98,7 @@ const page = () => {
               </h1>
               <h1 className=" text-1xl mt-4">
                 {" "}
-                We will send you an email Shortly to test@test.com please check
+              Hey,{user?.name?.split(" ")[0]}  We will send you an email Shortly to {user?.email} please check
                 your email
               </h1>
             </div>
@@ -58,7 +106,7 @@ const page = () => {
               <div className=" bg-white h-[15rem]">
                 <div className=" px-8 py-5 ">
                   <div className=" w-full h-[8rem]  mt-8 ">
-                    <StepProgress />
+                    <StepProgress orderedDate={formatDate(orderData?.createdAt)} />
                   </div>
 
                   <div>
@@ -66,13 +114,13 @@ const page = () => {
                       {" "}
                       Expected delivery Date :
                     </span>
-                    <span className=" font-bold mr-6"> 20 June 2024</span>
-                    <a
+                    <span className=" font-bold mr-6">{deliveryDate}</span>
+                    {/* <a
                       href="#"
                       style={{ color: "blue", textDecoration: "underline" }}
                     >
                       Track your Order
-                    </a>
+                    </a> */}
                   </div>
                 </div>
               </div>
@@ -82,21 +130,21 @@ const page = () => {
             <div className=" border-b-2 border-black"></div>
             <div className="">
               <h1 className="w-80  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 uppercase text-2xl bg-yellow-400 font-bold">
-                Order Items(3)
+                Order Items({orderItems?.length})
               </h1>
             </div>
-            <div className=" flex flex-wrap justify-around pt-4">
-              <div className=" py-1 mt-2 mb-2 w-[25rem] mr-3  ">
-                <SummaryCard />
-              </div>{" "}
-              <div className=" py-1 mt-2 mb-2 w-[25rem] mr-3  ">
-                <SummaryCard />
-              </div>{" "}
-              <div className=" py-1 mt-2 mb-2 w-[25rem] mr-3  ">
-                <SummaryCard />
-              </div>{" "}
-              <div className=" py-1 mt-2 mb-2 w-[25rem] mr-3  ">
-                <SummaryCard />
+            <div className=" h-[30rem] overflow-y-auto">
+              <div className=" flex flex-wrap   pt-4 pr-4">
+                <div className=" py-1 mt-2 mb-2   w-full ">
+                  {orderItems.map((item) => (
+                    <CheckOutOrderSuccessCard
+                      // handleClickDelete={handleClickDelete}
+                      product={item?.product}
+                      quantity={item?.quantity}
+                      // handleQuantityChange={handleQuantityCookieChange}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -106,16 +154,17 @@ const page = () => {
           <div className=" px-8">
             <div className=" h-[7rem] flex justify-between pt-4 border-b-2 border-black">
               <div className="">
-                <h1 className=" text-2xl font-bold"> ORDER DETAIL</h1>
-                <h1 className=" text-4xl font-bold">#20561</h1>
+                <h1 className=" text-2xl font-bold"> ORDER NUMBER</h1>
+                <h1 className=" text-2xl font-bold uppercase">
+                  #{orderData?.id}
+                </h1>
               </div>
-              <div>
-                <div className=" h-[4rem] ">
-                  <button className="w-auto  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2  bg-yellow-400">
-                    <h1 className=" font-bold">View or Manage orders</h1>
-                  </button>
-                </div>
-              </div>
+              <div></div>
+            </div>
+            <div className=" h-[4rem] ">
+              <button className="w-auto  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2  bg-yellow-400">
+                <h1 className=" font-bold">View or Manage orders</h1>
+              </button>
             </div>
             <div>
               <div className=" h-[10rem] border-b-2 border-black">
@@ -123,57 +172,145 @@ const page = () => {
                   {" "}
                   Delivery Address
                 </h1>
-                <h1> John Doe, 1234 Elm Street</h1>
+
+                {orderData.length !== 0 ? (
+                  <>
+                    {" "}
+                    <h1>{`${orderData?.address?.apartment} , ${orderData?.address?.street}`}</h1>
+                    <h1>{`${orderData?.address?.city},`}</h1>
+                    <h1>{`${orderData?.address?.state} ${orderData?.address?.postalCode}, ${orderData?.address?.country}`}</h1>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <h1>Loading ...</h1>
+                    </div>
+                  </>
+                )}
+
+                {/* <h1> John Doe, 1234 Elm Street</h1>
                 <h1> Apt 5B, Springfield,</h1>
-                <h1> IL 62704, United States</h1>
+                <h1> IL 62704, United States</h1> */}
               </div>
               <div className=" h-[10rem] border-b-2 border-black">
                 <h1 className="  h-[4rem] text-3xl font-bold mb-2 pt-3">
                   Billing Address
                 </h1>
-                <h1> John Doe, 1234 Elm Street</h1>
-                <h1> Apt 5B, Springfield,</h1>
-                <h1> IL 62704, United States</h1>
+                {orderData.length !== 0 ? (
+                  <>
+                    {" "}
+                    <h1>{`${orderData?.address?.apartment} , ${orderData?.address?.street}`}</h1>
+                    <h1>{`${orderData?.address?.city},`}</h1>
+                    <h1>{`${orderData?.address?.state} ${orderData?.address?.postalCode}, ${orderData?.address?.country}`}</h1>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <h1>Loading ...</h1>
+                    </div>
+                  </>
+                )}
               </div>
-              <div className=" h-[10rem] border-b-2 border-black">
-                <h1 className="  h-[4rem] text-3xl font-bold mb-2 pt-3">
-                  Contact Details
+              <div className=" border-b-2 border-black  pb-6">
+                <h1 className="  text-3xl font-bold mb-2 pt-3">
+                  Payment Details
                 </h1>
-                <h1> test@test.com</h1>
-                <h1> 9999999999,</h1>
-                <h1> 9999999999</h1>
+                <div className=" flex ">
+                  <div className="  w-[15rem] ">
+                    <h1 className="uppercase text-[1.2rem]">Payment Mode</h1>
+                  </div>
+                  <div className="">
+                    <h1>{orderData?.paymentMode  }</h1>
+                  </div>
+                </div>
+                <div className=" flex ">
+                  <div className="   w-[15rem]">
+                    <h1 className="uppercase text-[1.2rem]">Payee Name </h1>
+                  </div>
+                  <div className=" ">
+                    <h1>{orderData?.card?.cardHolderName}</h1>
+                  </div>
+                </div>
+                <div className=" flex ">
+                  <div className="   w-[15rem]">
+                  <h1 className="uppercase text-[1.2rem]">Card Expiry </h1>
+
+                    
+                    </div>
+                  <div className=" ">
+                  <h1>{orderData?.card?.cardExpiry}</h1>
+                  </div>
+                </div>
+                <div className=" flex ">
+                  <div className="   w-[15rem]"> 
+                  <h1 className="uppercase text-[1.2rem]">Payment Status </h1>
+
+                    
+                    </div>
+                  <div className=" ">
+                    <h1>{orderData?.isPaid == true && "SUCCESSFULL" }</h1>
+                  </div>
+                </div>
               </div>
             </div>
             <div>
               <div>
                 <div className=" mb-5 mt-8">
                   <h1 className="w-80  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 uppercase text-2xl  bg-yellow-400 font-bold">
-                    Order Summary(3)
+                    {`${orderItems && `Order Summary(${orderItems?.length})`} `}
                   </h1>
-                  {/* <div className=" py-1 mt-2 mb-2 w-auto flex-1 ">
-                    <SummaryCard />
-                  </div> */}
+                  <div className=" py-1 mt-2 mb-2 w-auto  ">
+                    {orderItems.map((item) => (
+                      <div className=" flex justify-between ">
+                        <div className=" w-[25rem]">
+                          <h1 className=" self-center  text-[1.2rem] font-bold">
+                            {" "}
+                            {item?.product?.name.length > 36
+                              ? item?.product?.name.slice(0, 35) + "..."
+                              : item?.product?.name}
+                          </h1>
+                        </div>
+                        <span className=" flex  self-center  mr-4  w-[4rem]  justify-between">
+                          <div className=" self-center">
+                            <X />
+                          </div>{" "}
+                          <h1 className=" text-[1.5rem] ">{item?.quantity}</h1>
+                        </span>
+
+                        <div className=" flex self-center py-2  w-[10rem]">
+                          <h1 className=" text-[1.3rem] self-center">
+                            {(item?.price * item?.quantity)?.toLocaleString(
+                              "en-IN",
+                              {
+                                style: "currency",
+                                currency: "INR",
+                              }
+                            )}
+                          </h1>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
 
                   <div className=" border-b-2 border-black">
                     <div className=" flex justify-between">
-                      <span className=" self-center">Sub Total</span>
-                      <span>
-                        <div className=" flex  ">
-                          <div className=" self-center">
-                            <DollarSign size={20} />
-                          </div>
-                          <h1 className=" text-[1.3rem] self-center">9.99</h1>
-                        </div>
+                      <span className=" self-center  text-2xl font-bold">
+                        Sub Total
+                      </span>
+                      <span className="text-[1.3rem]">
+                        {orderData?.orderTotal?.toLocaleString("en-IN", {
+                          style: "currency",
+                          currency: "INR",
+                        })}
                       </span>
                     </div>
                     <div className=" flex justify-between">
-                      <span className=" self-center">Delivery</span>
+                      <span className=" self-center  text-2xl font-bold">
+                        Delivery
+                      </span>
                       <span>
                         <div className=" flex  ">
-                          <div className=" self-center">
-                            <DollarSign size={20} />
-                          </div>
-                          <h1 className=" text-[1.3rem] self-center">9.99</h1>
+                          <h1 className=" text-[1.3rem] self-center">0</h1>
                         </div>
                       </span>
                     </div>
@@ -185,11 +322,11 @@ const page = () => {
                     </span>
                     <span>
                       <div className=" flex  ">
-                        <div className=" self-center">
-                          <DollarSign size={25} />
-                        </div>
-                        <h1 className=" text-[1.8rem] self-center font-bold">
-                          29.99
+                        <h1 className="text-[1.3rem]">
+                          {orderData?.orderTotal?.toLocaleString("en-IN", {
+                            style: "currency",
+                            currency: "INR",
+                          })}
                         </h1>
                       </div>
                     </span>

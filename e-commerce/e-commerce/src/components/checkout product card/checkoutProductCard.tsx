@@ -13,7 +13,7 @@ const CheckoutProductCard = ({ product,handleQuantityChange,handleClickDelete })
   
   
 // Assuming the product object has cartItems array and we are getting the quantity from it
-const quantity = product.cartItems?.find(item => item.productId === product.id)?.quantity || 0;
+const quantity = product?.cartItems?.find(item => item.productId === product.id)?.quantity || 0;
 
   return (
     <div>
@@ -31,17 +31,17 @@ const quantity = product.cartItems?.find(item => item.productId === product.id)?
               />
             </div>
             <div className=" price py-4">
-            <h1 className=" self-center  text-[1.2rem] "> {product.name.length > 36 ? product.name.slice(0, 40) + "..." : product.name}</h1>              
-            <h1 className=" py-2 px-2 text-[1.2rem] font-bold uppercase">{product.brand.name}</h1>
+            <h1 className=" self-center  text-[1.2rem] "> {product?.name.length > 36 ? product?.name.slice(0, 40) + "..." : product?.name}</h1>              
+            <h1 className=" py-2 px-2 text-[1.2rem] font-bold uppercase">{product?.brand?.name}</h1>
               <div className="box flex pr-4 py-2 px-2">
                 <button className=" pr-2  hover:bg-gray-200 pl-1">
-                  <Minus size={20}  onClick={()=>  handleQuantityChange(user?.id, product.id,-1)} />
+                  <Minus size={20}  onClick={()=>  handleQuantityChange(user?.id, product?.id,-1)} />
                 </button>
                 <div className=" text-[1.5rem] w-7  h-[2rem]">
-                  <div className=" px-2  ">{product.cartQuantity}</div>
+                  <div className=" px-2  ">{product?.cartQuantity}</div>
                 </div>
                 <button className=" pl-2  hover:bg-gray-200 pr-1">
-                  <Plus size={20} onClick={()=>  handleQuantityChange( user?.id,product.id,1)}/>
+                  <Plus size={20} onClick={()=>  handleQuantityChange( user?.id,product?.id,1)}/>
                 </button>
               </div>
             </div>
@@ -50,7 +50,7 @@ const quantity = product.cartItems?.find(item => item.productId === product.id)?
             <div className="">
               <div className=" flex self-center py-2 ">
                 <h1 className=" text-[1.3rem] self-center">
-                  {product.discountedPrice.toLocaleString("en-IN", {
+                  {product?.discountedPrice.toLocaleString("en-IN", {
                     style: "currency",
                     currency: "INR",
                   })}
@@ -61,7 +61,7 @@ const quantity = product.cartItems?.find(item => item.productId === product.id)?
                   <Heart size={25} />
                 </button>
                 <button className="transform transition-transform duration-300 hover:scale-110" onClick={()=>
-                handleClickDelete(user?.id,product.id)
+                handleClickDelete(user?.id,product?.id)
                 }>
                   <Trash2 />
                 </button>

@@ -3,11 +3,15 @@ import 'rsuite/Steps/styles/index.css';
 
 import React from 'react'
 
-const StepProgress = () => {
+const StepProgress = (orderedDate) => {
+  // description={orderedDate}
+  // alert(orderedDate)
+  // console.log("this is the ordered date", orderedDate)
+
   return (
     <div>
-       <Steps current={1} >
-    <Steps.Item title="Order Confirmed"  description=" 19 May 2024" />
+       <Steps current={0} >
+    <Steps.Item title="Order Confirmed"   description={orderedDate?.orderedDate} />
     <Steps.Item title="order Packed"  />
     <Steps.Item title="Order Dispatched"/>
     <Steps.Item title="Delivered"  />

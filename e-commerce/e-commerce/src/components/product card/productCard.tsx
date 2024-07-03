@@ -183,45 +183,38 @@ const ProductCard: React.FC<updatedDataResponse> = ({
                 </div>
               </div>
 
-              {
-                product?.cartQuantity === 0 || !product?.cartQuantity && (
-
-             
-              <div className="right self-center pb-7">
-                <button
-                  className="nbutton items-center border-2 border-black  px-2  justify-between hidden "
-                  onClick={() => {
-                    handleClickAdd(user?.id, product?.id);
-                  }}
-                >
-                  <div>
-                    <ShoppingCart size={20} />
+              {product?.cartQuantity === 0 ||
+                (!product?.cartQuantity && (
+                  <div className="right self-center pb-7">
+                    <button
+                      className="nbutton items-center border-2 border-black  px-2  justify-between hidden "
+                      onClick={() => {
+                        handleClickAdd(user?.id, product?.id);
+                      }}
+                    >
+                      <div>
+                        <ShoppingCart size={20} />
+                      </div>
+                      <div className="text-sm px-3">Add to Cart</div>
+                    </button>
                   </div>
-                  <div className="text-sm px-3">Add to Cart</div>
-                </button>
-              </div>
-                 )
-                }
+                ))}
 
-{
-                product?.cartQuantity === 0 && (
-
-             
-              <div className="right self-center pb-7">
-                <button
-                  className="nbutton items-center border-2 border-black  px-2  justify-between hidden "
-                  onClick={() => {
-                    handleClickAdd(user?.id, product?.id);
-                  }}
-                >
-                  <div>
-                    <ShoppingCart size={20} />
-                  </div>
-                  <div className="text-sm px-3">Add to Cart</div>
-                </button>
-              </div>
-                 )
-                }
+              {product?.cartQuantity === 0 && (
+                <div className="right self-center pb-7">
+                  <button
+                    className="nbutton items-center border-2 border-black  px-2  justify-between hidden "
+                    onClick={() => {
+                      handleClickAdd(user?.id, product?.id);
+                    }}
+                  >
+                    <div>
+                      <ShoppingCart size={20} />
+                    </div>
+                    <div className="text-sm px-3">Add to Cart</div>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

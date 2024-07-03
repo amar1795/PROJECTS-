@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Trash2 } from "lucide-react";
 import Image from "next/image";
 import React, { use, useEffect, useState } from "react";
@@ -7,6 +7,7 @@ import Link from "next/link";
 import { fetchReview } from "@/actions/productRating/fetchReview";
 import MiniStarComponent from "../rating star component/MiniStarComponent";
 import MiniStarRatingComponent from "../rating star component/MiniStarRatingComponent";
+import ColorSpan from "../ColourSpan";
 
 // helper function to format the parent Categories to be used in the link
 const extractFirstAndLastParentCategoryNamesWithNumbers = (
@@ -33,7 +34,10 @@ const extractFirstAndLastParentCategoryNamesWithNumbers = (
   return formattedCategories;
 };
 
-const OrderDetailsComponent = ({ orderItem, isPaid }) => {
+const OrderDetailsComponent = ({
+  orderItem,
+  isPaid,
+}) => {
   const [reviewData, setReviewData] = useState(null);
   const [newData, setNewData] = useState(true);
   console.log("this is the review Data", reviewData);
@@ -43,11 +47,11 @@ const OrderDetailsComponent = ({ orderItem, isPaid }) => {
   //   "this is the review reviewMessage",
   //   reviewData?.review?.reviewTitle
   // );
-// console.log("this is the product ID and the name", orderItem?.product.id, orderItem?.product.name)
-// console.log("this is the product ID inside the orderItem", orderItem)
+  // console.log("this is the product ID and the name", orderItem?.product.id, orderItem?.product.name)
+  // console.log("this is the product ID inside the orderItem", orderItem)
   useEffect(() => {
     const fetchReviewData = async () => {
-      const Data = await fetchReview({productId:orderItem?.productId});
+      const Data = await fetchReview({ productId: orderItem?.productId });
       setReviewData(Data);
     };
     fetchReviewData();
@@ -89,6 +93,13 @@ const OrderDetailsComponent = ({ orderItem, isPaid }) => {
                   Brand Name :{orderItem?.product.brand.name}
                 </h1>
                 <h1 className=" py-2 px-2">
+                Colour: <ColorSpan color={`${"black"}`} /> Black
+                </h1>
+                <h1 className=" py-2 px-2">
+                  Size :{"Large"}
+
+                </h1>
+                <h1 className=" py-2 px-2">
                   Qty : <span>{orderItem?.quantity}</span>
                 </h1>
                 <h1 className="py-2 px-2">
@@ -103,18 +114,22 @@ const OrderDetailsComponent = ({ orderItem, isPaid }) => {
                 </h1>
               </div>
 
+              
+
               {reviewData?.review?.rating ? (
                 <div className="mr-11">
                   <div className=" flex ">
-                  <p>You Rated {reviewData?.review?.rating} Stars </p>
-                  <div className=" self-center ml-2" >
-                    <MiniStarRatingComponent  reviewStars={reviewData?.review?.rating}/>
+                    <p>You Rated {reviewData?.review?.rating} Stars </p>
+                    <div className=" self-center ml-2">
+                      <MiniStarRatingComponent
+                        reviewStars={reviewData?.review?.rating}
+                      />
+                    </div>
                   </div>
-                  </div>
-                  
+
                   {reviewData?.review?.review === "" ? (
                     <ReviewModal
-                    setNewData={setNewData}
+                      setNewData={setNewData}
                       buttonName="Add your Review"
                       reviewId={reviewData?.review?.id}
                       ProductImage={orderItem?.product.images[0].url}
@@ -126,40 +141,40 @@ const OrderDetailsComponent = ({ orderItem, isPaid }) => {
                       isPaid={isPaid}
                     />
                   ) : (
-                   <div>
-                    <p>Your Review is :</p>
+                    <div>
+                      <p>Your Review is :</p>
                       <p>{reviewData?.review?.review}</p>
                       <ReviewModal
-                      setNewData={setNewData}
-                      reviewId={reviewData?.review?.id}
-                      buttonName="Edit your Review"
-                      reviewStars={reviewData?.review?.rating}
-                      reviewTitle={reviewData?.review?.reviewTitle}
-                      reviewMessage={reviewData?.review?.review}
-                      ProductImage={orderItem?.product.images[0].url}
-                      ProductName={orderItem?.product.name}
-                      ProductId={orderItem?.productId}
-                      isPaid={isPaid}
-                    />
-                   </div>
+                        setNewData={setNewData}
+                        reviewId={reviewData?.review?.id}
+                        buttonName="Edit your Review"
+                        reviewStars={reviewData?.review?.rating}
+                        reviewTitle={reviewData?.review?.reviewTitle}
+                        reviewMessage={reviewData?.review?.review}
+                        ProductImage={orderItem?.product.images[0].url}
+                        ProductName={orderItem?.product.name}
+                        ProductId={orderItem?.productId}
+                        isPaid={isPaid}
+                      />
+                    </div>
                   )}
                 </div>
-              ):(
-                <div className="mr-11"> 
-
+              ) : (
+                <div className="mr-11">
                   <ReviewModal
-                  setNewData={setNewData}
-                buttonName="Rate the product"
-                reviewId={reviewData?.review?.id}
-                ProductImage={orderItem?.product.images[0].url}
-                ProductName={orderItem?.product.name}
-                ProductId={orderItem?.productId}
-                reviewStars={reviewData?.review?.rating}
-                reviewTitle={reviewData?.review?.reviewTitle}
-                reviewMessage={reviewData?.review?.review}
-                isPaid={isPaid}
-              />
-              </div>)}
+                    setNewData={setNewData}
+                    buttonName="Rate the product"
+                    reviewId={reviewData?.review?.id}
+                    ProductImage={orderItem?.product.images[0].url}
+                    ProductName={orderItem?.product.name}
+                    ProductId={orderItem?.productId}
+                    reviewStars={reviewData?.review?.rating}
+                    reviewTitle={reviewData?.review?.reviewTitle}
+                    reviewMessage={reviewData?.review?.review}
+                    isPaid={isPaid}
+                  />
+                </div>
+              )}
 
               {/* */}
             </div>
