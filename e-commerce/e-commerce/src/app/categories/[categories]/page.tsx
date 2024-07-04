@@ -285,7 +285,8 @@ const Page = ({ params }: { params: { categories: string } }) => {
   // console.log("this is the Previous segment:", previousSegment);
   const breadcrumbsData = [
     { id: 1, href: "/", label: "Home" },
-    { id: 2, href: `/categories/${previousSegment1}`, label: previousSegment1 },
+    { id: 2, href: `/categories/${previousSegment1}`,  label: previousSegment1.split('?')[0]
+  },
     // { id: 3, href: `/categories/${previousSegment1}/${previousSegment}`, label: previousSegment },
     // { id: 4, href: params?.product, label: data?.name },
   ];

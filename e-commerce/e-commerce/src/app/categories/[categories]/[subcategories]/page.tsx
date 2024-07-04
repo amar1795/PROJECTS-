@@ -11,22 +11,28 @@ import { Separator } from "@/components/ui/separator";
 import fcard from "@/components/filters-category/filterCard";
 import Fcard from "@/components/filters-category/filterCard";
 import { PaginationComponent } from "@/components/pagination";
+
 import {
   getProductsByCategory,
   getProductsByCategoryFiltered,
   getProductsByCategoryfiltered,
 } from "@/actions/createProduct";
+
 import CategoriesRelatedProduct from "@/components/categories/CategoriesRelatedProduct";
 import { useToast } from "@/components/ui/use-toast";
 
 const Page = ({ params }: { params: { subcategories: string } }) => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(() => {
+    const storedPage = localStorage.getItem("currentPage");
+    return storedPage ? parseInt(storedPage, 10) : 1;
+  });
   const [paginatedData, setPaginatedData] = useState({
     products: [],
     totalPages: 0,
     totalProductsCount: 0,
     currentProductsCount: 0,
   });
+
   const [categoryName, setSelectedCategoryName] = useState([]);
   const [parentCategoryName, setparentCategoryName] = useState(
     params.subcategories
@@ -42,11 +48,23 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
   const [filterData, setFilterData] = useState([]);
   const [sortBy, setSortBy] = useState("");
 
+  useEffect(() => {
+    const storedPage = localStorage.getItem("currentPage");
+    if (storedPage) {
+      setCurrentPage(parseInt(storedPage, 10));
+    }
+  }, []);
+
+  // Save current page to local storage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("currentPage", currentPage.toString());
+  }, [currentPage]);
+
   console.log("this is the parent category name", parentCategoryName);
   
   useEffect(() => {
     const fetchPaginatedData = async () => {
-      
+        // alert("fetching data")
       console.log("this is the minimum discount price", minDiscountedPrice)
       const data = await getProductsByCategoryFiltered(
         parentCategoryName ,
@@ -109,15 +127,16 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
       // Construct the query parameters
     const queryParams = new URLSearchParams();
 
-    if (brandName) queryParams.set('brandName', brandName);
-    if (minDiscountedPrice) queryParams.set('minDiscountedPrice', minDiscountedPrice);
-    if (maxDiscountedPrice) queryParams.set('maxDiscountedPrice', maxDiscountedPrice);
-    if (minDiscountPercentage) queryParams.set('minDiscountPercentage', minDiscountPercentage);
-    if (maxDiscountPercentage) queryParams.set('maxDiscountPercentage', maxDiscountPercentage);
+    // if (brandName) queryParams.set('brandName', brandName);
+    // if (minDiscountedPrice) queryParams.set('minDiscountedPrice', minDiscountedPrice);
+    // if (maxDiscountedPrice) queryParams.set('maxDiscountedPrice', maxDiscountedPrice);
+    // if (minDiscountPercentage) queryParams.set('minDiscountPercentage', minDiscountPercentage);
+    // if (maxDiscountPercentage) queryParams.set('maxDiscountPercentage', maxDiscountPercentage);
 
-    // Update the browser's URL with the new query parameters
-    const newUrl = `${window.location.pathname}?${queryParams.toString()}`;
-    window.history.replaceState(null, '', newUrl);
+    // // Update the browser's URL with the new query parameters
+    // this is causing to re render the data with back to the same page when using the pagination
+    // const newUrl = `${window.location.pathname}?${queryParams.toString()}`;
+    // window.history.replaceState(null, '', newUrl);
 
     };
     console.log("hello")
@@ -141,7 +160,7 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
   const breadcrumbsData = [
     { id: 1, href: "/", label: "Home" },
     { id: 2, href: `/categories/${previousSegment1}`, label: previousSegment1 },
-    { id: 3, href: `/categories/${previousSegment1}/${previousSegment}`, label: previousSegment },
+    { id: 3, href: `/categories/${previousSegment1}/${previousSegment}`, label: previousSegment.split('?')[0] },
     // { id: 4, href: params?.product, label: data?.name },
   ];
 

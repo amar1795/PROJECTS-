@@ -41,7 +41,6 @@ import decreaseProductQuantity from "@/actions/cart/decreaseProduct";
 
 
 
-
 export type relatedProduct = {
   id: string;
   name: string;
@@ -128,6 +127,7 @@ const page = ({ params }: { params: { product: string } }) => {
         const updatedData: updatedDataResponse | undefined = await fetchProductAllData(params.product);
         console.log("this is the updatedData:", updatedData);
         setupdatedProducts(updatedData || null);
+
         // const relatedProducts = await getProductsByCategoryOriginal(updatedData?.category?.parentId)
         const relatedProducts = await getProductsByCategory(updatedData?.category?.id)
         // issue is here the wihsliost is coming to be empty "" string hence unable to update the wishlist properly 
@@ -140,6 +140,7 @@ const page = ({ params }: { params: { product: string } }) => {
 
     updateData();
 }, []);
+
 
 // useEffect(() => {
 //   const updateData = async () => {

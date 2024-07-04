@@ -32,6 +32,8 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import React, { use, useEffect, useState } from "react";
+import { set } from "zod";
+
 
 // Utility function to format date
 const formatDate = (dateString: string) => {
@@ -64,7 +66,6 @@ const page = ({ params }: { params: { productID: string } }) => {
     const storedPage = localStorage.getItem("currentOrdersPage");
     return storedPage ? parseInt(storedPage, 10) : 1;
   });
-
   
 // Function to remove spaces from a string
 const removeSpaces = (name: string): string => {
@@ -148,6 +149,7 @@ const removeSpaces = (name: string): string => {
     updateData();
   }, []);
 
+
   useEffect(() => {
     const fetchReviewData = async () => {
       const Data = await fetchReview({ productId: data?.id });
@@ -226,6 +228,7 @@ const removeSpaces = (name: string): string => {
 
 
   const url=`http://localhost:3000/categories/${removeSpaces(topmostParentCategory)}/${removeSpaces(parentCategory)}/${data?.id}`
+  // console.log("this is the unique colors",uniqueColors)
 
 
   return (

@@ -64,7 +64,7 @@ const page = async() => {
 // const data=await getCartDataFromCookies()
 // const count=data.length;
 // console.log("this is the count", count);
-
+fetchProductAllData(["665af50e3220eba7c7eab944"])
   return (
     <div className=" bg-pink-500 border-2 border-black px-10 ">
       <div>

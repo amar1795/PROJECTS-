@@ -69,6 +69,8 @@ export async function createProduct({
   }
 }
 
+// creating product varient
+
 export async function createProductVarient() {
   try {
     const productID = "665af50e3220eba7c7eab944"; // Replace with the actual product ID
@@ -1519,7 +1521,7 @@ export const fetchProductAllData = cache(async (productdata: string) => {
     // parentCategoryName: parentCategory.name, // Add parent category name to the organizedProduct
     // relatedProducts: relatedProducts, // Add related products to the organizedProduct
   };
-
-  // console.dir(organizedProduct, { depth: null });
+  
+  console.dir(organizedProduct, { depth: null });
   return organizedProduct;
 });

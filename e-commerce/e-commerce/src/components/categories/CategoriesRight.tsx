@@ -26,6 +26,9 @@ import LikeAndDislikeButton from "../likeAndDislikeButton";
 import { productLike } from "@/actions/productReview/productLike";
 import { productDislike } from "@/actions/productReview/productDislike";
 import { toast } from "../ui/use-toast";
+import { getUniqueColors } from "@/lib/utils";
+import ColorSelection from "../product selection/ColourSelection";
+
 
 
 
@@ -64,6 +67,9 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
 }) => {
   const user = useCurrentUser();
 
+  const [uniqueColors, setUniqueColors] = useState([]);
+
+
   const initialData = [
     {
       name: "5 Stars",
@@ -98,6 +104,8 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
   ];
 
   console.log("this is the initial data", initialData);
+
+
   const [reviews, setReviews] = useState([]);
   const [verifiedPurchaseCount, setVerifiedPurchaseCount] = useState("");
   const [reviewData, setReviewData] = useState(null);
@@ -113,9 +121,12 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
       // alert("fethcreviewdata is  been called")
       console.log("this is the fetchreview data", Data);
       setReviewData(Data);
+      setUniqueColors(getUniqueColors(data?.productVariants))
+
     };
     fetchReviewData();
   }, [data, newData]);
+  console.log("this is the unique colors", uniqueColors);
 
   useEffect(() => {
     const getReviews = async () => {
@@ -196,6 +207,13 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
               </div>
             </div>
             <h3>Inclusive of all taxes</h3>
+
+            <div>
+            <div>
+           <ColorSelection variants={data?.productVariants} />
+
+    </div>
+            </div>
 
             <div className="button flex w-[15rem] justify-between mt-5">
               {!outOfStock ? (
