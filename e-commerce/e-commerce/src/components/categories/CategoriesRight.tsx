@@ -10,7 +10,7 @@ import {
   ThumbsDown,
   ThumbsUp,
 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import StarChart from "../star charts/starChart";
 import Image from "next/image";
@@ -29,10 +29,6 @@ import { toast } from "../ui/use-toast";
 import { getUniqueColors } from "@/lib/utils";
 import ColorSelection from "../product selection/ColourSelection";
 
-
-
-
-
 type CategoriesRightProps = {
   data: updatedDataResponse;
 };
@@ -48,13 +44,13 @@ const formatDate = (dateString: string) => {
 };
 
 const handlelike = async (ratingId: string) => {
- const {error,message,like}=await productLike(ratingId)
- console.log("this is the liked data response",error,message,like)
+  const { error, message, like } = await productLike(ratingId);
+  console.log("this is the liked data response", error, message, like);
 };
 
 const handleDislike = async (ratingId: string) => {
- const {error,message,dislike}=await productDislike(ratingId)
- console.log("this is the disliked data response",error,message,dislike)
+  const { error, message, dislike } = await productDislike(ratingId);
+  console.log("this is the disliked data response", error, message, dislike);
 };
 
 const CategoriesRight: React.FC<CategoriesRightProps> = ({
@@ -68,7 +64,28 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
   const user = useCurrentUser();
 
   const [uniqueColors, setUniqueColors] = useState([]);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(null);
+  console.log("this is the selected size", selectedSize);
+  useEffect(() => {
+   
+    if(selectedColor !== null) {
+    callToast({
+      title: `You selected colour ${selectedColor}`,
+      description: `You have successfully selected the colour ${selectedColor} `,
+    })
+  }
+  }, [selectedColor]);
 
+  useEffect(() => {
+   
+    if(selectedSize !== null) {
+    callToast({
+      title: `You selected Size ${selectedSize}`,
+      description: `You have successfully selected the Size ${selectedSize} `,
+    })
+  }
+  }, [selectedSize]);
 
   const initialData = [
     {
@@ -105,7 +122,6 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
 
   console.log("this is the initial data", initialData);
 
-
   const [reviews, setReviews] = useState([]);
   const [verifiedPurchaseCount, setVerifiedPurchaseCount] = useState("");
   const [reviewData, setReviewData] = useState(null);
@@ -121,8 +137,7 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
       // alert("fethcreviewdata is  been called")
       console.log("this is the fetchreview data", Data);
       setReviewData(Data);
-      setUniqueColors(getUniqueColors(data?.productVariants))
-
+      setUniqueColors(getUniqueColors(data?.productVariants));
     };
     fetchReviewData();
   }, [data, newData]);
@@ -131,9 +146,12 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
   useEffect(() => {
     const getReviews = async () => {
       if (data?.id) {
-    
         const { reviews, verifiedPurchaseCount, error } =
-          await getProductReviews({ productId: data?.id, fetchLimit: 1,sortDirection:"asc"});
+          await getProductReviews({
+            productId: data?.id,
+            fetchLimit: 1,
+            sortDirection: "asc",
+          });
         const value = reviews;
         setVerifiedPurchaseCount(verifiedPurchaseCount);
         setReviews(value);
@@ -162,6 +180,31 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
     }));
     setbarChartData(updatedData);
   }, [data, newData]);
+
+
+  const addToCart = () => {
+     if(selectedColor == null) {
+      callToast({
+        variant: "destructive",
+        title: `Please select a size and colour `,
+        description: `You have successfully selected the colour ${selectedColor} `,
+      })}
+
+      else if(selectedSize == null) {
+        callToast({
+          variant: "destructive", 
+          title: `Please select a size `,
+          description: `You have successfully selected the size ${selectedSize} `,
+        })
+      }
+
+     else 
+     {
+      handleClickAdd(user?.id, data.id);
+     }
+
+    
+  };
 
   return (
     <div>
@@ -209,10 +252,9 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
             <h3>Inclusive of all taxes</h3>
 
             <div>
-            <div>
-           <ColorSelection variants={data?.productVariants} />
-
-    </div>
+              <div>
+                <ColorSelection variants={data?.productVariants} setColor={setSelectedColor} setSize={setSelectedSize} />
+              </div>
             </div>
 
             <div className="button flex w-[15rem] justify-between mt-5">
@@ -250,9 +292,7 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
                       <button
                         type="submit"
                         className="w-40  p-2  border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500"
-                        onClick={() => {
-                          handleClickAdd(user?.id, data?.id);
-                        }}
+                        onClick={addToCart}
                       >
                         <h1 className=" font-bold">{"Add to Cart"} </h1>
                       </button>
