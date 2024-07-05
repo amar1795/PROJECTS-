@@ -241,7 +241,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                                 strokeWidth={0.7}
                                 className={`hover:fill-red-500 text-black ${product?.isWishlisted ? "fill-red-500" : ""}`}
                               /> */}
-                              <WishlistButton isWishlisted={product.isWishlisted} />
+                              <WishlistButton isWishlistedData={product.isWishlisted} />
                             </div>
                             <Link href={`categories/${category}/${product.category.name.replace(/\s+/g, "")}/${product.id}`}>
                               <img src={product.images[0]?.url} alt={product.images[0].altText || "Product Image"} />

@@ -21,6 +21,7 @@ import {
 } from "@/actions/cart/addCartDatatoCookies";
 import increaseProductQuantity from "@/actions/cart/increaseProduct";
 import decreaseProductQuantity from "@/actions/cart/decreaseProduct";
+import WishlistButton from "../animated_heart/heart";
 
 // need to fix the bug for the related items used inthe shooping cart the link url is showing undefined
 const formatPrice = (price: number): string => {
@@ -94,15 +95,18 @@ const ProductCard: React.FC<updatedDataResponse> = ({
                 onClick={() => handleWishlistToggle(user?.id, product.id)}
               >
                 {/* wishlist icon */}
-                <Heart
+                {/* <Heart
                   className={`hover:fill-red-500 text-black ${
                     product?.isWishlisted ? "fill-red-500" : ""
                   }`}
                   size={40}
                   strokeWidth={0.8}
                   // className={` hover:fill-red-500 text-black`}
-                />
+                /> */}
+                 <WishlistButton isWishlistedData={product?.isWishlisted}  />
+
               </button>
+            
               <div className="ProductImage bg-red-400 h-full w-full absolute">
                 <Link href={newUrl}>
                   <Image

@@ -1,20 +1,44 @@
 import React, { useEffect, useState } from "react";
 
-const SizeSelection = ({ sizes, color,setSize,selectedColor }) => {
-  const [selectedSize, setSelectedSize] = useState(null);
+const SizeSelection = ({variants, sizes, color, setSize, selectedColor,setInitialLoadColorAndSize }) => {
+  const [selectedSize, setSelectedSize] = useState(sizes[0]);
+  const [initialLoadCount, setInitialLoadCount] = useState(0);
+  console.log("this is the selected size", selectedSize);
+
+
+  useEffect(() => {
+    if (sizes ) {
+     
+      setSelectedSize(sizes[0]);
+    }
+
+  }, [variants]);
+
+  // useEffect(() => {
+  //   if (initialLoadCount !== 3) {
+  //     // Set the initial size when the component mounts
+  //     setSelectedSize(sizes[0]);
+  //     setSize(sizes[0]);
+  //     setInitialLoadCount(prev => prev+1);
+  //   }
+
+  // }, [sizes]);
 
   useEffect(() => {
     if (selectedColor) {
       // alert("Please select a color first");
       setSelectedSize(null);
       setSize(null);
-      
+      // setInitialLoadColorAndSize(true);
+
     }
   }, [selectedColor]);
-  
+
   useEffect(() => {
     if (selectedSize) {
       setSize(selectedSize);
+      // setInitialLoadColorAndSize(true);
+
     }
   }, [selectedSize]);
 

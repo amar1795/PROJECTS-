@@ -28,10 +28,44 @@ import { productDislike } from "@/actions/productReview/productDislike";
 import { toast } from "../ui/use-toast";
 import { getUniqueColors } from "@/lib/utils";
 import ColorSelection from "../product selection/ColourSelection";
+import deleteCartItem from "@/actions/cart/deleteCartProducts";
+import { removeProductFromCookies } from "@/actions/cart/addCartDatatoCookies";
+import { NotifyMeModal } from "../NotifyMeModal";
+import addItemToCart from "@/actions/cart/addItemToCart";
+
+type ProductVariant = {
+  id: string;
+  color: string;
+  size: string;
+  stock: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ProductVariantResult = {
+  id: string;
+  stock: number;
+} | null;
 
 type CategoriesRightProps = {
   data: updatedDataResponse;
 };
+
+function findProductVariant(
+  productVariants: ProductVariant[],
+  color: string,
+  size: string
+): ProductVariantResult {
+  for (const variant of productVariants) {
+    if (
+      variant.color.toLowerCase() === color.toLowerCase() &&
+      variant.size.toLowerCase() === size.toLowerCase()
+    ) {
+      return { id: variant.id, stock: variant.stock };
+    }
+  }
+  return null;
+}
 
 // Utility function to format date
 const formatDate = (dateString: string) => {
@@ -60,31 +94,68 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
   handleQuantityChange,
   callToast,
   setUpdateChart,
+  setUpdateTrigger,
+  initialColor,
+  initialSize,
 }) => {
+  console.log("this is the data quantities from categories right", data?.cartQuantity);
   const user = useCurrentUser();
+
+  // const initialColour= data?.productVariants && data?.productVariants[0]?.color;
+  // const initialSize=data?.productVariants && data?.productVariants[0]?.size;
+  console.log(
+    "this is the initial colour and size inside the categories right",
+    initialColor,
+    initialSize
+  );
 
   const [uniqueColors, setUniqueColors] = useState([]);
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
+  const [initialLoadColorAndSize, setInitialLoadColorAndSize] = useState(true);
+  const [productVarients, setProductVarients] = useState(data?.productVariants);
+
+  const [tempQuantity, setTempQuantity] = useState(data?.cartQuantity );
+  console.log(
+    "this is the selected color and size from initial data",
+    selectedColor,
+    selectedSize
+  );
+
+  // useEffect(() => {
+  //   if (data?.productVariants && data.productVariants.length > 0) {
+  //     // alert("i have been called")
+  //     const initialColour = data.productVariants[0]?.color;
+  //     const initialSize = data.productVariants[0]?.size;
+  //     console.log("Initial color and size:", initialColour, initialSize);
+
+  //     setSelectedColor(initialColour);
+  //     setSelectedSize(initialSize);
+  //   }
+  // }, [data]);
+
   console.log("this is the selected size", selectedSize);
   useEffect(() => {
-   
-    if(selectedColor !== null) {
-    callToast({
-      title: `You selected colour ${selectedColor}`,
-      description: `You have successfully selected the colour ${selectedColor} `,
-    })
-  }
+    if (selectedColor !== null) {
+      if (initialLoadColorAndSize === true) {
+        callToast({
+          title: `You selected colour ${selectedColor}`,
+          description: `You have successfully selected the colour ${selectedColor} `,
+        });
+      }
+    }
   }, [selectedColor]);
 
   useEffect(() => {
-   
-    if(selectedSize !== null) {
-    callToast({
-      title: `You selected Size ${selectedSize}`,
-      description: `You have successfully selected the Size ${selectedSize} `,
-    })
-  }
+    if (selectedSize !== null) {
+      if (initialLoadColorAndSize === true) {
+        callToast({
+          title: `You selected Size ${selectedSize}`,
+          description: `You have successfully selected the Size ${selectedSize} `,
+        });
+      }
+    }
+    // setInitialLoadColorAndSize(true);
   }, [selectedSize]);
 
   const initialData = [
@@ -127,10 +198,15 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
   const [reviewData, setReviewData] = useState(null);
   const [newData, setNewData] = useState(true);
   const [barChartData, setbarChartData] = useState(initialData);
+  const [toggledVarientQuantity, setToggledVarientQuantity] = useState(false);
+  const [productVarientStock, setProductVarientStock] = useState(0);
+  const [productVarientID, setProductVarientID] = useState("");
   console.log("this is the chart data", barChartData);
+
   if (!data) {
     return <div>Loading...</div>;
   }
+
   useEffect(() => {
     const fetchReviewData = async () => {
       const Data = await fetchReview({ productId: data?.id });
@@ -181,30 +257,163 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
     setbarChartData(updatedData);
   }, [data, newData]);
 
-
   const addToCart = () => {
-     if(selectedColor == null) {
+    // need to optmize the toggle varient part code so that the quantity will be shown in the cart
+    if (selectedColor == null) {
       callToast({
         variant: "destructive",
         title: `Please select a size and colour `,
         description: `You have successfully selected the colour ${selectedColor} `,
-      })}
+      });
+    } else if (selectedSize == null) {
+      callToast({
+        variant: "destructive",
+        title: `Please select a size `,
+        description: `You have successfully selected the size ${selectedSize} `,
+      });
+    } else {
+      handleClickAdd(user?.id, data.id, selectedColor, selectedSize);
+      const productVarietnID = findProductVariant(
+        data?.productVariants,
+        selectedColor,
+        selectedSize
+      );
+      setProductVarientStock(productVarietnID?.stock);
+      console.log(
+        "this is the product varient id which is selected",
+        productVarietnID
+      );
+    }
+  };
 
-      else if(selectedSize == null) {
-        callToast({
-          variant: "destructive", 
-          title: `Please select a size `,
-          description: `You have successfully selected the size ${selectedSize} `,
-        })
+  const handleDecrease = () => {
+    if (selectedColor == null) {
+      callToast({
+        variant: "destructive",
+        title: `Please select a size and colour `,
+        description: `You have successfully selected the colour ${selectedColor} `,
+      });
+    } else if (selectedSize == null) {
+      callToast({
+        variant: "destructive",
+        title: `Please select a size `,
+        description: `You have successfully selected the size ${selectedSize} `,
+      });
+    } else {
+      if (tempQuantity == 0) {
+        return;
       }
 
-     else 
-     {
-      handleClickAdd(user?.id, data.id);
-     }
+      setTempQuantity((prev) => prev - 1);
 
-    
+      // the below needs to be done when the product is finalized and clicked on proceed to buy
+
+      // handleQuantityChange(user?.id, data.id, -1);
+      // const productVarietnID = findProductVariant(
+      //   data?.productVariants,
+      //   selectedColor,
+      //   selectedSize
+      // );
+
+      // console.log(
+      //   "this is the product varient id which is selected",
+      //   productVarietnID
+      // );
+    }
   };
+
+  const handleIncrease = () => {
+    if (selectedColor == null) {
+      callToast({
+        variant: "destructive",
+        title: `Please select a size and colour `,
+        description: `You have successfully selected the colour ${selectedColor} `,
+      });
+    } else if (selectedSize == null) {
+      callToast({
+        variant: "destructive",
+        title: `Please select a size `,
+        description: `You have successfully selected the size ${selectedSize} `,
+      });
+    } else {
+      if (tempQuantity > productVarientStock - 1) {
+        return;
+      }
+      setTempQuantity((prev) => prev + 1);
+
+      // handleQuantityChange(user?.id, data.id, 1)
+
+      // the below needs to be done when the product is finalized and clicked on proceed to buy
+      // handleClickAdd(user?.id, data.id, selectedColor, selectedSize);
+
+      // const productVarietnID = findProductVariant(
+      //   data?.productVariants,
+      //   selectedColor,
+      //   selectedSize
+      // );
+
+      // console.log(
+      //   "this is the product varient id which is selected",
+      //   productVarietnID
+      // );
+    }
+  };
+
+  const handleConfirm = async() => {
+    // alert("i have been called")
+    if (selectedColor == null) {
+      callToast({
+        variant: "destructive",
+        title: `Please select a size and colour `,
+        description: `You have successfully selected the colour ${selectedColor} `,
+      });
+    } else if (selectedSize == null) {
+      callToast({
+        variant: "destructive",
+        title: `Please select a size `,
+        description: `You have successfully selected the size ${selectedSize} `,
+      });
+    } else {
+     const {success,message}=await addItemToCart(user?.id,data.id,productVarientID,selectedColor,selectedSize,tempQuantity)
+     if(success){
+      alert("Item added to cart successfully")
+     }
+      console.log("this is the final value to be updated in the db", tempQuantity,selectedColor,selectedSize,productVarientID);
+      // handleClickAdd(user?.id, data.id, selectedColor, selectedSize);
+    }
+
+  }
+
+  useEffect(() => {
+    // remove the items from cookies when the product varient is swithced
+    removeProductFromCookies(data.id);
+
+    // remove the items from the db as well when the product varient is swithced
+
+    deleteCartItem(user?.id, data.id);
+    // setToggledVarientQuantity( (prev) => !prev);
+
+    // setUpdateTrigger((prev) => !prev);
+
+    if (selectedColor && selectedSize) {
+      const productVarietnID = findProductVariant(
+        data?.productVariants,
+        selectedColor,
+        selectedSize
+      );
+      setProductVarientStock(productVarietnID?.stock);
+      setProductVarientID(productVarietnID?.id);
+      console.log(
+        "this is the product varient id which is selected",
+        productVarietnID
+      );
+      // setToggledVarientQuantity( (prev) => !prev);
+      // setTempQuantity(0);
+    }
+
+    setTempQuantity(data?.cartQuantity);
+
+  }, [selectedColor, selectedSize]);
 
   return (
     <div>
@@ -253,39 +462,49 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
 
             <div>
               <div>
-                <ColorSelection variants={data?.productVariants} setColor={setSelectedColor} setSize={setSelectedSize} />
+                <ColorSelection
+                  setInitialLoadColorAndSize={setInitialLoadColorAndSize}
+                  variants={data?.productVariants}
+                  setColor={setSelectedColor}
+                  setSize={setSelectedSize}
+                />
               </div>
             </div>
 
             <div className="button flex w-[15rem] justify-between mt-5">
               {!outOfStock ? (
                 <div className="button flex w-[15rem] justify-between mt-4">
-                  {data?.cartQuantity > 0 ? (
+                  {productVarientStock > 0 ? (
                     <div className=" flex self-center ">
                       <div className="box flex pr-4 self-center">
                         {/* quantity change icons */}
                         <button
                           className=" pr-2  hover:bg-gray-200 pl-1"
-                          onClick={() =>
-                            handleQuantityChange(user?.id, data.id, -1)
-                          }
+                          onClick={handleDecrease}
                         >
                           <Minus size={30} />
                         </button>
                         <div className=" text-[2rem] w-11  bg-white h-[2.5rem]  ">
                           <h1 className="  flex text-center justify-center align-middle  ">
-                            {data?.cartQuantity || 0}
+                            {/* {data?.cartQuantity || 0} */}
+                            {tempQuantity || 0}
                           </h1>
                         </div>
                         <button
                           className=" pl-2  hover:bg-gray-200 pr-1"
-                          onClick={() =>
-                            handleQuantityChange(user?.id, data.id, 1)
-                          }
+                          onClick={handleIncrease}
                         >
                           <Plus size={30} />
                         </button>
                       </div>
+                    </div>
+                  ) : productVarientStock === 0 &&
+                    selectedColor &&
+                    selectedSize ? (
+                    <div className=" h-[4rem]">
+                      <h1 className="w-40  p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500 font-bold">
+                        {"Out of stock"}
+                      </h1>
                     </div>
                   ) : (
                     <div className=" h-[4rem]">
@@ -334,6 +553,28 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
                 </div>
               )}
             </div>
+            {productVarientStock === 0 ? (
+              <div className=" h-[4rem] mt-8">
+                {/* <button
+                  type="submit"
+                  className={`w-60  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-pink-500 `}
+                  // onClick={() => handleWishlistToggle(user?.id, data.id)}
+                >
+                  <h1 className=" font-bold">{"Notify Me"} </h1>
+                </button> */}
+                <NotifyMeModal buttonName="Notify Me"/>
+              </div>
+            ) : (
+              <div className=" h-[4rem] mt-8">
+                <button
+                  type="submit"
+                  className={`w-60  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-green-500 `}
+                  onClick={handleConfirm}
+                >
+                  <h1 className=" font-bold">{"Proceed to buy"} </h1>
+                </button>
+              </div>
+            )}
           </div>
           <div className=" border-b-2 border-gray-300 mt-5"></div>
           <div className="   mt-10 text-[1.2rem]">

@@ -21,11 +21,19 @@ import Image from "next/image";
 import PhotoViewer from "@/components/photo viewer/photoViewer";
 import CategoriesRight from "@/components/categories/CategoriesRight";
 import CategoriesRelatedProduct from "@/components/categories/CategoriesRelatedProduct";
-import { fetchProductAllData, getProductsByCategory, getProductsByCategoryOriginal } from "@/actions/createProduct";
+import {
+  fetchProductAllData,
+  getProductsByCategory,
+  getProductsByCategoryOriginal,
+} from "@/actions/createProduct";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useToast } from "@/components/ui/use-toast";
 import { toggleWishlist } from "@/actions/wishlist";
-import { addCartDatatoCookies, getCartDataFromCookies, removeProductFromCookies } from "@/actions/cart/addCartDatatoCookies";
+import {
+  addCartDatatoCookies,
+  getCartDataFromCookies,
+  removeProductFromCookies,
+} from "@/actions/cart/addCartDatatoCookies";
 import { fetchSingleProduct } from "@/actions/cart/fetchSingleProduct";
 import increaseProductQuantity from "@/actions/cart/increaseProduct";
 import decreaseProductQuantity from "@/actions/cart/decreaseProduct";
@@ -38,8 +46,6 @@ import decreaseProductQuantity from "@/actions/cart/decreaseProduct";
 //     description: post?.description,
 //   };
 // }
-
-
 
 export type relatedProduct = {
   id: string;
@@ -54,33 +60,33 @@ export type updatedDataResponse = {
   discountedPrice: number | null;
   description: string;
   category: {
-      id: string;
-      name: string;
+    id: string;
+    name: string;
   };
   brand: {
-      id: string;
-      name: string;
+    id: string;
+    name: string;
   };
   images: {
-      id: string;
-      url: string;
+    id: string;
+    url: string;
   }[];
 
   ratings: {
-      count: {
-          1: number;
-          2: number;
-          3: number;
-          4: number;
-          5: number;
-      };
-      reviews: {
-          rating: number;
-          review: string;
-      }[];
-      totalReviews: number;
-      totalRatings: number;
-      averageRating: number;
+    count: {
+      1: number;
+      2: number;
+      3: number;
+      4: number;
+      5: number;
+    };
+    reviews: {
+      rating: number;
+      review: string;
+    }[];
+    totalReviews: number;
+    totalRatings: number;
+    averageRating: number;
   };
   createdAt: string;
   updatedAt: string;
@@ -91,194 +97,247 @@ const page = ({ params }: { params: { product: string } }) => {
   const { toast } = useToast();
   const user = useCurrentUser();
 
-  console.log("this is the session",session?.user?.id)
+  console.log("this is the session", session?.user?.id);
 
-  
   const [outOfStock, setoutOfStock] = React.useState(false);
 
   const [data, setData] = React.useState<updatedDataResponse | null>(null);
-    
-  const [relatedProducts, setRelatedProducts] = React.useState<relatedProduct[] | null>(null);
+
+  const [relatedProducts, setRelatedProducts] = React.useState<
+    relatedProduct[] | null
+  >(null);
+  
   const [parentCategory, setParentCategory] = React.useState<string>("");
   const [mensCollectionData, setMensCollectionData] = React.useState<any[]>([]);
   const [updateTrigger, setUpdateTrigger] = useState(false);
-  const[updateChart,setUpdateChart] =useState(false)
-
+  const [updateChart, setUpdateChart] = useState(false);
+  const [initialColor, setInitialColor] = useState("");
+  const [initialSize, setInitialSize] = useState("");
   const [updatedProducts, setupdatedProducts] = useState([]);
-  console.log("this is the updatedProducts product from related products page", updatedProducts);
+console.log("this is the initial colour and size", initialColor, initialSize)
+  console.log(
+    "this is the updatedProducts product from related products page",
+    updatedProducts
+  );
+
+
+
   // this user doesn't work for some reason whereas this is meant to be used in the client side
   // const { user } = useCurrentUser();
 
   const currentUser = session?.user?.id;
 
-  const callToast = ({variant,title,description}) => {
+  const callToast = ({ variant, title, description }) => {
     // alert("toast is being  called")
     toast({
       variant: variant,
-      title:title,
+      title: title,
       description: description,
     });
-  }
+  };
 
   useEffect(() => {
     const updateData = async () => {
       // alert("I am being called")
       // this needs to be revalidated via polling every 30 minutes because if everyone starts rating it simulteneously it will hit the backend mulitple times
-        const updatedData: updatedDataResponse | undefined = await fetchProductAllData(params.product);
-        console.log("this is the updatedData:", updatedData);
-        setupdatedProducts(updatedData || null);
+      const updatedData: updatedDataResponse | undefined =
+        await fetchProductAllData(params.product);
+      console.log("this is the updatedData:", updatedData);
+      setupdatedProducts(updatedData || null);
 
-        // const relatedProducts = await getProductsByCategoryOriginal(updatedData?.category?.parentId)
-        const relatedProducts = await getProductsByCategory(updatedData?.category?.id)
-        // issue is here the wihsliost is coming to be empty "" string hence unable to update the wishlist properly 
-        console.log("this is the related products test", relatedProducts);
-        setRelatedProducts(relatedProducts);
-        setParentCategory(updatedData?.category?.parentName || "");
-        // alert("update Data is being called")
-        // console.log("these are the related products:", relatedProducts);
+      // const relatedProducts = await getProductsByCategoryOriginal(updatedData?.category?.parentId)
+      const relatedProducts = await getProductsByCategory(
+        updatedData?.category?.id
+      );
+      // issue is here the wihsliost is coming to be empty "" string hence unable to update the wishlist properly
+      console.log("this is the related products test", relatedProducts);
+
+      const filteredRelatedProducts = relatedProducts.filter(
+        (item) => item.id !== updatedData?.id
+      );
+      setRelatedProducts(filteredRelatedProducts);
+
+      setParentCategory(updatedData?.category?.parentName || "");
+      // alert("update Data is being called")
+      // console.log("these are the related products:", relatedProducts);
     };
 
     updateData();
-}, []);
+  }, []);
 
+  // useEffect(() => {
+  //   const updateData = async () => {
 
-// useEffect(() => {
-//   const updateData = async () => {
-     
-//     // alert("I am being called")
-//         const relatedProducts = await getProductsByCategory(updatedProducts?.id)
-//       setRelatedProducts(relatedProducts);
-      
-//       // console.log("these are the related products:", relatedProducts);
-//   };
+  //     // alert("I am being called")
+  //         const relatedProducts = await getProductsByCategory(updatedProducts?.id)
+  //       setRelatedProducts(relatedProducts);
 
-//   updateData();
+  //       // console.log("these are the related products:", relatedProducts);
+  //   };
 
-// }, [updateTrigger]);
+  //   updateData();
 
+  // }, [updateTrigger]);
 
-const handleWishlistToggle = useCallback(async (userId: string, productId: string) => {
-  if (!user) {
-    callToast({
-      variant: "destructive",
-      title: "Not Logged In",
-      description: "Please login to wishlist this item",
-    });
-    return;
-  }
+  const handleWishlistToggle = useCallback(
+    async (userId: string, productId: string) => {
+      if (!user) {
+        callToast({
+          variant: "destructive",
+          title: "Not Logged In",
+          description: "Please login to wishlist this item",
+        });
+        return;
+      }
 
-  if( updatedProducts.id === productId )
-    {
+      if (updatedProducts.id === productId) {
+        const updatedProductsList = {
+          ...updatedProducts,
+          isWishlisted: !updatedProducts.isWishlisted,
+        };
 
-    const updatedProductsList= { ...updatedProducts, isWishlisted: !updatedProducts.isWishlisted } 
-      
-    setupdatedProducts(updatedProductsList);
-    }
-  
+        setupdatedProducts(updatedProductsList);
+      }
 
-
-  setTimeout(async () => {
-    const message = await toggleWishlist(userId, productId);
-    callToast({
-      variant: message.message === "added" ? "default" : "destructive",
-      title: message.message === "added" ? "Added to Wishlist" : "Removed from Wishlist",
-      description: message.message === "added" ? "The item has been wishlisted" : "The item has been removed from wishlist",
-      
-    });
-  }, 200);
-}, [updatedProducts, user, toast]);
-
-
-const handleClickAdd = async (userID, productID) => {
-  // alert("add to cart is being called")
-  console.log("this is the product id", productID);
-  const completedata = await fetchSingleProduct(productID);
-  completedata.map((item) => {
-    if(item.id === productID){
-      
-      const newData= {...item, cartQuantity: 1}
-      console.log("this is the new data", newData);
-      addCartDatatoCookies([newData]);
-    }});
-
-    if(user){
       setTimeout(async () => {
-        
-          // alert("increase quantity is called", userID, productId)
-          await increaseProductQuantity(userID, productID);
-        
+        const message = await toggleWishlist(userId, productId);
+        callToast({
+          variant: message.message === "added" ? "default" : "destructive",
+          title:
+            message.message === "added"
+              ? "Added to Wishlist"
+              : "Removed from Wishlist",
+          description:
+            message.message === "added"
+              ? "The item has been wishlisted"
+              : "The item has been removed from wishlist",
+        });
+      }, 200);
+    },
+    [updatedProducts, user, toast]
+  );
+
+  const handleClickAdd = async (
+    userID,
+    productID,
+    selectedColor,
+    selectedSize
+  ) => {
+    // alert("add to cart is being called")
+    console.log(
+      "this is the product from handleadd to the cart function ",
+      userID,
+      productID,
+      selectedColor,
+      selectedSize
+    );
+    console.log("this is the product id", productID);
+    const completedata = await fetchSingleProduct(productID);
+    completedata.map((item) => {
+      if (item.id === productID) {
+        const newData = { ...item, cartQuantity: 1 };
+        console.log("this is the new data", newData);
+        addCartDatatoCookies([newData]);
+      }
+    });
+
+    if (user) {
+      setTimeout(async () => {
+        // alert("increase quantity is called", userID, productId)
+        await increaseProductQuantity(userID, productID);
       }, 200);
     }
 
-  // addProductToCart(userID, productID);
-  
-  setUpdateTrigger((prev) => !prev);
-};
+    // addProductToCart(userID, productID);
 
-const handleQuantityChange = useCallback(
-  (userId: string, productId: string, change: number) => {
-    // alert("i have been called")
+    setUpdateTrigger((prev) => !prev);
+  };
 
-    // let updatedProductsList;
+  const handleQuantityChange = useCallback(
+    (userId: string, productId: string, change: number) => {
+      // alert("i have been called")
+
+      // let updatedProductsList;
       if (updatedProducts.id === productId) {
         // Ensure quantity doesn't go below 0
-        const currentQuantity = updatedProducts?.cartQuantity ? updatedProducts?.cartQuantity: 0; // Initialize to 0 if undefined or null
+        const currentQuantity = updatedProducts?.cartQuantity
+          ? updatedProducts?.cartQuantity
+          : 0; // Initialize to 0 if undefined or null
         const newQuantity = Math.max(currentQuantity + change, 0);
         // alert( newQuantity)
-        const updatedProductsList= { ...updatedProducts, cartQuantity: newQuantity };
+        const updatedProductsList = {
+          ...updatedProducts,
+          cartQuantity: newQuantity,
+        };
         setupdatedProducts(updatedProductsList);
         console.log("this is the updated products", updatedProductsList);
 
         if (updatedProductsList?.cartQuantity === 0) {
           // alert(updatedProductsList?.cartQuantity)
-           removeProductFromCookies(productId); // Remove product from cookies if cartQuantity is 0
+          removeProductFromCookies(productId); // Remove product from cookies if cartQuantity is 0
         } else {
-           addCartDatatoCookies([updatedProductsList]); // Otherwise, save updated data to cookies
+          addCartDatatoCookies([updatedProductsList]); // Otherwise, save updated data to cookies
         }
       }
-     
-       // Save updated product information to cookies
-  
 
-    if(user){
-    setTimeout(async () => {
-      if (change > 0) {
-        // alert("increase quantity is called", userId, productId)
-        await increaseProductQuantity(userId, productId);
-      } else {
-        // alert("decrease quantity is called")
-        await decreaseProductQuantity(userId, productId);
+      // Save updated product information to cookies
+
+      if (user) {
+        setTimeout(async () => {
+          if (change > 0) {
+            // alert("increase quantity is called", userId, productId)
+            await increaseProductQuantity(userId, productId);
+          } else {
+            // alert("decrease quantity is called")
+            await decreaseProductQuantity(userId, productId);
+          }
+        }, 200);
       }
-    }, 200);
-  }
-},
-  [updatedProducts]
-);
+    },
+    [updatedProducts]
+  );
 
-useEffect(() => {
-  async function mergeDataFromCookies() {
-    const cookieData = await getCartDataFromCookies();
-    // create another function here to merge the login usercart lenght and the cookie cart length and then update the cart length in the shopping cart Icon
+  useEffect(() => {
+    async function mergeDataFromCookies() {
+      const cookieData = await getCartDataFromCookies();
+      // create another function here to merge the login usercart lenght and the cookie cart length and then update the cart length in the shopping cart Icon
       // alert("Merge data from cookie called")
-      const updatedData: updatedDataResponse | undefined = await fetchProductAllData(params.product);
+      const updatedData: updatedDataResponse | undefined =
+        await fetchProductAllData(params.product);
       console.log("this is the updatedData:", updatedData);
 
-      const cookieProduct = cookieData.find(item => item.id === updatedData?.id);
-      if(cookieProduct) {
-       const  mergedProducts = { ...updatedData, cartQuantity: cookieProduct.cartQuantity }
-       
-       setupdatedProducts(mergedProducts);
-      
+      const cookieProduct = cookieData.find(
+        (item) => item.id === updatedData?.id
+      );
+      if (cookieProduct) {
+        const mergedProducts = {
+          ...updatedData,
+          cartQuantity: cookieProduct.cartQuantity,
+        };
+
+        setupdatedProducts(mergedProducts);
+      }
+
+      else{
+        // need to optimize this part 
+        const mergedProducts = {
+          ...updatedData,
+          cartQuantity: 0,
+        };
+        
+        setupdatedProducts(mergedProducts)
+      }
+
+      setInitialColor(updatedProducts?.productVariants?.[0]?.color);
+       setInitialSize(updatedProducts?.productVariants?.[0]?.size);
     }
 
-  }
+    mergeDataFromCookies();
+  }, [updateTrigger]);
 
-  mergeDataFromCookies();
-}, [updateTrigger]);
-
-const ProductId=data?.id;
-// console.log("this is the product id:", ProductId);
-//   console.log("these are the related product:", relatedProducts);
+  const ProductId = data?.id;
+  // console.log("this is the product id:", ProductId);
+  //   console.log("these are the related product:", relatedProducts);
   const completeUrl = typeof window !== "undefined" ? window.location.href : "";
   const segments = completeUrl.split("/");
   const previousSegment = segments[segments.length - 2];
@@ -294,12 +353,16 @@ const ProductId=data?.id;
     "https://images.pexels.com/photos/24023467/pexels-photo-24023467/free-photo-of-a-wedding-reception-in-a-greenhouse-with-chandeliers.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
   ];
 
-    const breadcrumbsData = [
-      { id: 1, href: "/", label: "Home" },
-      { id: 2, href: `/categories/${previousSegment1}`, label: previousSegment1 },
-      { id: 3, href: `/categories/${previousSegment1}/${previousSegment}`, label: previousSegment },
-      { id: 4, href: params.product, label: data?.name },
-    ];
+  const breadcrumbsData = [
+    { id: 1, href: "/", label: "Home" },
+    { id: 2, href: `/categories/${previousSegment1}`, label: previousSegment1 },
+    {
+      id: 3,
+      href: `/categories/${previousSegment1}/${previousSegment}`,
+      label: previousSegment,
+    },
+    { id: 4, href: params.product, label: data?.name },
+  ];
 
   // console.log("this is the data:", data);
 
@@ -324,21 +387,32 @@ const ProductId=data?.id;
               {/* right component */}
               {/* brand:string */}
 
-               <CategoriesRight data={updatedProducts} handleWishlistToggle={handleWishlistToggle}
-               handleClickAdd={handleClickAdd} handleQuantityChange={handleQuantityChange}
-               callToast={callToast} setUpdateChart={setUpdateChart}/> 
-               {/* <h1 className=" text-[2rem]">{data?.brand.name}</h1>  */}
-              
+              <CategoriesRight
+                data={updatedProducts}
+                initialColor={initialColor}
+                initialSize={initialSize}
+                handleWishlistToggle={handleWishlistToggle}
+                handleClickAdd={handleClickAdd}
+                handleQuantityChange={handleQuantityChange}
+                callToast={callToast}
+                setUpdateChart={setUpdateChart}
+                setUpdateTrigger={setUpdateTrigger}
+              />
+              {/* <h1 className=" text-[2rem]">{data?.brand.name}</h1>  */}
             </div>
           </div>
-          <div >
-            
-            <div className="bg-teal-600   pt-6">           
-            <h3 className=" ml-8 w-[20rem] text-[2rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
-              Related Products
-            </h3>
+          <div>
+            <div className="bg-teal-600   pt-6">
+              <h3 className=" ml-8 w-[20rem] text-[2rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
+                Related Products
+              </h3>
             </div>
-            <CategoriesRelatedProduct relatedProduct={relatedProducts} ProductId={ProductId} callToast={callToast} filteredId={params.product}/>
+            <CategoriesRelatedProduct
+              relatedProduct={relatedProducts}
+              ProductId={ProductId}
+              callToast={callToast}
+              filteredId={params.product}
+            />
           </div>
           <MainFooter />
         </div>

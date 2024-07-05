@@ -3,10 +3,11 @@ import { Heart } from 'lucide-react';
 import './heart.css';
 import Confetti from 'react-dom-confetti';
 
-const WishlistButton = ({ user, product, handleWishlistToggle,isWishlisted }) => {
+const WishlistButton = ({ user, product, handleWishlistToggle,isWishlistedData }) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [confettiActive, setConfettiActive] = useState(false);
-    const [isHeartWishlisted, setIsHeartWishlisted] = useState(isWishlisted);
+
+    const [isHeartWishlisted, setIsHeartWishlisted] = useState(isWishlistedData);
 //   const isWishlisted = true;
 
   const handleClick = () => {
@@ -37,7 +38,7 @@ const WishlistButton = ({ user, product, handleWishlistToggle,isWishlisted }) =>
       <Heart
         size={40}
         strokeWidth={0.7}
-        className={`heart-icon text-black ${isAnimating ? "heart-rainbow" : product?.isWishlisted ? "heart-red" : ""}`}
+        className={`heart-icon text-black ${isAnimating ? "heart-rainbow" : isWishlistedData ? "heart-red" : ""}`}
         onAnimationEnd={handleAnimationEnd}
       />
       <Confetti active={confettiActive} config={{ spread: 60, startVelocity: 30, elementCount: 50, decay: 0.9 }} />
