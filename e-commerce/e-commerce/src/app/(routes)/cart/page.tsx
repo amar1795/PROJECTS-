@@ -38,10 +38,22 @@ import { set } from "zod";
 import { fetchSingleProduct } from "@/actions/cart/fetchSingleProduct";
 import { fetchAllCartCookieData } from "@/actions/cart/fetchAllCartCookieData";
 import { toggleWishlist } from "@/actions/wishlist";
+import { useCheckoutStock } from "@/state hooks/product-checkout-stock";
+
+function calculateTotal(products) {
+  let total = 0;
+  for (let product of products) {
+      let cartQuantity = product.cartQuantity;
+      let discountedPrice = product.discountedPrice;
+      total += cartQuantity * discountedPrice;
+  }
+  return total;
+}
 
 const page = () => {
   const user = useCurrentUser();
   const { toast } = useToast();
+  const testQuantity =useCheckoutStock((state) => state.cartProductQuantity);
 
   const searchParams = useSearchParams();
   const cancelled = searchParams.get("canceled");
@@ -61,6 +73,9 @@ const page = () => {
     useState([]);
   const [mergedTotalCount, setMergedTotalCount] = useState(0);
   const [mergedTotalAmount, setMergedTotalAmount] = useState(0);
+  console.log("this is the  mereged products", completeMergedupdatedProducts);
+
+  const [total, setTotal] = useState(0);
 
   // fethcing the cookies Data
   // useEffect(() => {
@@ -106,17 +121,33 @@ const page = () => {
   //   getCookiesData();
   // }, [updateTrigger, fetchnewTotal]);
 
+
+  useEffect(() => {
+
+    async function getCookiesData() {
+      const { mergedData, total, count } = await fetchAllCartCookieData();
+    
+      setMergedTotalAmount(total);
+      setMergedTotalCount(count);
+    }
+
+    getCookiesData();
+
+  },[fetchnewTotal])
+
   useEffect(() => {
     async function getCookiesData() {
       const { mergedData, total, count } = await fetchAllCartCookieData();
       // create another server function to merge the dbcart data and the cookie data lenght and show it everytime the same count on the shopping cart Icon in this way the consistency will be mainted and the data will be shown without any delayed updation 
+
+      console.log("this is the merged data added to completemeregeddata", mergedData);
       setCompleteMergedupdatedProducts(mergedData);
       setMergedTotalAmount(total);
       setMergedTotalCount(count);
     }
 
     getCookiesData();
-  }, [updateTrigger, fetchnewTotal]);
+  }, [updateTrigger]);
 
   useEffect(() => {
     if (cancelled) {
@@ -205,7 +236,7 @@ const page = () => {
     const updatedProductsList = updatedProducts.map((product) =>
       product.id === productId ? { ...product, isWishlisted: !product.isWishlisted } : product
     );
-  
+    
     setupdatedProducts(updatedProductsList);
   
     setTimeout(async () => {
@@ -234,6 +265,8 @@ const page = () => {
         // setSummaryData(cartSummaryData);
         setMergedTotalCount(products.length);
         setMergedTotalAmount(totalAmount);
+       
+      setTotal(totalAmount);
         // now merging the data from the db into the cookies data hence merge Data
         setCompleteMergedupdatedProducts(products);
       } catch (error) {
@@ -250,6 +283,8 @@ const page = () => {
   useEffect(() => {
     const relatedData = async () => {
       const data = await getRelatedProducts(user?.id);
+      console.log("this is the related updated products list", data);
+
       setupdatedProducts(data);
     };
     relatedData();
@@ -325,8 +360,10 @@ const page = () => {
         }
       );
 
-      // setfetchnewTotal(prev => !prev)
+      setfetchnewTotal(prev => !prev)
       setCompleteMergedupdatedProducts(updatedProductsList);
+     const total= calculateTotal(updatedProductsList);
+      setTotal(total);
       setCartCookieProducts(updatedProductsList);
 
       // setUpdateTrigger((prev) => !prev);
@@ -369,7 +406,7 @@ const page = () => {
       //   }, 200);
       // }
       // Update state after debounce
-      debounceUpdateTrigger();
+      // debounceUpdateTrigger();
     },
     [completeMergedupdatedProducts]
   );
@@ -414,7 +451,7 @@ const page = () => {
             <div className=" text-[2rem] leading-none  border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
               <div className=" flex self-center py-2  h-[3.5rem]">
                 <h1 className=" text-[2rem] self-center leading-none">
-                  { mergedTotalAmount?.toLocaleString("en-IN", {
+                  { total?.toLocaleString("en-IN", {
                         style: "currency",
                         currency: "INR",
                       })
@@ -438,6 +475,8 @@ const page = () => {
                       <CheckoutProductCard
                         handleClickDelete={handleClickDelete}
                         product={product}
+                        size={product?.size}
+                        color={product?.color}
                         handleQuantityChange={handleQuantityCookieChange}
                       />
                     </div>
@@ -471,6 +510,7 @@ const page = () => {
                           <X />
                         </div>{" "}
                         <h1 className=" text-[1.5rem] ">{item.cartQuantity}</h1>
+                        {/* <h1 className=" text-[1.5rem] ">{testQuantity}</h1> */}
                       </span>
 
                       <div className=" flex self-center py-2  w-[10rem]">
@@ -509,7 +549,7 @@ const page = () => {
 
                   <div className=" flex self-center py-2 font-bold">
                     <h1 className=" text-[1.3rem] self-center">
-                      {mergedTotalAmount?.toLocaleString("en-IN", {
+                      {total?.toLocaleString("en-IN", {
                         style: "currency",
                         currency: "INR",
                       })}

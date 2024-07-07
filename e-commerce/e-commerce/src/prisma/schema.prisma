@@ -353,16 +353,17 @@ model Cart {
 }
 
 model CartItem {
-  id               String          @id @default(auto()) @map("_id") @db.ObjectId
-  cartId           String          @db.ObjectId // Foreign Key to Cart
-  cart             Cart            @relation(fields: [cartId], references: [id])
-  productId        String          @db.ObjectId // Foreign Key to Product
-  product          Product         @relation("ProductToCart", fields: [productId], references: [id])
-  quantity         Int             @default(1)
-  productVariantID String?         @db.ObjectId // Optional Foreign Key to Product Variant
-  productVariant   ProductVariant? @relation(fields: [productVariantID], references: [id])
-  productColour    String? // Optional Product Colour
-  productSize      String? // Optional Product Size
+  id                  String          @id @default(auto()) @map("_id") @db.ObjectId
+  cartId              String          @db.ObjectId // Foreign Key to Cart
+  cart                Cart            @relation(fields: [cartId], references: [id])
+  productId           String          @db.ObjectId // Foreign Key to Product
+  product             Product         @relation("ProductToCart", fields: [productId], references: [id])
+  quantity            Int             @default(1)
+  productVariantID    String?         @db.ObjectId // Optional Foreign Key to Product Variant
+  productVariant      ProductVariant? @relation(fields: [productVariantID], references: [id])
+  productColour       String? // Optional Product Colour
+  productSize         String? // Optional Product Size
+  productVarientStock Int? // Optional Product Varient Stock
 
   @@index([cartId])
   @@index([productId])

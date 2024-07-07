@@ -29,7 +29,7 @@ import { toast } from "../ui/use-toast";
 import { getUniqueColors } from "@/lib/utils";
 import ColorSelection from "../product selection/ColourSelection";
 import deleteCartItem from "@/actions/cart/deleteCartProducts";
-import { removeProductFromCookies } from "@/actions/cart/addCartDatatoCookies";
+import { addCartDatatoCookies, removeProductFromCookies } from "@/actions/cart/addCartDatatoCookies";
 import { NotifyMeModal } from "../NotifyMeModal";
 import addItemToCart from "@/actions/cart/addItemToCart";
 
@@ -115,7 +115,7 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
   const [initialLoadColorAndSize, setInitialLoadColorAndSize] = useState(true);
   const [productVarients, setProductVarients] = useState(data?.productVariants);
 
-  const [tempQuantity, setTempQuantity] = useState(data?.cartQuantity );
+  const [tempQuantity, setTempQuantity] = useState(data?.cartQuantity);
   console.log(
     "this is the selected color and size from initial data",
     selectedColor,
@@ -374,23 +374,45 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
         description: `You have successfully selected the size ${selectedSize} `,
       });
     } else {
-     const {success,message}=await addItemToCart(user?.id,data.id,productVarientID,selectedColor,selectedSize,tempQuantity)
-     if(success){
-      alert("Item added to cart successfully")
-     }
-      console.log("this is the final value to be updated in the db", tempQuantity,selectedColor,selectedSize,productVarientID);
-      // handleClickAdd(user?.id, data.id, selectedColor, selectedSize);
+
+      if(user )
+      {
+          // this is being added to db also need to add in the cookie when the user is not logged in 
+          const {success,message}=await addItemToCart(user?.id,data.id,productVarientID,selectedColor,selectedSize,tempQuantity,productVarientStock)
+          if(success === true){
+          alert("Item added to cart successfully")
+          }
+          console.log("this is the final value to be updated in the db", tempQuantity,selectedColor,selectedSize,productVarientID,productVarientStock);
+          // handleClickAdd(user?.id, data.id, selectedColor, selectedSize);
+      }
+
+      else{
+          const dataobj={
+            id:data.id,
+            cartQuantity:tempQuantity,
+            discountedPrice:data.discountedPrice,
+            color:selectedColor,
+            size:selectedSize,
+            stock:productVarientStock,
+            productVarientID:productVarientID
+
+          }
+      const {success,cookieValue}= await addCartDatatoCookies([dataobj])
+        // console.log("this is the final value to be updated in the cookie", tempQuantity,selectedColor,selectedSize,productVarientID,productVarientStock);
+        console.log("this is the cookie value",success,cookieValue)
+      }
+      
     }
 
   }
 
   useEffect(() => {
     // remove the items from cookies when the product varient is swithced
-    removeProductFromCookies(data.id);
+    // removeProductFromCookies(data.id);
 
     // remove the items from the db as well when the product varient is swithced
 
-    deleteCartItem(user?.id, data.id);
+    // deleteCartItem(user?.id, data.id);
     // setToggledVarientQuantity( (prev) => !prev);
 
     // setUpdateTrigger((prev) => !prev);
@@ -487,7 +509,7 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
                         <div className=" text-[2rem] w-11  bg-white h-[2.5rem]  ">
                           <h1 className="  flex text-center justify-center align-middle  ">
                             {/* {data?.cartQuantity || 0} */}
-                            {tempQuantity || 0}
+                            {tempQuantity || 1}
                           </h1>
                         </div>
                         <button

@@ -17,6 +17,10 @@ export async function addCartDatatoCookies(updatedProducts) {
       id: product.id,
       cartQuantity: product?.cartQuantity,
       discountedPrice: product.discountedPrice,
+      color:product?.color,
+      size:product?.size,
+      stock:product?.stock,
+      productVarientID:product?.productVarientID
     }));
 
   // Merge new data with existing data, ensuring no duplicates
@@ -25,8 +29,10 @@ export async function addCartDatatoCookies(updatedProducts) {
   productsToStore.forEach(productToStore => {
     const index = mergedData.findIndex(item => item.id === productToStore.id);
     if (index !== -1) {
+      // Update existing product
       mergedData[index] = productToStore;
     } else {
+      // Add new product
       mergedData.push(productToStore);
     }
   });
@@ -40,6 +46,8 @@ export async function addCartDatatoCookies(updatedProducts) {
     path: '/',
   });
   fetchAllCartCookieData();
+
+  return  { success: true, cookieValue: productsToStore };
   
 }
 

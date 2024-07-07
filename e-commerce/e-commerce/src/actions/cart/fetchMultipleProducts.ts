@@ -15,7 +15,7 @@ export async function fetchMultipleProducts(productIds: string[]) {
         include: {
           brand: true,
           images: { take: 1 }, // Fetch only the first image
-                
+          cartItems: true,       
         },
       });
 

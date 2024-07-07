@@ -6,7 +6,9 @@ import { fetchMultipleProducts } from './fetchMultipleProducts';
 import { revalidatePath } from 'next/cache';
 
 export async function fetchAllCartCookieData() {
+  
           const cookieData = await getCartDataFromCookies();
+
           const completedata = await fetchMultipleProducts(
             cookieData.map((product) => product.id)
           );
@@ -15,7 +17,7 @@ export async function fetchAllCartCookieData() {
           const mergedData = completedata.map((product) => {
             const cookieProduct = cookieData.find((item) => item.id === product.id);
             if (cookieProduct) {
-              return { ...product, cartQuantity: cookieProduct.cartQuantity };
+              return { ...product, cartQuantity: cookieProduct.cartQuantity, color:cookieProduct.color, size:cookieProduct.size, stock:cookieProduct.stock,productVarientID:cookieProduct.productVarientID};
             }
             return product;
           });

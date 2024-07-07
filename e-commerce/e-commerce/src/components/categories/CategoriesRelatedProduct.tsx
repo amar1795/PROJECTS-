@@ -32,7 +32,7 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
 }) => {
   if (!relatedProduct) return <div>Loading ...</div>;
 
-  const testData= relatedProduct;
+  const testData = relatedProduct;
   console.log("this is the test related Data for wishlist", testData);
   console.log(
     "this is the related product from related products page",
@@ -46,26 +46,30 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
   // console.log("this is the product id from related products page:", filteredId);
   const [updatedProducts, setupdatedProducts] =
     useState<Product[]>(filteredProducts);
-    
-    
-console.log("this is the updated test products", updatedProducts);
-    // Initialize a state to control the merging process
-const [isMerged, setIsMerged] = useState(false);
 
-    const [updatedRelatedProducts, setupdatedRelatedProducts] =
+  console.log("this is the updated test products", updatedProducts);
+  // Initialize a state to control the merging process
+  const [isMerged, setIsMerged] = useState(false);
+
+  
+  const [Added, setAdded] = useState(false);
+  const [Removed, setRemoved] = useState(false);
+
+  const [updatedRelatedProducts, setupdatedRelatedProducts] =
     useState(relatedProduct);
 
-    useEffect(() => {
-      const updatefunction = () => {
-        
-        setupdatedRelatedProducts(relatedProduct)
-        setupdatedProducts(relatedProduct)
-        console.log("this is the related product from categories products page", relatedProduct)
-        setIsMerged(false);
-
-      }
-      updatefunction()
-    }, [relatedProduct]);
+  useEffect(() => {
+    const updatefunction = () => {
+      setupdatedRelatedProducts(relatedProduct);
+      setupdatedProducts(relatedProduct);
+      console.log(
+        "this is the related product from categories products page",
+        relatedProduct
+      );
+      setIsMerged(false);
+    };
+    updatefunction();
+  }, [relatedProduct]);
 
   console.log(
     "this is the updatedProducts product from related products page",
@@ -92,50 +96,48 @@ const [isMerged, setIsMerged] = useState(false);
     // console.log("this is the completed data", completedata);
     // // addProductToCart(userID, productID);
     // addCartDatatoCookies(completedata);
-  
-    if(categoryPageData == true){
 
-      const updatedRelatedProductsList = updatedRelatedProducts.map((product) => {
+    if (categoryPageData == true) {
+      const updatedRelatedProductsList = updatedRelatedProducts.map(
+        (product) => {
+          if (product.id === productID) {
+            return { ...product, cartQuantity: 1 };
+          }
+          return product;
+        }
+      );
+      console.log(
+        "this is the updated products test handliclick list",
+        updatedRelatedProductsList
+      );
+
+      setupdatedRelatedProducts(updatedRelatedProductsList);
+      addCartDatatoCookies(updatedRelatedProductsList); // Otherwise, save updated data to cookies
+    } else {
+      const updatedProductsList = updatedProducts.map((product) => {
         if (product.id === productID) {
           return { ...product, cartQuantity: 1 };
         }
         return product;
       });
-      console.log("this is the updated products test handliclick list", updatedRelatedProductsList);
-  
-      setupdatedRelatedProducts(updatedRelatedProductsList);
-      addCartDatatoCookies(updatedRelatedProductsList); // Otherwise, save updated data to cookies
-  
-   
-    }
-    else
-    {  
-      
-      const updatedProductsList = updatedProducts.map((product) => {
-      if (product.id === productID) {
-        return { ...product, cartQuantity: 1 };
-      }
-      return product;
-    });
-    console.log("this is the updated products test handliclick list", updatedProductsList);
+      console.log(
+        "this is the updated products test handliclick list",
+        updatedProductsList
+      );
 
-    setupdatedProducts(updatedProductsList);
-    addCartDatatoCookies(updatedProductsList); // Otherwise, save updated data to cookies
-
+      setupdatedProducts(updatedProductsList);
+      addCartDatatoCookies(updatedProductsList); // Otherwise, save updated data to cookies
     }
 
-    
-    if(userID){
+    if (userID) {
       await increaseProductQuantity(userID, productID);
-
     }
 
-  
     // setUpdateTrigger((prev) => !prev);
-
   };
 
   const handleWishlistToggle = useCallback(
+    // alert("handleWishlistToggle is called"),
     async (userId: string, productId: string) => {
       if (!user) {
         callToast({
@@ -150,7 +152,10 @@ const [isMerged, setIsMerged] = useState(false);
           ? { ...product, isWishlisted: !product.isWishlisted }
           : product
       );
-      console.log("this is the updated test products list", updatedProductsList);
+      console.log(
+        "this is the updated test products list",
+        updatedProductsList
+      );
       setupdatedProducts(updatedProductsList);
 
       const updatedRelatedProductsList = updatedRelatedProducts.map((product) =>
@@ -160,24 +165,24 @@ const [isMerged, setIsMerged] = useState(false);
       );
       setupdatedRelatedProducts(updatedRelatedProductsList);
 
+      const message = await toggleWishlist(userId, productId);
 
+      setAdded(message.message === "added" ? true : false);
+      setRemoved(message.message === "removed" ? true : false);
 
-      setTimeout(async () => {
-        const message = await toggleWishlist(userId, productId);
-        callToast({
-          variant: message.message === "added" ? "default" : "destructive",
-          title:
-            message.message === "added"
-              ? "Added to Wishlist"
-              : "Removed from Wishlist",
-          description:
-            message.message === "added"
-              ? "The item has been wishlisted"
-              : "The item has been removed from wishlist",
-        });
-      }, 200);
+      callToast({
+        variant: message.message === "added" ? "default" : "destructive",
+        title:
+          message.message === "added"
+            ? "Added to Wishlist"
+            : "Removed from Wishlist",
+        description:
+          message.message === "added"
+            ? "The item has been wishlisted"
+            : "The item has been removed from wishlist",
+      });
     },
-    [updatedProducts, user, toast,updatedRelatedProducts]
+    [updatedProducts, user, toast, updatedRelatedProducts]
   );
 
   const handleQuantityChange = useCallback(
@@ -196,54 +201,53 @@ const [isMerged, setIsMerged] = useState(false);
         }
         return product;
       });
-      console.log("this is the updated products test handliclick list", updatedProductsList);
+      console.log(
+        "this is the updated products test handliclick list",
+        updatedProductsList
+      );
       setupdatedProducts(updatedProductsList);
 
-
-      const updatedProductsListRelated = updatedRelatedProducts.map((product) => {
-        // alert("handlequantity changed is called")
-        if (product.id === productId) {
-          // Ensure quantity doesn't go below 0
-          const currentQuantity = product?.cartQuantity
-            ? product?.cartQuantity
-            : 0; // Initialize to 0 if undefined or null
-          const newQuantity = Math.max(currentQuantity + change, 0);
-          // alert( newQuantity)
-          return { ...product, cartQuantity: newQuantity };
+      const updatedProductsListRelated = updatedRelatedProducts.map(
+        (product) => {
+          // alert("handlequantity changed is called")
+          if (product.id === productId) {
+            // Ensure quantity doesn't go below 0
+            const currentQuantity = product?.cartQuantity
+              ? product?.cartQuantity
+              : 0; // Initialize to 0 if undefined or null
+            const newQuantity = Math.max(currentQuantity + change, 0);
+            // alert( newQuantity)
+            return { ...product, cartQuantity: newQuantity };
+          }
+          return product;
         }
-        return product;
-      });
+      );
       setupdatedRelatedProducts(updatedProductsListRelated);
       console.log("these are the updated products", updatedProducts);
 
-      if(categoryPageData == true){
+      if (categoryPageData == true) {
         // Save updated product information to cookies
-      if (
-        updatedProductsListRelated.find((product) => product.id === productId)
-          ?.cartQuantity === 0
-      ) {
-        removeProductFromCookies(productId); // Remove product from cookies if cartQuantity is 0
+        if (
+          updatedProductsListRelated.find((product) => product.id === productId)
+            ?.cartQuantity === 0
+        ) {
+          removeProductFromCookies(productId); // Remove product from cookies if cartQuantity is 0
+        } else {
+          // alert("addCartDatatoCookies is called")
+          addCartDatatoCookies(updatedProductsListRelated); // Otherwise, save updated data to cookies
+        }
       } else {
-        // alert("addCartDatatoCookies is called")
-        addCartDatatoCookies(updatedProductsListRelated); // Otherwise, save updated data to cookies
+        // Save updated product information to cookies
+        if (
+          updatedProductsList.find((product) => product.id === productId)
+            ?.cartQuantity === 0
+        ) {
+          removeProductFromCookies(productId); // Remove product from cookies if cartQuantity is 0
+        } else {
+          // alert("addCartDatatoCookies is called")
+          addCartDatatoCookies(updatedProductsList); // Otherwise, save updated data to cookies
+        }
       }
-      }
-      else
-      {
-
-     
-      // Save updated product information to cookies
-      if (
-        updatedProductsList.find((product) => product.id === productId)
-          ?.cartQuantity === 0
-      ) {
-        removeProductFromCookies(productId); // Remove product from cookies if cartQuantity is 0
-      } else {
-        // alert("addCartDatatoCookies is called")
-        addCartDatatoCookies(updatedProductsList); // Otherwise, save updated data to cookies
-      }
-
-    }
 
       if (user) {
         setTimeout(async () => {
@@ -257,43 +261,54 @@ const [isMerged, setIsMerged] = useState(false);
         }, 200);
       }
     },
-    [updatedProducts , updatedRelatedProducts]
+    [updatedProducts, updatedRelatedProducts]
   );
 
   useEffect(() => {
     if (!isMerged) {
-    async function mergeDataFromCookies() {
-      const cookieData = await getCartDataFromCookies();
-      console.log("this is the updatedProducts data", updatedProducts);
-      // create another function here to merge the login usercart lenght and the cookie cart length and then update the cart length in the shopping cart Icon
-      const mergedProducts = updatedProducts.map((product) => {
-        const cookieProduct = cookieData.find((item) => item.id === product.id);
-        return cookieProduct
-          ? { ...product, cartQuantity: cookieProduct.cartQuantity }
-          : product;
-      });
-      console.log("this is the meregedproduct inside the merged cookies", mergedProducts);
-      setupdatedProducts(mergedProducts);
-      console.log("this is the updated related inside the useeffect products", updatedRelatedProducts);
+      async function mergeDataFromCookies() {
+        const cookieData = await getCartDataFromCookies();
+        console.log("this is the updatedProducts data", updatedProducts);
+        // create another function here to merge the login usercart lenght and the cookie cart length and then update the cart length in the shopping cart Icon
+        const mergedProducts = updatedProducts.map((product) => {
+          const cookieProduct = cookieData.find(
+            (item) => item.id === product.id
+          );
+          return cookieProduct
+            ? { ...product, cartQuantity: cookieProduct.cartQuantity }
+            : product;
+        });
+        console.log(
+          "this is the meregedproduct inside the merged cookies",
+          mergedProducts
+        );
+        setupdatedProducts(mergedProducts);
+        console.log(
+          "this is the updated related inside the useeffect products",
+          updatedRelatedProducts
+        );
 
-      const mergedRelatedProducts = updatedRelatedProducts.map((product) => {
-        const cookieProduct = cookieData.find((item) => item.id === product.id);
-        return cookieProduct
-          ? { ...product, cartQuantity: cookieProduct.cartQuantity }
-          : product;
-      });
+        const mergedRelatedProducts = updatedRelatedProducts.map((product) => {
+          const cookieProduct = cookieData.find(
+            (item) => item.id === product.id
+          );
+          return cookieProduct
+            ? { ...product, cartQuantity: cookieProduct.cartQuantity }
+            : product;
+        });
 
-      setupdatedRelatedProducts(mergedRelatedProducts);
-      console.log("Merged related products with cookies:", mergedRelatedProducts);
+        setupdatedRelatedProducts(mergedRelatedProducts);
+        console.log(
+          "Merged related products with cookies:",
+          mergedRelatedProducts
+        );
 
-      // Set isMerged to true to avoid re-running the effect unnecessarily
-     setIsMerged(true);
+        // Set isMerged to true to avoid re-running the effect unnecessarily
+        setIsMerged(true);
+      }
+      mergeDataFromCookies();
     }
-    mergeDataFromCookies();
-    }
-     
-
-  }, [ updateTrigger,relatedProduct,isMerged]);
+  }, [updateTrigger, relatedProduct, isMerged]);
 
   console.log("this is the updated related products", updatedRelatedProducts);
   return (
@@ -308,12 +323,14 @@ const [isMerged, setIsMerged] = useState(false);
                 .map((product) => (
                   <div className="py-4" key={product.id}>
                     <ProductCard
+                    Added={Added}
+                    Removed={Removed}
                       product={product}
                       productId={product.id}
                       handleQuantityChange={handleQuantityChange}
                       handleWishlistToggle={handleWishlistToggle}
                       handleClickAdd={handleClickAdd}
-                      catRelatedProduct={true} 
+                      catRelatedProduct={true}
                     />
                   </div>
                 ))
@@ -322,12 +339,14 @@ const [isMerged, setIsMerged] = useState(false);
                 .map((product) => (
                   <div className="py-4" key={product.id}>
                     <ProductCard
+                    Added={Added}
+                    Removed={Removed}
                       product={product}
                       productId={product.id}
                       handleQuantityChange={handleQuantityChange}
                       handleWishlistToggle={handleWishlistToggle}
                       handleClickAdd={handleClickAdd}
-                      catRelatedProduct={true} 
+                      catRelatedProduct={true}
                     />
                   </div>
                 ))}

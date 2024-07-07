@@ -3,10 +3,10 @@ import { Heart } from 'lucide-react';
 import './heart.css';
 import Confetti from 'react-dom-confetti';
 
-const WishlistButton = ({ user, product, handleWishlistToggle,isWishlistedData }) => {
+const WishlistButton = ({ user, product, handleWishlistToggle,isWishlistedData ,Added}) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [confettiActive, setConfettiActive] = useState(false);
-
+console.log("this is added data from parent",Added)
     const [isHeartWishlisted, setIsHeartWishlisted] = useState(isWishlistedData);
 //   const isWishlisted = true;
 

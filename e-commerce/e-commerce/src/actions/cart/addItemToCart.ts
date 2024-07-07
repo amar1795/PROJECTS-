@@ -3,7 +3,7 @@
 import { prismadb } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
-export default async function addItemToCart(userId, productId, productVariant, productColour, productSize, quantity) {
+export default async function addItemToCart(userId, productId, productVariant, productColour, productSize, quantity,productVarientStock) {
   console.log("User ID:", userId);
 
   try {
@@ -37,17 +37,20 @@ export default async function addItemToCart(userId, productId, productVariant, p
   } else {
     // Check if the product is already in the cart
     let cartItem = cart.cartItems.find(item =>
-      item.productId === productId &&
-      item.productVariantID === (productVariant || null) &&
-      item.productColour === (productColour || null) &&
-      item.productSize === (productSize || null)
+      item.productId === productId
     );
 
     if (cartItem) {
       // Increase the quantity if the product is already in the cart
       await prismadb.cartItem.update({
         where: { id: cartItem.id },
-        data: { quantity: cartItem.quantity + quantity }
+        data: {
+          quantity,
+          productVariantID: productVariant || null,
+          productColour: productColour || null,
+          productSize: productSize || null,
+          productVarientStock: productVarientStock || null
+        }
       });
     } else {
       // Add the product to the cart with specified quantity
@@ -58,7 +61,8 @@ export default async function addItemToCart(userId, productId, productVariant, p
           quantity,
           productVariantID: productVariant || null,
           productColour: productColour || null,
-          productSize: productSize || null
+          productSize: productSize || null,
+          productVarientStock: productVarientStock || null
         }
       });
     }

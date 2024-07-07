@@ -35,6 +35,8 @@ const removeSpaces = (name: string): string => {
 };
 
 const ProductCard: React.FC<updatedDataResponse> = ({
+  Added,
+  Removed,
   product,
   handleClickAdd,
   catRelatedProduct,
@@ -103,7 +105,7 @@ const ProductCard: React.FC<updatedDataResponse> = ({
                   strokeWidth={0.8}
                   // className={` hover:fill-red-500 text-black`}
                 /> */}
-                 <WishlistButton isWishlistedData={product?.isWishlisted}  />
+                 <WishlistButton isWishlistedData={product?.isWishlisted} Added={Added} Removed={Removed}  />
 
               </button>
             
