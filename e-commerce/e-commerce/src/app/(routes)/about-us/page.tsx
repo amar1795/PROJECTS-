@@ -4,7 +4,7 @@ import { getCartDataFromCookies } from "@/actions/cart/addCartDatatoCookies";
 import { getRelatedProducts } from "@/actions/cart/categoryRelatedProduct";
 import deleteCartItem from "@/actions/cart/deleteCartProducts";
 import { fetchAllCartCookieData } from "@/actions/cart/fetchAllCartCookieData";
-import { createProduct, createProductRating, createProductReview, createProductVarient, deleteProduct, fetchAllProduct, fetchAllReviews, fetchProduct, fetchProductAllData, fetchProductVarient, fetchProductanotherversion, fetchProductsByCategory, fethChildrenCategories, getProductsByCategory } from "@/actions/createProduct";
+import { createProduct, createProductRating, createProductReview, deleteProduct, fetchAllProduct, fetchAllReviews, fetchProduct, fetchProductAllData, fetchProductVarient, fetchProductanotherversion, fetchProductsByCategory, fethChildrenCategories, getProductsByCategory } from "@/actions/createProduct";
 import { dummyUserFunction, getUserBySpecificEmail } from "@/actions/dummyUser";
 import {  testEmail } from "@/actions/email/testEmail";
 import { fetchAllOrders } from "@/actions/order/fetchAllOrder";
@@ -15,6 +15,8 @@ import { productCreationNew } from "@/actions/product/productCreation";
 import { getUserById } from "@/auth";
 import React from "react";
 import WishlistButton from "@/components/animated_heart/heart"
+import { generateCombinations, generatePantCombinations } from "@/actions/product/generateCombination";
+import { createProductVarient, deleteProductVarients, GenerateCombinationProductVarients } from "@/actions/product/createProductVarients";
 const page = async() => {
   // CreateColour()
   // CreateSize()
@@ -36,7 +38,7 @@ const page = async() => {
   // createProductRating()
   // getAllUsers()
   // createProductReview()
-  // fetchProduct()
+  
   // fetchProductAllData()
   // fetchAllReviews()
   // deleteProduct("665dbac4212a3a7b7d76b6c8")
@@ -48,23 +50,40 @@ const page = async() => {
   // UpdateCategory()
   // fetchAllProduct()
   // fetchProductAllData()
-  // fetchProductsByCategory("665a0b9f14be77720636d443")
   // getProductsByCategory("665a0b9f14be77720636d443")
   // getUserBySpecificEmail("facfrenzy97@gmail.com")
   // deleteCartItem("6665de25b7e0328f68f43485","665af50e3220eba7c7eab944")
-//  const data= getRelatedProducts("6665de25b7e0328f68f43485").then((data)=>{console.log("this is the related products", data)})
-//  console.log("this is the related products", data);  
-// fetchAllOrders()
-// testEmail({last_name:"smith",first_name:"john"})
-// fetchOrderById("66756c6354363728fe808d27")
-// searchProductsByNameOrBrand("shirt")
-// getUserById("6673e3d87214902e3b734de3")
-// getCartDataFromCookies()
-// const { count } = await fetchAllCartCookieData();
-// const data=await getCartDataFromCookies()
-// const count=data.length;
-// console.log("this is the count", count);
-fetchProductAllData(["665af50e3220eba7c7eab944"])
+  //  const data= getRelatedProducts("6665de25b7e0328f68f43485").then((data)=>{console.log("this is the related products", data)})
+  //  console.log("this is the related products", data);  
+  // fetchAllOrders()
+  // testEmail({last_name:"smith",first_name:"john"})
+  // fetchOrderById("66756c6354363728fe808d27")
+  // searchProductsByNameOrBrand("shirt")
+  // getUserById("6673e3d87214902e3b734de3")
+  // getCartDataFromCookies()
+  // const { count } = await fetchAllCartCookieData();
+  // const data=await getCartDataFromCookies()
+  // const count=data.length;
+  // console.log("this is the count", count);
+  // fetchProductsByCategory("665a0ba214be77720636d44a")
+  // generateCombinations("665b00173220eba7c7eabab3")
+  // fetchProductAllData(["665ac95e5788e185779d7ce0"])
+  // deleteProductVarients("665b05173220eba7c7eabadd")
+  
+  fetchProduct("665b05173220eba7c7eabadd")
+const ProductsPants= [
+ 
+  { id: '665b03223220eba7c7eabacb' },
+  { id: '665b03a33220eba7c7eabad1' },
+  { id: '665b04ac3220eba7c7eabad7' },
+  { id: '665b05173220eba7c7eabadd' }
+]
+
+// generatePantCombinations("665b028f3220eba7c7eabac5")
+// createProductVarient("665b03223220eba7c7eabacb")
+// GenerateCombinationProductVarients(ProductsPants)
+
+
   return (
     <div className=" bg-pink-500 border-2 border-black px-10 ">
       <div>

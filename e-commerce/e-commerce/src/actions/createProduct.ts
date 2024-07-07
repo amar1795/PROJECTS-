@@ -71,10 +71,10 @@ export async function createProduct({
 
 // creating product varient
 
-export async function createProductVarient() {
+export async function createProductVarientOld() {
   try {
     const productID = "665af50e3220eba7c7eab944"; // Replace with the actual product ID
-    const formalShirtVariants = await prismadb.productVariant.createMany({
+    const productVariants = await prismadb.productVariant.createMany({
       data: [
         {
           productId: productID,
@@ -151,7 +151,7 @@ export async function createProductVarient() {
       ],
     });
 
-    console.log("Product variants created:", formalShirtVariants);
+    console.log("Product variants created:", productVariants);
   } catch (error) {
     console.error("Error creating product variant:", error);
   }
@@ -337,15 +337,16 @@ export async function createProductReview(productID: string) {
   }
 }
 
-export async function fetchProduct() {
+export async function fetchProduct(productId) {
+  
   const product = await prismadb.product.findUnique({
     where: {
-      id: "665ac95e5788e185779d7ce0",
+      id: productId,
     },
     include: {
       category: true, // Include the category
       brand: true, // Include the brand
-      images: true, // Include the images
+      // images: true, // Include the images
 
       productVariants: {
         include: {
@@ -355,26 +356,39 @@ export async function fetchProduct() {
       },
     },
   });
-  console.log("Product:", product);
-  product?.productVariants.forEach((variant) => {
-    // Accessing color and size properties directly
-    const color = variant.color.name; // Assuming 'name' is the property containing the color name
-    const size = variant.size.name; // Assuming 'name' is the property containing the size name
 
-    console.log("Color:", color);
-    console.log("Size:", size);
-  });
+     // Transform productVariants to include color and size names
+     const transformedProductVariants = product.productVariants.map((variant) => ({
+      ...variant,
+      color: variant.color.name, // Replace color object with its name
+      size: variant.size.name, // Replace size object with its name
+    }));
 
-  const category = await prismadb.category.findUnique({
-    where: {
-      id: product?.categoryId,
-    },
-  });
+    const transformedProduct = {
+      ...product,
+      productVariants: transformedProductVariants.length,
+      productVariants: transformedProductVariants,
+    };
+  // product?.productVariants.forEach((variant) => {
+  //   // Accessing color and size properties directly
+  //   const color = variant.color.name; // Assuming 'name' is the property containing the color name
+  //   const size = variant.size.name; // Assuming 'name' is the property containing the size name
+
+  //   console.log("Color:", color);
+  //   console.log("Size:", size);
+  // });
+
+  // const category = await prismadb.category.findUnique({
+  //   where: {
+  //     id: product?.categoryId,
+  //   },
+  // });
 
   // Access category name
-  const categoryName = category?.name;
+  // const categoryName = category?.name;
 
-  console.log("Category:", categoryName);
+  console.log("Product:", transformedProduct);
+  // console.log("Category:", categoryName);
 }
 
 export async function fetchAllProduct() {

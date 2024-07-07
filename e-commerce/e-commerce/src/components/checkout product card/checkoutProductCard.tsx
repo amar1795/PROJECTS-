@@ -46,11 +46,11 @@ const CheckoutProductCard = ({
 
   const handleDecrease = () => {
    
-      if (tempQuantity == 1) {
-        return;
-      }
+      // if (tempQuantity == 1) {
+      //   return;
+      // }
 
-      setTempQuantity((prev) => prev - 1);
+      // setTempQuantity((prev) => prev - 1);
 
       // the below needs to be done when the product is finalized and clicked on proceed to buy
 
@@ -128,16 +128,21 @@ const CheckoutProductCard = ({
                 {product?.brand?.name}
               </h1>
 
-              {product?.cartItems && product?.cartItems[0]?.productSize && (
+              {product?.cartItems && product?.cartItems[0]?.productSize ? (
                 <div className="  px-2 text-[1.2rem] uppercase flex self-center">
                   <span className=" font-bold self-center">SIZE:</span>
                   {/* {product?.cartItems[0]?.productSize} */}
                   {/* <SelectionSizeBox size={product?.cartItems[0]?.productSize} color={product?.cartItems[0]?.productColour} /> */}
                   <SelectionSizeBox size={size} color={color} />
                 </div>
-              )}
+              ) : ( <div className="  px-2 text-[1.2rem] uppercase flex self-center">
+                <span className=" font-bold self-center">SIZE:</span>
+                {/* {product?.cartItems[0]?.productSize} */}
+                {/* <SelectionSizeBox size={product?.cartItems[0]?.productSize} color={product?.cartItems[0]?.productColour} /> */}
+                <SelectionSizeBox size={size} color={color} />
+              </div>)}
 
-              {product?.cartItems && product?.cartItems[0]?.productColour && (
+              {product?.cartItems && product?.cartItems[0]?.productColour ? (
                 <div className="  px-2 text-[1.2rem] uppercase flex self-center">
                   <span className=" font-bold mt-1">COLOUR:</span>
                   {/* {product?.cartItems[0]?.productColour} */}
@@ -145,7 +150,13 @@ const CheckoutProductCard = ({
                   {/* <ColourBox color={product?.cartItems[0]?.productColour} /> */}
                   <ColourBox color={color} />
                 </div>
-              )}
+              ): (<div className="  px-2 text-[1.2rem] uppercase flex self-center">
+                <span className=" font-bold mt-1">COLOUR:</span>
+                {/* {product?.cartItems[0]?.productColour} */}
+                {/* when the user is signed in */}
+                {/* <ColourBox color={product?.cartItems[0]?.productColour} /> */}
+                <ColourBox color={color} />
+              </div>)}
 
               <div>
                 

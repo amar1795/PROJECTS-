@@ -55,7 +55,7 @@ export async function getCartDataFromCookies() {
   const cookieStore = cookies();
   const existingDataCookie = cookieStore.get('cartProducts');
   const existingData = existingDataCookie ? JSON.parse(existingDataCookie.value) : [];
-  console.log("this is the existing data cookie", existingData);
+  // console.log("this is the existing data cookie", existingData);
   return existingData;
 
 }

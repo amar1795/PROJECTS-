@@ -486,7 +486,7 @@ successfully retrieved 40 users [
   }
 ]
 
-[
+Colors = [
   {
   id: '665af3c03220eba7c7eab93e',
   name: 'White',
@@ -541,7 +541,7 @@ successfully retrieved 40 users [
 
 <!-- sizes -->
 
-successfully retrieved sizes [
+Sizes = [
   {
     id: '665aca6d5788e185779d7ce5',
     name: 'Extra Small',
@@ -669,8 +669,144 @@ successfully retrieved sizes [
     category: 'shoes',
     createdAt: 2024-06-01T07:17:31.710Z,
     updatedAt: 2024-06-01T07:17:31.710Z
+  },
+  {
+    id: '668a8033600804a6d384884a',
+    name: 'UK Size 28',
+    value: '28',
+    category: 'waist',
+    createdAt: 2024-07-07T11:46:59.052Z,
+    updatedAt: 2024-07-07T11:46:59.052Z
+  },
+  {
+    id: '668a8033600804a6d384884b',
+    name: 'UK Size 29',
+    value: '29',
+    category: 'waist',
+    createdAt: 2024-07-07T11:46:59.181Z,
+    updatedAt: 2024-07-07T11:46:59.181Z
+  },
+  {
+    id: '668a8033600804a6d384884c',
+    name: 'UK Size 30',
+    value: '30',
+    category: 'waist',
+    createdAt: 2024-07-07T11:46:59.265Z,
+    updatedAt: 2024-07-07T11:46:59.265Z
+  },
+  {
+    id: '668a8033600804a6d384884d',
+    name: 'UK Size 31',
+    value: '31',
+    category: 'waist',
+    createdAt: 2024-07-07T11:46:59.352Z,
+    updatedAt: 2024-07-07T11:46:59.352Z
+  },
+  {
+    id: '668a8033600804a6d384884e',
+    name: 'UK Size 32',
+    value: '32',
+    category: 'waist',
+    createdAt: 2024-07-07T11:46:59.441Z,
+    updatedAt: 2024-07-07T11:46:59.441Z
+  },
+  {
+    id: '668a8033600804a6d384884f',
+    name: 'UK Size 33',
+    value: '33',
+    category: 'waist',
+    createdAt: 2024-07-07T11:46:59.528Z,
+    updatedAt: 2024-07-07T11:46:59.528Z
+  },
+  {
+    id: '668a8033600804a6d3848850',
+    name: 'UK Size 34',
+    value: '34',
+    category: 'waist',
+    createdAt: 2024-07-07T11:46:59.615Z,
+    updatedAt: 2024-07-07T11:46:59.615Z
+  },
+  {
+    id: '668a8033600804a6d3848851',
+    name: 'UK Size 35',
+    value: '35',
+    category: 'waist',
+    createdAt: 2024-07-07T11:46:59.700Z,
+    updatedAt: 2024-07-07T11:46:59.700Z
+  },
+  {
+    id: '668a8033600804a6d3848852',
+    name: 'UK Size 36',
+    value: '36',
+    category: 'waist',
+    createdAt: 2024-07-07T11:46:59.788Z,
+    updatedAt: 2024-07-07T11:46:59.788Z
+  },
+  {
+    id: '668a8033600804a6d3848853',
+    name: 'UK Size 37',
+    value: '37',
+    category: 'waist',
+    createdAt: 2024-07-07T11:46:59.875Z,
+    updatedAt: 2024-07-07T11:46:59.875Z
+  },
+  {
+    id: '668a8033600804a6d3848854',
+    name: 'UK Size 38',
+    value: '38',
+    category: 'waist',
+    createdAt: 2024-07-07T11:46:59.962Z,
+    updatedAt: 2024-07-07T11:46:59.962Z
+  },
+  {
+    id: '668a8034600804a6d3848855',
+    name: 'UK Size 39',
+    value: '39',
+    category: 'waist',
+    createdAt: 2024-07-07T11:47:00.049Z,
+    updatedAt: 2024-07-07T11:47:00.049Z
+  },
+  {
+    id: '668a8034600804a6d3848856',
+    name: 'UK Size 40',
+    value: '40',
+    category: 'waist',
+    createdAt: 2024-07-07T11:47:00.136Z,
+    updatedAt: 2024-07-07T11:47:00.136Z
+  },
+  {
+    id: '668a8034600804a6d3848857',
+    name: 'UK Size 41',
+    value: '41',
+    category: 'waist',
+    createdAt: 2024-07-07T11:47:00.222Z,
+    updatedAt: 2024-07-07T11:47:00.222Z
+  },
+  {
+    id: '668a8034600804a6d3848858',
+    name: 'UK Size 42',
+    value: '42',
+    category: 'waist',
+    createdAt: 2024-07-07T11:47:00.310Z,
+    updatedAt: 2024-07-07T11:47:00.310Z
+  },
+  {
+    id: '668a8034600804a6d3848859',
+    name: 'UK Size 43',
+    value: '43',
+    category: 'waist',
+    createdAt: 2024-07-07T11:47:00.396Z,
+    updatedAt: 2024-07-07T11:47:00.396Z
+  },
+  {
+    id: '668a8034600804a6d384885a',
+    name: 'UK Size 44',
+    value: '44',
+    category: 'waist',
+    createdAt: 2024-07-07T11:47:00.484Z,
+    updatedAt: 2024-07-07T11:47:00.484Z
   }
-] and size count is  16
+] and size count is  33
 
 
 successfully created brands [

@@ -149,18 +149,25 @@ export async function CreateSize() {
         
         const sizeLabels = [
            
-          
-        
-            { name: 'UK Size 3', value: '3', category: 'shoes' },
-            { name: 'UK Size 4', value: '4', category: 'shoes' },
-            { name: 'UK Size 5', value: '5', category: 'shoes' },
-            { name: 'UK Size 6', value: '6', category: 'shoes' },
-            { name: 'UK Size 7', value: '7', category: 'shoes' },
-            { name: 'UK Size 8', value: '8', category: 'shoes' },
-            { name: 'UK Size 9', value: '9', category: 'shoes' },
-            { name: 'UK Size 10', value: '10', category: 'shoes' },
-            { name: 'UK Size 11', value: '11', category: 'shoes' },
-            { name: 'UK Size 12', value: '12', category: 'shoes' }
+              
+          { name: 'UK Size 28', value: '28', category: 'waist' },
+          { name: 'UK Size 29', value: '29', category: 'waist' },
+          { name: 'UK Size 30', value: '30', category: 'waist' },
+          { name: 'UK Size 31', value: '31', category: 'waist' },
+          { name: 'UK Size 32', value: '32', category: 'waist' },
+          { name: 'UK Size 33', value: '33', category: 'waist' },
+          { name: 'UK Size 34', value: '34', category: 'waist' },
+          { name: 'UK Size 35', value: '35', category: 'waist' },
+          { name: 'UK Size 36', value: '36', category: 'waist' },
+          { name: 'UK Size 37', value: '37', category: 'waist' },
+          { name: 'UK Size 38', value: '38', category: 'waist' },
+          { name: 'UK Size 39', value: '39', category: 'waist' },
+          { name: 'UK Size 40', value: '40', category: 'waist' },
+          { name: 'UK Size 41', value: '41', category: 'waist' },
+          { name: 'UK Size 42', value: '42', category: 'waist' },
+          { name: 'UK Size 43', value: '43', category: 'waist' },
+          { name: 'UK Size 44', value: '44', category: 'waist' }
+
         ];
 
         for (const item of sizeLabels) {
@@ -182,6 +189,7 @@ export async function CreateSize() {
         throw error;
     }
 }
+
 export async function getAllSizes() {
   
     try {

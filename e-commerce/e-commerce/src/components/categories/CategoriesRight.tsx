@@ -116,6 +116,7 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
   const [productVarients, setProductVarients] = useState(data?.productVariants);
 
   const [tempQuantity, setTempQuantity] = useState(data?.cartQuantity);
+  console.log("this is the temp quantity", tempQuantity);
   console.log(
     "this is the selected color and size from initial data",
     selectedColor,
@@ -135,28 +136,28 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
   // }, [data]);
 
   console.log("this is the selected size", selectedSize);
-  useEffect(() => {
-    if (selectedColor !== null) {
-      if (initialLoadColorAndSize === true) {
-        callToast({
-          title: `You selected colour ${selectedColor}`,
-          description: `You have successfully selected the colour ${selectedColor} `,
-        });
-      }
-    }
-  }, [selectedColor]);
+  // useEffect(() => {
+  //   if (selectedColor !== null) {
+  //     if (initialLoadColorAndSize === true) {
+  //       callToast({
+  //         title: `You selected colour ${selectedColor}`,
+  //         description: `You have successfully selected the colour ${selectedColor} `,
+  //       });
+  //     }
+  //   }
+  // }, [selectedColor]);
 
-  useEffect(() => {
-    if (selectedSize !== null) {
-      if (initialLoadColorAndSize === true) {
-        callToast({
-          title: `You selected Size ${selectedSize}`,
-          description: `You have successfully selected the Size ${selectedSize} `,
-        });
-      }
-    }
-    // setInitialLoadColorAndSize(true);
-  }, [selectedSize]);
+  // useEffect(() => {
+  //   if (selectedSize !== null) {
+  //     if (initialLoadColorAndSize === true) {
+  //       callToast({
+  //         title: `You selected Size ${selectedSize}`,
+  //         description: `You have successfully selected the Size ${selectedSize} `,
+  //       });
+  //     }
+  //   }
+  //   // setInitialLoadColorAndSize(true);
+  // }, [selectedSize]);
 
   const initialData = [
     {
@@ -211,6 +212,8 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
     const fetchReviewData = async () => {
       const Data = await fetchReview({ productId: data?.id });
       // alert("fethcreviewdata is  been called")
+      setTempQuantity(data?.cartQuantity);
+
       console.log("this is the fetchreview data", Data);
       setReviewData(Data);
       setUniqueColors(getUniqueColors(data?.productVariants));
@@ -397,8 +400,9 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
             productVarientID:productVarientID
 
           }
+          
+          console.log("this is the final value to be updated in the cookie", tempQuantity,selectedColor,selectedSize,productVarientID,productVarientStock);
       const {success,cookieValue}= await addCartDatatoCookies([dataobj])
-        // console.log("this is the final value to be updated in the cookie", tempQuantity,selectedColor,selectedSize,productVarientID,productVarientStock);
         console.log("this is the cookie value",success,cookieValue)
       }
       

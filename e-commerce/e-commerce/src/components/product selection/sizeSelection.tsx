@@ -48,7 +48,25 @@ const SizeSelection = ({variants, sizes, color, setSize, selectedColor,setInitia
     Large: "L",
     "Extra Large": "XL",
     "Extra Extra Large": "XXL",
+    "UK Size 28": "28",
+    "UK Size 29": "29",
+    "UK Size 30": "30",
+    "UK Size 31": "31",
+    "UK Size 32": "32",
+    "UK Size 33": "33",
+    "UK Size 34": "34",
+    "UK Size 35": "35",
+    "UK Size 36": "36",
+    "UK Size 37": "37",
+    "UK Size 38": "38",
+    "UK Size 39": "39",
+    "UK Size 40": "40",
+    "UK Size 41": "41",
+    "UK Size 42": "42",
+    "UK Size 43": "43",
+    "UK Size 44": "44"
   };
+  
 
   const circleStyle = (size) => ({
     borderRadius: "5%",
