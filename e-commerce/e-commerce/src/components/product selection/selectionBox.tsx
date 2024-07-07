@@ -31,8 +31,18 @@ const SelectionSizeBox = ({size,color}) => {
     "UK Size 9": "9",
     "UK Size 10": "10",
     "UK Size 11": "11",
-    "UK Size 12": "12"
+    "UK Size 12": "12",
+    "UK One Size": "One",
+    "UK Kids 5-6": "5-6Y",
+    "UK Kids 6-7": "6-7Y",
+    "UK Kids 7-8": "7-8Y",
+    "UK Kids 8-9": "8-9Y",
+    "UK Kids 9-10": "9-10Y",
+    "UK Kids 10-11": "10-11Y",
+    "UK Kids 11-12": "11-12Y",
+    "UK Kids 12-13": "12-13Y"
   };
+  
   
     const circleStyle = (size) => ({
         borderRadius: "5%",
@@ -46,7 +56,7 @@ const SelectionSizeBox = ({size,color}) => {
         border: "2px solid black",
         color: "white",
         backgroundColor: color,
-        fontSize: "2rem", // Increase this value as needed
+        fontSize: size?.includes("Kids") || size?.includes("One") ? "0.8rem" : "2rem", // Adjust font size conditionally
         hover: {
           backgroundColor: "#EAB308",
         },
@@ -56,7 +66,7 @@ const SelectionSizeBox = ({size,color}) => {
       <div
               style={circleStyle(size)}
             >
-              { sizeAbbreviations[size] || size[0].toUpperCase()}
+              { sizeAbbreviations[size] ||  size[0]?.toUpperCase()}
             </div>
     </div>
   )
