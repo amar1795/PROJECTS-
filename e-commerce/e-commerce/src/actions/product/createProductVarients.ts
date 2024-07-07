@@ -83,6 +83,7 @@ export async function createProductVarient(productid) {
     // Generate combinations using the previous function
 
     // const combinations = generateCombinations(productid);
+    
     const combinations = generatePantCombinations(productid);
     const productVariants = await prismadb.productVariant.createMany({
       data: combinations,

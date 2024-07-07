@@ -65,20 +65,19 @@ const page = async() => {
   // const data=await getCartDataFromCookies()
   // const count=data.length;
   // console.log("this is the count", count);
-  // fetchProductsByCategory("665a0ba214be77720636d44a")
+  fetchProductsByCategory("665df2e246b36eef0288e436")
   // generateCombinations("665b00173220eba7c7eabab3")
   // fetchProductAllData(["665ac95e5788e185779d7ce0"])
   // deleteProductVarients("665b05173220eba7c7eabadd")
   
-  fetchProduct("665b05173220eba7c7eabadd")
-const ProductsPants= [
- 
-  { id: '665b03223220eba7c7eabacb' },
-  { id: '665b03a33220eba7c7eabad1' },
-  { id: '665b04ac3220eba7c7eabad7' },
-  { id: '665b05173220eba7c7eabadd' }
+  // fetchProduct("665b05173220eba7c7eabadd")
+const ProductsPants=[
+  { id: '665edcb761d3f1845be9fcfe' },
+  { id: '665edd5961d3f1845be9fd04' },
+  { id: '665eddc361d3f1845be9fd0b' },
+  { id: '665ede3961d3f1845be9fd12' },
+  { id: '665edea561d3f1845be9fd18' }
 ]
-
 // generatePantCombinations("665b028f3220eba7c7eabac5")
 // createProductVarient("665b03223220eba7c7eabacb")
 // GenerateCombinationProductVarients(ProductsPants)

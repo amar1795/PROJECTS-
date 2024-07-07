@@ -17,6 +17,17 @@ const ProductColourData = [
   { id: "66570726617228492bfcb58b", name: "Black", value: "000000" },
 ];
 
+
+const ShoeColourData = [
+    { id: "665af3c03220eba7c7eab93e", name: "White", value: "FFFFFF" },
+    { id: "66570726617228492bfcb58b", name: "Black", value: "000000" },
+    { id: "66570726617228492bfcb586", name: "Blue", value: "3a86ff" },
+    { id: "66570726617228492bfcb587", name: "Purple", value: "8338ec" },
+    { id: "66570726617228492bfcb588", name: "Red", value: "ff006e" },
+    { id: "66570726617228492bfcb589", name: "Orange", value: "fb5607" },
+    { id: "66570726617228492bfcb58a", name: "Yellow", value: "ffbe0b" },
+  ];
+
 const PantsProductData = [
     { id: "668a8033600804a6d384884a", name: "UK Size 28", value: "28" },
     { id: "668a8033600804a6d384884b", name: "UK Size 29", value: "29" },
@@ -25,18 +36,62 @@ const PantsProductData = [
     { id: "668a8033600804a6d384884e", name: "UK Size 32", value: "32" },
     { id: "668a8033600804a6d384884f", name: "UK Size 33", value: "33" },
     { id: "668a8033600804a6d3848850", name: "UK Size 34", value: "34" },
-    { id: "668a8033600804a6d3848851", name: "UK Size 35", value: "35" },
-    { id: "668a8033600804a6d3848852", name: "UK Size 36", value: "36" },
-    { id: "668a8033600804a6d3848853", name: "UK Size 37", value: "37" },
-    { id: "668a8033600804a6d3848854", name: "UK Size 38", value: "38" },
-    { id: "668a8034600804a6d3848855", name: "UK Size 39", value: "39" },
-    { id: "668a8034600804a6d3848856", name: "UK Size 40", value: "40" },
-    { id: "668a8034600804a6d3848857", name: "UK Size 41", value: "41" },
-    { id: "668a8034600804a6d3848858", name: "UK Size 42", value: "42" },
-    { id: "668a8034600804a6d3848859", name: "UK Size 43", value: "43" },
-    { id: "668a8034600804a6d384885a", name: "UK Size 44", value: "44" }
+    // { id: "668a8033600804a6d3848851", name: "UK Size 35", value: "35" },
+    // { id: "668a8033600804a6d3848852", name: "UK Size 36", value: "36" },
+    // { id: "668a8033600804a6d3848853", name: "UK Size 37", value: "37" },
+    // { id: "668a8033600804a6d3848854", name: "UK Size 38", value: "38" },
+    // { id: "668a8034600804a6d3848855", name: "UK Size 39", value: "39" },
+    // { id: "668a8034600804a6d3848856", name: "UK Size 40", value: "40" },
+    // { id: "668a8034600804a6d3848857", name: "UK Size 41", value: "41" },
+    // { id: "668a8034600804a6d3848858", name: "UK Size 42", value: "42" },
+    // { id: "668a8034600804a6d3848859", name: "UK Size 43", value: "43" },
+    // { id: "668a8034600804a6d384885a", name: "UK Size 44", value: "44" }
   ];
   
+
+const shoeData=[ {
+    id: '665acb0a5788e185779d7cf1',
+    name: 'UK Size 6',
+    value: '6',
+   
+  },
+  {
+    id: '665acb0a5788e185779d7cf2',
+    name: 'UK Size 7',
+    value: '7',
+   
+  },
+  {
+    id: '665acb0b5788e185779d7cf3',
+    name: 'UK Size 8',
+    value: '8',
+   
+  },
+  {
+    id: '665acb0b5788e185779d7cf4',
+    name: 'UK Size 9',
+    value: '9',
+   
+  },
+//   {
+//     id: '665acb0b5788e185779d7cf5',
+//     name: 'UK Size 10',
+//     value: '10',
+   
+//   },
+//   {
+//     id: '665acb0b5788e185779d7cf6',
+//     name: 'UK Size 11',
+//     value: '11',
+   
+//   },
+//   {
+//     id: '665acb0b5788e185779d7cf7',
+//     name: 'UK Size 12',
+//     value: '12',
+    
+//   },
+]
 
 export function generateCombinations(productID) {
   const data = [];
@@ -74,9 +129,9 @@ export function generatePantCombinations(productID) {
     const data = [];
   
     // Iterate over each color
-    ProductColourData.forEach((color) => {
+    ShoeColourData.forEach((color) => {
       // Iterate over each pant size (from 28 to 44)
-      PantsProductData.forEach((pantsSize) => {
+      shoeData.forEach((pantsSize) => {
         data.push({
           productId: productID,
           colorId: color.id,
