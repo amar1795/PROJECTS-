@@ -24,7 +24,14 @@ const SelectionSizeBox = ({size,color}) => {
     "UK Size 41": "41",
     "UK Size 42": "42",
     "UK Size 43": "43",
-    "UK Size 44": "44"
+    "UK Size 44": "44",
+    "UK Size 6": "6",
+    "UK Size 7": "7",
+    "UK Size 8": "8",
+    "UK Size 9": "9",
+    "UK Size 10": "10",
+    "UK Size 11": "11",
+    "UK Size 12": "12"
   };
   
     const circleStyle = (size) => ({
@@ -49,7 +56,7 @@ const SelectionSizeBox = ({size,color}) => {
       <div
               style={circleStyle(size)}
             >
-              {sizeAbbreviations[size] || size[0].toUpperCase()}
+              { sizeAbbreviations[size] || size[0].toUpperCase()}
             </div>
     </div>
   )
