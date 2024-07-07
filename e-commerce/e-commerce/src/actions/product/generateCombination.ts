@@ -1,10 +1,10 @@
 const ProductSizeData = [
-  { id: "665aca6d5788e185779d7ce5", name: "Extra Small", value: "XS" },
+  // { id: "665aca6d5788e185779d7ce5", name: "Extra Small", value: "XS" },
   { id: "665aca6e5788e185779d7ce6", name: "Small", value: "S" },
   { id: "665aca6e5788e185779d7ce7", name: "Medium", value: "M" },
   { id: "665aca6e5788e185779d7ce8", name: "Large", value: "L" },
-  { id: "665aca6e5788e185779d7ce9", name: "Extra Large", value: "XL" },
-  { id: "665aca6e5788e185779d7cea", name: "Extra Extra Large", value: "XXL" },
+//   { id: "665aca6e5788e185779d7ce9", name: "Extra Large", value: "XL" },
+//   { id: "665aca6e5788e185779d7cea", name: "Extra Extra Large", value: "XXL" },
 ];
 
 const ProductColourData = [
@@ -48,6 +48,24 @@ const PantsProductData = [
     // { id: "668a8034600804a6d384885a", name: "UK Size 44", value: "44" }
   ];
   
+  const kidsSizeData = [
+    { id: '668abbcf820896ea2209efbe', name: 'UK Kids 5-6', value: '5-6Y' },
+    { id: '668abbcf820896ea2209efbf', name: 'UK Kids 6-7', value: '6-7Y' },
+    { id: '668abbcf820896ea2209efc0', name: 'UK Kids 7-8', value: '7-8Y' },
+    { id: '668abbcf820896ea2209efc1', name: 'UK Kids 8-9', value: '8-9Y' },
+    { id: '668abbcf820896ea2209efc2', name: 'UK Kids 9-10', value: '9-10Y' },
+    { id: '668abbcf820896ea2209efc3', name: 'UK Kids 10-11', value: '10-11Y' },
+    { id: '668abbcf820896ea2209efc4', name: 'UK Kids 11-12', value: '11-12Y' },
+    { id: '668abbd0820896ea2209efc5', name: 'UK Kids 12-13', value: '12-13Y' }
+  ];
+  
+  const bagSize=[
+    {
+      id: '668abd28820896ea2209f0de',
+      name: 'UK One Size',
+      value: 'One',
+    }
+  ]
 
 const shoeData=[ {
     id: '665acb0a5788e185779d7cf1',
@@ -129,9 +147,9 @@ export function generatePantCombinations(productID) {
     const data = [];
   
     // Iterate over each color
-    ShoeColourData.forEach((color) => {
+    ProductColourData.forEach((color) => {
       // Iterate over each pant size (from 28 to 44)
-      shoeData.forEach((pantsSize) => {
+      bagSize.forEach((pantsSize) => {
         data.push({
           productId: productID,
           colorId: color.id,

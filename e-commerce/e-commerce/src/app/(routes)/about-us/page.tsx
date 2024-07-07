@@ -65,18 +65,18 @@ const page = async() => {
   // const data=await getCartDataFromCookies()
   // const count=data.length;
   // console.log("this is the count", count);
-  fetchProductsByCategory("665df2e246b36eef0288e436")
   // generateCombinations("665b00173220eba7c7eabab3")
   // fetchProductAllData(["665ac95e5788e185779d7ce0"])
   // deleteProductVarients("665b05173220eba7c7eabadd")
   
-  // fetchProduct("665b05173220eba7c7eabadd")
-const ProductsPants=[
-  { id: '665edcb761d3f1845be9fcfe' },
-  { id: '665edd5961d3f1845be9fd04' },
-  { id: '665eddc361d3f1845be9fd0b' },
-  { id: '665ede3961d3f1845be9fd12' },
-  { id: '665edea561d3f1845be9fd18' }
+  // fetchProductsByCategory("665ebc387a973feb4e9cdc81")
+  // fetchProduct("665da796212a3a7b7d76b5ef")
+const ProductsPants=  [
+  { id: '665ebce37a973feb4e9cdc82' },
+  { id: '665ebe0a7a973feb4e9cdc87' },
+  { id: '665ebeb67a973feb4e9cdc8d' },
+  { id: '665ebf307a973feb4e9cdc92' },
+  { id: '665ebfbe7a973feb4e9cdc98' }
 ]
 // generatePantCombinations("665b028f3220eba7c7eabac5")
 // createProductVarient("665b03223220eba7c7eabacb")
