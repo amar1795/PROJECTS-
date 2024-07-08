@@ -98,7 +98,7 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
   initialColor,
   initialSize,
 }) => {
-  console.log("this is the data quantities from categories right", data?.cartQuantity);
+  console.log("this is the data quantities from categories right", data);
   const user = useCurrentUser();
 
   // const initialColour= data?.productVariants && data?.productVariants[0]?.color;

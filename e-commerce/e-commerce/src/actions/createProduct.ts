@@ -606,6 +606,13 @@ export async function getProductsByCategory(
         // Fetch only the first image
         take: 1,
       }, // Include product images
+      productVariants: {
+        take: 1, // Fetch only the first product variant
+        include: {
+          color: true,
+          size: true,
+        },
+      },
       ratings: {
         include: {
           images: true, // Include review images
@@ -705,6 +712,10 @@ export async function getProductsByCategory(
       ...product,
       isWishlisted: isWishlisted,
       totalWishlistCount: totalWishlistCount,
+      color: product.productVariants[0].color.name,
+      size: product.productVariants[0].size.name,
+      stock: product.productVariants[0].stock,
+      productVarientID: product.productVariants[0].id,
       ratings: {
         count: ratingsCount,
         reviews: reviews,

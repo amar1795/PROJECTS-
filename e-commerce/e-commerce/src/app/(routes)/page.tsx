@@ -19,18 +19,17 @@ export default async function Home() {
   const user = session?.user?.id;
 
   const mensCollectionData = await getProductsByCategory(
-    "665a0b9f14be77720636d443",
-    user
+    "665a0b9f14be77720636d443"
+   
   );
   // console.log("this is the menscollection", mensCollectionData);
   const womensCollection = await getProductsByCategory(
-    "665d97977547073cf15bf546",
-    user
+    "665d97977547073cf15bf546"
+   
   );
   // console.log("this is the womenscollection", womensCollection);
   const kidsCollection = await getProductsByCategory(
-    "665de7eb62075d484b0229db",
-    user
+    "665de7eb62075d484b0229db"
   );
 
   // console.log("this is the menscollection cart quantity for the user test", mensCollectionData );
