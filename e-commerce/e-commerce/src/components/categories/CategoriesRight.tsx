@@ -202,6 +202,8 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
   const [toggledVarientQuantity, setToggledVarientQuantity] = useState(false);
   const [productVarientStock, setProductVarientStock] = useState(0);
   const [productVarientID, setProductVarientID] = useState("");
+  const [itemInCart, setItemInCart] = useState(false);
+
   console.log("this is the chart data", barChartData);
 
   if (!data) {
@@ -212,7 +214,7 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
     const fetchReviewData = async () => {
       const Data = await fetchReview({ productId: data?.id });
       // alert("fethcreviewdata is  been called")
-      setTempQuantity(data?.cartQuantity);
+      setTempQuantity(data?.cartQuantity || 0);
 
       console.log("this is the fetchreview data", Data);
       setReviewData(Data);
@@ -220,6 +222,7 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
     };
     fetchReviewData();
   }, [data, newData]);
+
   console.log("this is the unique colors", uniqueColors);
 
   useEffect(() => {
@@ -244,6 +247,9 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
     };
     getReviews();
   }, [data, newData]);
+
+
+  
   // brand cannot be destructured from data issue arised because the data  was null , so i added a check to see if data is null or not and display the loading message if it is null
   console.log("this is the data from categories right", data);
   // data.ratings.count
@@ -425,6 +431,29 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
 
   }
 
+  const handleremove = async () => {
+    callToast({
+      varientType: "destructive",
+      message: "Item removed from cart",
+      description: "Item successfully removed from cart",
+    });
+
+    setTempQuantity(0);
+    await removeProductFromCookies(product.id);
+    setItemInCart(false);
+
+    if (user) {
+      const userID = user?.id;
+      const productID = product.id;
+
+        if (userID) {
+          // alert("delete cart item is being called")
+          deleteCartItem(userID, productID);
+        }
+      
+    }
+  };
+
   useEffect(() => {
     // remove the items from cookies when the product varient is swithced
     // removeProductFromCookies(data.id);
@@ -528,7 +557,7 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
                         <div className=" text-[2rem] w-11  bg-white h-[2.5rem]  ">
                           <h1 className="  flex text-center justify-center align-middle  ">
                             {/* {data?.cartQuantity || 0} */}
-                            {tempQuantity || 1}
+                            {tempQuantity }
                           </h1>
                         </div>
                         <button
