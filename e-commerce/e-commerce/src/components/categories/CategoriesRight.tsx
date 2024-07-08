@@ -387,6 +387,21 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
           }
           console.log("this is the final value to be updated in the db", tempQuantity,selectedColor,selectedSize,productVarientID,productVarientStock);
           // handleClickAdd(user?.id, data.id, selectedColor, selectedSize);
+          const dataobj={
+            id:data.id,
+            cartQuantity:tempQuantity,
+            discountedPrice:data.discountedPrice,
+            color:selectedColor,
+            size:selectedSize,
+            stock:productVarientStock,
+            productVarientID:productVarientID
+
+          }
+
+          const value= await addCartDatatoCookies([dataobj])
+          console.log("this is the cookie value",value.success,value.cookieValue)
+
+          
       }
 
       else{

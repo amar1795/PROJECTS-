@@ -66,7 +66,7 @@ const SelectionSizeBox = ({size,color}) => {
       <div
               style={circleStyle(size)}
             >
-              { sizeAbbreviations[size] ||  size[0]?.toUpperCase()}
+              { sizeAbbreviations[size] || size && size[0]?.toUpperCase()}
             </div>
     </div>
   )

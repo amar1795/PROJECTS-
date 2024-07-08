@@ -71,13 +71,13 @@ const page = async() => {
   
   // fetchProductsByCategory("665ebc387a973feb4e9cdc81")
   // fetchProduct("665da796212a3a7b7d76b5ef")
-const ProductsPants=  [
-  { id: '665ebce37a973feb4e9cdc82' },
-  { id: '665ebe0a7a973feb4e9cdc87' },
-  { id: '665ebeb67a973feb4e9cdc8d' },
-  { id: '665ebf307a973feb4e9cdc92' },
-  { id: '665ebfbe7a973feb4e9cdc98' }
-]
+// const ProductsPants=  [
+//   { id: '665ebce37a973feb4e9cdc82' },
+//   { id: '665ebe0a7a973feb4e9cdc87' },
+//   { id: '665ebeb67a973feb4e9cdc8d' },
+//   { id: '665ebf307a973feb4e9cdc92' },
+//   { id: '665ebfbe7a973feb4e9cdc98' }
+// ]
 // generatePantCombinations("665b028f3220eba7c7eabac5")
 // createProductVarient("665b03223220eba7c7eabacb")
 // GenerateCombinationProductVarients(ProductsPants)

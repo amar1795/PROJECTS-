@@ -143,6 +143,8 @@ const page = () => {
       console.log("this is the merged data added to completemeregeddata", mergedData);
       setCompleteMergedupdatedProducts(mergedData);
       setMergedTotalAmount(total);
+      setTotal(total);
+
       setMergedTotalCount(count);
     }
 

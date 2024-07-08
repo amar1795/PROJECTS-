@@ -100,6 +100,7 @@ export async function getProductsInCartSummary(userId: string) {
 
     if (cookieData.length > 0) {
       const cookieProductIds = cookieData.map((item) => item.id);
+
       productIds.push(...cookieProductIds);
     }
 
@@ -122,12 +123,13 @@ export async function getProductsInCartSummary(userId: string) {
     // Fetch the user's cart items
     const cart = await prismadb.cart.findFirst({
       where: { userId },
+      // orderBy: { createdAt: 'desc' },
       include: { cartItems: true },
     });
 
     const cartItems = cart ? cart.cartItems : [];
     // update the cart quantity in the products array here from the cookie data
-    
+
     // Update the cartItems quantity in the cart based on the cookie data
     for (const cookieItem of cookieData) {
       const cartItem = cartItems.find(
@@ -137,31 +139,45 @@ export async function getProductsInCartSummary(userId: string) {
         // Update the cart item's quantity
         await prismadb.cartItem.update({
           where: { id: cartItem.id },
-          data: { quantity: cookieItem.cartQuantity },
+          data: {
+            quantity: cookieItem.cartQuantity,
+            productColour: cookieItem.productColour,
+            productSize: cookieItem.productSize,
+            productVariantID: cookieItem.productVariantID,
+            productVarientStock: cookieItem.productVarientStock,
+          },
         });
-      } 
-      else {
+      } else {
         // Add new cart item if not already in cart
         await prismadb.cartItem.create({
           data: {
             cartId: cart.id,
             productId: cookieItem.id,
             quantity: cookieItem.cartQuantity,
+            productColour: cookieItem.color,
+            productSize: cookieItem.size,
+            productVariantID: cookieItem.productVarientID,
+            productVarientStock: cookieItem.stock,
           },
         });
+      }
     }
-  }
 
     // Map the cart items to products and include the cart quantity for each product
     let totalAmount = 0;
     products = products.map((product) => {
       const cartItem = cartItems.find((item) => item.productId === product.id);
       const cartQuantity = cartItem ? cartItem.quantity : 0;
-      const discountedPrice = product.discountedPrice ;
+      const discountedPrice = product.discountedPrice;
+
       totalAmount += cartQuantity * discountedPrice;
       return {
         ...product,
         cartQuantity: cartQuantity,
+        productVarientID: cartItem?.productVariantID,
+        color: cartItem?.productColour,
+        stock: cartItem?.productVarientStock,
+        size: cartItem?.productSize,
       };
     });
 
@@ -169,13 +185,18 @@ export async function getProductsInCartSummary(userId: string) {
     // console.log("this is the products in cart summary", products)
     //   wierd issue here was unable to fethc the product id with the url and was shwoing undefined imracoulously it started working again  now
     //   console.log("this is the products in cart summary", products[0].images[0].url)
-    // console.log("this is the products in cart summary", products)
+    console.log("this is the products in cart summary", products);
     return {
       products,
       totalAmount,
-    };;
+    };
   } catch (error) {
     console.error("Error fetching products in cart summary:", error);
     throw new Error("Failed to fetch products in cart summary");
   }
 }
+
+// productVarientID
+// size
+// stock
+// color
