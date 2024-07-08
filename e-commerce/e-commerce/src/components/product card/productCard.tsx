@@ -22,6 +22,8 @@ import {
 import increaseProductQuantity from "@/actions/cart/increaseProduct";
 import decreaseProductQuantity from "@/actions/cart/decreaseProduct";
 import WishlistButton from "../animated_heart/heart";
+import addItemToCart from "@/actions/cart/addItemToCart";
+import deleteCartItem from "@/actions/cart/deleteCartProducts";
 
 // need to fix the bug for the related items used inthe shooping cart the link url is showing undefined
 const formatPrice = (price: number): string => {
@@ -35,6 +37,7 @@ const removeSpaces = (name: string): string => {
 };
 
 const ProductCard: React.FC<updatedDataResponse> = ({
+  callToast,
   Added,
   Removed,
   product,
@@ -44,7 +47,140 @@ const ProductCard: React.FC<updatedDataResponse> = ({
   handleWishlistToggle,
 }) => {
   const user = useCurrentUser();
-  console.log("this is the product card ", product);
+  const [tempquantity, settempQuantity] = useState(0);
+  const [color, setColor] = useState();
+  const [size, setSize] = useState();
+  const [productVarientID, setProductVarientID] = useState();
+  const [stock, setStock] = useState();
+  const [itemInCart, setItemInCart] = useState(false);
+
+  useEffect(() => {
+    settempQuantity(product.cartQuantity || 0);
+    setColor(product.color);
+    setSize(product.size);
+    setProductVarientID(product.productVarientID);
+    setStock(product.stock);
+
+    if (product.cartQuantity) {
+      setItemInCart(true);
+    }
+  }, [product]);
+
+  const handleIncrease = () => {
+    // alert("add to cart is being called");
+    if (tempquantity > stock - 1) {
+      return;
+    }
+    settempQuantity((prev) => prev + 1);
+  };
+
+  const handleDecrease = async () => {
+    if (tempquantity == 0) {
+      return;
+    }
+
+    settempQuantity((prev) => prev - 1);
+  };
+
+  const handleConfirm = async () => {
+    if (tempquantity == 0) {
+      callToast({
+        variant: "destructive",
+        title: "Please add the quantity first",
+        description:
+          "Please add the quantity first in order to add the item to cart",
+      });
+      return;
+    }
+
+    if (user) {
+      // this is being added to db also need to add in the cookie when the user is not logged in
+      const { success, message } = await addItemToCart(
+        user?.id,
+        product.id,
+        productVarientID,
+        color,
+        size,
+        tempquantity,
+        stock
+      );
+      if (success === true) {
+        //   alert("Item added to cart successfully")
+      }
+      console.log(
+        "this is the final value to be updated in the db",
+        tempquantity,
+        color,
+        size,
+        productVarientID,
+        stock
+      );
+      // handleClickAdd(user?.id, data.id, selectedColor, selectedSize);
+      const dataobj = {
+        id: product.id,
+        cartQuantity: tempquantity,
+        discountedPrice: product.discountedPrice,
+        color: color,
+        size: size,
+        stock: stock,
+        productVarientID: productVarientID,
+      };
+
+      const value = await addCartDatatoCookies([dataobj]);
+      console.log("this is the cookie value", value.success, value.cookieValue);
+    } else {
+      const dataobj = {
+        id: product.id,
+        cartQuantity: tempquantity,
+        discountedPrice: product.discountedPrice,
+        color: color,
+        size: size,
+        stock: stock,
+        productVarientID: productVarientID,
+      };
+
+      console.log(
+        "this is the final value to be updated in the db",
+        tempquantity,
+        color,
+        size,
+        productVarientID,
+        stock
+      );
+      const { success, cookieValue } = await addCartDatatoCookies([dataobj]);
+      console.log("this is the cookie value", success, cookieValue);
+    }
+    callToast({
+      title: "Item added to cart",
+      description: "successfully added item to cart",
+    });
+
+    setItemInCart(true);
+  };
+
+  const handleremove = async () => {
+    callToast({
+      variant: "destructive",
+      title: "Item removed from cart",
+      description: "Item successfully removed from cart",
+    });
+
+    settempQuantity(0);
+    await removeProductFromCookies(product.id);
+    setItemInCart(false);
+
+    if (user) {
+      const userID = user?.id;
+      const productID = product.id;
+
+      if (userID) {
+        // alert("delete cart item is being called")
+        deleteCartItem(userID, productID);
+      }
+    }
+  };
+
+  console.log("this is the product card data", product);
   // console.log("this is the updated products", updatedProducts);
 
   // console.log("this is the productID from product card", product?.category?.name);
@@ -105,10 +241,13 @@ const ProductCard: React.FC<updatedDataResponse> = ({
                   strokeWidth={0.8}
                   // className={` hover:fill-red-500 text-black`}
                 /> */}
-                 <WishlistButton isWishlistedData={product?.isWishlisted} Added={Added} Removed={Removed}  />
-
+                <WishlistButton
+                  isWishlistedData={product?.isWishlisted}
+                  Added={Added}
+                  Removed={Removed}
+                />
               </button>
-            
+
               <div className="ProductImage bg-red-400 h-full w-full absolute">
                 <Link href={newUrl}>
                   <Image
@@ -137,22 +276,16 @@ const ProductCard: React.FC<updatedDataResponse> = ({
                   {/* quantity change icons */}
                   <button
                     className=" pr-2  hover:bg-gray-200 pl-1"
-                    onClick={() =>
-                      handleQuantityChange(user?.id, product.id, -1)
-                    }
+                    onClick={handleDecrease}
                   >
                     <Minus size={20} />
                   </button>
-                  <div className=" text-[1.5rem] w-7  bg-white  h-[2rem]">
-                    <div className=" px-2 py-2 ">
-                      {product?.cartQuantity || 0}
-                    </div>
+                  <div className=" text-[1.5rem]   bg-white  h-[2rem]">
+                    <div className=" px-2 py-2 ">{tempquantity || 0}</div>
                   </div>
                   <button
                     className=" pl-2  hover:bg-gray-200 pr-1"
-                    onClick={() =>
-                      handleQuantityChange(user?.id, product.id, 1)
-                    }
+                    onClick={handleIncrease}
                   >
                     <Plus size={20} />
                   </button>
@@ -189,13 +322,13 @@ const ProductCard: React.FC<updatedDataResponse> = ({
                 </div>
               </div>
 
-              {product?.cartQuantity === 0 ||
+              {/* {product?.cartQuantity === 0 ||
                 (!product?.cartQuantity && (
                   <div className="right self-center pb-7">
                     <button
                       className="nbutton items-center border-2 border-black  px-2  justify-between hidden "
                       onClick={() => {
-                        handleClickAdd(user?.id, product?.id);
+                        // handleClickAdd(user?.id, product?.id);
                       }}
                     >
                       <div>
@@ -204,15 +337,26 @@ const ProductCard: React.FC<updatedDataResponse> = ({
                       <div className="text-sm px-3">Add to Cart</div>
                     </button>
                   </div>
-                ))}
+                ))} */}
 
-              {product?.cartQuantity === 0 && (
+              {product?.cartQuantity || itemInCart ? (
+                <div className="right self-center pb-7">
+                <button
+                  className="nbutton items-center border-2 border-black   px-2  py-2 justify-between hidden "
+                  onClick={handleremove}
+                >
+                  <div>
+                    <ShoppingCart size={30} />
+                  </div>
+                  <div className="text-sm px-1">Remove</div>
+                </button>
+                </div>
+
+              ) : (
                 <div className="right self-center pb-7">
                   <button
                     className="nbutton items-center border-2 border-black  px-2  justify-between hidden "
-                    onClick={() => {
-                      handleClickAdd(user?.id, product?.id);
-                    }}
+                    onClick={handleConfirm}
                   >
                     <div>
                       <ShoppingCart size={20} />

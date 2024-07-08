@@ -3,6 +3,7 @@ import {
   removeProductFromCookies,
 } from "@/actions/cart/addCartDatatoCookies";
 import addItemToCart from "@/actions/cart/addItemToCart";
+import deleteCartItem from "@/actions/cart/deleteCartProducts";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { Minus, Plus, ShoppingCart, StarIcon } from "lucide-react";
 import Link from "next/link";
@@ -54,7 +55,6 @@ const ProductCardLower = ({ product, theme, formatPrice, callToast }) => {
 
   const handleDecrease = async () => {
     if (tempquantity == 0) {
-    
       return;
     }
 
@@ -77,6 +77,12 @@ const ProductCardLower = ({ product, theme, formatPrice, callToast }) => {
 
   const handleConfirm = async () => {
     if (tempquantity == 0) {
+      callToast({
+        varientType: "destructive",
+        message: "Please add the quantity first",
+        description:
+          "Please add the quantity first in order to add the item to cart",
+      });
       return;
     }
 
@@ -137,32 +143,36 @@ const ProductCardLower = ({ product, theme, formatPrice, callToast }) => {
       const { success, cookieValue } = await addCartDatatoCookies([dataobj]);
       console.log("this is the cookie value", success, cookieValue);
     }
+    callToast({
+      message: "Item added to cart",
+      description: "successfully added item to cart",
+    });
 
-    if (tempquantity === 0) {
-      alert("Please add the quantity first");
-      callToast({
-        variant: "destructive",
-        message: "Please add the quantity first",
-        description:
-          "Please add the quantity first in order to add the item to cart",
-      });
-    } else {
-      callToast({
-        message: "Item added to cart",
-        description: "successfully added item to cart",
-      });
-    }
     setItemInCart(true);
   };
 
-
   const handleremove = async () => {
+    callToast({
+      varientType: "destructive",
+      message: "Item removed from cart",
+      description: "Item successfully removed from cart",
+    });
 
-      settempQuantity(0);
+    settempQuantity(0);
     await removeProductFromCookies(product.id);
     setItemInCart(false);
-    
-  }
+
+    if (user) {
+      const userID = user?.id;
+      const productID = product.id;
+
+        if (userID) {
+          // alert("delete cart item is being called")
+          deleteCartItem(userID, productID);
+        }
+      
+    }
+  };
 
   return (
     <div>
@@ -218,7 +228,7 @@ const ProductCardLower = ({ product, theme, formatPrice, callToast }) => {
                 <div>
                   <ShoppingCart size={30} />
                 </div>
-                <div className="text-sm px-1">Remove  </div>
+                <div className="text-sm px-1">Remove </div>
               </button>
             ) : (
               <button className="buynow" onClick={handleConfirm}>

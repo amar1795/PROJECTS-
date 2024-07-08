@@ -69,15 +69,15 @@ const page = async() => {
   // fetchProductAllData(["665ac95e5788e185779d7ce0"])
   // deleteProductVarients("665b05173220eba7c7eabadd")
   
-  // fetchProductsByCategory("665ebc387a973feb4e9cdc81")
-  // fetchProduct("665da796212a3a7b7d76b5ef")
-// const ProductsPants=  [
-//   { id: '665ebce37a973feb4e9cdc82' },
-//   { id: '665ebe0a7a973feb4e9cdc87' },
-//   { id: '665ebeb67a973feb4e9cdc8d' },
-//   { id: '665ebf307a973feb4e9cdc92' },
-//   { id: '665ebfbe7a973feb4e9cdc98' }
-// ]
+  // fetchProductsByCategory("665a0ba214be77720636d44c")
+  // fetchProduct("665d6679b76a9c2e856b5fb2")
+  
+const ProductsPants= [
+  { id: '665d68a9b76a9c2e856b5fbe' },
+  // { id: '665d698ab76a9c2e856b5fc4' },
+  // { id: '665d69d8b76a9c2e856b5fca' },
+  // { id: '665d6a11b76a9c2e856b5fd0' }
+]
 // generatePantCombinations("665b028f3220eba7c7eabac5")
 // createProductVarient("665b03223220eba7c7eabacb")
 // GenerateCombinationProductVarients(ProductsPants)

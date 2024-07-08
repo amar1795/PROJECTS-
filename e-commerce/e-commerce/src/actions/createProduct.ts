@@ -712,10 +712,10 @@ export async function getProductsByCategory(
       ...product,
       isWishlisted: isWishlisted,
       totalWishlistCount: totalWishlistCount,
-      color: product.productVariants[0].color.name,
-      size: product.productVariants[0].size.name,
-      stock: product.productVariants[0].stock,
-      productVarientID: product.productVariants[0].id,
+      color:product.productVariants && product.productVariants[0]?.color?.name,
+        size: product.productVariants && product.productVariants[0]?.size?.name,
+        stock: product.productVariants && product.productVariants[0]?.stock,
+        productVarientID:product.productVariants &&  product.productVariants[0]?.id,
       ratings: {
         count: ratingsCount,
         reviews: reviews,
@@ -1198,7 +1198,10 @@ export const getProductsByCategoryFiltered = cache(
       },
       include: {
         brand: true, // Include brand details
-        images: true, // Include product images
+        images: {
+          // Fetch only the first image
+          take: 1,
+        }, // Include product images
         ratings: {
           include: {
             images: true, // Include review images
@@ -1213,6 +1216,13 @@ export const getProductsByCategoryFiltered = cache(
             },
           },
         }),
+        productVariants: {
+          take: 1, // Fetch only the first product variant
+          include: {
+            color: true,
+            size: true,
+          },
+        },
         // Include any other relations you need
       },
       // skip: skip,
@@ -1345,6 +1355,10 @@ export const getProductsByCategoryFiltered = cache(
 
       return {
         ...product,
+        color:product.productVariants && product.productVariants[0]?.color?.name,
+        size: product.productVariants && product.productVariants[0]?.size?.name,
+        stock: product.productVariants && product.productVariants[0]?.stock,
+        productVarientID:product.productVariants &&  product.productVariants[0]?.id,
         isWishlisted: isWishlisted,
         ratings: {
           count: ratingsCount,
@@ -1481,6 +1495,8 @@ export const fetchProductAllData = cache(async (productdata: string) => {
     createdAt: variant.createdAt,
     updatedAt: variant.updatedAt,
   }));
+
+
       const isWishlisted = userId && product.wishlists.length > 0;
 
   // Format the ratings

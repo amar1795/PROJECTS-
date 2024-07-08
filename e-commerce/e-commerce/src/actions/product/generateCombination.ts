@@ -3,8 +3,8 @@ const ProductSizeData = [
   { id: "665aca6e5788e185779d7ce6", name: "Small", value: "S" },
   { id: "665aca6e5788e185779d7ce7", name: "Medium", value: "M" },
   { id: "665aca6e5788e185779d7ce8", name: "Large", value: "L" },
-//   { id: "665aca6e5788e185779d7ce9", name: "Extra Large", value: "XL" },
-//   { id: "665aca6e5788e185779d7cea", name: "Extra Extra Large", value: "XXL" },
+  { id: "665aca6e5788e185779d7ce9", name: "Extra Large", value: "XL" },
+  { id: "665aca6e5788e185779d7cea", name: "Extra Extra Large", value: "XXL" },
 ];
 
 const ProductColourData = [
@@ -149,7 +149,7 @@ export function generatePantCombinations(productID) {
     // Iterate over each color
     ProductColourData.forEach((color) => {
       // Iterate over each pant size (from 28 to 44)
-      bagSize.forEach((pantsSize) => {
+      ProductSizeData.forEach((pantsSize) => {
         data.push({
           productId: productID,
           colorId: color.id,

@@ -95,9 +95,9 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
 
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
 
-  const callToast = ({message,description,varient}) => {
+  const callToast = ({varientType,message,description}) => {
     toast({
-      variant: varient,
+      variant: varientType,
       title: `${message}`,
       description: `${description}`,
     });

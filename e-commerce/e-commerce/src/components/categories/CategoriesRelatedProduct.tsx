@@ -323,6 +323,7 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
                 .map((product) => (
                   <div className="py-4" key={product.id}>
                     <ProductCard
+                    callToast={callToast}
                     Added={Added}
                     Removed={Removed}
                       product={product}
@@ -339,6 +340,7 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
                 .map((product) => (
                   <div className="py-4" key={product.id}>
                     <ProductCard
+                    callToast={callToast}
                     Added={Added}
                     Removed={Removed}
                       product={product}
