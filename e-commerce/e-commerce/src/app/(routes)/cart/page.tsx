@@ -39,6 +39,7 @@ import { fetchSingleProduct } from "@/actions/cart/fetchSingleProduct";
 import { fetchAllCartCookieData } from "@/actions/cart/fetchAllCartCookieData";
 import { toggleWishlist } from "@/actions/wishlist";
 import { useCheckoutStock } from "@/state hooks/product-checkout-stock";
+import { getProductsByCategoryOriginal } from "@/actions/createProduct";
 
 function calculateTotal(products) {
   let total = 0;
@@ -68,7 +69,7 @@ const page = () => {
   const [totalCookieAmount, setTotalCookieAmount] = useState(0);
   const [productCookieCount, setProductCookieCount] = useState(0);
   const [updatedProducts, setupdatedProducts] = useState([]);
-
+  const [CartRelatedProducts, setCartRelatedProducts] = useState(true);
   const [completeMergedupdatedProducts, setCompleteMergedupdatedProducts] =
     useState([]);
   const [mergedTotalCount, setMergedTotalCount] = useState(0);
@@ -211,15 +212,15 @@ const page = () => {
 
   const handleClickAdd = async (userID, productID) => {
     // alert("add to cart is being called")
-    console.log("this is the product id", productID);
-    const completedata = await fetchSingleProduct(productID);
-    console.log("this is the completed data", completedata);
+    // console.log("this is the product id", productID);
+    // const completedata = await fetchSingleProduct(productID);
+    // console.log("this is the completed data", completedata);
     // addProductToCart(userID, productID);
-    toast({
-      title: "Item Added to cart",
-      description: "successfully added the item to cart",
-    });
-    addCartDatatoCookies(completedata);
+    // toast({
+    //   title: "Item Added to cart",
+    //   description: "successfully added the item to cart",
+    // });
+    // addCartDatatoCookies(completedata);
 
 
     setUpdateTrigger((prev) => !prev);
@@ -284,10 +285,14 @@ const page = () => {
   // related products useffect
   useEffect(() => {
     const relatedData = async () => {
+      // this needs to work without the user as well
+     
       const data = await getRelatedProducts(user?.id);
       console.log("this is the related updated products list", data);
 
       setupdatedProducts(data);
+      
+    
     };
     relatedData();
   }, [updateRelatedTrigger]);
@@ -596,6 +601,8 @@ const page = () => {
                 {updatedProducts.map((product) => (
                   <div className=" mb-4" key={product?.id}>
                     <ProductCard
+                    callToast = {toast}
+                    CartRelatedProducts={CartRelatedProducts}
                       product={product}
                       handleClickAdd={handleClickAdd}
                       handleQuantityChange={handleQuantityCookieChange} 

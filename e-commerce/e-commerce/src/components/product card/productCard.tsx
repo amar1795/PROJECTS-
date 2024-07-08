@@ -24,6 +24,7 @@ import decreaseProductQuantity from "@/actions/cart/decreaseProduct";
 import WishlistButton from "../animated_heart/heart";
 import addItemToCart from "@/actions/cart/addItemToCart";
 import deleteCartItem from "@/actions/cart/deleteCartProducts";
+import { getProductDetailsByID } from "@/actions/product/searchedProductData";
 
 // need to fix the bug for the related items used inthe shooping cart the link url is showing undefined
 const formatPrice = (price: number): string => {
@@ -37,6 +38,7 @@ const removeSpaces = (name: string): string => {
 };
 
 const ProductCard: React.FC<updatedDataResponse> = ({
+  CartRelatedProducts,
   callToast,
   Added,
   Removed,
@@ -53,6 +55,10 @@ const ProductCard: React.FC<updatedDataResponse> = ({
   const [productVarientID, setProductVarientID] = useState();
   const [stock, setStock] = useState();
   const [itemInCart, setItemInCart] = useState(false);
+  const [fetchedData, setFetchedData] = useState("");
+  const [url, setUrl] = useState("");
+  console.log("this is the url", url);
+  console.log("this is the fetched product data", product);
 
   useEffect(() => {
     settempQuantity(product.cartQuantity || 0);
@@ -65,6 +71,29 @@ const ProductCard: React.FC<updatedDataResponse> = ({
       setItemInCart(true);
     }
   }, [product]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getProductDetailsByID(product.id);
+      console.log("this is the fetched data", data);
+      setFetchedData(data);
+      if (data) {
+        let { parentCategory, topmostParentCategory } = data?.parentCategoryIds;
+
+        const productId = data?.productId || "";
+        if (parentCategory === "Kids Category") {
+          parentCategory = "Kids";
+        }
+
+        const cleanedCategory0 = parentCategory.replace(/\s+/g, "");
+        const testUrl = `/categories/${topmostParentCategory}/${cleanedCategory0}/${productId}`;
+        console.log("this is the test url", testUrl);
+        setUrl(testUrl);
+      }
+    };
+
+    fetchData();
+  }, [catRelatedProduct]);
 
   const handleIncrease = () => {
     // alert("add to cart is being called");
@@ -131,7 +160,7 @@ const ProductCard: React.FC<updatedDataResponse> = ({
     } else {
       const dataobj = {
         id: product.id,
-        cartQuantity: tempquantity,
+        cartQuantity: tempquantity || 1,
         discountedPrice: product.discountedPrice,
         color: color,
         size: size,
@@ -157,6 +186,88 @@ const ProductCard: React.FC<updatedDataResponse> = ({
 
     setItemInCart(true);
   };
+
+
+
+
+  const handleConfirmCart = async () => {
+
+    if (tempquantity == 0) {
+      callToast({
+        variant: "destructive",
+        title: "Please add the quantity first",
+        description:
+          "Please add the quantity first in order to add the item to cart",
+      });
+      return;
+    }
+    // const tempquantity = 1;
+
+    if (user) {
+      // this is being added to db also need to add in the cookie when the user is not logged in
+      const { success, message } = await addItemToCart(
+        user?.id,
+        product.id,
+        productVarientID,
+        color,
+        size,
+        tempquantity,
+        stock
+      );
+      if (success === true) {
+        //   alert("Item added to cart successfully")
+      }
+      console.log(
+        "this is the final value to be updated in the db",
+        tempquantity,
+        color,
+        size,
+        productVarientID,
+        stock
+      );
+      // handleClickAdd(user?.id, data.id, selectedColor, selectedSize);
+      const dataobj = {
+        id: product.id,
+        cartQuantity: tempquantity,
+        discountedPrice: product.discountedPrice,
+        color: color,
+        size: size,
+        stock: stock,
+        productVarientID: productVarientID,
+      };
+
+      const value = await addCartDatatoCookies([dataobj]);
+      console.log("this is the cookie value", value.success, value.cookieValue);
+    } else {
+      const dataobj = {
+        id: product.id,
+        cartQuantity: tempquantity || 1,
+        discountedPrice: product.discountedPrice,
+        color: color,
+        size: size,
+        stock: stock,
+        productVarientID: productVarientID,
+      };
+
+      console.log(
+        "this is the final value to be updated in the db",
+        tempquantity,
+        color,
+        size,
+        productVarientID,
+        stock
+      );
+      const { success, cookieValue } = await addCartDatatoCookies([dataobj]);
+      console.log("this is the cookie value", success, cookieValue);
+    }
+    callToast({
+      title: "Item added to cart",
+      description: "successfully added item to cart",
+    });
+    handleClickAdd();
+    setItemInCart(true);
+
+  }
 
   const handleremove = async () => {
     callToast({
@@ -249,7 +360,7 @@ const ProductCard: React.FC<updatedDataResponse> = ({
               </button>
 
               <div className="ProductImage bg-red-400 h-full w-full absolute">
-                <Link href={newUrl}>
+                <Link href={url}>
                   <Image
                     alt="product image"
                     fill="true"
@@ -271,7 +382,10 @@ const ProductCard: React.FC<updatedDataResponse> = ({
               </div>
             </div>
             <div>
-              {catRelatedProduct && (
+              {/* {catRelatedProduct && ( */}
+              {(
+                
+
                 <div className="box flex pr-4">
                   {/* quantity change icons */}
                   <button
@@ -341,29 +455,44 @@ const ProductCard: React.FC<updatedDataResponse> = ({
 
               {product?.cartQuantity || itemInCart ? (
                 <div className="right self-center pb-7">
-                <button
-                  className="nbutton items-center border-2 border-black   px-2  py-2 justify-between hidden "
-                  onClick={handleremove}
-                >
-                  <div>
-                    <ShoppingCart size={30} />
-                  </div>
-                  <div className="text-sm px-1">Remove</div>
-                </button>
-                </div>
-
-              ) : (
-                <div className="right self-center pb-7">
                   <button
-                    className="nbutton items-center border-2 border-black  px-2  justify-between hidden "
-                    onClick={handleConfirm}
+                    className="nbutton items-center border-2 border-black   px-2  py-2 justify-between hidden "
+                    onClick={handleremove}
                   >
                     <div>
-                      <ShoppingCart size={20} />
+                      <ShoppingCart size={30} />
                     </div>
-                    <div className="text-sm px-3">Add to Cart</div>
+                    <div className="text-sm px-1">Remove</div>
                   </button>
-                </div>
+                </div>  
+              ) : CartRelatedProducts == true ? (
+                <>
+                  <div className="right self-center pb-7">
+                    <button
+                      className="nbutton items-center border-2 border-black  px-2  justify-between hidden "
+                      onClick={handleConfirmCart}
+                    >
+                      <div>
+                        <ShoppingCart size={20} />
+                      </div>
+                      <div className="text-sm px-3">Add to Cart</div>
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="right self-center pb-7">
+                    <button
+                      className="nbutton items-center border-2 border-black  px-2  justify-between hidden "
+                      onClick={handleConfirm}
+                    >
+                      <div>
+                        <ShoppingCart size={20} />
+                      </div>
+                      <div className="text-sm px-3">Add to Cart</div>
+                    </button>
+                  </div>
+                </>
               )}
             </div>
           </div>

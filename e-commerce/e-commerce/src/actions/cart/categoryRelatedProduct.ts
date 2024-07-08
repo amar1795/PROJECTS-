@@ -3,21 +3,36 @@
 import { prismadb } from "@/lib/db";
 import { tr } from "@faker-js/faker";
 import { revalidatePath } from "next/cache";
+import { fetchAllCartCookieData } from "./fetchAllCartCookieData";
 
 // let count=0;
 // Function to get related products
 export async function getRelatedProducts(userId: string) {
   // console.log("get related products function  has been called", count++);
   // Fetch the user's cart
-  const cart = await prismadb.cart.findFirst({
-    where: { userId },
-    orderBy: { createdAt: 'desc' },
-    include: { cartItems: { include: { product: true } } }
-  });
 
-  if (!cart || cart.cartItems.length === 0) return [];
+  let cartProducts=[];
 
-  const cartProducts = cart.cartItems.map(item => item.product);
+  if(userId) 
+  {
+    const cart = await prismadb.cart.findFirst({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+      include: { cartItems: { include: { product: true } } }
+    });
+  
+    if (!cart || cart.cartItems.length === 0) return [];
+    cartProducts = cart.cartItems.map(item => item.product);
+
+  }
+  else{
+    
+    const { mergedData } = await fetchAllCartCookieData();
+    cartProducts = mergedData;
+  }
+ 
+
+
   const parentCategories = [];
 
   // Find parent categories for each product in the cart
@@ -86,6 +101,13 @@ export async function getRelatedProducts(userId: string) {
          select: { url: true },
          take: 1
        },
+       productVariants: {
+        take: 1, // Fetch only the first product variant
+        include: {
+          color: true,
+          size: true,
+        },
+      },
        ratings: true,
        ...(userId && {
         wishlists: {
@@ -127,6 +149,10 @@ export async function getRelatedProducts(userId: string) {
     return {
       ...product,
       isWishlisted: isWishlisted,
+      color:product.productVariants && product.productVariants[0]?.color?.name,
+      size: product.productVariants && product.productVariants[0]?.size?.name,
+      stock: product.productVariants && product.productVariants[0]?.stock,
+      productVarientID:product.productVariants &&  product.productVariants[0]?.id,
       ratings: {
         count: ratingsCount,
         reviews: reviews,

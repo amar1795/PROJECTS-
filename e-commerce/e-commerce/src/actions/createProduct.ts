@@ -562,6 +562,10 @@ export async function getProductsByCategoryOriginal(categoryId: string) {
   return selectedRelatedProducts;
 }
 
+
+
+
+
 // gives all the products of a specific category and its nested subcategories
 export async function getProductsByCategory(
   categoryId: string
