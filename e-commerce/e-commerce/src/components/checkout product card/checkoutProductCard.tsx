@@ -9,6 +9,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import ColourBox from "../product selection/colourBox";
 import SelectionSizeBox from "../product selection/selectionBox";
 import { useCheckoutStock } from "@/state hooks/product-checkout-stock";
+import { getProductDetailsByID } from "@/actions/product/searchedProductData";
+import Link from "next/link";
 
 const CheckoutProductCard = ({
   size,
@@ -17,6 +19,7 @@ const CheckoutProductCard = ({
   handleQuantityChange,
   handleClickDelete,
 }) => {
+  const [url, setUrl] = useState("");
 
   useEffect(() => {
     if (product && Array.isArray(product.cartItems) && product.cartItems.length > 0) {
@@ -41,6 +44,28 @@ const CheckoutProductCard = ({
 
   const user = useCurrentUser();
 
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getProductDetailsByID(product.id);
+      console.log("this is the fetched data", data);
+      if (data) {
+        let { parentCategory, topmostParentCategory } = data?.parentCategoryIds;
+
+        const productId = data?.productId || "";
+        if (parentCategory === "Kids Category") {
+          parentCategory = "Kids";
+        }
+
+        const cleanedCategory0 = parentCategory.replace(/\s+/g, "");
+        const testUrl = `/categories/${topmostParentCategory}/${cleanedCategory0}/${productId}`;
+        console.log("this is the test url", testUrl);
+        setUrl(testUrl);
+      }
+    };
+
+    fetchData();
+  }, [product]);
 
 
 
@@ -107,6 +132,7 @@ const CheckoutProductCard = ({
         <div className=" overflow-hidden flex justify-between bg-opacity-20 backdrop-blur-lg border border-white/30 bg-white  ">
           <div className=" flex">
             <div>
+            <Link href={url}>
               <Image
                 width={150}
                 height={100}
@@ -115,6 +141,7 @@ const CheckoutProductCard = ({
                 alt=""
                 className=" h-[11rem] w-[10rem] object-cover  px-2 py-4 transform transition-transform duration-300 hover:scale-110 "
               />
+            </Link>
             </div>
             <div className=" price py-4">
               <h1 className=" self-center px-2  text-[1.2rem] ">

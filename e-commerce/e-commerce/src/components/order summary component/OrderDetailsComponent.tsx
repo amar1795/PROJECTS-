@@ -85,7 +85,7 @@ const OrderDetailsComponent = ({ orderItem, isPaid }) => {
               Product Name: {orderItem?.product.name}
             </h1>
             <div className=" flex justify-between ">
-              <div>
+              <div className="w-[40rem]">
                 <h1 className=" py-2 px-2">
                   Brand Name :{orderItem?.product.brand.name}
                 </h1>
