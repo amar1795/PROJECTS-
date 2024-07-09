@@ -53,6 +53,13 @@ interface Order {
 //   productQuantity: number;
 // }
 
+// need to fix the bug for the related items used inthe shooping cart the link url is showing undefined
+const formatPrice = (price: number): string => {
+  // Format the price with the Indian Rupee symbol
+  return "₹" + price?.toLocaleString("en-IN");
+};
+
+
 interface OrderProps {
   orderPlacedDate: string;
   orderTotalAmount: number;
@@ -121,7 +128,7 @@ const OrderSummaryComponent: React.FC<OrderProps> = ({
               </div>
               <div className="min-w-40">
                 <h1 className=" font-bold underline"> TOTAL AMOUNT</h1>
-                <p>{order.orderTotal}</p>
+                <p>{formatPrice(order.orderTotal)}</p>
               </div>
               <div className="min-w-[12rem]">
                 <h1 className=" font-bold underline">SHIPPING ADDRESS</h1>

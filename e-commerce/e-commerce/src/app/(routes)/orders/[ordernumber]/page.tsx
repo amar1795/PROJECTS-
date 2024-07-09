@@ -26,6 +26,11 @@ const page = async ({ params }: { params: { ordernumber: string } }) => {
   // Constructing the final formatted date and time string
   const formattedDate = `${day} ${month} ${year}`;
   const formattedTime = `${hours}:${minutes}`;
+
+  const formatPrice = (price: number): string => {
+    // Format the price with the Indian Rupee symbol
+    return "₹" + price?.toLocaleString("en-IN");
+  };
   return (
     <div>
       <div className=" min-h-[95vh] bg-pink-500 ">
@@ -102,29 +107,29 @@ const page = async ({ params }: { params: { ordernumber: string } }) => {
                   <h1 className=" text-[2rem]"> Order Summary</h1>
                   <div className="">
                     <div className=" flex justify-between">
-                      <h1>Item(s) Subtotal </h1>
-                      <div className=" w-[5rem]">
-                        :${orderData.order?.orderTotal.toFixed(2)}
+                      <div>Item(s) Subtotal </div>
+                      <div className=" ">
+                        :{formatPrice(orderData.order?.orderTotal.toFixed(2))}
                       </div>
                     </div>
                     <div className=" flex justify-between">
                       <h1>Shipping </h1>
-                      <div className=" w-[5rem]">:$0.00</div>
+                      <div className=" w-[6.5rem]">:{formatPrice(0)}</div>
                     </div>
                     <div className=" flex justify-between">
                       <h1>Discount </h1>
-                      <div className=" w-[5rem]">:$0.00</div>
+                      <div className=" w-[6.5rem]">:{formatPrice(0)}</div>
                     </div>
                     <div className=" flex justify-between">
                       <h1>Total</h1>
-                      <div className=" w-[5rem]">
-                        :${orderData.order?.orderTotal.toFixed(2)}
+                      <div className=" ">
+                        :{formatPrice(orderData.order?.orderTotal.toFixed(2))}
                       </div>
                     </div>
                     <div className=" flex justify-between font-bold">
                       <h1 className=" ">GrandTotal </h1>
-                      <div className=" w-[5rem]">
-                        :${orderData.order?.orderTotal.toFixed(2)}
+                      <div className=" ">
+                        :{formatPrice(orderData.order?.orderTotal.toFixed(2))}
                       </div>
                     </div>
                   </div>
