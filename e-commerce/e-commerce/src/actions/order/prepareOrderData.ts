@@ -32,12 +32,18 @@ export function prepareOrderData(
   const orderItems = products.map((product) => {
     const price = product.discountedPrice ; // Use discounted price if available, otherwise regular price
     const quantity = product.cartQuantity;
+    const productVarientID = product.productVarientID;
+    const size = product.size;
+    const color = product.color;
     totalAmount += price * quantity;
     
     return {
       productId: product.id,
       quantity: quantity,
       price: price,
+      productVarientID: productVarientID,
+      size: size,
+      color: color,
     };
   });
 

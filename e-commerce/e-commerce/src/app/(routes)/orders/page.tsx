@@ -26,7 +26,7 @@ const page =  () => {
     const fetchOrders = async () => {
      const  fetchedOrders = await fetchAllOrders({page:currentPage,sortOrder});
       setOrders(fetchedOrders);
-      // console.log("these are the orders",fetchedOrders);
+      console.log("these are the fetched orders",fetchedOrders);
       
      
     };

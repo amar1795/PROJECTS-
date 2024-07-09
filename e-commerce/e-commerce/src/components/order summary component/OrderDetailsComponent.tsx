@@ -34,10 +34,7 @@ const extractFirstAndLastParentCategoryNamesWithNumbers = (
   return formattedCategories;
 };
 
-const OrderDetailsComponent = ({
-  orderItem,
-  isPaid,
-}) => {
+const OrderDetailsComponent = ({ orderItem, isPaid }) => {
   const [reviewData, setReviewData] = useState(null);
   const [newData, setNewData] = useState(true);
   console.log("this is the review Data", reviewData);
@@ -92,13 +89,18 @@ const OrderDetailsComponent = ({
                 <h1 className=" py-2 px-2">
                   Brand Name :{orderItem?.product.brand.name}
                 </h1>
-                <h1 className=" py-2 px-2">
-                Colour: <ColorSpan color={`${"black"}`} /> Black
-                </h1>
-                <h1 className=" py-2 px-2">
-                  Size :{"Large"}
 
-                </h1>
+                {orderItem?.color && (
+                  <h1 className="py-2 px-2">
+                    Colour: <ColorSpan color={orderItem.color} />{" "}
+                    {orderItem.color}
+                  </h1>
+                )}
+
+                {orderItem?.size && (
+                  <h1 className=" py-2 px-2">Size :{orderItem?.size}</h1>
+                )}
+
                 <h1 className=" py-2 px-2">
                   Qty : <span>{orderItem?.quantity}</span>
                 </h1>
@@ -113,8 +115,6 @@ const OrderDetailsComponent = ({
                   </span>
                 </h1>
               </div>
-
-              
 
               {reviewData?.review?.rating ? (
                 <div className="mr-11">
