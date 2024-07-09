@@ -148,6 +148,7 @@ const page = () => {
       postalCode: "33101",
     },
   ];
+  
   // addAddressToUser(user, addresses1[4])
 
   const onSubmit = (values: z.infer<typeof AddressSchema>) => {
@@ -205,6 +206,7 @@ const page = () => {
         description:
           "Order Creation in progress and proceeding to the next step...",
       });
+
       const order = await processOrder({
         selectedAddressId: selectedAddress?.id,
       });

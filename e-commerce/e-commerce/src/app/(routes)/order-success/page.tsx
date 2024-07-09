@@ -14,9 +14,8 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { CircleCheck, CircleCheckBig, DollarSign, X } from "lucide-react";
 import React, { use, useEffect, useState } from "react";
 
-
 // Utility function to format date
- const formatDate = (dateString: string) => {
+const formatDate = (dateString: string) => {
   const options: Intl.DateTimeFormatOptions = {
     day: "2-digit",
     month: "long",
@@ -25,23 +24,21 @@ import React, { use, useEffect, useState } from "react";
   return new Date(dateString).toLocaleDateString("en-US", options);
 };
 
-
 const getRandomFutureDate = (baseDateString) => {
   const baseDate = new Date(baseDateString);
   const randomDaysAhead = Math.floor(Math.random() * 3) + 2; // Generates a random number between 2 and 4
   baseDate.setDate(baseDate.getDate() + randomDaysAhead);
 
-  const options = { day: '2-digit', month: 'long', year: 'numeric' };
-  return baseDate.toLocaleDateString('en-GB', options);
+  const options = { day: "2-digit", month: "long", year: "numeric" };
+  return baseDate.toLocaleDateString("en-GB", options);
 };
-
 
 const page = () => {
   const [orderData, setOrderData] = useState([]);
   const [orderItems, setOrderItems] = useState([]);
   const [deliveryDate, setDeliveryDate] = useState([]);
-  
-  console.log("this is hte delviery Date ", deliveryDate)
+
+  console.log("this is hte delviery Date ", deliveryDate);
   const user = useCurrentUser();
 
   useEffect(() => {
@@ -60,16 +57,20 @@ const page = () => {
         // Update the order payment status if the orderId parameter is present
         if (orderId) {
           await updateOrderPaymentStatus({ orderId: orderId });
+          const orderData = await fetchOrderById(orderId);
+          setOrderData(orderData?.order);
+          setOrderItems(orderData?.order?.orderItems);
+          setDeliveryDate(getRandomFutureDate(orderData?.order?.createdAt));
+          console.log("this is the orderData ", orderData?.order);
         }
-
       } else {
         // this needs to be used in if block
         console.error("Missing success parameter");
-        const orderData = await fetchOrderById("666C0B82F6EF578CBE3C4965");
-        setOrderData(orderData?.order);
-        setOrderItems(orderData?.order?.orderItems);
-        setDeliveryDate(getRandomFutureDate(orderData?.order?.createdAt));
-        console.log("this is the orderData ", orderData?.order);
+        // const orderData = await fetchOrderById("666C0B82F6EF578CBE3C4965");
+        // setOrderData(orderData?.order);
+        // setOrderItems(orderData?.order?.orderItems);
+        // setDeliveryDate(getRandomFutureDate(orderData?.order?.createdAt));
+        // console.log("this is the orderData ", orderData?.order);
       }
     };
 
@@ -79,35 +80,35 @@ const page = () => {
   return (
     <div className=" overflow-hidden border-2 border-black">
       <div className=" flex ">
-
-        
         <div>
-        <ConfettiComponent />
-        <ConfettiComponent2  />
+          <ConfettiComponent />
+          <ConfettiComponent2 />
         </div>
         <div className=" bg-teal-500 flex-1 border-2 border-black">
           <div className=" flex flex-col  justify-center ">
             <div className=" flex flex-col items-center ">
               {/* <CircleCheck size={140} strokeWidth={0.6} /> */}
               <div className=" ">
-              <TickAnimation />
+                <TickAnimation />
               </div>
               <h1 className=" text-2xl font-bold mt-4"> Thank you</h1>
               <h1 className=" text-4xl font-bold mt-2">
                 {" "}
-               Congractulations! Your Order has been Confirmed
+                Congractulations! Your Order has been Confirmed
               </h1>
               <h1 className=" text-[1.2rem] mt-4">
                 {" "}
-              Hey,{user?.name?.split(" ")[0]}  We will send you an email Shortly to {user?.email} please check
-                your email
+                Hey,{user?.name?.split(" ")[0]} We will send you an email
+                Shortly to {user?.email} please check your email
               </h1>
             </div>
             <div className=" px-8 mt-8 ">
               <div className=" bg-white h-[15rem]">
                 <div className=" px-8 py-5 ">
                   <div className=" w-full h-[8rem]  mt-8 ">
-                    <StepProgress orderedDate={formatDate(orderData?.createdAt)} />
+                    <StepProgress
+                      orderedDate={formatDate(orderData?.createdAt)}
+                    />
                   </div>
 
                   <div>
@@ -138,14 +139,14 @@ const page = () => {
               <div className=" flex flex-wrap   pt-4 pr-4">
                 <div className=" py-1 mt-2 mb-2   w-full ">
                   {orderItems.map((item) => (
-                   <div className=" mb-4">
-                     <CheckOutOrderSuccessCard
-                      // handleClickDelete={handleClickDelete}
-                      product={item?.product}
-                      quantity={item?.quantity}
-                      // handleQuantityChange={handleQuantityCookieChange}
-                    />
-                   </div>
+                    <div className=" mb-4">
+                      <CheckOutOrderSuccessCard
+                        // handleClickDelete={handleClickDelete}
+                        product={item?.product}
+                        quantity={item?.quantity}
+                        // handleQuantityChange={handleQuantityCookieChange}
+                      />
+                    </div>
                   ))}
                 </div>
               </div>
@@ -223,7 +224,7 @@ const page = () => {
                     <h1 className="uppercase text-[1.2rem]">Payment Mode</h1>
                   </div>
                   <div className="">
-                    <h1>{orderData?.paymentMode  }</h1>
+                    <h1>{orderData?.paymentMode}</h1>
                   </div>
                 </div>
                 <div className=" flex ">
@@ -236,22 +237,18 @@ const page = () => {
                 </div>
                 <div className=" flex ">
                   <div className="   w-[15rem]">
-                  <h1 className="uppercase text-[1.2rem]">Card Expiry </h1>
-
-                    
-                    </div>
+                    <h1 className="uppercase text-[1.2rem]">Card Expiry </h1>
+                  </div>
                   <div className=" ">
-                  <h1>{orderData?.card?.cardExpiry}</h1>
+                    <h1>{orderData?.card?.cardExpiry}</h1>
                   </div>
                 </div>
                 <div className=" flex ">
-                  <div className="   w-[15rem]"> 
-                  <h1 className="uppercase text-[1.2rem]">Payment Status </h1>
-
-                    
-                    </div>
+                  <div className="   w-[15rem]">
+                    <h1 className="uppercase text-[1.2rem]">Payment Status </h1>
+                  </div>
                   <div className=" ">
-                    <h1>{orderData?.isPaid == true && "SUCCESSFULL" }</h1>
+                    <h1>{orderData?.isPaid == true && "SUCCESSFULL"}</h1>
                   </div>
                 </div>
               </div>

@@ -74,3 +74,18 @@ export async function removeProductFromCookies(productId) {
     path: '/',
   });
 }
+
+
+export async function clearCartCookies() {
+  const cookieStore = cookies();
+
+  // Clear the 'cartProducts' cookie by setting it to an empty array
+  cookieStore.set({
+    name: 'cartProducts',
+    value: JSON.stringify([]),
+    httpOnly: true,
+    path: '/',
+  });
+
+  return { success: true, message: 'Cart cleared successfully' };
+}

@@ -17,6 +17,7 @@ import React from "react";
 import WishlistButton from "@/components/animated_heart/heart"
 import { generateCombinations, generatePantCombinations } from "@/actions/product/generateCombination";
 import { createProductVarient, deleteProductVarients, GenerateCombinationProductVarients } from "@/actions/product/createProductVarients";
+import emptyCart from "@/actions/cart/emptyCart";
 const page = async() => {
   // CreateColour()
   // CreateSize()
@@ -72,15 +73,17 @@ const page = async() => {
   // fetchProductsByCategory("665a0ba214be77720636d44c")
   // fetchProduct("665d6679b76a9c2e856b5fb2")
   
-const ProductsPants= [
-  { id: '665d68a9b76a9c2e856b5fbe' },
+// const ProductsPants= [
+  // { id: '665d68a9b76a9c2e856b5fbe' },
   // { id: '665d698ab76a9c2e856b5fc4' },
   // { id: '665d69d8b76a9c2e856b5fca' },
   // { id: '665d6a11b76a9c2e856b5fd0' }
-]
+// ]
 // generatePantCombinations("665b028f3220eba7c7eabac5")
 // createProductVarient("665b03223220eba7c7eabacb")
 // GenerateCombinationProductVarients(ProductsPants)
+
+// emptyCart()
 
 
   return (

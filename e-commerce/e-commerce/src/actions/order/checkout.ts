@@ -23,8 +23,11 @@ export async function processOrder({ selectedAddressId }:{selectedAddressId:stri
       throw new Error("Unauthorized");
     }
 
-    const productData = await getProductsInCartSummary(user);
+    const data = await getProductsInCartSummary(user);
 
+    const productData = data?.products;
+
+    console.log("Product data is ",productData)
     if(!productData || productData.length === 0){
         throw new Error("No products found in the cart");
         }
@@ -36,7 +39,10 @@ export async function processOrder({ selectedAddressId }:{selectedAddressId:stri
         product_data: {
           name: product.name,
           images: [product.images[0].url],
-         
+          metadata: {
+            color: product.color,
+            size: product.size,
+          },
 
         },
         unit_amount: product?.discountedPrice * 100,
