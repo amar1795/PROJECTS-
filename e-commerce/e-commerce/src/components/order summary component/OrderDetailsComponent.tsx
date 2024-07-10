@@ -8,6 +8,7 @@ import { fetchReview } from "@/actions/productRating/fetchReview";
 import MiniStarComponent from "../rating star component/MiniStarComponent";
 import MiniStarRatingComponent from "../rating star component/MiniStarRatingComponent";
 import ColorSpan from "../ColourSpan";
+import { getProductDetailsByID } from "@/actions/product/searchedProductData";
 
 // helper function to format the parent Categories to be used in the link
 const extractFirstAndLastParentCategoryNamesWithNumbers = (
@@ -37,6 +38,8 @@ const extractFirstAndLastParentCategoryNamesWithNumbers = (
 const OrderDetailsComponent = ({ orderItem, isPaid }) => {
   const [reviewData, setReviewData] = useState(null);
   const [newData, setNewData] = useState(true);
+  const [url, setUrl] = useState("");
+
   console.log("this is the review Data", reviewData);
   // console.log("this is the review rating", reviewData?.review?.rating);
   // console.log("this is the review reviewTitle", reviewData?.review?.review);
@@ -45,11 +48,26 @@ const OrderDetailsComponent = ({ orderItem, isPaid }) => {
   //   reviewData?.review?.reviewTitle
   // );
   // console.log("this is the product ID and the name", orderItem?.product.id, orderItem?.product.name)
-  // console.log("this is the product ID inside the orderItem", orderItem)
+  console.log("this is the product ID inside the orderItem", orderItem)
   useEffect(() => {
     const fetchReviewData = async () => {
       const Data = await fetchReview({ productId: orderItem?.productId });
       setReviewData(Data);
+      const data = await getProductDetailsByID(orderItem?.productId);
+
+      if (data) {
+        let { parentCategory, topmostParentCategory } = data?.parentCategoryIds;
+
+        const productId = data?.productId || "";
+        if (parentCategory === "Kids Category") {
+          parentCategory = "Kids";
+        }
+
+        const cleanedCategory0 = parentCategory.replace(/\s+/g, "");
+        const testUrl = `/categories/${topmostParentCategory}/${cleanedCategory0}/${productId}`;
+        console.log("this is the test url", testUrl);
+        setUrl(testUrl);
+      }
     };
     fetchReviewData();
   }, [newData]);
@@ -68,7 +86,7 @@ const OrderDetailsComponent = ({ orderItem, isPaid }) => {
       <div className="  bg-yellow-500 mt-4">
         <div className=" flex  text-[1.3rem] border-2 border-black border-b-8 border-r-4">
           <Link
-            href={`/categories/${parentCategoryNamesWithNumbers[0]}/${parentCategoryNamesWithNumbers[1]}/${orderItem?.productId}`}
+            href={url}
           >
             <Image
               src={orderItem?.product.images[0].url}
