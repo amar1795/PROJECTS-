@@ -41,11 +41,14 @@ const page = () => {
   const [selectedAddress, setSelectedAddress] = useState<string | undefined>();
   const [productData, setproductData] = useState([]);
   const [AllUserCards, setAllUserCards] = useState([]);
-const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false);
+  const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false);
   const [paymentData, setPaymentData] = useState([]);
   const [selectedCardId, setSelectedCardId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [paymentMode, setPaymentMode] = useState("");
+  const [activeTab, setActiveTab] = useState("card");
 
+  // CARD or WALLET
 
   // Function to handle card selection
   const handleCardSelect = (card) => {
@@ -57,7 +60,7 @@ const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false);
       cardExpiry: card.cardExpiry,
       cardID: card.id,
     };
-    console.log('Selected Card Details:', cardDetails);
+    console.log("Selected Card Details:", cardDetails);
   };
 
   const router = useRouter();
@@ -76,11 +79,12 @@ const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false);
     "3344 Birch Boulevard, Room 10, Miami, FL 33101, United States",
   ];
   const { toast } = useToast();
+
   const handleProceedToPayment = () => {
     if (!selectedAddress) {
       toast({
         title: "Error",
-        description: "Please select a shipping address",
+        description: "Please select a shipping address ",
         variant: "destructive",
       });
       return;
@@ -125,7 +129,6 @@ const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false);
       const allUserCards = await fetchUserCards(user?.id);
       setAllUserCards(allUserCards);
       setIsLoading(false);
-
     };
     cartSummary();
   }, []);
@@ -177,6 +180,11 @@ const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false);
   ];
 
   // addAddressToUser(user, addresses1[4])
+  const activateTab = (tab) => {
+    setActiveTab(tab);
+    setPaymentMode(tab);
+    // alert(tab);
+  }
 
   const onSubmit = (values: z.infer<typeof AddressSchema>) => {
     setError("");
@@ -198,7 +206,7 @@ const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false);
   };
 
   const onSubmitPayment = async (values: z.infer<typeof PaymentSchema>) => {
-    // Check if the address is selected before proceeding
+    // Check if the address is selected before proceeding and after filling the card details
     if (!selectedAddress) {
       toast({
         title: "Error",
@@ -217,6 +225,10 @@ const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false);
           setError(data.error);
           setSuccess(data.success);
           setPaymentData(data.paymentRecord);
+          console.log(
+            "this is the payment card data from usercheckout action",
+            data.paymentRecord
+          );
         } catch (error) {
           console.error("Error during payment:", error);
           setError("Failed to process payment. Please try again.");
@@ -236,6 +248,7 @@ const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false);
 
       const order = await processOrder({
         selectedAddressId: selectedAddress?.id,
+        cardId: paymentData.card.id,
       });
       console.log("this is the order data", order.url);
 
@@ -379,11 +392,11 @@ const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false);
   };
 
   return (
-    <div>
+    <div className=" border-black border-2">
       <div className=" bg-teal-600 h-[8rem] border-b-4 border-black">
         <h1 className=" text-[5rem] px-4">CHECKOUT </h1>
       </div>
-      <div className="  bg-green-400  ">
+      <div className="  bg-green-500  ">
         <div className="">
           <div className=" ">
             <div className="py-4 px-5">
@@ -551,169 +564,216 @@ const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false);
                   </div>
                   <div>
                     <div></div>
-                    {
-                       isLoading ? (
-                        <div className=" flex justify-center  items-center h-screen ">
-                          <LoadingAnimation />
-                        </div>
-                      ): (
-                    <RadioGroupComponent
-                      address={alladdress}
-                      selectedAddress={selectedAddress}
-                      onChange={handleAddressChange}
-                    />
-                  )
-                }
-
+                    {isLoading ? (
+                      <div className=" flex justify-center  items-center h-[20rem] ">
+                        <LoadingAnimation />
+                      </div>
+                    ) : (
+                      <RadioGroupComponent
+                        address={alladdress}
+                        selectedAddress={selectedAddress}
+                        onChange={handleAddressChange}
+                      />
+                    )}
                   </div>
                 </div>
               </div>
 
               <div className=" border-2 border-black  mt-8"></div>
-
-              <div className=" flex justify-between">
-
-             
-
-              <div >
-
-              
-              <form
-                // ref={formRef}
-                onSubmit={handleSubmitPayment(onSubmitPayment)}
-              >
-                <div className="w-[20rem] pt-5  ">
-                  <h3 className="w-[20rem] text-[2rem] leading-none p-2 border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
+              <div>
+                <div className=" pt-5 mb-8 ">
+                  <h3 className="w-[30rem] text-[3rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
                     Payment Method
                   </h3>
-                  <input
-                    type="text"
-                    {...registerPayment("cardNumber")}
-                    placeholder="Card Number"
-                    className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
-                    // onInput={formatCardNumber}
-                  />
-                  {errorsPayment.cardNumber && (
-                    <span className="italic text-red-950 text-[1.1rem]">
-                      {errorsPayment.cardNumber.message}
-                    </span>
-                  )}
-                  <input
-                    type="text"
-                    {...registerPayment("expirationDate")}
-                    placeholder="MM/YY"
-                    className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
-                    // onInput={formatExpirationDate}
-                  />
-                  {errorsPayment.expirationDate && (
-                    <span className="italic text-red-950 text-[1.1rem]">
-                      {errorsPayment.expirationDate.message}
-                    </span>
-                  )}
-                  <input
-                    type="text"
-                    {...registerPayment("cvv")}
-                    placeholder="CVV"
-                    className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
-                    // onInput={restrictCvv}
-                  />
-                  {errorsPayment.cvv && (
-                    <span className="italic text-red-950 text-[1.1rem]">
-                      {errorsPayment.cvv.message}
-                    </span>
-                  )}
-                  <input
-                    type="text"
-                    {...registerPayment("nameOnCard")}
-                    placeholder="Name on card"
-                    className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
-                  />
-                  {errorsPayment.nameOnCard && (
-                    <span className="italic text-red-950 text-[1.1rem]">
-                      {errorsPayment.nameOnCard.message}
-                    </span>
-                  )}
-
-                  <div className=" mt-5" onClick={handleProceedToPayment}>
-                    <StyledButton buttonName="Proceed to Payment" />
+                </div>
+              </div>
+                
+              <div className=" flex-1 ">
+                <div className=" flex justify-around ">
+                  <div className="   mb-8 ">
+                    <button
+                      type="button"
+                      className={`w-[15rem] p-2 border-2 border-black  mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2  ml-4  ${
+                        activeTab === "card"
+                          ? "bg-white text-black"
+                          : "bg-yellow-400 text-black"
+                      }`}
+                      onClick={() => activateTab("card")}
+                    >
+                      <h1 className="font-bold text-[1.5rem]">CARD</h1>
+                    </button>
+                  </div>
+                  <div className="   mb-8 ">
+                    <button
+                      type="button"
+                      className={`w-[15rem] p-2 border-2 border-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 ml-4 ${
+                        activeTab === "wallet"
+                          ? "bg-white text-black"
+                          : "bg-yellow-400 text-black"
+                      }`}
+                      
+                      onClick={()=>activateTab("wallet")}
+                    >
+                      <h1 className="font-bold text-[1.5rem]">WALLET</h1>
+                    </button>
                   </div>
                 </div>
-              </form>
-              </div>    
-              <div>
-                <div className=" mr-[5rem]">
-                  <div className="w-[20rem] pt-5 mr-[20rem] ">
-                    <h3 className="w-[20rem] text-[2rem] leading-none p-2 border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
-                      Saved Cards
-                    </h3>
-                    {/* cardHolderName: true,
+
+                <div className="  w-full border-black border-2">
+                  {activeTab === "card" && (
+                    <div className=" mx-4 mb-4 h-[30rem]">
+                      <div className=" flex justify-between">
+                <div>
+                  <form
+                    // ref={formRef}
+                    onSubmit={handleSubmitPayment(onSubmitPayment)}
+                  >
+                    <div className="w-[20rem] pt-5  ">
+                      <h3 className="w-[30rem] text-[2rem] leading-none p-2 border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 bg-yellow-500 uppercase">
+                        Enter Card Details
+                      </h3>
+                      <input
+                        type="text"
+                        {...registerPayment("cardNumber")}
+                        placeholder="Card Number"
+                        className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
+                        // onInput={formatCardNumber}
+                      />
+                      {errorsPayment.cardNumber && (
+                        <span className="italic text-red-950 text-[1.1rem]">
+                          {errorsPayment.cardNumber.message}
+                        </span>
+                      )}
+                      <input
+                        type="text"
+                        {...registerPayment("expirationDate")}
+                        placeholder="MM/YY"
+                        className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
+                        // onInput={formatExpirationDate}
+                      />
+                      {errorsPayment.expirationDate && (
+                        <span className="italic text-red-950 text-[1.1rem]">
+                          {errorsPayment.expirationDate.message}
+                        </span>
+                      )}
+                      <input
+                        type="text"
+                        {...registerPayment("cvv")}
+                        placeholder="CVV"
+                        className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
+                        // onInput={restrictCvv}
+                      />
+                      {errorsPayment.cvv && (
+                        <span className="italic text-red-950 text-[1.1rem]">
+                          {errorsPayment.cvv.message}
+                        </span>
+                      )}
+                      <input
+                        type="text"
+                        {...registerPayment("nameOnCard")}
+                        placeholder="Name on card"
+                        className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4 focus:outline-none"
+                      />
+                      {errorsPayment.nameOnCard && (
+                        <span className="italic text-red-950 text-[1.1rem]">
+                          {errorsPayment.nameOnCard.message}
+                        </span>
+                      )}
+
+                      <div className=" mt-5" onClick={handleProceedToPayment}>
+                        <StyledButton buttonName="Proceed to Payment" />
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div>
+                  <div className=" mr-[5rem]">
+                    <div className="w-[20rem] pt-5 mr-[20rem] ">
+                      <h3 className="w-[20rem] text-[2rem] leading-none p-2 border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
+                        Saved Cards
+                      </h3>
+                      {/* cardHolderName: true,
                 cardExpiry: true,
                 lastFourDigits: true */}
 
-                    <div className="overflow-auto h-[20rem] w-[42rem] mt-4 border-2 border-black px-2  ">
-                      {
-                        isLoading ? (
-                        <div className=" flex justify-center  items-center  h-full ">
-                          <LoadingAnimation />
-                        </div>
-                          // <div className="text-center mt-4">Loading...</div>
+                      <div className="overflow-auto h-[20rem] w-[42rem] mt-4 border-2 border-black px-2  ">
+                        {isLoading ? (
+                          <div className=" flex justify-center  items-center  h-full ">
+                            <LoadingAnimation />
+                          </div>
                         ) : (
-                      <div className=" mt-4 ">
-                        { AllUserCards.map((card) => (
-                          <div
-                            key={card.id}
-                            className="w-[40rem] h-[4rem] mt-2 text-[1rem] leading-none p-2 border-2 border-black text-black  border-b-8 border-r-4 bg-yellow-500"
-                          >
-                            <div className=" flex justify-between h-full">
-                              <div className=" flex ">
-                                <div className=" h-full">
-                                  <Image
-                                    src="/1.jpg"
-                                    width={50}
-                                    height={50}
-                                    alt="Logo"
-                                    className=" rounded-md mr-2"
-                                  />
-                                </div>
-                                <div className=" flex flex-col justify-between h-full ">
-                                  <div className=" flex">
-                                    <p>{card.cardHolderName}</p>
-                                    <div className=" flex ml-4">
-                                      <p>VISA </p>
-                                      <p> **** {card.lastFourDigits}</p>
+                          // <div className="text-center mt-4">Loading...</div>
+                          <div className=" mt-4 ">
+                            {AllUserCards.map((card) => (
+                              <div
+                                key={card.id}
+                                className="w-[40rem] h-[4rem] mt-2 text-[1rem] leading-none p-2 border-2 border-black text-black  border-b-8 border-r-4 bg-yellow-500"
+                              >
+                                <div className=" flex justify-between h-full">
+                                  <div className=" flex ">
+                                    <div className=" h-full">
+                                      <Image
+                                        src="/1.jpg"
+                                        width={50}
+                                        height={50}
+                                        alt="Logo"
+                                        className=" rounded-md mr-2"
+                                      />
+                                    </div>
+                                    <div className=" flex flex-col justify-between h-full ">
+                                      <div className=" flex">
+                                        <p>{card.cardHolderName}</p>
+                                        <div className=" flex ml-4">
+                                          <p>VISA </p>
+                                          <p> **** {card.lastFourDigits}</p>
+                                        </div>
+                                      </div>
+                                      <p>Expires :{card.cardExpiry} </p>
                                     </div>
                                   </div>
-                                  <p>Expires :{card.cardExpiry} </p>
+                                  <div className=" flex self-center">
+                                    {/* <DeleteModal /> */}
+                                    <div className=" pb-4">
+                                      <button
+                                        className="p-1 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 ml-2 bg-green-500"
+                                        onClick={() => handleCardSelect(card)}
+                                      >
+                                        <div
+                                          className={`h-6 w-6 ${
+                                            selectedCardId === card?.id
+                                              ? "bg-black"
+                                              : "bg-white"
+                                          }`}
+                                        >
+                                          {/* Add an empty space to keep the div rendered */}
+                                          &nbsp;
+                                        </div>
+                                      </button>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                              <div className=" flex self-center">
-                                {/* <DeleteModal /> */}
-                                <div className=" pb-4">
-                                <button
-                                className="p-1 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 ml-2 bg-green-500"
-                                onClick={() => handleCardSelect(card)}
-                                >
-                                <div
-                                    className={`h-6 w-6 ${selectedCardId === card?.id ? 'bg-black' : 'bg-white'}`}
-
-                                >
-                                  {/* Add an empty space to keep the div rendered */}
-                                  &nbsp;
-                                </div>
-                              </button>
-                                </div>
-                              </div>
-                            </div>
+                            ))}
                           </div>
-                        ))}
+                        )}
                       </div>
-                      )
-                    }
                     </div>
                   </div>
                 </div>
               </div>
+                    </div>
+                  )}
+                  {activeTab === "wallet" && (
+                    <div className="h-[30rem]">
+                      {/* Debit History Content */}
+                      <h2>Wallet Details</h2>
+                      <p>Details about the wallet</p>
+                    </div>
+                  )}
+                </div>
               </div>
+                    
+             
             </div>
           </div>
         </div>

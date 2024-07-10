@@ -12,7 +12,8 @@ import { auth } from "@/auth";
 
 // no need to use the loadstripe when using checout session 
 
-export async function processOrder({ selectedAddressId }:{selectedAddressId:string}) {
+export async function processOrder({ selectedAddressId }:{selectedAddressId:string,cardId:string}) {
+  // need to pass the card ID/wallet ID as well from here and the payment mode as well
   console.log("Process order function is being called ")
   try {
    
@@ -60,6 +61,9 @@ export async function processOrder({ selectedAddressId }:{selectedAddressId:stri
       products: products,
       addressID: addressID,
       totalAmount: totalAmount,
+  //     paymentMode?: string;
+  // cardId?: string;
+  // walletId?: string;
     };
 
     const orderResult = await createOrder(orderData);
