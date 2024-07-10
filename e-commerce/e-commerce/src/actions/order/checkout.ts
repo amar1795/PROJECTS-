@@ -8,15 +8,25 @@ import { prepareOrderData } from "@/actions/order/prepareOrderData";
 import { getProductsInCartSummary } from "@/actions/cart/cartSummary";
 import { auth } from "@/auth";
 
-// webhook not required as we are not using the advanced features like subscriptions ,disputes etc and confirming if the payent succeeded or not  which can be done  checking the success true or false in the url as well 
+// webhook not required as we are not using the advanced features like subscriptions ,disputes etc and confirming if the payent succeeded or not  which can be done  checking the success true or false in the url as well
 
-// no need to use the loadstripe when using checout session 
+// no need to use the loadstripe when using checout session
 
-export async function processOrder({ selectedAddressId }:{selectedAddressId:string,cardId:string}) {
+export async function processOrder({
+  selectedAddressId,
+  cardId,
+  paymentMode,
+  walletId,
+}: {
+  selectedAddressId: string;
+  cardId: string;
+  paymentMode: string;
+  walletId: string;
+  
+}) {
   // need to pass the card ID/wallet ID as well from here and the payment mode as well
-  console.log("Process order function is being called ")
+  console.log("Process order function is being called ");
   try {
-   
     const userSession = await auth();
     const user = userSession?.user?.id;
 
@@ -28,10 +38,10 @@ export async function processOrder({ selectedAddressId }:{selectedAddressId:stri
 
     const productData = data?.products;
 
-    console.log("Product data is ",productData)
-    if(!productData || productData.length === 0){
-        throw new Error("No products found in the cart");
-        }
+    console.log("Product data is ", productData);
+    if (!productData || productData.length === 0) {
+      throw new Error("No products found in the cart");
+    }
 
     const line_items = productData.map((product) => ({
       quantity: product?.cartQuantity,
@@ -44,7 +54,6 @@ export async function processOrder({ selectedAddressId }:{selectedAddressId:stri
             color: product.color,
             size: product.size,
           },
-
         },
         unit_amount: product?.discountedPrice * 100,
       },
@@ -61,13 +70,15 @@ export async function processOrder({ selectedAddressId }:{selectedAddressId:stri
       products: products,
       addressID: addressID,
       totalAmount: totalAmount,
-  //     paymentMode?: string;
-  // cardId?: string;
-  // walletId?: string;
+      paymentMode: paymentMode,
+      cardId: cardId,
+      walletId: walletId,
     };
 
+    // order creation and payment processing is being done in this function
     const orderResult = await createOrder(orderData);
 
+    // stipe session creation
     const session = await stripe.checkout.sessions.create({
       line_items,
       mode: "payment",
@@ -78,7 +89,6 @@ export async function processOrder({ selectedAddressId }:{selectedAddressId:stri
       },
     });
 
-   
     return { url: session.url };
   } catch (error) {
     console.error("Error processing order:", error);

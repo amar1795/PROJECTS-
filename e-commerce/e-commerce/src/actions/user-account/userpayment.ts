@@ -42,7 +42,7 @@ export async function userCheckoutPayment(userId: string, paymentDetails: z.infe
       cardCvc: validatedPayment.data.cvv,
       cardHolderName: validatedPayment.data.nameOnCard,
     }
-
+// this function create card or wallet based on the payment mode
    const paymentRecord= await handlePaymentInfo({ userId, paymentMode: "CARD", cardDetails: {...UserCardDetails} });
     
 

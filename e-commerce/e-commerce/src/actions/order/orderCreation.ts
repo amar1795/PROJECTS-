@@ -27,8 +27,8 @@ export async function createOrder(props: CreateOrderProps) {
       userId,
       products,
       addressID,
-      paymentMode = "CARD",
-      cardId = "666b163bd4a3961818aeb7a7",
+      paymentMode ,
+      cardId ,
       walletId,
       totalAmount,
     } = props;
