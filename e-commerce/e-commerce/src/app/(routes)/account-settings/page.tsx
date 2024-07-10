@@ -47,21 +47,19 @@ const page = () => {
   const [userImage, setUserImage] = useState("");
   const [fetchImage, setfetchImage] = useState(false);
   // const [toastData, setToastData] = useState({});
-  const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(
+  const [isTwoFactorEnabled, setIsTwoFactorEnabled] =
+    useState();
     // personalInformation?.data?.isTwoFactorEnabled
-  );
 
-  console.log("this is the isTwoFactorEnabled", isTwoFactorEnabled)
+  console.log("this is the isTwoFactorEnabled", isTwoFactorEnabled);
   const [initialState, setInitialState] = useState(
     personalInformation?.data?.isTwoFactorEnabled
   );
 
   const [showSaveChanges, setShowSaveChanges] = useState(false);
 
-  
   useEffect(() => {
     const data = async () => {
-      
       const alladdress = await getAllAddressesForUser(user?.id);
       console.log("All Address: ", alladdress);
       setalladdress(alladdress);
@@ -70,41 +68,29 @@ const page = () => {
       const personalData = await getUserNameandEmailData();
       setPersonalInformation(personalData.data);
       setIsTwoFactorEnabled(personalData.data.isTwoFactorEnabled);
-      
     };
     data();
   }, [success, newData]);
 
   useEffect(() => {
     const fetchUpdatedImage = async () => {
-      
       const newData = await getUserById(user?.id);
       setUserImage(newData?.image);
       console.log("this is the new data", newData);
-
-     
-
     };
-    fetchUpdatedImage()
-
+    fetchUpdatedImage();
   }, []);
 
-  
-    const fetchUpdatedImage = async () => {
-      
-      const newData = await getUserById(user?.id);
-      setUserImage(newData?.image);
-      console.log("this is the new data", newData);
+  const fetchUpdatedImage = async () => {
+    const newData = await getUserById(user?.id);
+    setUserImage(newData?.image);
+    console.log("this is the new data", newData);
 
-      toast({
-        title: "Updated Profile Image",
-        description: "Successfully Updated the Profile Image",
-      });
-
-    };
-   
-    
-
+    toast({
+      title: "Updated Profile Image",
+      description: "Successfully Updated the Profile Image",
+    });
+  };
 
   useEffect(() => {
     setInitialState(personalInformation?.data?.isTwoFactorEnabled);
@@ -116,38 +102,38 @@ const page = () => {
   //     setShowSaveChanges(isTwoFactorEnabled !== personalInformation?.data?.isTwoFactorEnabled);
   // }, [isTwoFactorEnabled, personalInformation?.data?.isTwoFactorEnabled]);
 
-  
-  // this will show the Data in the update Modal in the toast 
+  // this will show the Data in the update Modal in the toast
   const setToastData = (data) => {
-    toast(data)
-  }
+    toast(data);
+  };
 
   const toggleTwoFactor = (e) => {
     e.preventDefault();
     setIsTwoFactorEnabled(!isTwoFactorEnabled); // Toggle the state using the previous state
     // setShowSaveChanges(true); // Show Save Changes whenever toggled
-    setShowSaveChanges(isTwoFactorEnabled !== personalInformation?.data?.isTwoFactorEnabled);
+    setShowSaveChanges(
+      isTwoFactorEnabled !== personalInformation?.data?.isTwoFactorEnabled
+    );
   };
 
   const saveChanges = () => {
     // Implement the function to save changes to the database
     setInitialState(isTwoFactorEnabled); // Update the initial state to match the new saved state
     setShowSaveChanges(false); // Hide Save Changes after saving
-    updateTwoStepVerificationStatus({ isTwoFactorEnabled})
+    updateTwoStepVerificationStatus({ isTwoFactorEnabled })
       .then((data) => {
-        
-      if(data.data)
-        {
+        if (data.data) {
           toast({
             title: "Two Step Verifictation enabled",
-            description: "Successfully Updated the two step Verification Status",
+            description:
+              "Successfully Updated the two step Verification Status",
           });
-        }
-        else{
+        } else {
           toast({
             title: "Two Step Verifictation Disabled",
             variant: "destructive",
-            description: "Successfully Updated the two step Verification Status",
+            description:
+              "Successfully Updated the two step Verification Status",
           });
         }
         // alert(data.message);
@@ -248,7 +234,6 @@ const page = () => {
     mode: "onBlur", // Validate on blur
   });
 
-
   const onSubmit = (values: z.infer<typeof AddressSchema>) => {
     setError("");
     setSuccess("");
@@ -287,14 +272,10 @@ const page = () => {
   //   setIsSelected(!isSelected);
   // };
 
-  
   const initiateLogout = async () => {
-  
-    signOut({ redirect: true, callbackUrl: '/'});
+    signOut({ redirect: true, callbackUrl: "/" });
     await logout();
-   
   };
-
 
   return (
     <div className="overflow-hidden border-2 border-black  flex flex-col ">
@@ -310,24 +291,26 @@ const page = () => {
           </div>
 
           <div>
-          <div className=" py-4">
-           <div className=" flex">
-           <div>
-           <h1 className="text-[2rem]">
-            Hello,
-            </h1>
-           <h1 className=" self-center mr-4 text-[2rem] uppercase font-bold">{user?.name?.split(" ")[0]}</h1>
-           </div>
-          <CustomUserAvatar  src={userImage}  />
+            <div className=" py-4">
+              <div className=" flex">
+                <div>
+                  <h1 className="text-[2rem]">Hello,</h1>
+                  <h1 className=" self-center mr-4 text-[2rem] uppercase font-bold">
+                    {user?.name?.split(" ")[0]}
+                  </h1>
                 </div>
-           </div>
+                <CustomUserAvatar src={userImage} />
+              </div>
+            </div>
           </div>
 
           <div className=" flex">
             <div className="h-[4rem]">
               <Link href="/orders">
                 <button className=" mr-12 p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-400">
-                  <h1 className="font-bold">See your Complete Order's History </h1>
+                  <h1 className="font-bold">
+                    See your Complete Order's History{" "}
+                  </h1>
                 </button>
               </Link>
             </div>
@@ -339,7 +322,10 @@ const page = () => {
               </Link>
             </div>
             <div className="h-[4rem]">
-              <button onClick={() =>  initiateLogout()} className="w-[10rem] p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-pink-600">
+              <button
+                onClick={() => initiateLogout()}
+                className="w-[10rem] p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-pink-600"
+              >
                 <h1 className="font-bold">Logout</h1>
               </button>
             </div>
@@ -359,23 +345,17 @@ const page = () => {
                   This image will appear as your profile photo
                 </p>
                 <div className=" mt-4">
-               { 
-               
-
-                 <CustomUserAvatar  src={userImage}  />
-               
-               }
+                  {<CustomUserAvatar src={userImage} />}
                 </div>
               </div>
               <div className="flex flex-col    border-2 border-black flex-1  h-[20rem]  ">
                 <div className=" flex px-4 py-4 justify-between h-full">
                   <div>
                     <div className=" pl-[2rem] pt-4 flex   h-[10rem] w-full">
-                      <UploadImage fetchUpdatedImage={fetchUpdatedImage}  />
+                      <UploadImage fetchUpdatedImage={fetchUpdatedImage} />
                     </div>
                   </div>
                 </div>
-          
               </div>
             </div>
           </div>
@@ -404,14 +384,26 @@ const page = () => {
                           </div>
 
                           <div>
-                            <UpdateModal buttonName={"Update"} inputData={"name"} data={personalInformation} setNewData={setNewData} setToastData={setToastData} />
+                            <UpdateModal
+                              buttonName={"Update"}
+                              inputData={"name"}
+                              data={personalInformation}
+                              setNewData={setNewData}
+                              setToastData={setToastData}
+                            />
                           </div>
                         </div>
                         <div className=" flex ">
                           <h3 className=" w-[34rem] h-[3.4rem] pt-4 mt-3 text-[1rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500 ">
                             {personalInformation.email}
                           </h3>
-                          <UpdateModal buttonName={"Update"} inputData={"email"} data={personalInformation} setNewData={setNewData} setToastData={setToastData}/>
+                          <UpdateModal
+                            buttonName={"Update"}
+                            inputData={"email"}
+                            data={personalInformation}
+                            setNewData={setNewData}
+                            setToastData={setToastData}
+                          />
                         </div>
                         <div className=" mt-4 flex h-full ">
                           <h3 className=" w-[25rem] h-[3.4rem] pt-4 mt-3 text-[1rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
@@ -420,22 +412,21 @@ const page = () => {
                           <div className=" h-[4rem] mr-4">
                             {isTwoFactorEnabled !== undefined && (
                               <button
-                              className="p-1 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 ml-2 bg-green-500"
-                              onClick={toggleTwoFactor}
-                            >
-                              <div
-                                className={`h-6 w-6 ${
-                                  isTwoFactorEnabled === true ? "bg-black" : "bg-white"
-                                }`}
+                                className="p-1 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 ml-2 bg-green-500"
+                                onClick={toggleTwoFactor}
                               >
-                                {/* Add an empty space to keep the div rendered */}
-                                &nbsp;
-                              </div>
-                            </button>
-
-                            )
-                              
-                            }
+                                <div
+                                  className={`h-6 w-6 ${
+                                    isTwoFactorEnabled === true
+                                      ? "bg-black"
+                                      : "bg-white"
+                                  }`}
+                                >
+                                  {/* Add an empty space to keep the div rendered */}
+                                  &nbsp;
+                                </div>
+                              </button>
+                            )}
                           </div>
                           {showSaveChanges && (
                             <button
@@ -752,7 +743,7 @@ const page = () => {
                   </div>
                 </form>
               </div>
-              <div>
+              <div className=" mr-2">
                 <div className="w-[20rem] pt-5 mr-[20rem] ">
                   <h3 className="w-[20rem] text-[2rem] leading-none p-2 border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
                     Saved Cards
@@ -760,40 +751,43 @@ const page = () => {
                   {/* cardHolderName: true,
                 cardExpiry: true,
                 lastFourDigits: true */}
-                  <div className=" mt-4">
-                    {AllUserCards.map((card) => (
-                      <div
-                        key={card.id}
-                        className="w-[40rem] h-[4rem] mt-2 text-[1rem] leading-none p-2 border-2 border-black text-black  border-b-8 border-r-4 bg-yellow-500"
-                      >
-                        <div className=" flex justify-between h-full">
-                          <div className=" flex ">
-                            <div className=" h-full">
-                              <Image
-                                src="/1.jpg"
-                                width={50}
-                                height={50}
-                                alt="Logo"
-                                className=" rounded-md mr-2"
-                              />
-                            </div>
-                            <div className=" flex flex-col justify-between h-full ">
-                              <div className=" flex">
-                                <p>{card.cardHolderName}</p>
-                                <div className=" flex ml-4">
-                                  <p>VISA </p>
-                                  <p> **** {card.lastFourDigits}</p>
-                                </div>
+
+                  <div className="overflow-auto h-[20rem] w-[42rem] mt-4 border-2 border-black px-2  ">
+                    <div className=" mt-4 ">
+                      {AllUserCards.map((card) => (
+                        <div
+                          key={card.id}
+                          className="w-[40rem] h-[4rem] mt-2 text-[1rem] leading-none p-2 border-2 border-black text-black  border-b-8 border-r-4 bg-yellow-500"
+                        >
+                          <div className=" flex justify-between h-full">
+                            <div className=" flex ">
+                              <div className=" h-full">
+                                <Image
+                                  src="/1.jpg"
+                                  width={50}
+                                  height={50}
+                                  alt="Logo"
+                                  className=" rounded-md mr-2"
+                                />
                               </div>
-                              <p>Expires :{card.cardExpiry} </p>
+                              <div className=" flex flex-col justify-between h-full ">
+                                <div className=" flex">
+                                  <p>{card.cardHolderName}</p>
+                                  <div className=" flex ml-4">
+                                    <p>VISA </p>
+                                    <p> **** {card.lastFourDigits}</p>
+                                  </div>
+                                </div>
+                                <p>Expires :{card.cardExpiry} </p>
+                              </div>
                             </div>
-                          </div>
-                          <div className=" flex self-center">
-                            <DeleteModal />
+                            <div className=" flex self-center">
+                              <DeleteModal />
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>

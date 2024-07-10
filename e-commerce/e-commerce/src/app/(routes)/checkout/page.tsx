@@ -29,6 +29,10 @@ import { prepareOrderData } from "@/actions/order/prepareOrderData";
 import { createOrder } from "@/actions/order/orderCreation";
 import { processOrder } from "@/actions/order/checkout";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { DeleteModal } from "@/components/deleteModal";
+import { fetchUserCards } from "@/actions/payments/fetchAllCards";
+import LoadingAnimation from "@/components/Loading/LoadingAnimation";
 
 const page = () => {
   const [error, setError] = useState<string | undefined>("");
@@ -36,9 +40,28 @@ const page = () => {
   const [alladdress, setalladdress] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState<string | undefined>();
   const [productData, setproductData] = useState([]);
+  const [AllUserCards, setAllUserCards] = useState([]);
+const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false);
   const [paymentData, setPaymentData] = useState([]);
+  const [selectedCardId, setSelectedCardId] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+
+  // Function to handle card selection
+  const handleCardSelect = (card) => {
+    setSelectedCardId(card.id);
+    // Store card details
+    const cardDetails = {
+      cardHolderName: card.cardHolderName,
+      lastFourDigits: card.lastFourDigits,
+      cardExpiry: card.cardExpiry,
+      cardID: card.id,
+    };
+    console.log('Selected Card Details:', cardDetails);
+  };
+
   const router = useRouter();
-// console.log("this is the address",alladdress)
+  // console.log("this is the address",alladdress)
   const [isPending, startTransition] = useTransition();
   const formRef = useRef<HTMLFormElement | null>(null);
 
@@ -62,7 +85,7 @@ const page = () => {
       });
       return;
     }
-    // i guess formref was creating the issue of creating the order twice  at times 
+    // i guess formref was creating the issue of creating the order twice  at times
     // if (formRef.current) {
     //   formRef.current.dispatchEvent(
     //     new Event("submit", { cancelable: true, bubbles: true })
@@ -99,6 +122,10 @@ const page = () => {
       const data = await getProductsInCartSummary(user.id);
       setproductData(data);
       console.log("this is the product data", data);
+      const allUserCards = await fetchUserCards(user?.id);
+      setAllUserCards(allUserCards);
+      setIsLoading(false);
+
     };
     cartSummary();
   }, []);
@@ -148,7 +175,7 @@ const page = () => {
       postalCode: "33101",
     },
   ];
-  
+
   // addAddressToUser(user, addresses1[4])
 
   const onSubmit = (values: z.infer<typeof AddressSchema>) => {
@@ -524,22 +551,38 @@ const page = () => {
                   </div>
                   <div>
                     <div></div>
-
+                    {
+                       isLoading ? (
+                        <div className=" flex justify-center  items-center h-screen ">
+                          <LoadingAnimation />
+                        </div>
+                      ): (
                     <RadioGroupComponent
                       address={alladdress}
                       selectedAddress={selectedAddress}
                       onChange={handleAddressChange}
                     />
+                  )
+                }
+
                   </div>
                 </div>
               </div>
 
               <div className=" border-2 border-black  mt-8"></div>
+
+              <div className=" flex justify-between">
+
+             
+
+              <div >
+
+              
               <form
                 // ref={formRef}
                 onSubmit={handleSubmitPayment(onSubmitPayment)}
               >
-                <div className="w-[20rem] pt-5">
+                <div className="w-[20rem] pt-5  ">
                   <h3 className="w-[20rem] text-[2rem] leading-none p-2 border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
                     Payment Method
                   </h3>
@@ -596,6 +639,81 @@ const page = () => {
                   </div>
                 </div>
               </form>
+              </div>    
+              <div>
+                <div className=" mr-[5rem]">
+                  <div className="w-[20rem] pt-5 mr-[20rem] ">
+                    <h3 className="w-[20rem] text-[2rem] leading-none p-2 border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
+                      Saved Cards
+                    </h3>
+                    {/* cardHolderName: true,
+                cardExpiry: true,
+                lastFourDigits: true */}
+
+                    <div className="overflow-auto h-[20rem] w-[42rem] mt-4 border-2 border-black px-2  ">
+                      {
+                        isLoading ? (
+                        <div className=" flex justify-center  items-center  h-full ">
+                          <LoadingAnimation />
+                        </div>
+                          // <div className="text-center mt-4">Loading...</div>
+                        ) : (
+                      <div className=" mt-4 ">
+                        { AllUserCards.map((card) => (
+                          <div
+                            key={card.id}
+                            className="w-[40rem] h-[4rem] mt-2 text-[1rem] leading-none p-2 border-2 border-black text-black  border-b-8 border-r-4 bg-yellow-500"
+                          >
+                            <div className=" flex justify-between h-full">
+                              <div className=" flex ">
+                                <div className=" h-full">
+                                  <Image
+                                    src="/1.jpg"
+                                    width={50}
+                                    height={50}
+                                    alt="Logo"
+                                    className=" rounded-md mr-2"
+                                  />
+                                </div>
+                                <div className=" flex flex-col justify-between h-full ">
+                                  <div className=" flex">
+                                    <p>{card.cardHolderName}</p>
+                                    <div className=" flex ml-4">
+                                      <p>VISA </p>
+                                      <p> **** {card.lastFourDigits}</p>
+                                    </div>
+                                  </div>
+                                  <p>Expires :{card.cardExpiry} </p>
+                                </div>
+                              </div>
+                              <div className=" flex self-center">
+                                {/* <DeleteModal /> */}
+                                <div className=" pb-4">
+                                <button
+                                className="p-1 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 ml-2 bg-green-500"
+                                onClick={() => handleCardSelect(card)}
+                                >
+                                <div
+                                    className={`h-6 w-6 ${selectedCardId === card?.id ? 'bg-black' : 'bg-white'}`}
+
+                                >
+                                  {/* Add an empty space to keep the div rendered */}
+                                  &nbsp;
+                                </div>
+                              </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      )
+                    }
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
             </div>
           </div>
         </div>
