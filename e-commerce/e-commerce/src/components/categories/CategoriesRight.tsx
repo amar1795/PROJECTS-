@@ -29,7 +29,10 @@ import { toast } from "../ui/use-toast";
 import { getUniqueColors } from "@/lib/utils";
 import ColorSelection from "../product selection/ColourSelection";
 import deleteCartItem from "@/actions/cart/deleteCartProducts";
-import { addCartDatatoCookies, removeProductFromCookies } from "@/actions/cart/addCartDatatoCookies";
+import {
+  addCartDatatoCookies,
+  removeProductFromCookies,
+} from "@/actions/cart/addCartDatatoCookies";
 import { NotifyMeModal } from "../NotifyMeModal";
 import addItemToCart from "@/actions/cart/addItemToCart";
 
@@ -98,7 +101,7 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
   initialColor,
   initialSize,
 }) => {
-  console.log("this is the data quantities from categories right", data);
+  console.log("this is the data quantities from categories right", data?.cartQuantity);
   const user = useCurrentUser();
 
   // const initialColour= data?.productVariants && data?.productVariants[0]?.color;
@@ -199,10 +202,12 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
   const [reviewData, setReviewData] = useState(null);
   const [newData, setNewData] = useState(true);
   const [barChartData, setbarChartData] = useState(initialData);
-  const [toggledVarientQuantity, setToggledVarientQuantity] = useState(false);
+  const [VarientQuantity, setVarientQuantity] = useState(null);
   const [productVarientStock, setProductVarientStock] = useState(0);
   const [productVarientID, setProductVarientID] = useState("");
   const [itemInCart, setItemInCart] = useState(false);
+
+  console.log("this is the item in cart value", itemInCart);
 
   console.log("this is the chart data", barChartData);
 
@@ -219,6 +224,12 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
       console.log("this is the fetchreview data", Data);
       setReviewData(Data);
       setUniqueColors(getUniqueColors(data?.productVariants));
+
+      if (data?.cartQuantity) {
+        console.log("this is the data cart quantity", data?.cartQuantity);
+        setItemInCart(true);
+        setVarientQuantity(data?.cartQuantity);
+      }
     };
     fetchReviewData();
   }, [data, newData]);
@@ -248,8 +259,6 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
     getReviews();
   }, [data, newData]);
 
-
-  
   // brand cannot be destructured from data issue arised because the data  was null , so i added a check to see if data is null or not and display the loading message if it is null
   console.log("this is the data from categories right", data);
   // data.ratings.count
@@ -368,8 +377,20 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
     }
   };
 
-  const handleConfirm = async() => {
+  const handleConfirm = async () => {
+
     // alert("i have been called")
+
+    if (tempQuantity == 0) {
+      callToast({
+        variant: "destructive",
+        title: "Please add the quantity first",
+        description:
+          "Please add atleast one quantity first in order to add the item to cart",
+      });
+      return;
+    }
+
     if (selectedColor == null) {
       callToast({
         variant: "destructive",
@@ -383,76 +404,207 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
         description: `You have successfully selected the size ${selectedSize} `,
       });
     } else {
+      if (user) {
+        // this is being added to db also need to add in the cookie when the user is not logged in
+        const { success, message } = await addItemToCart(
+          user?.id,
+          data.id,
+          productVarientID,
+          selectedColor,
+          selectedSize,
+          tempQuantity,
+          productVarientStock
+        );
+        if (success === true) {
+          // alert("Item added to cart successfully")
+        }
+        console.log(
+          "this is the final value to be updated in the db",
+          tempQuantity,
+          selectedColor,
+          selectedSize,
+          productVarientID,
+          productVarientStock
+        );
+        // handleClickAdd(user?.id, data.id, selectedColor, selectedSize);
+        const dataobj = {
+          id: data.id,
+          cartQuantity: tempQuantity,
+          discountedPrice: data.discountedPrice,
+          color: selectedColor,
+          size: selectedSize,
+          stock: productVarientStock,
+          productVarientID: productVarientID,
+        };
 
-      if(user )
-      {
-          // this is being added to db also need to add in the cookie when the user is not logged in 
-          const {success,message}=await addItemToCart(user?.id,data.id,productVarientID,selectedColor,selectedSize,tempQuantity,productVarientStock)
-          if(success === true){
-          alert("Item added to cart successfully")
-          }
-          console.log("this is the final value to be updated in the db", tempQuantity,selectedColor,selectedSize,productVarientID,productVarientStock);
-          // handleClickAdd(user?.id, data.id, selectedColor, selectedSize);
-          const dataobj={
-            id:data.id,
-            cartQuantity:tempQuantity,
-            discountedPrice:data.discountedPrice,
-            color:selectedColor,
-            size:selectedSize,
-            stock:productVarientStock,
-            productVarientID:productVarientID
+        const value = await addCartDatatoCookies([dataobj]);
+        console.log(
+          "this is the cookie value",
+          value.success,
+          value.cookieValue
+        );
+      } else {
+        const dataobj = {
+          id: data.id,
+          cartQuantity: tempQuantity,
+          discountedPrice: data.discountedPrice,
+          color: selectedColor,
+          size: selectedSize,
+          stock: productVarientStock,
+          productVarientID: productVarientID,
+        };
 
-          }
-
-          const value= await addCartDatatoCookies([dataobj])
-          console.log("this is the cookie value",value.success,value.cookieValue)
-
-          
+        console.log(
+          "this is the final value to be updated in the cookie",
+          tempQuantity,
+          selectedColor,
+          selectedSize,
+          productVarientID,
+          productVarientStock
+        );
+        const { success, cookieValue } = await addCartDatatoCookies([dataobj]);
+        console.log("this is the cookie value", success, cookieValue);
       }
-
-      else{
-          const dataobj={
-            id:data.id,
-            cartQuantity:tempQuantity,
-            discountedPrice:data.discountedPrice,
-            color:selectedColor,
-            size:selectedSize,
-            stock:productVarientStock,
-            productVarientID:productVarientID
-
-          }
-          
-          console.log("this is the final value to be updated in the cookie", tempQuantity,selectedColor,selectedSize,productVarientID,productVarientStock);
-      const {success,cookieValue}= await addCartDatatoCookies([dataobj])
-        console.log("this is the cookie value",success,cookieValue)
-      }
-      
     }
 
-  }
+
+    callToast({
+      title: "Item added to cart",
+      description: "successfully added item to cart",
+    });
+
+    setItemInCart(true);
+  };
+
+  const handleUpdate = async () => {
+
+    if(tempQuantity === data?.cartQuantity){
+      return 
+    }
+
+    // alert("i have been called")
+
+    if (tempQuantity == 0) {
+      callToast({
+        variant: "destructive",
+        title: "Please add the quantity first",
+        description:
+          "Please add atleast one quantity first in order to add the item to cart",
+      });
+      return;
+    }
+
+    if (selectedColor == null) {
+      callToast({
+        variant: "destructive",
+        title: `Please select a size and colour `,
+        description: `You have successfully selected the colour ${selectedColor} `,
+      });
+    } else if (selectedSize == null) {
+      callToast({
+        variant: "destructive",
+        title: `Please select a size `,
+        description: `You have successfully selected the size ${selectedSize} `,
+      });
+    } else {
+      if (user) {
+        // this is being added to db also need to add in the cookie when the user is not logged in
+        const { success, message } = await addItemToCart(
+          user?.id,
+          data.id,
+          productVarientID,
+          selectedColor,
+          selectedSize,
+          tempQuantity,
+          productVarientStock
+        );
+        if (success === true) {
+          // alert("Item added to cart successfully")
+        }
+        console.log(
+          "this is the final value to be updated in the db",
+          tempQuantity,
+          selectedColor,
+          selectedSize,
+          productVarientID,
+          productVarientStock
+        );
+        // handleClickAdd(user?.id, data.id, selectedColor, selectedSize);
+        const dataobj = {
+          id: data.id,
+          cartQuantity: tempQuantity,
+          discountedPrice: data.discountedPrice,
+          color: selectedColor,
+          size: selectedSize,
+          stock: productVarientStock,
+          productVarientID: productVarientID,
+        };
+
+        const value = await addCartDatatoCookies([dataobj]);
+        console.log(
+          "this is the cookie value",
+          value.success,
+          value.cookieValue
+        );
+      } else {
+        const dataobj = {
+          id: data.id,
+          cartQuantity: tempQuantity,
+          discountedPrice: data.discountedPrice,
+          color: selectedColor,
+          size: selectedSize,
+          stock: productVarientStock,
+          productVarientID: productVarientID,
+        };
+
+        console.log(
+          "this is the final value to be updated in the cookie",
+          tempQuantity,
+          selectedColor,
+          selectedSize,
+          productVarientID,
+          productVarientStock
+        );
+        const { success, cookieValue } = await addCartDatatoCookies([dataobj]);
+        console.log("this is the cookie value", success, cookieValue);
+      }
+    }
+
+   
+      callToast({
+        title: "Item updated in cart",
+        description: "successfully updated item in cart",
+      });
+   
+
+    setItemInCart(true);
+  };
 
   const handleremove = async () => {
     callToast({
-      varientType: "destructive",
-      message: "Item removed from cart",
+      varient: "destructive",
+      title: "Item removed from cart",
       description: "Item successfully removed from cart",
     });
 
     setTempQuantity(0);
-    await removeProductFromCookies(product.id);
+    setVarientQuantity(0);
+    await removeProductFromCookies(data?.id);
     setItemInCart(false);
 
     if (user) {
       const userID = user?.id;
-      const productID = product.id;
+      const productID = data?.id;
 
-        if (userID) {
-          // alert("delete cart item is being called")
-          deleteCartItem(userID, productID);
-        }
-      
+      if (userID) {
+        // alert("delete cart item is being called")
+        deleteCartItem(userID, productID);
+      }
     }
   };
+
+  // useEffect(() => {
+  // },[itemInCart])
 
   useEffect(() => {
     // remove the items from cookies when the product varient is swithced
@@ -482,7 +634,6 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
     }
 
     setTempQuantity(data?.cartQuantity);
-
   }, [selectedColor, selectedSize]);
 
   return (
@@ -542,7 +693,7 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
             </div>
 
             <div className="button flex w-[15rem] justify-between mt-5">
-              {!outOfStock ? (
+              {
                 <div className="button flex w-[15rem] justify-between mt-4">
                   {productVarientStock > 0 ? (
                     <div className=" flex self-center ">
@@ -557,7 +708,7 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
                         <div className=" text-[2rem] w-11  bg-white h-[2.5rem]  ">
                           <h1 className="  flex text-center justify-center align-middle  ">
                             {/* {data?.cartQuantity || 0} */}
-                            {tempQuantity }
+                            {tempQuantity}
                           </h1>
                         </div>
                         <button
@@ -568,36 +719,19 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
                         </button>
                       </div>
                     </div>
-                  ) : productVarientStock === 0 &&
-                    selectedColor &&
-                    selectedSize ? (
-                    <div className=" h-[4rem]">
-                      <h1 className="w-40  p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500 font-bold">
-                        {"Out of stock"}
-                      </h1>
-                    </div>
                   ) : (
-                    <div className=" h-[4rem]">
-                      <button
-                        type="submit"
-                        className="w-40  p-2  border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500"
-                        onClick={addToCart}
-                      >
-                        <h1 className=" font-bold">{"Add to Cart"} </h1>
-                      </button>
-                    </div>
+                    productVarientStock === 0 &&
+                    selectedColor &&
+                    selectedSize && (
+                      <div className=" h-[4rem]">
+                        <h1 className="w-40  p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4  bg-yellow-500 font-bold">
+                          {"Out of stock"}
+                        </h1>
+                      </div>
+                    )
                   )}
                 </div>
-              ) : (
-                <div className=" h-[4rem]">
-                  <button
-                    type="submit"
-                    className="w-40  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-500"
-                  >
-                    <h1 className=" font-bold">{"Out of stock"} </h1>
-                  </button>
-                </div>
-              )}
+              }
 
               {!data?.isWishlisted ? (
                 <div className=" h-[4rem] ml-5">
@@ -625,14 +759,48 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
             </div>
             {productVarientStock === 0 ? (
               <div className=" h-[4rem] mt-8">
-                {/* <button
-                  type="submit"
-                  className={`w-60  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-pink-500 `}
-                  // onClick={() => handleWishlistToggle(user?.id, data.id)}
-                >
-                  <h1 className=" font-bold">{"Notify Me"} </h1>
-                </button> */}
-                <NotifyMeModal buttonName="Notify Me"/>
+                <NotifyMeModal buttonName="Notify Me" />
+              </div>
+            ) : itemInCart || VarientQuantity ? (
+              <div className=" ">
+                <div>
+                  <div className=" h-[4rem] mt-8">
+                    <button
+                      type="submit"
+                      className={`w-60  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-red-600 `}
+                      onClick={handleremove}
+                    >
+                          <ShoppingCart />
+
+                      <h1 className=" font-bold pl-4">Remove  </h1>
+                    </button>
+                  </div>
+                </div>
+
+                <div className=" flex">
+                <div className=" h-[4rem]  mr-4">
+                    <button
+                      type="submit"
+                      className={`w-60  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-green-500 `}
+                      onClick={handleUpdate}
+                      >
+                         <ShoppingCart />
+                      <h1 className=" font-bold pl-4">Update </h1>
+                    </button>
+                  </div>
+                  <div className=" h-[4rem] ">
+                    <Link href="/cart">
+                    <button
+                      className={`w-60  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-green-500 `}
+                      // onClick={handleremove}
+                    >
+                      <ShoppingCart />
+                      <h1 className=" font-bold pl-4">Go to Cart </h1>
+                    </button>
+                    </Link>
+                  </div>
+                  
+                </div>
               </div>
             ) : (
               <div className=" h-[4rem] mt-8">
@@ -641,7 +809,8 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
                   className={`w-60  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-green-500 `}
                   onClick={handleConfirm}
                 >
-                  <h1 className=" font-bold">{"Proceed to buy"} </h1>
+                  <ShoppingCart />
+                  <h1 className=" font-bold pl-4">{"Add to Cart"} </h1>
                 </button>
               </div>
             )}

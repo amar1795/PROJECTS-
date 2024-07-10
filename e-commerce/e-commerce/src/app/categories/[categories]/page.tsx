@@ -285,8 +285,11 @@ const Page = ({ params }: { params: { categories: string } }) => {
   // console.log("this is the Previous segment:", previousSegment);
   const breadcrumbsData = [
     { id: 1, href: "/", label: "Home" },
-    { id: 2, href: `/categories/${previousSegment1}`,  label: previousSegment1.split('?')[0]
-  },
+    {
+      id: 2,
+      href: `/categories/${previousSegment1}`,
+      label: previousSegment1.split("?")[0],
+    },
     // { id: 3, href: `/categories/${previousSegment1}/${previousSegment}`, label: previousSegment },
     // { id: 4, href: params?.product, label: data?.name },
   ];
@@ -316,7 +319,11 @@ const Page = ({ params }: { params: { categories: string } }) => {
       <div className=" mt-[8rem]">
         <BreadcrumbWithCustomSeparator items={breadcrumbsData} />
         <div className="filter flex justify-between w-full px-5 mt-5  overflow-hidden relative">
-          <div className=" self-center font-bold">FILTERS</div>
+          <div className=" h-[4rem]">
+            <h1 className="w-40  p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4  bg-pink-500 font-bold">
+              FILTERS
+            </h1>
+          </div>
           <div className=" px-5 py-5 flex w-[19rem] justify-between ">
             <SelectDemo setSortBy={setSortBy} />
           </div>
