@@ -140,17 +140,17 @@ const page = async() => {
               </p>
               <ul>
                 <li className=" text-lg  mt-4">
-                  <strong>Offering a Diverse Range of Products:</strong> From
+                  <strong>`Offering a Diverse Range of Products:</strong> From
                   the latest electronics and stylish fashion pieces to essential
                   home goods and unique gifts, we bring a variety of products to
                   your fingertips. Our extensive catalog is curated to ensure
-                  that you find exactly what you're looking for, and more.
+                  that you find exactly what you are looking for, and more.
                 </li>
                 <li className=" text-lg  mt-4">
                   <strong>Ensuring Quality and Authenticity:</strong> We partner
                   with trusted brands and suppliers to bring you only the best.
                   Every product on Purchase Pal is vetted for quality and
-                  authenticity, so you can shop with confidence knowing you're
+                  authenticity, so you can shop with confidence knowing you are
                   getting genuine items.
                 </li>
                 <li className=" text-lg  mt-4">
@@ -162,7 +162,7 @@ const page = async() => {
                 </li>
                 <li className=" text-lg  mt-4">
                   <strong>Offering Competitive Prices:</strong> We understand
-                  the importance of value for money. That's why we work
+                  the importance of value for money. That&apos;s why we work
                   tirelessly to provide you with competitive prices without
                   compromising on quality.
                 </li>
@@ -208,7 +208,7 @@ const page = async() => {
                   shortest possible time.
                 </li>
                 <li className=" text-lg  mt-4">
-                  <strong>Hassle-Free Returns:</strong> If something isn't
+                  <strong>Hassle-Free Returns:</strong> If something is not
                   right, our hassle-free return policy allows you to return
                   items easily and get a refund or exchange.
                 </li>
