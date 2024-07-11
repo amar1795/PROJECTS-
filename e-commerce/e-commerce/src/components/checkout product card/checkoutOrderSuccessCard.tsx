@@ -6,8 +6,11 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { DollarSign, Heart, Minus, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
 import React, { useCallback, useState } from "react";
+import ColorSpan from "../ColourSpan";
 
 const CheckOutOrderSuccessCard = ({
+  colour,
+  size,
   quantity,
   product,
   handleQuantityChange,
@@ -15,7 +18,7 @@ const CheckOutOrderSuccessCard = ({
 }) => {
   // console.log("this is the updated products", updatedProducts);
   const user = useCurrentUser();
-
+console.log("this is the colour", colour)
   // Assuming the product object has cartItems array and we are getting the quantity from it
   // const quantity =
   //   product?.cartItems?.find((item) => item.productId === product.id)
@@ -57,27 +60,22 @@ const CheckOutOrderSuccessCard = ({
                   </span>
                 </span>
               </div>
-              <div>
-                <span className=" text-[1.2rem] font-bold">COLOUR :</span>{" "}
+              <div className=" flex  ">
+                <span className=" text-[1.2rem] font-bold pt-2">COLOUR :</span>{" "}
                 <span>
-                  <span className=" self-center  text-[1.2rem] ">
-                    {`
-                        BLACK `}
-                    {/* {product?.name.length > 36
-                  ? product?.name.slice(0, 40) + "..."
-                  : product?.name}{" "} */}
+                  <span className=" flex text-[1.2rem] pb-2  ">
+                  <h1 className="py-2 px-2">
+                     <ColorSpan color={colour} />
+                    {/* {colour} */}
+                  </h1>
                   </span>
                 </span>
               </div>
               <div>
-                <span className=" text-[1.2rem] font-bold">SIZE</span>{" "}
+                <span className=" text-[1.2rem] font-bold">SIZE :</span>{" "}
                 <span>
                   <span className=" self-center  text-[1.2rem] ">
-                    {`
-                       LARGE `}
-                    {/* {product?.name.length > 36
-                  ? product?.name.slice(0, 40) + "..."
-                  : product?.name}{" "} */}
+                   {size}
                   </span>
                 </span>
               </div>

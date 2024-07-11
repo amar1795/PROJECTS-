@@ -2,6 +2,8 @@
 import emptyCart from "@/actions/cart/emptyCart";
 import { fetchOrderById } from "@/actions/order/fetchSingleOrder";
 import { updateOrderPaymentStatus } from "@/actions/order/orderUpdate";
+import LoadingAnimation from "@/components/Loading/LoadingAnimation";
+import LoadingText from "@/components/Loading/loadingText";
 import StepProgress from "@/components/StepProgress";
 import CheckOutOrderSuccessCard from "@/components/checkout product card/checkoutOrderSuccessCard";
 import CheckoutProductCard from "@/components/checkout product card/checkoutProductCard";
@@ -60,6 +62,10 @@ const page = () => {
           const orderData = await fetchOrderById(orderId);
           setOrderData(orderData?.order);
           setOrderItems(orderData?.order?.orderItems);
+          console.log(
+            "this is the orderData for colour and size",
+            orderData?.order?.orderItems
+          );
           setDeliveryDate(getRandomFutureDate(orderData?.order?.createdAt));
           console.log("this is the orderData ", orderData?.order);
         }
@@ -76,6 +82,20 @@ const page = () => {
 
     processOrder();
   }, []);
+
+  if (orderItems.length == 0)
+    return (
+      <div className=" h-[100vh]">
+        <div className=" flex justify-center">
+          <div className=" text-center">
+            <div className=" h-[5rem] justify-center flex">
+              <LoadingAnimation />
+            </div>
+            <LoadingText />
+          </div>
+        </div>
+      </div>
+    );
 
   return (
     <div className=" overflow-hidden border-2 border-black">
@@ -142,6 +162,8 @@ const page = () => {
                     <div className=" mb-4">
                       <CheckOutOrderSuccessCard
                         // handleClickDelete={handleClickDelete}
+                        colour={item?.color}
+                        size={item?.size}
                         product={item?.product}
                         quantity={item?.quantity}
                         // handleQuantityChange={handleQuantityCookieChange}
@@ -227,22 +249,29 @@ const page = () => {
                     <h1>{orderData?.paymentMode}</h1>
                   </div>
                 </div>
-                <div className=" flex ">
-                  <div className="   w-[15rem]">
-                    <h1 className="uppercase text-[1.2rem]">Payee Name </h1>
-                  </div>
-                  <div className=" ">
-                    <h1>{orderData?.card?.cardHolderName}</h1>
-                  </div>
-                </div>
-                <div className=" flex ">
-                  <div className="   w-[15rem]">
-                    <h1 className="uppercase text-[1.2rem]">Card Expiry </h1>
-                  </div>
-                  <div className=" ">
-                    <h1>{orderData?.card?.cardExpiry}</h1>
-                  </div>
-                </div>
+                {orderData?.paymentMode == "CARD" && (
+                  <>
+                    <div className=" flex ">
+                      <div className="   w-[15rem]">
+                        <h1 className="uppercase text-[1.2rem]">Payee Name </h1>
+                      </div>
+                      <div className=" ">
+                        <h1>{orderData?.card?.cardHolderName}</h1>
+                      </div>
+                    </div>
+                    <div className=" flex ">
+                      <div className="   w-[15rem]">
+                        <h1 className="uppercase text-[1.2rem]">
+                          Card Expiry{" "}
+                        </h1>
+                      </div>
+                      <div className=" ">
+                        <h1>{orderData?.card?.cardExpiry}</h1>
+                      </div>
+                    </div>
+                  </>
+                )}
+
                 <div className=" flex ">
                   <div className="   w-[15rem]">
                     <h1 className="uppercase text-[1.2rem]">Payment Status </h1>
