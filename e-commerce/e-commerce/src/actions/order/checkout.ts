@@ -7,6 +7,7 @@ import { createOrder } from "@/actions/order/orderCreation";
 import { prepareOrderData } from "@/actions/order/prepareOrderData";
 import { getProductsInCartSummary } from "@/actions/cart/cartSummary";
 import { auth } from "@/auth";
+import addTransaction from "../payments/addWalletTransaction";
 
 // webhook not required as we are not using the advanced features like subscriptions ,disputes etc and confirming if the payent succeeded or not  which can be done  checking the success true or false in the url as well
 
@@ -78,6 +79,16 @@ export async function processOrder({
     // order creation and payment processing is being done in this function
     const orderResult = await createOrder(orderData);
 
+    if(walletId){
+       await addTransaction(totalAmount, "DEBIT", `Payment for order ${orderResult?.createdOrder.id}`);
+      // if wallet is used for payment then we need to update the wallet balance
+     const success_url = `http://localhost:3000/order-success/?success=true/orderId=${orderResult?.createdOrder.id}`;
+
+      return { url: success_url };
+
+    }
+
+    else {  
     // stipe session creation
     const session = await stripe.checkout.sessions.create({
       line_items,
@@ -88,8 +99,9 @@ export async function processOrder({
         orderId: orderResult?.createdOrder.id,
       },
     });
-
+  
     return { url: session.url };
+  }
   } catch (error) {
     console.error("Error processing order:", error);
     throw new Error("Internal Server Error");

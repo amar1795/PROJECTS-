@@ -33,6 +33,15 @@ import Image from "next/image";
 import { DeleteModal } from "@/components/deleteModal";
 import { fetchUserCards } from "@/actions/payments/fetchAllCards";
 import LoadingAnimation from "@/components/Loading/LoadingAnimation";
+import getUserWallet from "@/actions/payments/getUserWallet";
+
+// need to restructure these helper functions later
+const formatToINR = (amount) => {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+  }).format(amount);
+};
 
 const page = () => {
   const [error, setError] = useState<string | undefined>("");
@@ -50,6 +59,10 @@ const page = () => {
   const [paymentMode, setPaymentMode] = useState("CARD");
   const [activeTab, setActiveTab] = useState("card");
   const [cardDetails, setCardDetails] = useState("");
+  const [walletData, setWalletData] = useState([]);
+  const [WalletTrigger, setWalletTrigger] = useState(false);
+  const [totalAmount, setTotalAmount] = useState(null);
+  console.log("this is the wallet data", walletData);
   console.log("this is the payment mode", paymentMode);
   console.log("this is the selected card id", selectedCardId);
   // CARD or WALLET
@@ -102,8 +115,7 @@ const page = () => {
     // }
   };
 
-  const handleConfirmPayment = async() => {
-
+  const handleConfirmPayment = async () => {
     if (!selectedAddress) {
       toast({
         title: "Please select a shipping address",
@@ -113,39 +125,33 @@ const page = () => {
       return;
     }
 
-    if( paymentMode === "CARD" && selectedCardId === null){
-    
+    if (paymentMode === "CARD" && selectedCardId === null) {
       toast({
         title: "Please select a card",
         description: "Please select a card to proceed with the payment",
         variant: "destructive",
       });
       return;
-    }
-
-    else if (paymentMode === "WALLET" && WalletCardId === null){
+    } else if (paymentMode === "WALLET" && WalletCardId === null) {
       toast({
         title: "Please select a wallet",
         description: "Please select a wallet to proceed with the payment",
         variant: "destructive",
       });
       return;
-      
     }
 
-
-    
     const order = await processOrder({
       selectedAddressId: selectedAddress?.id,
-      cardId: selectedCardId !=null ? selectedCardId: "",
+      cardId: selectedCardId != null ? selectedCardId : "",
       paymentMode: paymentMode,
-      walletId: WalletCardId !== null ? WalletCardId: "" ,
+      walletId: WalletCardId !== null ? WalletCardId : "",
     });
-    
+
     window.location = order.url;
 
     console.log("this is the order data", order.url);
-  }
+  };
 
   useEffect(() => {
     const data = async () => {
@@ -164,6 +170,26 @@ const page = () => {
     data();
   }, [success]);
 
+  // useEffect(() => {
+  //   const getWalletData = async () => {
+  //     const walletData = await getUserWallet();
+  //     setWalletData(walletData);
+  //   };
+  //   getWalletData();
+  // }, [WalletTrigger]);
+
+  const getWalletData = async () => {
+    const walletData = await getUserWallet();
+    setWalletData(walletData);
+  };
+
+  const handleWalletSelect = async (wallet) => {
+
+    setWalletCardId(wallet);
+
+
+  };
+
   // userId: string,
   // products: Product[],
   // addressID: string,
@@ -175,6 +201,7 @@ const page = () => {
     const cartSummary = async () => {
       const data = await getProductsInCartSummary(user.id);
       setproductData(data);
+      setTotalAmount(data.totalAmount)
       console.log("this is the product data", data);
       const allUserCards = await fetchUserCards(user?.id);
       setAllUserCards(allUserCards);
@@ -244,7 +271,9 @@ const page = () => {
     if (tab === "card") {
       setPaymentMode("CARD");
     } else {
+      setWalletTrigger((prev) => !prev);
       setPaymentMode("WALLET");
+      getWalletData();
     }
 
     // alert(tab);
@@ -814,7 +843,6 @@ const page = () => {
                                             </div>
                                           </div>
                                           <div className=" flex self-center">
-                                            {/* <DeleteModal /> */}
                                             <div className=" pb-4">
                                               <button
                                                 className="p-1 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 ml-2 bg-green-500"
@@ -848,22 +876,110 @@ const page = () => {
                     </div>
                   )}
                   {activeTab === "wallet" && (
-                    <div className="h-[30rem]">
+                    <div className="h-[30rem] ml-5">
                       {/* Debit History Content */}
-                      <h2>Wallet Details</h2>
-                      <p>Details about the wallet</p>
+
+                      {walletData.length === 0 ? (
+                        <div className=" flex self-center mt-5 h-[10rem] ">
+                          <LoadingAnimation />
+                        </div>
+                      ) : (
+                        <>
+                        <div className=" flex mt-4 ">
+                          <div className=" w-[25rem] text-[2rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
+                            <div className=" p-4 px-4">
+                              <h1 className=" text-[2rem]">
+                               
+                                Available balance
+                              </h1>
+                              <h1 className=" mt-4 text-[1.8rem]">
+                                {formatToINR(walletData.wallet.balance)}
+                              </h1>
+                            </div>
+                          </div>
+                          {
+                            totalAmount < walletData.wallet.balance && (
+                              <div className=" flex self-center">
+                            <div className=" pb-4">
+                              <button
+                                className="p-1 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 ml-2 bg-green-500"
+                                onClick={() =>
+                                  handleWalletSelect(walletData.wallet.id)
+                                }
+                              >
+                                
+                                <div
+                                className={`h-6 w-6 ${
+                                  WalletCardId == walletData.wallet.id
+                                    ? "bg-black"
+                                    : "bg-white"
+                                }`}
+                                >
+                                  {/* Add an empty space to keep the div rendered */}
+                                  &nbsp;
+                                </div>
+                              </button>
+                            </div>
+                          </div>
+                            )
+                          }
+                          
+                        </div>
+
+                        <div>
+                                {
+                                  totalAmount > walletData.wallet.balance && (
+                                    <div className=" mt-8">
+                                      <div className=" w-[30rem] text-[2rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
+                            <div className=" p-4 px-4">
+                              <h1 className=" text-[1.5rem]">
+                               
+                              Insufficient balance in the wallet
+                              </h1>
+                             
+                            </div>
+                          </div>
+                          
+                                      
+                                    </div>
+                                  ) 
+                                  
+                                }
+                        </div>
+
+                        <div>
+                        
+                                    
+                                    <div className=" mt-8">
+                                      <div className=" w-[30rem] text-[2rem] leading-none p-2 border-2 border-black text-black  flex self-center justify-center border-b-8 border-r-4 bg-yellow-500">
+                            <div className=" p-4 px-4">
+                              <h1 className=" text-[1.5rem]">
+                               
+                              Amount to Pay {formatToINR(totalAmount)}
+                              </h1>
+                             
+                            </div>
+                          </div>
+                                    </div>
+                                  
+                        </div>
+                        </>
+                      )}
+                  
                     </div>
                   )}
                 </div>
 
-                <div className=" mt-5 w-[20rem] mb-7" onClick={handleConfirmPayment}>
+                <div
+                  className=" mt-5 w-[20rem] mb-7"
+                  onClick={handleConfirmPayment}
+                >
                   <StyledButton buttonName="Proceed to Payment" />
                 </div>
               </div>
             </div>
           </div>
         </div>
-       
       </div>
     </div>
   );

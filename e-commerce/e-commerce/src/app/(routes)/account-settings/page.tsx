@@ -913,68 +913,90 @@ const page = () => {
                 <div className=" bg-teal-600 h-[20rem] w-full border-black border-2">
                   {activeTab === "credit" && (
                     <div className=" px-4 mt-2  overflow-y-auto">
-
-                    {creditTransaction && creditTransaction.map((transaction) => (
-                     <div key={transaction.id} className="flex justify-between border-b-8 border-r-4  bg-white border-black border-2 px-2" >
-                        <div className=" ">
-                          <div className="left  flex pt-2">
-                            <div className="   w-[5rem]">
-                              <div className=" flex justify-center ">
-                                <CircleCheckBig size={30} strokeWidth={1} color="green" />
-                              </div>
-                              <div className=" flex justify-center">
-                                <h1 className=" text-green-600">Success</h1>
+                      {creditTransaction &&
+                        creditTransaction.map((transaction) => (
+                          <div
+                            key={transaction.id}
+                            className="flex justify-between border-b-8 border-r-4  bg-white border-black border-2 px-2"
+                          >
+                            <div className=" ">
+                              <div className="left  flex pt-2">
+                                <div className="   w-[5rem]">
+                                  <div className=" flex justify-center ">
+                                    <CircleCheckBig
+                                      size={30}
+                                      strokeWidth={1}
+                                      color="green"
+                                    />
+                                  </div>
+                                  <div className=" flex justify-center">
+                                    <h1 className=" text-green-600">Success</h1>
+                                  </div>
+                                </div>
+                                <div>
+                                  <div>Remarks :{transaction.description}</div>
+                                  <div>{formatDate(transaction.createdAt)}</div>
+                                </div>
                               </div>
                             </div>
-                            <div>
-                              <div>Remarks :{transaction.description}</div>
-                              <div>{formatDate(transaction.createdAt)}</div>
+                            <div className=" flex flex-col mt-2">
+                              <div className="  ">
+                                Transaction Id:{transaction?.id}
+                              </div>
+                              <div className=" text-green-800  ">
+                                {formatToINR(transaction.amount)} Credit
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className=" flex flex-col mt-2">
-                        <div className="  ">Transaction Id:{transaction?.id}</div>
-                        <div className=" text-green-800  ">{formatToINR(transaction.amount)}Cr</div>
-
-                        </div>
-                      </div>
-                    ))}
-                     
+                        ))}
                     </div>
                   )}
                   {activeTab === "debit" && (
                     <div className=" px-4 mt-2  overflow-y-auto">
-                       {debitTransaction !="" ? debitTransaction.map((transaction) => (
-                     <div key={transaction.id} className="flex justify-between border-b-8 border-r-4  bg-white border-black border-2 px-2" >
-                        <div className=" ">
-                          <div className="left  flex pt-2">
-                            <div className="   w-[5rem]">
-                              <div className=" flex justify-center ">
-                                <CircleCheckBig size={30} strokeWidth={1} color="green" />
-                              </div>
-                              <div className=" flex justify-center">
-                                <h1 className=" text-green-600">Success</h1>
+                      {debitTransaction != "" ? (
+                        debitTransaction.map((transaction) => (
+                          <div
+                            key={transaction.id}
+                            className="flex justify-between border-b-8 border-r-4  bg-white border-black border-2 px-2"
+                          >
+                            <div className=" ">
+                              <div className="left  flex pt-2">
+                                <div className="   w-[5rem]">
+                                  <div className=" flex justify-center ">
+                                    <CircleCheckBig
+                                      size={30}
+                                      strokeWidth={1}
+                                      color="green"
+                                    />
+                                  </div>
+                                  <div className=" flex justify-center">
+                                    <h1 className=" text-green-600">Success</h1>
+                                  </div>
+                                </div>
+                                <div>
+                                  <div>Remarks :{transaction.description}</div>
+                                  <div>{formatDate(transaction.createdAt)}</div>
+                                </div>
                               </div>
                             </div>
-                            <div>
-                              <div>Remarks :{transaction.description}</div>
-                              <div>{formatDate(transaction.createdAt)}</div>
+                            <div className=" flex flex-col mt-2">
+                              <div className="  ">
+                                Transaction Id:{transaction?.id}
+                              </div>
+                              <div className=" text-red-800  ">
+                                {formatToINR(transaction.amount)} Debit
+                              </div>
                             </div>
                           </div>
+                        ))
+                      ) : (
+                        <div className=" h-[40vh] bg-pink-600  text-center">
+                          <h1 className=" text-[2rem] uppercase">
+                            {" "}
+                            No transactions made yet{" "}
+                          </h1>
                         </div>
-                        <div className=" flex flex-col mt-2">
-                        <div className="  ">Transaction Id:{transaction?.id}</div>
-                        <div className=" text-green-800  ">{formatToINR(transaction.amount)}Cr</div>
-
-                        </div>
-                      </div>
-                    )):(
-                      <div className=" h-[40vh] bg-pink-600  text-center">
-                        <h1 className=" text-[2rem] uppercase"> No transactions made yet </h1>
-                  
-                      </div>
-                    )}
-                     
+                      )}
                     </div>
                   )}
                 </div>
