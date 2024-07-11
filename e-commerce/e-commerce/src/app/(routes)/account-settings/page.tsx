@@ -63,7 +63,6 @@ const page = () => {
 
   const [showSaveChanges, setShowSaveChanges] = useState(false);
 
-
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = {
       day: "2-digit",
@@ -75,8 +74,6 @@ const page = () => {
     };
     return new Date(dateString).toLocaleDateString("en-US", options);
   };
-  
-
 
   useEffect(() => {
     const data = async () => {
@@ -88,25 +85,24 @@ const page = () => {
       const walletData = await getUserWallet();
       setWalletData(walletData);
       console.log("this is the wallet data", walletData);
-        const transactionData = walletData?.wallet?.transactions;
-          
-        if (transactionData) {
-          const creditTransactions = [];
-          const debitTransactions = [];
-        
-          transactionData.forEach((transaction) => {
-            if (transaction.type === "CREDIT") {
-              creditTransactions.push(transaction);
-            } else {
-              debitTransactions.push(transaction);
-            }
-          });
-        
-          setCreditTransaction(creditTransactions);
-          setDebitTransaction(debitTransactions);
-        }
+      const transactionData = walletData?.wallet?.transactions;
 
-      
+      if (transactionData) {
+        const creditTransactions = [];
+        const debitTransactions = [];
+
+        transactionData.forEach((transaction) => {
+          if (transaction.type === "CREDIT") {
+            creditTransactions.push(transaction);
+          } else {
+            debitTransactions.push(transaction);
+          }
+        });
+
+        setCreditTransaction(creditTransactions);
+        setDebitTransaction(debitTransactions);
+      }
+
       // if (transactionData.type === "CREDIT") {
       //   setCreditTransaction(transactionData);
       // } else {
@@ -1026,6 +1022,12 @@ const page = () => {
                         <input
                           type="password"
                           placeholder="New pasword"
+                          className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
+                        />
+
+                        <input
+                          type="password"
+                          placeholder="ReEnter New pasword"
                           className="w-[34rem] p-2 border-2 border-black bg-white text-black mt-4 flex self-center justify-center border-b-8 border-r-4  focus:outline-none "
                         />
                       </div>

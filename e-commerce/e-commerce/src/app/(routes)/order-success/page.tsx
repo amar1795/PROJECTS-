@@ -86,7 +86,7 @@ const page = () => {
   if (orderItems.length == 0)
     return (
       <div className=" h-[100vh]">
-        <div className=" flex justify-center">
+        <div className=" flex justify-center mt-[50vh]">
           <div className=" text-center">
             <div className=" h-[5rem] justify-center flex">
               <LoadingAnimation />

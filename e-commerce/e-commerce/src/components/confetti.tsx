@@ -3,7 +3,7 @@ import useWindowSize from 'react-use/lib/useWindowSize'
 import  Confetti  from 'react-confetti'
 
 
-export const ConfettiComponent = () => {
+  const ConfettiComponent = () => {
     const confettiRef = useRef<HTMLCanvasElement>(null)
     const [peices, setPeices] = useState(200)
 
@@ -27,4 +27,5 @@ export const ConfettiComponent = () => {
             
 }
 
+export default ConfettiComponent
 

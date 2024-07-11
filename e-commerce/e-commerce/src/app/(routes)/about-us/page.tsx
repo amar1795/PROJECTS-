@@ -150,7 +150,7 @@ const page = async() => {
                   <strong>Ensuring Quality and Authenticity:</strong> We partner
                   with trusted brands and suppliers to bring you only the best.
                   Every product on Purchase Pal is vetted for quality and
-                  authenticity, so you can shop with confidence knowing you’re
+                  authenticity, so you can shop with confidence knowing you're
                   getting genuine items.
                 </li>
                 <li className=" text-lg  mt-4">
@@ -208,7 +208,7 @@ const page = async() => {
                   shortest possible time.
                 </li>
                 <li className=" text-lg  mt-4">
-                  <strong>Hassle-Free Returns:</strong> If something isn’t
+                  <strong>Hassle-Free Returns:</strong> If something isn't
                   right, our hassle-free return policy allows you to return
                   items easily and get a refund or exchange.
                 </li>
