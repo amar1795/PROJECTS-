@@ -2,7 +2,7 @@
 import UploadImage from "@/components/uploadImage";
 
 import React, { startTransition, use, useEffect, useState } from "react";
-import { Check, Trash2 } from "lucide-react";
+import { Check, CircleCheckBig, Trash2 } from "lucide-react";
 import Link from "next/link";
 import {
   RadioGroupComponent,
@@ -30,6 +30,7 @@ import CustomUserAvatar from "@/components/CustomAvatar";
 import { getUserById } from "@/data/user";
 import { signOut } from "next-auth/react";
 import { logout } from "@/actions/logout";
+import getUserWallet from "@/actions/payments/getUserWallet";
 
 const page = () => {
   const user = useCurrentUser();
@@ -46,10 +47,14 @@ const page = () => {
   const [newData, setNewData] = useState(true);
   const [userImage, setUserImage] = useState("");
   const [fetchImage, setfetchImage] = useState(false);
+  const [walletBalance, setWalletBalance] = useState(0);
+  const [creditTransaction, setCreditTransaction] = useState([]);
+  const [debitTransaction, setDebitTransaction] = useState([]);
+  const [walletData, setWalletData] = useState([]);
+  console.log("this is the credit transaction", creditTransaction);
   // const [toastData, setToastData] = useState({});
-  const [isTwoFactorEnabled, setIsTwoFactorEnabled] =
-    useState();
-    // personalInformation?.data?.isTwoFactorEnabled
+  const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState();
+  // personalInformation?.data?.isTwoFactorEnabled
 
   console.log("this is the isTwoFactorEnabled", isTwoFactorEnabled);
   const [initialState, setInitialState] = useState(
@@ -58,6 +63,21 @@ const page = () => {
 
   const [showSaveChanges, setShowSaveChanges] = useState(false);
 
+
+  const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true, // This will format the time in 12-hour format with AM/PM
+    };
+    return new Date(dateString).toLocaleDateString("en-US", options);
+  };
+  
+
+
   useEffect(() => {
     const data = async () => {
       const alladdress = await getAllAddressesForUser(user?.id);
@@ -65,10 +85,51 @@ const page = () => {
       setalladdress(alladdress);
       const allUserCards = await fetchUserCards(user?.id);
       setAllUserCards(allUserCards);
+      const walletData = await getUserWallet();
+      setWalletData(walletData);
+      console.log("this is the wallet data", walletData);
+        const transactionData = walletData?.wallet?.transactions;
+          
+        if (transactionData) {
+          const creditTransactions = [];
+          const debitTransactions = [];
+        
+          transactionData.forEach((transaction) => {
+            if (transaction.type === "CREDIT") {
+              creditTransactions.push(transaction);
+            } else {
+              debitTransactions.push(transaction);
+            }
+          });
+        
+          setCreditTransaction(creditTransactions);
+          setDebitTransaction(debitTransactions);
+        }
+
+      
+      // if (transactionData.type === "CREDIT") {
+      //   setCreditTransaction(transactionData);
+      // } else {
+      //   setDebitTransaction(transactionData);
+      // }
+      console.log("this is the wallet data created", transactionData);
+
+      //   {
+      //     "id": "668f82acdfb64b86fd862474",
+      //     "walletId": "668f82acdfb64b86fd862473",
+      //     "amount": 100000,
+      //     "type": "CREDIT",
+      //     "description": "Initial deposit",
+      //     "createdAt": "2024-07-11T06:58:52.318Z",
+      //     "updatedAt": "2024-07-11T06:58:52.318Z"
+      // }
+
+      setWalletBalance(walletData?.wallet?.balance || 0);
       const personalData = await getUserNameandEmailData();
       setPersonalInformation(personalData.data);
       setIsTwoFactorEnabled(personalData.data.isTwoFactorEnabled);
     };
+
     data();
   }, [success, newData]);
 
@@ -807,7 +868,7 @@ const page = () => {
                       <div className=" p-4 px-4">
                         <h1 className=" text-[2rem]"> Available balance</h1>
                         <h1 className=" mt-4 text-[1.8rem]">
-                          {formatToINR(100000)}
+                          {formatToINR(walletBalance)}
                         </h1>
                       </div>
                     </div>
@@ -849,19 +910,71 @@ const page = () => {
                   </div>
                 </div>
 
-                <div className=" bg-white h-[20rem] w-full border-black border-2">
+                <div className=" bg-teal-600 h-[20rem] w-full border-black border-2">
                   {activeTab === "credit" && (
-                    <div>
-                      {/* Credit History Content */}
-                      <h2>Credit History</h2>
-                      <p>Details about credit history...</p>
+                    <div className=" px-4 mt-2  overflow-y-auto">
+
+                    {creditTransaction && creditTransaction.map((transaction) => (
+                     <div key={transaction.id} className="flex justify-between border-b-8 border-r-4  bg-white border-black border-2 px-2" >
+                        <div className=" ">
+                          <div className="left  flex pt-2">
+                            <div className="   w-[5rem]">
+                              <div className=" flex justify-center ">
+                                <CircleCheckBig size={30} strokeWidth={1} color="green" />
+                              </div>
+                              <div className=" flex justify-center">
+                                <h1 className=" text-green-600">Success</h1>
+                              </div>
+                            </div>
+                            <div>
+                              <div>Remarks :{transaction.description}</div>
+                              <div>{formatDate(transaction.createdAt)}</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className=" flex flex-col mt-2">
+                        <div className="  ">Transaction Id:{transaction?.id}</div>
+                        <div className=" text-green-800  ">{formatToINR(transaction.amount)}Cr</div>
+
+                        </div>
+                      </div>
+                    ))}
+                     
                     </div>
                   )}
                   {activeTab === "debit" && (
-                    <div>
-                      {/* Debit History Content */}
-                      <h2>Debit History</h2>
-                      <p>Details about debit history...</p>
+                    <div className=" px-4 mt-2  overflow-y-auto">
+                       {debitTransaction !="" ? debitTransaction.map((transaction) => (
+                     <div key={transaction.id} className="flex justify-between border-b-8 border-r-4  bg-white border-black border-2 px-2" >
+                        <div className=" ">
+                          <div className="left  flex pt-2">
+                            <div className="   w-[5rem]">
+                              <div className=" flex justify-center ">
+                                <CircleCheckBig size={30} strokeWidth={1} color="green" />
+                              </div>
+                              <div className=" flex justify-center">
+                                <h1 className=" text-green-600">Success</h1>
+                              </div>
+                            </div>
+                            <div>
+                              <div>Remarks :{transaction.description}</div>
+                              <div>{formatDate(transaction.createdAt)}</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className=" flex flex-col mt-2">
+                        <div className="  ">Transaction Id:{transaction?.id}</div>
+                        <div className=" text-green-800  ">{formatToINR(transaction.amount)}Cr</div>
+
+                        </div>
+                      </div>
+                    )):(
+                      <div className=" h-[40vh] bg-pink-600  text-center">
+                        <h1 className=" text-[2rem] uppercase"> No transactions made yet </h1>
+                  
+                      </div>
+                    )}
+                     
                     </div>
                   )}
                 </div>

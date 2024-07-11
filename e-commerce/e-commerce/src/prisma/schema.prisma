@@ -57,13 +57,30 @@ model User {
 }
 
 model Wallet {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @unique @db.ObjectId // Foreign Key to User
-  user      User     @relation("UsertoWallet", fields: [userId], references: [id])
-  balance   Float    @default(0.0)
-  orders    Order[]  @relation("WalletToOrder")
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String        @unique @db.ObjectId // Foreign Key to User
+  user         User          @relation("UsertoWallet", fields: [userId], references: [id])
+  balance      Float         @default(0.0)
+  orders       Order[]       @relation("WalletToOrder")
+  transactions Transaction[] @relation("WalletToTransaction")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Transaction {
+  id          String          @id @default(auto()) @map("_id") @db.ObjectId
+  walletId    String          @db.ObjectId // Foreign Key to Wallet
+  wallet      Wallet          @relation("WalletToTransaction", fields: [walletId], references: [id])
+  amount      Float
+  type        TransactionType
+  description String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+enum TransactionType {
+  CREDIT
+  DEBIT
 }
 
 model Card {
@@ -391,17 +408,16 @@ model Order {
 }
 
 model OrderItem {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  orderId   String  @db.ObjectId // Foreign Key to Order
-  order     Order   @relation(fields: [orderId], references: [id])
-  productId String  @db.ObjectId // Foreign Key to Product
-  product   Product @relation(fields: [productId], references: [id])
-  quantity  Int // Quantity of the product in this order item
-  price     Float // Price of the product at the time of order
-  productVariantID String?  // Optional productVariantID of Product Variant
-  size            String? // Optional size of the product
-  color           String? // Optional color of the product
-
+  id               String  @id @default(auto()) @map("_id") @db.ObjectId
+  orderId          String  @db.ObjectId // Foreign Key to Order
+  order            Order   @relation(fields: [orderId], references: [id])
+  productId        String  @db.ObjectId // Foreign Key to Product
+  product          Product @relation(fields: [productId], references: [id])
+  quantity         Int // Quantity of the product in this order item
+  price            Float // Price of the product at the time of order
+  productVariantID String? // Optional productVariantID of Product Variant
+  size             String? // Optional size of the product
+  color            String? // Optional color of the product
 
   @@index([orderId])
   @@index([productId])

@@ -18,6 +18,9 @@ import WishlistButton from "@/components/animated_heart/heart"
 import { generateCombinations, generatePantCombinations } from "@/actions/product/generateCombination";
 import { createProductVarient, deleteProductVarients, GenerateCombinationProductVarients } from "@/actions/product/createProductVarients";
 import emptyCart from "@/actions/cart/emptyCart";
+import getUserWallet from "@/actions/payments/getUserWallet";
+import deleteWallet from "@/actions/payments/deleteUserWallet";
+import CreateUserWallet from "@/actions/payments/createUserWallet";
 const page = async() => {
   // CreateColour()
   // CreateSize()
@@ -84,7 +87,18 @@ const page = async() => {
 // GenerateCombinationProductVarients(ProductsPants)
 
 // emptyCart()
-
+  const data=await getUserWallet()
+  // console.log("this is the wallet data created", data?.wallet?.transactions);
+  // this is the wallet data created [
+  //   {
+  //     id: '668f82acdfb64b86fd862474',
+  //     walletId: '668f82acdfb64b86fd862473',
+  //     amount: 100000,
+  //     type: 'CREDIT',
+  //     description: 'Initial deposit',
+  //     createdAt: 2024-07-11T06:58:52.318Z,
+  //     updatedAt: 2024-07-11T06:58:52.318Z
+  //   }
 
   return (
     <div className=" bg-pink-500 border-2 border-black px-10 ">
