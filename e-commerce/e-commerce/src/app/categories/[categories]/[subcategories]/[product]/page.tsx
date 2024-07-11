@@ -92,7 +92,7 @@ export type updatedDataResponse = {
   updatedAt: string;
 };
 
-const page = ({ params }: { params: { product: string } }) => {
+const Page = ({ params }: { params: { product: string } }) => {
   const { data: session } = useSession();
   const { toast } = useToast();
   const user = useCurrentUser();
@@ -421,4 +421,4 @@ console.log("this is the initial colour and size", initialColor, initialSize)
   );
 };
 
-export default page;
+export default Page;

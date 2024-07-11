@@ -7,7 +7,7 @@ import OrderSummaryComponent from "@/components/order summary component/OrderSum
 import { PaginationComponent } from "@/components/pagination";
 import React, { use, useEffect, useState } from "react";
 
-const page =  () => {
+const Page =  () => {
 
   const [orders, setOrders] = useState([]);
 
@@ -26,7 +26,7 @@ const page =  () => {
     const fetchOrders = async () => {
      const  fetchedOrders = await fetchAllOrders({page:currentPage,sortOrder});
       setOrders(fetchedOrders);
-      
+
       console.log("these are the fetched orders",fetchedOrders);
       
      
@@ -109,4 +109,4 @@ const page =  () => {
   );
 };
 
-export default page;
+export default Page;

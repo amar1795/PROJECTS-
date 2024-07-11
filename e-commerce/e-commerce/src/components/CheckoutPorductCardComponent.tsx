@@ -10,8 +10,8 @@ const CheckoutPorductCardComponent = ({productData}) => {
             {
                 productData.map((product)=>{
                     return(
-                    <div className=' mb-4'>
-                        <CheckoutProductCard product={product} />
+                    <div className=' mb-4' key={product.id}>
+                        <CheckoutProductCard product={product}  />
                     </div>
                     )
                 })

@@ -43,7 +43,7 @@ const formatToINR = (amount) => {
   }).format(amount);
 };
 
-const page = () => {
+const Page = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [cardSuccess, setCardSuccess] = useState<string | undefined>("");
@@ -985,4 +985,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

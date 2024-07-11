@@ -32,7 +32,7 @@ import { signOut } from "next-auth/react";
 import { logout } from "@/actions/logout";
 import getUserWallet from "@/actions/payments/getUserWallet";
 
-const page = () => {
+const Page = () => {
   const user = useCurrentUser();
   const [activeTab, setActiveTab] = useState("credit");
 
@@ -1052,4 +1052,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

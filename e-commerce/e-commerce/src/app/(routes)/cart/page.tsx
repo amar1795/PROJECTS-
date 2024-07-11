@@ -51,7 +51,7 @@ function calculateTotal(products) {
   return total;
 }
 
-const page = () => {
+const Page = () => {
   const user = useCurrentUser();
   const { toast } = useToast();
   const testQuantity =useCheckoutStock((state) => state.cartProductQuantity);
@@ -620,4 +620,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

@@ -45,7 +45,7 @@ const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString("en-US", options);
 };
 
-const page = ({ params }: { params: { productID: string } }) => {
+const Page = ({ params }: { params: { productID: string } }) => {
   const [sortOrder, setSortOrder] = useState("desc");
   const [resetSort, setResetSort] = useState(false);
   const [filterRating, setFilterRating] = useState(null);
@@ -647,4 +647,4 @@ const removeSpaces = (name: string): string => {
   );
 };
 
-export default page;
+export default Page;
