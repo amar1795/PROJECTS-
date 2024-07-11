@@ -8,7 +8,7 @@ import StepProgress from "@/components/StepProgress";
 import CheckOutOrderSuccessCard from "@/components/checkout product card/checkoutOrderSuccessCard";
 import CheckoutProductCard from "@/components/checkout product card/checkoutProductCard";
 import { ConfettiComponent2 } from "@/components/confett2";
-import { ConfettiComponent } from "@/components/confetti";
+import  ConfettiComponent  from "@/components/confetti";
 import OrderDetailsComponent from "@/components/order summary component/OrderDetailsComponent";
 import SummaryCard from "@/components/summary product card/SummaryCard";
 import TickAnimation from "@/components/tick animation/tickAnimation";
