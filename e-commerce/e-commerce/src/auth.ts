@@ -123,4 +123,6 @@ export const {
   adapter: PrismaAdapter(prismadb),
   session: { strategy: "jwt" },
   ...authConfig,
+  secret: 'sdgsggr' 
+
 });
