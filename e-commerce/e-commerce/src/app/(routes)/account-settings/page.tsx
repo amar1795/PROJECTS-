@@ -37,10 +37,10 @@ const Page = () => {
   const [activeTab, setActiveTab] = useState("credit");
 
   const { toast } = useToast();
-  const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
+  const [error, setError] = useState<string >("");
+  const [success, setSuccess] = useState<string >("");
   const [alladdress, setalladdress] = useState([]);
-  const [selectedAddress, setSelectedAddress] = useState<string | undefined>();
+  const [selectedAddress, setSelectedAddress] = useState<string >();
   const [paymentData, setPaymentData] = useState([]);
   const [AllUserCards, setAllUserCards] = useState([]);
   const [personalInformation, setPersonalInformation] = useState([]);
@@ -363,20 +363,20 @@ const Page = () => {
 
           <div className=" flex">
             <div className="h-[4rem]">
-              {/* <Link href="/orders"> */}
+              <Link href="/orders">
                 <button className=" mr-12 p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-400">
                   <h1 className="font-bold">
                     See your Complete Order's History{" "}
                   </h1>
                 </button>
-              {/* </Link> */}
+              </Link>
             </div>
             <div className="h-[4rem]">
-              {/* <Link href="/"> */}
+              <Link href="/">
                 <button className=" mr-12 p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-green-600">
                   <h1 className="font-bold">Back to Home Page</h1>
                 </button>
-              {/* </Link> */}
+              </Link>
             </div>
             <div className="h-[4rem]">
               <button
