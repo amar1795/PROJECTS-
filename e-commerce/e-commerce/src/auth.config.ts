@@ -59,6 +59,6 @@ export default {
       }
     })
   ],
-  secret: 'adsgmldgkmk' 
+  // secret: 'adsgmldgkmk' 
 
 } satisfies NextAuthConfig
