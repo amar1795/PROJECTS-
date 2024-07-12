@@ -108,7 +108,7 @@ const page = () => {
       //     "You will be redirected to the login page within 5 seconds",
       // });
       setTimeout(() => {
-        // router.push("/login");
+        router.push("/login");
       }, 4000);
 
       // Reset the showToast state to prevent repeated toasts
