@@ -30,7 +30,7 @@ export const getAccountByUserId = async (userId: string) => {
 
 
 export const {
-  handlers : {GET, POST},
+  handlers,
   auth,
   signIn,
   signOut,
