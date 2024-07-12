@@ -13,8 +13,8 @@ const page = () => {
   const { toast } = useToast();
   const [showToast, setShowToast] = React.useState(false);
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  // const searchParams = useSearchParams();
+  // const token = searchParams.get("token");
 
 
   const [error, setError] = useState<string | undefined>("");
@@ -43,7 +43,7 @@ const page = () => {
     setSuccess("");
 
     startTransition(() => {
-      newPassword(values,token)
+      newPassword(values,"token")
         .then((data) => {
           if (data?.error) {
             reset();
