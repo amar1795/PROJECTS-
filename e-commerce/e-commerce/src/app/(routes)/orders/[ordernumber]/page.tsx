@@ -5,7 +5,7 @@ import { PaginationComponent } from "@/components/pagination";
 import Link from "next/link";
 import React from "react";
 
-const page = async ({ params }: { params: { ordernumber: string } }) => {
+const Page = async ({ params }: { params: { ordernumber: string } }) => {
   // console.log("this is the order number",params.ordernumber);
   const orderData = await fetchOrderById(params.ordernumber);
   // console.log("this is the order rating data for single order", orderData.order?.orderItems[0].product.ratings);
@@ -171,4 +171,4 @@ const page = async ({ params }: { params: { ordernumber: string } }) => {
   );
 };
 
-export default page;
+export default Page;
