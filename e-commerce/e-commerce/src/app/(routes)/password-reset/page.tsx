@@ -9,7 +9,7 @@ import { NewPasswordSchema } from "@/schemas";
 import { newPassword } from "@/actions/email/password-creation";
 import { useSearchParams } from "next/navigation";
 
-const page = () => {
+const Page = () => {
   const { toast } = useToast();
   const [showToast, setShowToast] = React.useState(false);
   const router = useRouter();
@@ -17,10 +17,12 @@ const page = () => {
   const token = searchParams.get("token");
 
 
+
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
+
 
   const {
     register: registerField,
@@ -174,4 +176,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

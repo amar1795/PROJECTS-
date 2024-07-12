@@ -4,7 +4,7 @@ import Login from "@/components/login";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
-const page = () => {
+const Page = () => {
   const [isSignup, setIsSignup] = React.useState(false);
 
  // Function to toggle between signup and login
@@ -47,4 +47,4 @@ useEffect(() => {
   );
 };
 
-export default page;
+export default Page;
