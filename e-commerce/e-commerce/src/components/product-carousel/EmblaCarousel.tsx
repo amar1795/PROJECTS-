@@ -24,6 +24,7 @@ import {
 } from "@/actions/cart/addCartDatatoCookies";
 import WishlistButton from "../animated_heart/heart";
 import ProductCardLower from "../ProductCardLower";
+import Image from "next/image";
 
 export type Brand = {
   id: string;
@@ -181,7 +182,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
         }, 200);
       }
     },
-    [updatedProducts]
+    [updatedProducts,user]
   );
 
   // useEffect to monitor changes to updatedProducts and save to cookies
@@ -211,7 +212,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
     }
 
     mergeDataFromCookies();
-  }, []);
+  }, [updatedProducts]);
 
   const onNavButtonClick = useCallback((emblaApi: EmblaCarouselType) => {
     const autoplay = emblaApi?.plugins()?.autoplay;
@@ -307,7 +308,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                                 ""
                               )}/${product.id}`}
                             >
-                              <img
+                              <Image
                                 src={product.images[0]?.url}
                                 alt={
                                   product.images[0].altText || "Product Image"

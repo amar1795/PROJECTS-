@@ -68,7 +68,7 @@ const Fcard: React.FC<{ category: Category }> = ({
   useEffect(() => {
     setMinDiscountedPrice(minPrice);
     setMaxDiscountedPrice(maxPrice);
-  }, [minPrice, maxPrice]);
+  }, [minPrice, maxPrice,setMaxDiscountedPrice,setMinDiscountedPrice]);
 
   return (
     <div className="mt-4 pb-2 border-b">

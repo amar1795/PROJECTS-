@@ -70,7 +70,7 @@ const OrderDetailsComponent = ({ orderItem, isPaid }) => {
       }
     };
     fetchReviewData();
-  }, [newData]);
+  }, [newData,orderItem?.productId]);
 
   // console.log("this is the order item", orderItem);
   // calling the helper function

@@ -30,33 +30,76 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
   filteredId,
   categoryPageData,
 }) => {
-  if (!relatedProduct) return <div>Loading ...</div>;
-
-  const testData = relatedProduct;
-  console.log("this is the test related Data for wishlist", testData);
-  console.log(
-    "this is the related product from related products page",
-    relatedProduct
-  );
-  // Filter out the product with the same ID as ProductId
+  const { toast } = useToast();
+  const user = useCurrentUser();
+    // Filter out the product with the same ID as ProductId
   const filteredProducts = relatedProduct.filter(
     (product) => product.id !== filteredId
   );
   console.log("this is the filtered test ", filteredProducts);
   // console.log("this is the product id from related products page:", filteredId);
+
   const [updatedProducts, setupdatedProducts] =
-    useState<Product[]>(filteredProducts);
+  useState<Product[]>(filteredProducts);
+  const [isMerged, setIsMerged] = useState(false);
+  const [Added, setAdded] = useState(false);
+  const [Removed, setRemoved] = useState(false);
+  const [updatedRelatedProducts, setupdatedRelatedProducts] =
+    useState(relatedProduct);
+    const [updateTrigger, setUpdateTrigger] = useState(false);
+
+
+  
+
+  useEffect(() => {
+    if (!isMerged) {
+      async function mergeDataFromCookies() {
+        const cookieData = await getCartDataFromCookies();
+        console.log("this is the updatedProducts data", updatedProducts);
+        // create another function here to merge the login usercart lenght and the cookie cart length and then update the cart length in the shopping cart Icon
+        const mergedProducts = updatedProducts.map((product) => {
+          const cookieProduct = cookieData.find(
+            (item) => item.id === product.id
+          );
+          return cookieProduct
+            ? { ...product, cartQuantity: cookieProduct.cartQuantity }
+            : product;
+        });
+        console.log(
+          "this is the meregedproduct inside the merged cookies",
+          mergedProducts
+        );
+        setupdatedProducts(mergedProducts);
+        console.log(
+          "this is the updated related inside the useeffect products",
+          updatedRelatedProducts
+        );
+
+        const mergedRelatedProducts = updatedRelatedProducts.map((product) => {
+          const cookieProduct = cookieData.find(
+            (item) => item.id === product.id
+          );
+          return cookieProduct
+            ? { ...product, cartQuantity: cookieProduct.cartQuantity }
+            : product;
+        });
+
+        setupdatedRelatedProducts(mergedRelatedProducts);
+        console.log(
+          "Merged related products with cookies:",
+          mergedRelatedProducts
+        );
+
+        // Set isMerged to true to avoid re-running the effect unnecessarily
+        setIsMerged(true);
+      }
+      mergeDataFromCookies();
+    }
+  }, [updateTrigger, relatedProduct, isMerged]);
 
   console.log("this is the updated test products", updatedProducts);
   // Initialize a state to control the merging process
-  const [isMerged, setIsMerged] = useState(false);
 
-  
-  const [Added, setAdded] = useState(false);
-  const [Removed, setRemoved] = useState(false);
-
-  const [updatedRelatedProducts, setupdatedRelatedProducts] =
-    useState(relatedProduct);
 
   useEffect(() => {
     const updatefunction = () => {
@@ -76,9 +119,15 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
     updatedProducts
   );
 
-  const { toast } = useToast();
-  const user = useCurrentUser();
-  const [updateTrigger, setUpdateTrigger] = useState(false);
+
+  if (!relatedProduct) return <div>Loading ...</div>;
+
+  const testData = relatedProduct;
+  console.log("this is the test related Data for wishlist", testData);
+  console.log(
+    "this is the related product from related products page",
+    relatedProduct
+  );
 
   // useEffect(() => {
   //   // Filter out the product with the filteredId
@@ -264,51 +313,7 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
     [updatedProducts, updatedRelatedProducts]
   );
 
-  useEffect(() => {
-    if (!isMerged) {
-      async function mergeDataFromCookies() {
-        const cookieData = await getCartDataFromCookies();
-        console.log("this is the updatedProducts data", updatedProducts);
-        // create another function here to merge the login usercart lenght and the cookie cart length and then update the cart length in the shopping cart Icon
-        const mergedProducts = updatedProducts.map((product) => {
-          const cookieProduct = cookieData.find(
-            (item) => item.id === product.id
-          );
-          return cookieProduct
-            ? { ...product, cartQuantity: cookieProduct.cartQuantity }
-            : product;
-        });
-        console.log(
-          "this is the meregedproduct inside the merged cookies",
-          mergedProducts
-        );
-        setupdatedProducts(mergedProducts);
-        console.log(
-          "this is the updated related inside the useeffect products",
-          updatedRelatedProducts
-        );
 
-        const mergedRelatedProducts = updatedRelatedProducts.map((product) => {
-          const cookieProduct = cookieData.find(
-            (item) => item.id === product.id
-          );
-          return cookieProduct
-            ? { ...product, cartQuantity: cookieProduct.cartQuantity }
-            : product;
-        });
-
-        setupdatedRelatedProducts(mergedRelatedProducts);
-        console.log(
-          "Merged related products with cookies:",
-          mergedRelatedProducts
-        );
-
-        // Set isMerged to true to avoid re-running the effect unnecessarily
-        setIsMerged(true);
-      }
-      mergeDataFromCookies();
-    }
-  }, [updateTrigger, relatedProduct, isMerged]);
 
   console.log("this is the updated related products", updatedRelatedProducts);
   return (

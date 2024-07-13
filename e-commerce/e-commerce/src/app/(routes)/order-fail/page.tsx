@@ -11,7 +11,7 @@ const Page = () => {
     router.push('/cart')
     
    }, 2000);
-  }, [])
+  }, [router])
 
   return (
     <div className=' h-screen'>

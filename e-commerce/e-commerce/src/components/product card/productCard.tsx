@@ -93,7 +93,7 @@ const ProductCard: React.FC<updatedDataResponse> = ({
     };
 
     fetchData();
-  }, [catRelatedProduct]);
+  }, [catRelatedProduct,product.id]);
 
   const handleIncrease = () => {
     // alert("add to cart is being called");

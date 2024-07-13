@@ -20,6 +20,11 @@ const CheckoutProductCard = ({
   handleClickDelete,
 }) => {
   const [url, setUrl] = useState("");
+  const [tempQuantity, setTempQuantity] = useState(0);
+  const [varientStock, setVarientStock] = useState(0);
+
+  const user = useCurrentUser();
+
 
   useEffect(() => {
     if (product && Array.isArray(product.cartItems) && product.cartItems.length > 0) {
@@ -39,12 +44,6 @@ const CheckoutProductCard = ({
 
   console.log("this is the updated products", product);
 
-  const [tempQuantity, setTempQuantity] = useState(0);
-  const [varientStock, setVarientStock] = useState(0);
-
-  const user = useCurrentUser();
-
-  
   useEffect(() => {
     const fetchData = async () => {
       const data = await getProductDetailsByID(product.id);

@@ -117,8 +117,18 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
   const [selectedSize, setSelectedSize] = useState(null);
   const [initialLoadColorAndSize, setInitialLoadColorAndSize] = useState(true);
   const [productVarients, setProductVarients] = useState(data?.productVariants);
-
+  const [reviews, setReviews] = useState([]);
+  const [verifiedPurchaseCount, setVerifiedPurchaseCount] = useState("");
+  const [reviewData, setReviewData] = useState(null);
+  const [newData, setNewData] = useState(true);
+  const [barChartData, setbarChartData] = useState(initialData);
+  const [VarientQuantity, setVarientQuantity] = useState(null);
+  const [productVarientStock, setProductVarientStock] = useState(0);
+  const [productVarientID, setProductVarientID] = useState("");
+  const [itemInCart, setItemInCart] = useState(false);
+  const [outOfStock, setoutOfStock] = useState(false);
   const [tempQuantity, setTempQuantity] = useState(data?.cartQuantity);
+
   console.log("this is the temp quantity", tempQuantity);
   console.log(
     "this is the selected color and size from initial data",
@@ -197,15 +207,7 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
 
   console.log("this is the initial data", initialData);
 
-  const [reviews, setReviews] = useState([]);
-  const [verifiedPurchaseCount, setVerifiedPurchaseCount] = useState("");
-  const [reviewData, setReviewData] = useState(null);
-  const [newData, setNewData] = useState(true);
-  const [barChartData, setbarChartData] = useState(initialData);
-  const [VarientQuantity, setVarientQuantity] = useState(null);
-  const [productVarientStock, setProductVarientStock] = useState(0);
-  const [productVarientID, setProductVarientID] = useState("");
-  const [itemInCart, setItemInCart] = useState(false);
+
 
   console.log("this is the item in cart value", itemInCart);
 
@@ -257,14 +259,10 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
       }
     };
     getReviews();
-  }, [data, newData]);
+  }, [data, newData,setUpdateChart]);
 
-  // brand cannot be destructured from data issue arised because the data  was null , so i added a check to see if data is null or not and display the loading message if it is null
-  console.log("this is the data from categories right", data);
-  // data.ratings.count
-  const { brand, price, discountedPrice, description } = data;
 
-  const [outOfStock, setoutOfStock] = React.useState(false);
+
 
   // Effect to update data based on ratingsCount
   useEffect(() => {
@@ -273,8 +271,44 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
       stars: data?.ratings?.count[index] || item.stars,
     }));
     setbarChartData(updatedData);
-  }, [data, newData]);
+  }, [data, newData,initialData]);
 
+  
+  useEffect(() => {
+    // remove the items from cookies when the product varient is swithced
+    // removeProductFromCookies(data.id);
+
+    // remove the items from the db as well when the product varient is swithced
+
+    // deleteCartItem(user?.id, data.id);
+    // setToggledVarientQuantity( (prev) => !prev);
+
+    // setUpdateTrigger((prev) => !prev);
+
+    if (selectedColor && selectedSize) {
+      const productVarietnID = findProductVariant(
+        data?.productVariants,
+        selectedColor,
+        selectedSize
+      );
+      setProductVarientStock(productVarietnID?.stock);
+      setProductVarientID(productVarietnID?.id);
+      console.log(
+        "this is the product varient id which is selected",
+        productVarietnID
+      );
+      // setToggledVarientQuantity( (prev) => !prev);
+      // setTempQuantity(0);
+    }
+
+    setTempQuantity(data?.cartQuantity);
+  }, [selectedColor, selectedSize,data?.cartQuantity,data?.productVariants]);
+
+    // brand cannot be destructured from data issue arised because the data  was null , so i added a check to see if data is null or not and display the loading message if it is null
+    console.log("this is the data from categories right", data);
+    // data.ratings.count
+    const { brand, price, discountedPrice, description } = data;
+    
   const addToCart = () => {
     // need to optmize the toggle varient part code so that the quantity will be shown in the cart
     if (selectedColor == null) {
@@ -606,35 +640,6 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
   // useEffect(() => {
   // },[itemInCart])
 
-  useEffect(() => {
-    // remove the items from cookies when the product varient is swithced
-    // removeProductFromCookies(data.id);
-
-    // remove the items from the db as well when the product varient is swithced
-
-    // deleteCartItem(user?.id, data.id);
-    // setToggledVarientQuantity( (prev) => !prev);
-
-    // setUpdateTrigger((prev) => !prev);
-
-    if (selectedColor && selectedSize) {
-      const productVarietnID = findProductVariant(
-        data?.productVariants,
-        selectedColor,
-        selectedSize
-      );
-      setProductVarientStock(productVarietnID?.stock);
-      setProductVarientID(productVarietnID?.id);
-      console.log(
-        "this is the product varient id which is selected",
-        productVarietnID
-      );
-      // setToggledVarientQuantity( (prev) => !prev);
-      // setTempQuantity(0);
-    }
-
-    setTempQuantity(data?.cartQuantity);
-  }, [selectedColor, selectedSize]);
 
   return (
     <div>
@@ -1024,7 +1029,7 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
                     reviews
                       .filter((review) => review?.review !== null)
                       .map((review) => (
-                        <div className=" flex border-2 border-black  bg-teal-600  min-h-28 mt-6">
+                        <div key={review?.id} className=" flex border-2 border-black  bg-teal-600  min-h-28 mt-6">
                           <div className=" w-[3rem] border-r-2 border-black ">
                             <div className=" flex justify-between px-2 pt-1">
                               <div>{review?.rating}</div>

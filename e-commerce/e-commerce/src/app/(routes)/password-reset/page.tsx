@@ -90,7 +90,7 @@ const Page = () => {
           "You have successfully reset your password! You will be redirected to the login page within 5 seconds.",
       });
     }
-  }, [error, success]);
+  }, [error, success,toast]);
 
 
 
@@ -116,7 +116,7 @@ const Page = () => {
       // Reset the showToast state to prevent repeated toasts
       setShowToast(false);
     }
-  }, [success]);
+  }, [success,router]);
 
 
 

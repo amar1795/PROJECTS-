@@ -168,7 +168,7 @@ const Page = () => {
       }
     };
     data();
-  }, [success]);
+  }, [success,toast,user?.id]);
 
   // useEffect(() => {
   //   const getWalletData = async () => {
@@ -208,7 +208,7 @@ const Page = () => {
       setIsLoading(false);
     };
     cartSummary();
-  }, []);
+  }, [user?.id]);
 
   useEffect(() => {
     const getAllCard = async () => {
@@ -217,7 +217,7 @@ const Page = () => {
       setIsLoading(false);
     };
     getAllCard();
-  }, [cardSuccess]);
+  }, [cardSuccess,user?.id]);
 
   // console.log("this is the payment Data ", paymentData);
 

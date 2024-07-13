@@ -1,4 +1,5 @@
 import { DollarSign, Heart, Minus, Plus, Trash2 } from "lucide-react";
+import Image from "next/image";
 import React from "react";
 
 const SummaryCard = () => {
@@ -7,7 +8,7 @@ const SummaryCard = () => {
       <div className=" border-2 border-black  rounded-xl overflow-hidden">
         <div className=" overflow-hidden flex justify-between bg-opacity-20 backdrop-blur-lg border border-white/30 bg-white ">
           <div className=" flex">
-            <img
+            <Image
               src="https://images.pexels.com/photos/23541799/pexels-photo-23541799/free-photo-of-shine-bright.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
                             'https://images.pexels.com/photos/17395579/pexels-photo-17395579/free-photo-of-shiny-water-at-sunset.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
               alt=""

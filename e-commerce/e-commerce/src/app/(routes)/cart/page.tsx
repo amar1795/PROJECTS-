@@ -78,50 +78,76 @@ const Page = () => {
 
   const [total, setTotal] = useState(0);
 
-  // fethcing the cookies Data
-  // useEffect(() => {
-  //   async function getCookiesData() {
-  //     // alert("get cookies data is being called")
-  //     const cookieData = await getCartDataFromCookies();
-  //     const completedata = await fetchMultipleProducts(
-  //       cookieData.map((product) => product.id)
-  //     );
-  //     // Merge cartQuantity from cookies into completedata
-  //     const mergedData = completedata.map((product) => {
-  //       const cookieProduct = cookieData.find((item) => item.id === product.id);
-  //       if (cookieProduct) {
-  //         return { ...product, cartQuantity: cookieProduct.cartQuantity };
-  //       }
-  //       return product;
-  //     });
+  const handleQuantityCookieChange = useCallback(
+    (userId: string, productId: string, change: number) => {
+      
+      // update the change in the cookies and we will update the database when fethcning the data from the cookies
+      const updatedProductsList = completeMergedupdatedProducts.map(
+        (product) => {
+          if (product.id === productId) {
+            // Ensure quantity doesn't go below 0
+            const currentQuantity = product?.cartQuantity
+              ? product?.cartQuantity
+              : 0; // Initialize to 0 if undefined or null
+            const newQuantity = Math.max(currentQuantity + change, 0);
+            // alert( newQuantity)
 
-  //     setCartCookieProducts(mergedData);
-  //     console.log("this is the cookie data", mergedData);
-  //     setCompleteMergedupdatedProducts(mergedData);
+            return { ...product, cartQuantity: newQuantity };
+          }
+          return product;
+        }
+      );
 
-  //     console.log("this is the merged data", mergedData);
-  //     // Calculate total amount and product count
-  //     let total = 0;
-  //     let count = 0;
+      setfetchnewTotal(prev => !prev)
+      setCompleteMergedupdatedProducts(updatedProductsList);
+     const total= calculateTotal(updatedProductsList);
+      setTotal(total);
+      setCartCookieProducts(updatedProductsList);
 
-  //     cookieData.forEach((product) => {
-  //       const price = product.discountedPrice || 0;
-  //       const quantity = product.cartQuantity || 0;
-  //       total += price * quantity;
-  //       count++;
-  //     });
+      // setUpdateTrigger((prev) => !prev);
 
-  //     // setTotalCookieAmount(total);
-  //     setMergedTotalAmount(total);
-  //     // alert("merged total amount is being called")
-  //     // alert("setTotalCookieAmount" + total)
-  //     // setProductCookieCount(count);
-  //     setMergedTotalCount(count);
-  //   }
+      // need to add the updated products to the database as well since it is being added in the cookies already
 
-  //   getCookiesData();
-  // }, [updateTrigger, fetchnewTotal]);
+      console.log("these are the updated products", cartCookieProducts);
 
+      // Save updated product information to cookies
+      if (
+        updatedProductsList.find((product) => product.id === productId)
+          ?.cartQuantity === 0
+      ) {
+        deleteCartItem(userId, productId);
+        removeProductFromCookies(productId); // Remove product from cookies if cartQuantity is 0
+
+        //  setUpdateTrigger((prev) => !prev);
+
+        setTimeout(() => {
+          toast({
+            title: "Item removed from cart",
+            description: "successfully removed the item from cart",
+            variant: "destructive",
+          });
+        }, 1000);
+      } else {
+        addCartDatatoCookies(updatedProductsList); // Otherwise, save updated data to cookies
+        //  setUpdateTrigger((prev) => !prev);
+      }
+
+      //   if(user){
+      //   setTimeout(async () => {
+      //     if (change > 0) {
+      //       // alert("increase quantity is called", userId, productId)
+      //       await increaseProductQuantity(userId, productId);
+      //     } else {
+      //       // alert("decrease quantity is called")
+      //       await decreaseProductQuantity(userId, productId);
+      //     }
+      //   }, 200);
+      // }
+      // Update state after debounce
+      // debounceUpdateTrigger();
+    },
+    [completeMergedupdatedProducts,cartCookieProducts,toast]
+  );
 
   useEffect(() => {
 
@@ -160,7 +186,7 @@ const Page = () => {
         variant: "destructive",
       });
     }
-  }, [cancelled]);
+  }, [cancelled,toast]);
 
   const handleClickDelete = (userID, productID) => {
     cartCookieProducts.map((product) => {
@@ -193,22 +219,7 @@ const Page = () => {
     }
   };
 
-  const handleClickCookieDelete = (userID, productID) => {
-    cartCookieProducts.map((product) => {
-      if (product?.id == productID) {
-        removeProductFromCookies(productID);
-        setUpdateTrigger((prev) => !prev);
-        setTimeout(() => {
-          toast({
-            title: "Item removed from cart",
-            description: "successfully removed the item from cart",
-            variant: "destructive",
-          });
-        }, 1000);
-      }
-    });
-    // deleteCartItem(userID, productID);
-  };
+
 
   const handleClickAdd = async (userID, productID) => {
     // alert("add to cart is being called")
@@ -278,7 +289,7 @@ const Page = () => {
       }
     };
     cartSummary();
-  }, []);
+  }, [user?.id]);
 
 
 
@@ -295,152 +306,38 @@ const Page = () => {
     
     };
     relatedData();
-  }, [updateRelatedTrigger]);
+  }, [updateRelatedTrigger,user?.id]);
 
   if (productData.length === 0 && !summaryData) {
     return <div>loading...</div>;
   }
 
-  // need to implement deboucning here for the quantity change
-  const handleQuantityChange = useCallback(
-    async (userId: string, productId: string, change: number) => {
-      let refetch = false;
 
-      const updatedProductsList = productData
-        ?.map((product) => {
-          if (product.id === productId) {
-            const updatedCartItems =
-              product.cartItems.length > 0
-                ? product.cartItems.map((item) => {
-                    if (item.productId === productId) {
-                      const newQuantity = Math.max(item.quantity + change, 0);
-                      if (newQuantity === 0) refetch = true;
-                      return { ...item, quantity: newQuantity };
-                    }
-                    return item;
-                  })
-                : [{ productId, quantity: Math.max(change, 0) }];
-            return {
-              ...product,
-              cartItems: updatedCartItems.filter((item) => item.quantity > 0),
-            };
-          }
-          return product;
-        })
-        .filter((product) => product.cartItems.length > 0);
 
-      setproductData(updatedProductsList);
-
-      if (change > 0) {
-        await increaseProductQuantity(userId, productId);
-      } else {
-        await decreaseProductQuantity(userId, productId);
-      }
-
-      if (refetch) {
-        setUpdateTrigger((prev) => !prev);
-      } else {
-        const cartSummaryData = await calculateCartSummary(user.id);
-        setSummaryData(cartSummaryData);
-      }
-    },
-    [productData]
-  );
-
-  const handleQuantityCookieChange = useCallback(
-    (userId: string, productId: string, change: number) => {
-      
-      // update the change in the cookies and we will update the database when fethcning the data from the cookies
-      const updatedProductsList = completeMergedupdatedProducts.map(
-        (product) => {
-          if (product.id === productId) {
-            // Ensure quantity doesn't go below 0
-            const currentQuantity = product?.cartQuantity
-              ? product?.cartQuantity
-              : 0; // Initialize to 0 if undefined or null
-            const newQuantity = Math.max(currentQuantity + change, 0);
-            // alert( newQuantity)
-
-            return { ...product, cartQuantity: newQuantity };
-          }
-          return product;
-        }
-      );
-
-      setfetchnewTotal(prev => !prev)
-      setCompleteMergedupdatedProducts(updatedProductsList);
-     const total= calculateTotal(updatedProductsList);
-      setTotal(total);
-      setCartCookieProducts(updatedProductsList);
-
-      // setUpdateTrigger((prev) => !prev);
-
-      // need to add the updated products to the database as well since it is being added in the cookies already
-
-      console.log("these are the updated products", cartCookieProducts);
-
-      // Save updated product information to cookies
-      if (
-        updatedProductsList.find((product) => product.id === productId)
-          ?.cartQuantity === 0
-      ) {
-        deleteCartItem(userId, productId);
-        removeProductFromCookies(productId); // Remove product from cookies if cartQuantity is 0
-
-        //  setUpdateTrigger((prev) => !prev);
-
-        setTimeout(() => {
-          toast({
-            title: "Item removed from cart",
-            description: "successfully removed the item from cart",
-            variant: "destructive",
-          });
-        }, 1000);
-      } else {
-        addCartDatatoCookies(updatedProductsList); // Otherwise, save updated data to cookies
-        //  setUpdateTrigger((prev) => !prev);
-      }
-
-      //   if(user){
-      //   setTimeout(async () => {
-      //     if (change > 0) {
-      //       // alert("increase quantity is called", userId, productId)
-      //       await increaseProductQuantity(userId, productId);
-      //     } else {
-      //       // alert("decrease quantity is called")
-      //       await decreaseProductQuantity(userId, productId);
-      //     }
-      //   }, 200);
-      // }
-      // Update state after debounce
-      // debounceUpdateTrigger();
-    },
-    [completeMergedupdatedProducts]
-  );
 
   // Debounce function implementation
-  const debounce = (func: Function, delay: number) => {
-    let timer: NodeJS.Timeout;
-    return function (this: any, ...args: any[]) {
-      clearTimeout(timer);
-      timer = setTimeout(() => func.apply(this, args), delay);
-    };
-  };
+  // const debounce = (func: Function, delay: number) => {
+  //   let timer: NodeJS.Timeout;
+  //   return function (this: any, ...args: any[]) {
+  //     clearTimeout(timer);
+  //     timer = setTimeout(() => func.apply(this, args), delay);
+  //   };
+  // };
 
-  const debounceUpdateTrigger = useRef(
-    debounce(() => {
-      // setCompleteMergedupdatedProducts(updatedProductsList);
-      // setCartCookieProducts(updatedProductsList);
-      setUpdateTrigger((prev) => !prev);
-    }, 1000)
-  ).current;
+  // const debounceUpdateTrigger = useRef(
+  //   debounce(() => {
+  //     // setCompleteMergedupdatedProducts(updatedProductsList);
+  //     // setCartCookieProducts(updatedProductsList);
+  //     setUpdateTrigger((prev) => !prev);
+  //   }, 1000)
+  // ).current;
 
   // Optionally, clean up the timer if the component unmounts or dependencies change
-  useEffect(() => {
-    return () => {
-      clearTimeout(debounceUpdateTrigger.current);
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     clearTimeout(debounceUpdateTrigger.current);
+  //   };
+  // }, []);
   // console.log("this is the summary data", summaryData);
 
   return (

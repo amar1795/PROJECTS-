@@ -147,7 +147,7 @@ const removeSpaces = (name: string): string => {
     };
 
     updateData();
-  }, []);
+  }, [params?.productID]);
 
 
   useEffect(() => {
@@ -323,7 +323,7 @@ const removeSpaces = (name: string): string => {
           <div className=" flex  ">
             <div className="flex  w-[48vw]">
               <div className="border-2 border-black overflow-hidden">
-                <img
+                <Image 
                   src={data?.images && data?.images[0]?.url}
                   alt=""
                   className=" h-[30rem] w-[22rem] object-cover  "
@@ -560,7 +560,7 @@ const removeSpaces = (name: string): string => {
                     .filter((review) => review?.review !== null)
                     .map((review) => (
                       <div className=" flex border-2 border-black  bg-teal-600  min-h-28 mt-6">
-                        <div className=" w-[3rem] border-r-2 border-black ">
+                        <div key={review?.id} className=" w-[3rem] border-r-2 border-black ">
                           <div className=" flex justify-between px-2 pt-1">
                             <div>{review?.rating}</div>
                             <div className=" self-center">

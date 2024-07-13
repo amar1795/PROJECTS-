@@ -35,7 +35,7 @@ const getRandomFutureDate = (baseDateString) => {
   return baseDate.toLocaleDateString("en-GB", options);
 };
 
-const page = () => {
+const Page = () => {
   const [orderData, setOrderData] = useState([]);
   const [orderItems, setOrderItems] = useState([]);
   const [deliveryDate, setDeliveryDate] = useState([]);
@@ -159,7 +159,7 @@ const page = () => {
               <div className=" flex flex-wrap   pt-4 pr-4">
                 <div className=" py-1 mt-2 mb-2   w-full ">
                   {orderItems.map((item) => (
-                    <div className=" mb-4">
+                    <div key={item?.id} className=" mb-4">
                       <CheckOutOrderSuccessCard
                         // handleClickDelete={handleClickDelete}
                         colour={item?.color}
@@ -290,7 +290,7 @@ const page = () => {
                   </h1>
                   <div className=" py-1 mt-2 mb-2 w-auto  ">
                     {orderItems.map((item) => (
-                      <div className=" flex justify-between ">
+                      <div key={item?.id} className=" flex justify-between ">
                         <div className=" w-[25rem]">
                           <h1 className=" self-center  text-[1.2rem] font-bold">
                             {" "}
@@ -370,4 +370,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

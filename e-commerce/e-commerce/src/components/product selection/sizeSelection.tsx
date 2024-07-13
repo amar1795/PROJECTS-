@@ -12,7 +12,7 @@ const SizeSelection = ({variants, sizes, color, setSize, selectedColor,setInitia
       setSelectedSize(sizes[0]);
     }
 
-  }, [variants]);
+  }, [variants,sizes]);
 
   // useEffect(() => {
   //   if (initialLoadCount !== 3) {
@@ -32,7 +32,7 @@ const SizeSelection = ({variants, sizes, color, setSize, selectedColor,setInitia
       // setInitialLoadColorAndSize(true);
 
     }
-  }, [selectedColor]);
+  }, [selectedColor,setSize]);
 
   useEffect(() => {
     if (selectedSize) {
@@ -40,7 +40,7 @@ const SizeSelection = ({variants, sizes, color, setSize, selectedColor,setInitia
       // setInitialLoadColorAndSize(true);
 
     }
-  }, [selectedSize]);
+  }, [selectedSize,setSize]);
 
   const sizeAbbreviations = {
     Small: "S",

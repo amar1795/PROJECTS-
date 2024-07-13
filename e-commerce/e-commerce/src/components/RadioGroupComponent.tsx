@@ -44,7 +44,7 @@ export function RadioGroupComponent({
   return (
     <RadioGroup defaultValue=""  onChange={handleChange}>
       {address.map((address, index) => (
-        <div className="flex items-center space-x-2">
+        <div key={address?.id} className="flex items-center space-x-2">
           
           {/* <RadioGroupItem
             className=" h-[2rem] w-[2rem]"

@@ -160,7 +160,7 @@ toast({
         </div>
         <div className=" text-center">
           <p className=" mx-[5rem] mt-4">
-            Don't have an account ?{" "}
+            Don&apos;t have an account ?{" "}
             <button onClick={toggleView} className=" font-bold text-2xl">
               Sign Up
             </button>

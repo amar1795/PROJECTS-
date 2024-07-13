@@ -163,7 +163,7 @@ console.log("this is the initial colour and size", initialColor, initialSize)
     };
 
     updateData();
-  }, []);
+  }, [params?.product]);
 
   // useEffect(() => {
   //   const updateData = async () => {
@@ -214,7 +214,7 @@ console.log("this is the initial colour and size", initialColor, initialSize)
         });
       }, 200);
     },
-    [updatedProducts, user, toast]
+    [updatedProducts, user, toast,callToast]
   );
 
   const handleClickAdd = async (
@@ -294,7 +294,7 @@ console.log("this is the initial colour and size", initialColor, initialSize)
         }, 200);
       }
     },
-    [updatedProducts]
+    [updatedProducts,user]
   );
 
   useEffect(() => {
@@ -333,7 +333,7 @@ console.log("this is the initial colour and size", initialColor, initialSize)
     }
 
     mergeDataFromCookies();
-  }, [updateTrigger]);
+  }, [updateTrigger,params?.product,updatedProducts?.productVariants]);
 
   const ProductId = data?.id;
   // console.log("this is the product id:", ProductId);

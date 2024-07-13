@@ -34,7 +34,7 @@ const ColorSelection = ({ variants,setSize,setColor,setInitialLoadColorAndSize }
         setSelectedColor(uniqueColors[0]);
         // setColor(uniqueColors[0]);
       }
-    }, [uniqueColors]);
+    }, [uniqueColors,selectedColor]);
 
   useEffect(() => {
     console.log("this is the selected color inside useeffect", selectedColor);
@@ -44,7 +44,7 @@ const ColorSelection = ({ variants,setSize,setColor,setInitialLoadColorAndSize }
       setColor(selectedColor);
     }
  
-  }, [selectedColor]);
+  }, [selectedColor,setColor]);
 
   const handleClickColour = (e) => {
     setSelectedColor(e.target.title);
