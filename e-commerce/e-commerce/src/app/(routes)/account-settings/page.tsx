@@ -127,7 +127,7 @@ const Page = () => {
     };
 
     data();
-  }, [success, newData]);
+  }, [success, newData,user?.id]);
 
   useEffect(() => {
     const fetchUpdatedImage = async () => {
@@ -136,7 +136,7 @@ const Page = () => {
       console.log("this is the new data", newData);
     };
     fetchUpdatedImage();
-  }, []);
+  }, [user?.id]);
 
   const fetchUpdatedImage = async () => {
     const newData = await getUserById(user?.id);
@@ -366,7 +366,7 @@ const Page = () => {
               <Link href="/orders">
                 <button className=" mr-12 p-2 border-2 border-black text-black mt-4 flex self-center justify-center border-b-8 border-r-4 active:border-b-2 active:border-r-2 bg-yellow-400">
                   <h1 className="font-bold">
-                    See your Complete Order's History{" "}
+                    See your Complete Order&apos;s History
                   </h1>
                 </button>
               </Link>
