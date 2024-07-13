@@ -3,7 +3,7 @@ import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { fetchAllCartCookieData } from './fetchAllCartCookieData';
 
-export async function addCartDatatoCookies(updatedProducts) {
+export async function addCartDatatoCookies(updatedProducts: any[] ) {
   const cookieStore = cookies();
   
   // Retrieve existing data from cookies
@@ -61,7 +61,7 @@ export async function getCartDataFromCookies() {
 }
 
 // Function to remove product from cookies
-export async function removeProductFromCookies(productId) {
+export async function removeProductFromCookies(productId: string) {
   
   const cookieData = await getCartDataFromCookies(); // Load existing cart data from cookies
   const updatedCookieData = cookieData.filter((item) => item.id !== productId);

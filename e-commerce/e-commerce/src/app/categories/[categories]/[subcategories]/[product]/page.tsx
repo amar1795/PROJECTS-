@@ -133,7 +133,7 @@ console.log("this is the initial colour and size", initialColor, initialSize)
       title,
       description,
     });
-  }, []);
+  }, [toast]);
 
   useEffect(() => {
     const updateData = async () => {
