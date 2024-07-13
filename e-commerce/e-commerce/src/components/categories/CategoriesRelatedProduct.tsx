@@ -162,7 +162,7 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
             : "The item has been removed from wishlist",
       });
     },
-    [updatedProducts, user, toast, updatedRelatedProducts,callToast]
+    [updatedProducts, user, updatedRelatedProducts,callToast]
   );
 
   const handleQuantityChange = useCallback(

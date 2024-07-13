@@ -127,14 +127,13 @@ console.log("this is the initial colour and size", initialColor, initialSize)
 
   const currentUser = session?.user?.id;
 
-  const callToast = ({ variant, title, description }) => {
-    // alert("toast is being  called")
+  const callToast = useCallback(({ variant, title, description }) => {
     toast({
-      variant: variant,
-      title: title,
-      description: description,
+      variant,
+      title,
+      description,
     });
-  };
+  }, []);
 
   useEffect(() => {
     const updateData = async () => {
