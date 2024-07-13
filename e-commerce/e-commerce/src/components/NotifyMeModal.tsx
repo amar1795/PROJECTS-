@@ -95,7 +95,7 @@ export function NotifyMeModal({ buttonName }: { buttonName: string }) {
           "Thank you for your interest in our product. We will notify you when the item comes in stock.",
       });
     }
-  }, [Modalerror, Modalsuccess]);
+  }, [Modalerror, Modalsuccess,toast]);
 
   return (
     <Dialog

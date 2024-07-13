@@ -142,6 +142,9 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
     console.log("hello")
     fetchPaginatedData();
   }, [
+    brandSelected,
+    filterData,
+    parentCategoryName,
     currentPage,
     categoryName,
     brandName,
@@ -151,6 +154,11 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
     maxDiscountPercentage,
     sortBy
   ]);
+
+  // new dependecy added to the useEffect , to be removed if causing any issue 
+  // brandSelected,
+  // filterData,
+  // parentCategoryName,
 
   const completeUrl = typeof window !== "undefined" ? window.location.href : "";
   const segments = completeUrl.split("/");

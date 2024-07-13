@@ -10,7 +10,7 @@ import {
   ThumbsDown,
   ThumbsUp,
 } from "lucide-react";
-import React, { use, useEffect, useState } from "react";
+import React, { use, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import StarChart from "../star charts/starChart";
 import Image from "next/image";
@@ -121,7 +121,7 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
   const [verifiedPurchaseCount, setVerifiedPurchaseCount] = useState("");
   const [reviewData, setReviewData] = useState(null);
   const [newData, setNewData] = useState(true);
-  const [barChartData, setbarChartData] = useState(initialData);
+  const [barChartData, setbarChartData] = useState(initialData );
   const [VarientQuantity, setVarientQuantity] = useState(null);
   const [productVarientStock, setProductVarientStock] = useState(0);
   const [productVarientID, setProductVarientID] = useState("");
@@ -129,93 +129,6 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
   const [outOfStock, setoutOfStock] = useState(false);
   const [tempQuantity, setTempQuantity] = useState(data?.cartQuantity);
 
-  console.log("this is the temp quantity", tempQuantity);
-  console.log(
-    "this is the selected color and size from initial data",
-    selectedColor,
-    selectedSize
-  );
-
-  // useEffect(() => {
-  //   if (data?.productVariants && data.productVariants.length > 0) {
-  //     // alert("i have been called")
-  //     const initialColour = data.productVariants[0]?.color;
-  //     const initialSize = data.productVariants[0]?.size;
-  //     console.log("Initial color and size:", initialColour, initialSize);
-
-  //     setSelectedColor(initialColour);
-  //     setSelectedSize(initialSize);
-  //   }
-  // }, [data]);
-
-  console.log("this is the selected size", selectedSize);
-  // useEffect(() => {
-  //   if (selectedColor !== null) {
-  //     if (initialLoadColorAndSize === true) {
-  //       callToast({
-  //         title: `You selected colour ${selectedColor}`,
-  //         description: `You have successfully selected the colour ${selectedColor} `,
-  //       });
-  //     }
-  //   }
-  // }, [selectedColor]);
-
-  // useEffect(() => {
-  //   if (selectedSize !== null) {
-  //     if (initialLoadColorAndSize === true) {
-  //       callToast({
-  //         title: `You selected Size ${selectedSize}`,
-  //         description: `You have successfully selected the Size ${selectedSize} `,
-  //       });
-  //     }
-  //   }
-  //   // setInitialLoadColorAndSize(true);
-  // }, [selectedSize]);
-
-  const initialData = [
-    {
-      name: "5 Stars",
-      uv: 5,
-      stars: data?.ratings?.count[5],
-      amt: 2000,
-    },
-    {
-      name: "4 Stars",
-      uv: 4,
-      stars: data?.ratings?.count[4],
-      amt: 2000,
-    },
-    {
-      name: "3 Stars",
-      uv: 3,
-      stars: data?.ratings?.count[3],
-      amt: 2000,
-    },
-    {
-      name: "2 Stars",
-      uv: 2,
-      stars: data?.ratings?.count[2],
-      amt: 2000,
-    },
-    {
-      name: "1 Stars",
-      uv: 1,
-      stars: data?.ratings?.count[1],
-      amt: 2000,
-    },
-  ];
-
-  console.log("this is the initial data", initialData);
-
-
-
-  console.log("this is the item in cart value", itemInCart);
-
-  console.log("this is the chart data", barChartData);
-
-  if (!data) {
-    return <div>Loading...</div>;
-  }
 
   useEffect(() => {
     const fetchReviewData = async () => {
@@ -262,8 +175,6 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
   }, [data, newData,setUpdateChart]);
 
 
-
-
   // Effect to update data based on ratingsCount
   useEffect(() => {
     const updatedData = initialData.map((item, index) => ({
@@ -303,6 +214,95 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
 
     setTempQuantity(data?.cartQuantity);
   }, [selectedColor, selectedSize,data?.cartQuantity,data?.productVariants]);
+
+  console.log("this is the temp quantity", tempQuantity);
+  console.log(
+    "this is the selected color and size from initial data",
+    selectedColor,
+    selectedSize
+  );
+
+  // useEffect(() => {
+  //   if (data?.productVariants && data.productVariants.length > 0) {
+  //     // alert("i have been called")
+  //     const initialColour = data.productVariants[0]?.color;
+  //     const initialSize = data.productVariants[0]?.size;
+  //     console.log("Initial color and size:", initialColour, initialSize);
+
+  //     setSelectedColor(initialColour);
+  //     setSelectedSize(initialSize);
+  //   }
+  // }, [data]);
+
+  console.log("this is the selected size", selectedSize);
+  // useEffect(() => {
+  //   if (selectedColor !== null) {
+  //     if (initialLoadColorAndSize === true) {
+  //       callToast({
+  //         title: `You selected colour ${selectedColor}`,
+  //         description: `You have successfully selected the colour ${selectedColor} `,
+  //       });
+  //     }
+  //   }
+  // }, [selectedColor]);
+
+  // useEffect(() => {
+  //   if (selectedSize !== null) {
+  //     if (initialLoadColorAndSize === true) {
+  //       callToast({
+  //         title: `You selected Size ${selectedSize}`,
+  //         description: `You have successfully selected the Size ${selectedSize} `,
+  //       });
+  //     }
+  //   }
+  //   // setInitialLoadColorAndSize(true);
+  // }, [selectedSize]);
+
+  const initialData = useMemo(() => [
+    {
+      name: "5 Stars",
+      uv: 5,
+      stars: data?.ratings?.count[5],
+      amt: 2000,
+    },
+    {
+      name: "4 Stars",
+      uv: 4,
+      stars: data?.ratings?.count[4],
+      amt: 2000,
+    },
+    {
+      name: "3 Stars",
+      uv: 3,
+      stars: data?.ratings?.count[3],
+      amt: 2000,
+    },
+    {
+      name: "2 Stars",
+      uv: 2,
+      stars: data?.ratings?.count[2],
+      amt: 2000,
+    },
+    {
+      name: "1 Stars",
+      uv: 1,
+      stars: data?.ratings?.count[1],
+      amt: 2000,
+    },
+  ], [data?.ratings?.count]);
+
+  console.log("this is the initial data", initialData);
+
+
+
+  console.log("this is the item in cart value", itemInCart);
+
+  console.log("this is the chart data", barChartData);
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+
 
     // brand cannot be destructured from data issue arised because the data  was null , so i added a check to see if data is null or not and display the loading message if it is null
     console.log("this is the data from categories right", data);

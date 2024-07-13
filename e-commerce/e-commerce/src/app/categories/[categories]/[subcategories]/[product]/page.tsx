@@ -214,7 +214,7 @@ console.log("this is the initial colour and size", initialColor, initialSize)
         });
       }, 200);
     },
-    [updatedProducts, user, toast,callToast]
+    [updatedProducts, user,callToast]
   );
 
   const handleClickAdd = async (

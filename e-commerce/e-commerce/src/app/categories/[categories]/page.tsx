@@ -263,6 +263,9 @@ const Page = ({ params }: { params: { categories: string } }) => {
     };
     fetchPaginatedData();
   }, [
+    brandSelected,
+    filterData,
+    parentCategoryName,
     currentPage,
     categoryName,
     brandName,
@@ -272,6 +275,14 @@ const Page = ({ params }: { params: { categories: string } }) => {
     maxDiscountPercentage,
     sortBy,
   ]);
+
+
+  
+  // new dependecy added to the useEffect , to be removed if causing any issue 
+  // brandSelected,
+  // filterData,
+  // parentCategoryName,
+
 
   const fixedBrand = paginatedData.brands.map((brand) => ({
     label: brand,

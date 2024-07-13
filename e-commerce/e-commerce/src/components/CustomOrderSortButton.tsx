@@ -17,7 +17,7 @@ const CustomOrderSortButton: React.FC<CustomButtonProps> = ({ initialButtonName,
     }
 
     
-  }, [resetFilter]); 
+  }, [resetFilter,initialButtonName,setFilterRating,setResetFilter]); 
 
   const completeUrl = typeof window !== "undefined" ? window.location.href : "";
 

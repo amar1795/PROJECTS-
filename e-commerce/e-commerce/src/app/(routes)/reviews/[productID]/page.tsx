@@ -559,7 +559,7 @@ const removeSpaces = (name: string): string => {
                   reviews
                     .filter((review) => review?.review !== null)
                     .map((review) => (
-                      <div className=" flex border-2 border-black  bg-teal-600  min-h-28 mt-6">
+                      <div key={review?.id} className=" flex border-2 border-black  bg-teal-600  min-h-28 mt-6">
                         <div key={review?.id} className=" w-[3rem] border-r-2 border-black ">
                           <div className=" flex justify-between px-2 pt-1">
                             <div>{review?.rating}</div>

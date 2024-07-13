@@ -49,8 +49,6 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
     const [updateTrigger, setUpdateTrigger] = useState(false);
 
 
-  
-
   useEffect(() => {
     if (!isMerged) {
       async function mergeDataFromCookies() {
@@ -95,7 +93,7 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
       }
       mergeDataFromCookies();
     }
-  }, [updateTrigger, relatedProduct, isMerged]);
+  }, [updateTrigger, relatedProduct, isMerged,updatedProducts,updatedRelatedProducts]);
 
   console.log("this is the updated test products", updatedProducts);
   // Initialize a state to control the merging process
@@ -118,73 +116,6 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
     "this is the updatedProducts product from related products page",
     updatedProducts
   );
-
-
-  if (!relatedProduct) return <div>Loading ...</div>;
-
-  const testData = relatedProduct;
-  console.log("this is the test related Data for wishlist", testData);
-  console.log(
-    "this is the related product from related products page",
-    relatedProduct
-  );
-
-  // useEffect(() => {
-  //   // Filter out the product with the filteredId
-  //   // alert(filteredId)
-  //   const filteredProducts = relatedProduct.filter(
-  //     (product) => product.id !== filteredId
-  //   );
-  //   setupdatedProducts(filteredProducts);
-  // }, [relatedProduct,filteredId]);
-
-  const handleClickAdd = async (userID, productID) => {
-    // alert("add to cart is being called")
-    console.log("this is the product id", productID);
-    // const completedata = await fetchSingleProduct(productID);
-    // console.log("this is the completed data", completedata);
-    // // addProductToCart(userID, productID);
-    // addCartDatatoCookies(completedata);
-
-    if (categoryPageData == true) {
-      const updatedRelatedProductsList = updatedRelatedProducts.map(
-        (product) => {
-          if (product.id === productID) {
-            return { ...product, cartQuantity: 1 };
-          }
-          return product;
-        }
-      );
-      console.log(
-        "this is the updated products test handliclick list",
-        updatedRelatedProductsList
-      );
-
-      setupdatedRelatedProducts(updatedRelatedProductsList);
-      addCartDatatoCookies(updatedRelatedProductsList); // Otherwise, save updated data to cookies
-    } else {
-      const updatedProductsList = updatedProducts.map((product) => {
-        if (product.id === productID) {
-          return { ...product, cartQuantity: 1 };
-        }
-        return product;
-      });
-      console.log(
-        "this is the updated products test handliclick list",
-        updatedProductsList
-      );
-
-      setupdatedProducts(updatedProductsList);
-      addCartDatatoCookies(updatedProductsList); // Otherwise, save updated data to cookies
-    }
-
-    if (userID) {
-      await increaseProductQuantity(userID, productID);
-    }
-
-    // setUpdateTrigger((prev) => !prev);
-  };
-
   const handleWishlistToggle = useCallback(
     // alert("handleWishlistToggle is called"),
     async (userId: string, productId: string) => {
@@ -231,7 +162,7 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
             : "The item has been removed from wishlist",
       });
     },
-    [updatedProducts, user, toast, updatedRelatedProducts]
+    [updatedProducts, user, toast, updatedRelatedProducts,callToast]
   );
 
   const handleQuantityChange = useCallback(
@@ -310,8 +241,75 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
         }, 200);
       }
     },
-    [updatedProducts, updatedRelatedProducts]
+    [updatedProducts, updatedRelatedProducts,categoryPageData,user]
   );
+
+  if (!relatedProduct) return <div>Loading ...</div>;
+
+  const testData = relatedProduct;
+  console.log("this is the test related Data for wishlist", testData);
+  console.log(
+    "this is the related product from related products page",
+    relatedProduct
+  );
+
+  // useEffect(() => {
+  //   // Filter out the product with the filteredId
+  //   // alert(filteredId)
+  //   const filteredProducts = relatedProduct.filter(
+  //     (product) => product.id !== filteredId
+  //   );
+  //   setupdatedProducts(filteredProducts);
+  // }, [relatedProduct,filteredId]);
+
+  const handleClickAdd = async (userID, productID) => {
+    // alert("add to cart is being called")
+    console.log("this is the product id", productID);
+    // const completedata = await fetchSingleProduct(productID);
+    // console.log("this is the completed data", completedata);
+    // // addProductToCart(userID, productID);
+    // addCartDatatoCookies(completedata);
+
+    if (categoryPageData == true) {
+      const updatedRelatedProductsList = updatedRelatedProducts.map(
+        (product) => {
+          if (product.id === productID) {
+            return { ...product, cartQuantity: 1 };
+          }
+          return product;
+        }
+      );
+      console.log(
+        "this is the updated products test handliclick list",
+        updatedRelatedProductsList
+      );
+
+      setupdatedRelatedProducts(updatedRelatedProductsList);
+      addCartDatatoCookies(updatedRelatedProductsList); // Otherwise, save updated data to cookies
+    } else {
+      const updatedProductsList = updatedProducts.map((product) => {
+        if (product.id === productID) {
+          return { ...product, cartQuantity: 1 };
+        }
+        return product;
+      });
+      console.log(
+        "this is the updated products test handliclick list",
+        updatedProductsList
+      );
+
+      setupdatedProducts(updatedProductsList);
+      addCartDatatoCookies(updatedProductsList); // Otherwise, save updated data to cookies
+    }
+
+    if (userID) {
+      await increaseProductQuantity(userID, productID);
+    }
+
+    // setUpdateTrigger((prev) => !prev);
+  };
+
+
 
 
 

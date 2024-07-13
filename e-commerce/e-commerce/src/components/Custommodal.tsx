@@ -95,7 +95,7 @@ export function CustomModal({ buttonName }: { buttonName: string }) {
           "Password rest link has been sent to your email address. Please check your email to reset your password.",
       });
     }
-  }, [Modalerror, Modalsuccess]);
+  }, [Modalerror, Modalsuccess,toast]);
 
   return (
     <Dialog

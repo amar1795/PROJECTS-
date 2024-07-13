@@ -399,7 +399,7 @@ const Page = () => {
                 </div>
 
                 {completeMergedupdatedProducts.map((item) => (
-                  <div className="orderSummary">
+                  <div key={item?.id} className="orderSummary">
                     <div className=" flex justify-between ">
                       <div className=" w-[26rem]">
                         <h1 className=" self-center  text-[1.2rem] font-bold">

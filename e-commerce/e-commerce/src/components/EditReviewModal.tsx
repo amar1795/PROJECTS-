@@ -106,14 +106,14 @@ export function EditReviewModal({
       setValue("rating", starRating);
       setValue("title", reviewTitle);
     }
-  }, []);
+  }, [reviewMessage,reviewStars,reviewTitle,setValue,starRating]);
 
   useEffect(() => {
    
     setValue("rating", starRating); // Sync starRating with form state
     // alert("this is the star rating"+starRating)
     console.log("this is the star rating", starRating);
-  }, [starRating]);
+  }, [starRating,setValue]);
 
   const onSubmit = (values: z.infer<typeof ReviewSchema>) => {
     setModalError("");
@@ -199,6 +199,7 @@ export function EditReviewModal({
                 <div className=" flex">
                   <div className="w-[4rem] overflow-hidden h-[4rem] border-2 border-black text-black flex self-center justify-center border-b-8 border-r-4 text-[1.1rem]  ">
                     <Image
+                    alt="Product Image"
                       src={ProductImage}
                       width={100}
                       height={100}
