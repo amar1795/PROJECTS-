@@ -32,6 +32,8 @@ useEffect(() => {
       <div className="min-h-[38rem] w-[70rem] flex justify-center bg-opacity-20 backdrop-blur-lg border-2 border-black bg-white rounded-3xl overflow-hidden">
         <div className=" relative  w-[30rem] border-r-2 border-black ">
           <Image
+          width={500}
+          height={500}
             src="/6.jpg"
             alt="Logo"
             layout="fill"

@@ -362,6 +362,8 @@ const ProductCard: React.FC<updatedDataResponse> = ({
               <div className="ProductImage bg-red-400 h-full w-full absolute">
                 <Link href={url}>
                   <Image
+                  width={500}
+                  height={500}
                     alt="product image"
                     fill="true"
                     objectFit="cover"

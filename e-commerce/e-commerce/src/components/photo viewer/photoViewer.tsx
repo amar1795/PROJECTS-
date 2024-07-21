@@ -23,7 +23,7 @@ const PhotoViewer = ({ images}: PhotoViewerProps) => {
           <PhotoView key={index} src={item?.url} >
             <div className='border-2 border-black overflow-hidden'>
 
-            <Image src={item?.url} alt="" className=' h-[30rem] w-[22rem] object-cover  px-2 py-6 transform transition-transform duration-300 hover:scale-110 '  />
+            <Image  width={500} height={500} src={item?.url} alt="" className=' h-[30rem] w-[22rem] object-cover  px-2 py-6 transform transition-transform duration-300 hover:scale-110 '  />
             </div>
           </PhotoView>
         ))}

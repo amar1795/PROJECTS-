@@ -45,6 +45,8 @@ const ReviewImageUpload: React.FC<ImageUploadProps> = ({
               </Button>
             </div>
             <Image
+            width={500}
+            height={500}
               fill
               className="object-cover"
               alt="Image"

@@ -102,62 +102,7 @@ const Page = ({ params }: { params: { categories: string } }) => {
     localStorage.setItem("currentPage", currentPage.toString());
   }, [currentPage]);
 
-  // useEffect(() => {
-
-  //   const urlParams = new URLSearchParams(window.location.search);
-  //   const test = localStorage.getItem('filteredData')
-  //   const
-  //   // alert(test)
-  //   const decodedParams = decodeURLParams(test);
-  //   console.log("this is the decoded params",decodedParams);
-  //   const categories = urlParams.get('category')?.split(',') || [];
-  //   const brands = urlParams.get('brandName')?.split(',') || [];
-  //   const minPrice = parseInt(urlParams.get('minDiscountedPrice') || '0', 10);
-  //   const maxPrice = parseInt(urlParams.get('maxDiscountedPrice') || '100000', 10);
-  //   const minDiscount = parseInt(urlParams.get('minDiscountPercentage') || '0', 10);
-  //   const maxDiscount = parseInt(urlParams.get('maxDiscountPercentage') || '100', 10);
-  //   const page = parseInt(urlParams.get('page') || '1', 10);
-
-  //   // If no URL params, check local storage
-  //   if (!urlParams.has('category') && localStorage.getItem('filteredData')) {
-  //     const storedParams = new URLSearchParams(localStorage.getItem('filteredData'));
-
-  //     const storedCategories = storedParams.get('category')?.split(',') || [];
-  //     const storedBrands = storedParams.get('brandName')?.split(',') || [];
-  //     const storedMinPrice = parseInt(storedParams.get('minDiscountedPrice') || '0', 10);
-  //     const storedMaxPrice = parseInt(storedParams.get('maxDiscountedPrice') || '100000', 10);
-  //     const storedMinDiscount = parseInt(storedParams.get('minDiscountPercentage') || '0', 10);
-  //     const storedMaxDiscount = parseInt(storedParams.get('maxDiscountPercentage') || '100', 10);
-  //     const storedPage = parseInt(storedParams.get('page') || '1', 10);
-
-  //     setSelectedCategoryName(Array.from(new Set(storedCategories)));
-  //     setBrandName(storedBrands);
-  //     setMinDiscountedPrice(storedMinPrice);
-  //     setMaxDiscountedPrice(storedMaxPrice);
-  //     setMinDiscountPercentage(storedMinDiscount);
-  //     setMaxDiscountPercentage(storedMaxDiscount);
-  //     setCurrentPage(storedPage);
-  //   } else {
-  //     setSelectedCategoryName(Array.from(new Set(categories)));
-  //     setBrandName(brands);
-  //     setMinDiscountedPrice(minPrice);
-  //     setMaxDiscountedPrice(maxPrice);
-  //     setMinDiscountPercentage(minDiscount);
-  //     setMaxDiscountPercentage(maxDiscount);
-  //     setCurrentPage(page);
-  //   }
-
-  //   // Save to local storage for next time
-  //   // const queryParams = new URLSearchParams();
-  //   // if (categories.length > 0) queryParams.set('category', categories.join(','));
-  //   // if (brands.length > 0) queryParams.set('brandName', brands.join(','));
-  //   // if (minPrice !== 0) queryParams.set('minDiscountedPrice', minPrice);
-  //   // if (maxPrice !== 100000) queryParams.set('maxDiscountedPrice', maxPrice);
-  //   // if (minDiscount !== 0) queryParams.set('minDiscountPercentage', minDiscount);
-  //   // if (maxDiscount !== 100) queryParams.set('maxDiscountPercentage', maxDiscount);
-  //   // if (page !== 1) queryParams.set('page', page);
-  //   // localStorage.setItem('filteredData', queryParams.toString());
-  // }, []);
+ 
 
   useEffect(() => {
     const fetchPaginatedData = async () => {
@@ -263,9 +208,9 @@ const Page = ({ params }: { params: { categories: string } }) => {
     };
     fetchPaginatedData();
   }, [
-    brandSelected,
-    filterData,
-    parentCategoryName,
+    // brandSelected,
+    // filterData,
+    // parentCategoryName,
     currentPage,
     categoryName,
     brandName,

@@ -44,11 +44,11 @@ const formatToINR = (amount) => {
 };
 
 const Page = () => {
-  const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
-  const [cardSuccess, setCardSuccess] = useState<string | undefined>("");
+  const [error, setError] = useState<string>("");
+  const [success, setSuccess] = useState<string>("");
+  const [cardSuccess, setCardSuccess] = useState<string>("");
   const [alladdress, setalladdress] = useState([]);
-  const [selectedAddress, setSelectedAddress] = useState<string | undefined>();
+  const [selectedAddress, setSelectedAddress] = useState<string>();
   const [productData, setproductData] = useState([]);
   const [AllUserCards, setAllUserCards] = useState([]);
   const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(false);

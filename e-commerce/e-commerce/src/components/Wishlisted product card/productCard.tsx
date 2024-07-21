@@ -61,6 +61,8 @@ const WishlistedProductCard: React.FC<updatedDataResponse> = ({ product,setData 
               </button>
               <div className="ProductImage bg-red-400 h-full w-full absolute">
                 <Image
+                width={500}
+                height={500}
                   alt="product image"
                   fill="true"
                   objectFit="cover"

@@ -32,8 +32,9 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
 }) => {
   const { toast } = useToast();
   const user = useCurrentUser();
+  console.log("this is the related product", relatedProduct);
     // Filter out the product with the same ID as ProductId
-  const filteredProducts = relatedProduct.filter(
+  const filteredProducts = relatedProduct?.filter(
     (product) => product.id !== filteredId
   );
   console.log("this is the filtered test ", filteredProducts);
@@ -44,8 +45,7 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
   const [isMerged, setIsMerged] = useState(false);
   const [Added, setAdded] = useState(false);
   const [Removed, setRemoved] = useState(false);
-  const [updatedRelatedProducts, setupdatedRelatedProducts] =
-    useState(relatedProduct);
+  const [updatedRelatedProducts, setupdatedRelatedProducts] =useState(relatedProduct);
     const [updateTrigger, setUpdateTrigger] = useState(false);
 
 
@@ -321,8 +321,7 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
         {/* relatedProduct */}
         <div className=" flex  flex-wrap pl-3">
           {categoryPageData
-            ? updatedRelatedProducts
-                .filter((product) => product.id !== ProductId)
+            ? updatedRelatedProducts?.filter((product) => product.id !== ProductId)
                 .map((product) => (
                   <div className="py-4" key={product.id}>
                     <ProductCard
@@ -338,8 +337,7 @@ const CategoriesRelatedProduct: React.FC<CategoriesRelatedProductProps> = ({
                     />
                   </div>
                 ))
-            : updatedProducts
-                .filter((product) => product.id !== ProductId)
+            : updatedProducts?.filter((product) => product.id !== ProductId)
                 .map((product) => (
                   <div className="py-4" key={product.id}>
                     <ProductCard

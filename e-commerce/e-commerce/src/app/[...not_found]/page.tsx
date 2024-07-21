@@ -12,6 +12,8 @@ const NotFound = () => {
         <ConfettiComponent />
       <div className="relative w-full h-full">
         <Image
+        width={500}
+        height={500}
           src={notfound}
           alt="Not Found"
           layout="fill"

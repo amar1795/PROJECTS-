@@ -324,6 +324,8 @@ const removeSpaces = (name: string): string => {
             <div className="flex  w-[48vw]">
               <div className="border-2 border-black overflow-hidden">
                 <Image 
+                width={500}
+                height={500}
                   src={data?.images && data?.images[0]?.url}
                   alt=""
                   className=" h-[30rem] w-[22rem] object-cover  "

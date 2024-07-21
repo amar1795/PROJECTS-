@@ -142,9 +142,9 @@ const Page = ({ params }: { params: { subcategories: string } }) => {
     console.log("hello")
     fetchPaginatedData();
   }, [
-    brandSelected,
-    filterData,
-    parentCategoryName,
+    // brandSelected,
+    // filterData,
+    // parentCategoryName,
     currentPage,
     categoryName,
     brandName,

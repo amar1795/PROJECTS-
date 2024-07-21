@@ -90,6 +90,8 @@ const handleDislike = async (ratingId: string) => {
   console.log("this is the disliked data response", error, message, dislike);
 };
 
+
+
 const CategoriesRight: React.FC<CategoriesRightProps> = ({
   data,
   handleWishlistToggle,
@@ -111,6 +113,42 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
     initialColor,
     initialSize
   );
+  
+const initialData = useMemo(() => [
+  {
+    name: "5 Stars",
+    uv: 5,
+    stars: data?.ratings?.count[5],
+    amt: 2000,
+  },
+  {
+    name: "4 Stars",
+    uv: 4,
+    stars: data?.ratings?.count[4],
+    amt: 2000,
+  },
+  {
+    name: "3 Stars",
+    uv: 3,
+    stars: data?.ratings?.count[3],
+    amt: 2000,
+  },
+  {
+    name: "2 Stars",
+    uv: 2,
+    stars: data?.ratings?.count[2],
+    amt: 2000,
+  },
+  {
+    name: "1 Stars",
+    uv: 1,
+    stars: data?.ratings?.count[1],
+    amt: 2000,
+  },
+], [data?.ratings?.count]);
+
+console.log("this is the initial data", initialData);
+
 
   const [uniqueColors, setUniqueColors] = useState([]);
   const [selectedColor, setSelectedColor] = useState(null);
@@ -121,7 +159,7 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
   const [verifiedPurchaseCount, setVerifiedPurchaseCount] = useState("");
   const [reviewData, setReviewData] = useState(null);
   const [newData, setNewData] = useState(true);
-  const [barChartData, setbarChartData] = useState(initialData );
+  const [barChartData, setbarChartData] = useState(initialData && initialData || []);
   const [VarientQuantity, setVarientQuantity] = useState(null);
   const [productVarientStock, setProductVarientStock] = useState(0);
   const [productVarientID, setProductVarientID] = useState("");
@@ -258,40 +296,7 @@ const CategoriesRight: React.FC<CategoriesRightProps> = ({
   //   // setInitialLoadColorAndSize(true);
   // }, [selectedSize]);
 
-  const initialData = useMemo(() => [
-    {
-      name: "5 Stars",
-      uv: 5,
-      stars: data?.ratings?.count[5],
-      amt: 2000,
-    },
-    {
-      name: "4 Stars",
-      uv: 4,
-      stars: data?.ratings?.count[4],
-      amt: 2000,
-    },
-    {
-      name: "3 Stars",
-      uv: 3,
-      stars: data?.ratings?.count[3],
-      amt: 2000,
-    },
-    {
-      name: "2 Stars",
-      uv: 2,
-      stars: data?.ratings?.count[2],
-      amt: 2000,
-    },
-    {
-      name: "1 Stars",
-      uv: 1,
-      stars: data?.ratings?.count[1],
-      amt: 2000,
-    },
-  ], [data?.ratings?.count]);
 
-  console.log("this is the initial data", initialData);
 
 
 

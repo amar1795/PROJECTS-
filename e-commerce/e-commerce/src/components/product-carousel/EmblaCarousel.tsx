@@ -309,6 +309,8 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                               )}/${product.id}`}
                             >
                               <Image
+                              height={500}
+                              width={500}
                                 src={product.images[0]?.url}
                                 alt={
                                   product.images[0].altText || "Product Image"
