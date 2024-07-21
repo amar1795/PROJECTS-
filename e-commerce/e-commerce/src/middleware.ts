@@ -1,5 +1,5 @@
 import NextAuth from "next-auth";
-import authConfig from "./auth.config";
+import authConfig from "@/auth.config";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export const publicRoutes = [

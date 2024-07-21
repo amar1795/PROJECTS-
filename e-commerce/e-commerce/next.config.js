@@ -18,5 +18,7 @@ module.exports = {
       experimental: {
         missingSuspenseWithCSRBailout: false,
       },
+      swcMinify: false,
+
 }
 
