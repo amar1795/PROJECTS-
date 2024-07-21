@@ -3,34 +3,34 @@ import authConfig from "./auth.config";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export const publicRoutes = [
-  "https://dummy-six-azure.vercel.app/",
-  "https://dummy-six-azure.vercel.app/auth/new-verification",
-  "https://dummy-six-azure.vercel.app/about-us",
-  "https://dummy-six-azure.vercel.app/password-reset",
-  "https://dummy-six-azure.vercel.app/contact-us",
-  "https://dummy-six-azure.vercel.app/categories",
-  "https://dummy-six-azure.vercel.app/favicon.ico" // Ensure favicon is handled
+  "/",
+  "/auth/new-verification",
+  "/about-us",
+  "/password-reset",
+  "/contact-us",
+  "/categories",
+  "/favicon.ico" // Ensure favicon is handled
 ];
 
 // Routes that require authentication
 export const authRoutes = [
-  "https://dummy-six-azure.vercel.app/password-reset",
-  "https://dummy-six-azure.vercel.app/login",
-  "https://dummy-six-azure.vercel.app/signup",
-  "https://dummy-six-azure.vercel.app/password-reset"
+  "/password-reset",
+  "/login",
+  "/signup",
+  "/password-reset"
 ];
 
 // Restricted routes for logged-in users
 const restrictedRoutes = [
-  "https://dummy-six-azure.vercel.app/checkout",
-  "https://dummy-six-azure.vercel.app/account-settings"
+  "/checkout",
+  "/account-settings"
 ];
 
 // API routes that require authentication
 export const apiAuthPrefix = "/api/auth";
 
 // Default login redirect path
-export const DEFAULT_LOGIN_REDIRECT_PATH = "https://dummy-six-azure.vercel.app/";
+export const DEFAULT_LOGIN_REDIRECT_PATH = "/";
 
 const { auth } = NextAuth(authConfig);
 
