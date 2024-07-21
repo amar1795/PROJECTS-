@@ -76,7 +76,7 @@ previousSegment = previousSegment?.split(/[?#]/)[0];
              
           
            <Link     key={option}
-           href={option === 'ALL' ? '/' : `${process.env.MAIN_DOMAIN}/categories/${option.replace(/\s+/g, '')}`}
+           href={option === 'ALL' ? `${process.env.MAIN_DOMAIN}/` : `${process.env.MAIN_DOMAIN}/categories/${option.replace(/\s+/g, '')}`}
            >
             <li
             key={option}
