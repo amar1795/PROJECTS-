@@ -212,7 +212,8 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
     }
 
     mergeDataFromCookies();
-  }, [updatedProducts]);
+  }, []);
+  // updatedProducts was causing the infinite loop in the dependency array above
 
   const onNavButtonClick = useCallback((emblaApi: EmblaCarouselType) => {
     const autoplay = emblaApi?.plugins()?.autoplay;
