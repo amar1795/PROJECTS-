@@ -741,6 +741,7 @@ console.log("this is the category id from the server action", categoryId)
   //   "Product Count:",
   //   productCount
   // );
+  console.log("These are the formatted Products:", formattedProducts);
   return formattedProducts;
 }
 
