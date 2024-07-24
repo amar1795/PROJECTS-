@@ -7,6 +7,8 @@ Hey everyone! This is my first self-coded, 0-to-completion E-commerce project, a
 
 ## here is the link to the that repo https://github.com/amar1795/e-commerce
 
+## Please use Temporary emails if you do not want to use your email by going in here https://temp-mail.org/en/ and use this for creating  your account 
+
 ## Tech Stack
 
 - **Framework:** Next.js (App-based)
