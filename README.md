@@ -2,6 +2,11 @@
 
 Hey everyone! This is my first self-coded, 0-to-completion E-commerce project, all by myself. Here is the [live link](https://optimzed-e-commerce.vercel.app/).
 
+
+## there is the another part of the same project  but optimized version of the project which i completed in that part
+
+## here is the link to the that repo https://github.com/amar1795/e-commerce
+
 ## Tech Stack
 
 - **Framework:** Next.js (App-based)
