@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Notes",
+  "version": "1.0",
+  "description": "Add notes to YouTube videos",
+  "permissions": ["storage", "activeTab"],
+  "content_scripts": [
+    {
+      "matches": ["*://www.youtube.com/*"],
+      "js": ["src/content.js"]
+    }
+  ],
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "action": {
+    "default_popup": "index.html"
+  }
+}
