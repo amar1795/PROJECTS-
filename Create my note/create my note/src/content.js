@@ -3,12 +3,15 @@ console.log('YouTube Notes content script loaded');
 
 function createSidebarContent() {
   return `
-    <div id="sidebar-content">
+    <div id="sidebar-main-content">
       <h1>Sidebar Test Content</h1>
       <p>If you can see this, the sidebar is working!</p>
       <h2>Notes</h2>
       <p>Here are some notes!</p>
       <h1>Hello</h1>
+    </div>
+    <div id="sidebar-right-column">
+      <button id="hide-sidebar-button">Hide Sidebar</button>
     </div>
   `;
 }
@@ -28,9 +31,16 @@ function addSidebar() {
   document.body.appendChild(toggleButton);
 
   // Toggle sidebar visibility
-  toggleButton.addEventListener('click', () => {
+  function toggleSidebar() {
     sidebar.classList.toggle('visible');
-  });
+    toggleButton.style.display = sidebar.classList.contains('visible') ? 'none' : 'block';
+  }
+
+  toggleButton.addEventListener('click', toggleSidebar);
+
+  // Hide sidebar button
+  const hideSidebarButton = document.getElementById('hide-sidebar-button');
+  hideSidebarButton.addEventListener('click', toggleSidebar);
 
   console.log('Sidebar elements added');
 }
@@ -39,8 +49,10 @@ function addSidebar() {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "toggleSidebar") {
     const sidebar = document.getElementById('yt-notes-sidebar-container');
-    if (sidebar) {
+    const toggleButton = document.getElementById('yt-notes-toggle-button');
+    if (sidebar && toggleButton) {
       sidebar.classList.toggle('visible');
+      toggleButton.style.display = sidebar.classList.contains('visible') ? 'none' : 'block';
     }
   }
 });
