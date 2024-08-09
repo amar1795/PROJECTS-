@@ -5,7 +5,7 @@
   width: 300px;
   height: 100%;
   background: #fff;
-  /* border-left: 1px solid #000000; */
+  border-left: 1px solid #000000;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
   transition: right 0.3s ease;
   z-index: 9999999;
@@ -55,4 +55,61 @@
   color: white;
   border: none;
   cursor: pointer;
+}
+
+#video-title {
+  font-size: 18px;
+  margin-bottom: 15px;
+  word-wrap: break-word;
+}
+
+#add-note-btn {
+  width: 100%;
+  padding: 10px;
+  background: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.note, .note-input {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.note-timestamp {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.note-content-input {
+  width: 100%;
+  resize: vertical;
+  margin-bottom: 10px;
+}
+
+.save-note-btn {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.note-content {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.timestamp-link {
+  color: #007bff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.timestamp-link:hover {
+  text-decoration: underline;
 }
