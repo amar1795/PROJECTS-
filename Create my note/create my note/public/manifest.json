@@ -7,7 +7,8 @@
   "content_scripts": [
     {
       "matches": ["*://www.youtube.com/*"],
-      "js": ["src/content.js"]
+      "js": ["src/content.js"],
+      "css": ["src/contentStyle.css"]
     }
   ],
   "background": {
@@ -15,5 +16,11 @@
   },
   "action": {
     "default_popup": "index.html"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["src/sidebar.js"],
+      "matches": ["*://www.youtube.com/*"]
+    }
+  ]
 }

@@ -1,23 +1,20 @@
-const injectSidebar = () => {
-    const sidebarFrame = document.createElement('iframe');
-    sidebarFrame.style.display = 'none';
-    sidebarFrame.src = chrome.runtime.getURL('sidebar.html');
-    document.body.appendChild(sidebarFrame);
-  
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = chrome.runtime.getURL('sidebar.css');
-    document.head.appendChild(link);
-  
-    const toggleButton = document.createElement('div');
-    toggleButton.id = 'toggle-button';
-    toggleButton.innerText = 'Notes';
-    document.body.appendChild(toggleButton);
-  
-    toggleButton.addEventListener('click', () => {
-      sidebarFrame.contentWindow.postMessage({ action: 'toggleSidebar' }, '*');
-    });
-  };
-  
-  injectSidebar();
-  
+// Create the sidebar button
+const sidebarButton = document.createElement('button');
+sidebarButton.innerText = '☰';
+sidebarButton.id = 'yt-notes-sidebar-toggle';
+document.body.appendChild(sidebarButton);
+
+// Create the sidebar
+const sidebar = document.createElement('div');
+sidebar.id = 'yt-notes-sidebar';
+document.body.appendChild(sidebar);
+
+// Toggle sidebar visibility
+sidebarButton.addEventListener('click', () => {
+  sidebar.classList.toggle('open');
+});
+
+// Inject your React app into the sidebar
+const script = document.createElement('script');
+script.src = chrome.runtime.getURL('src/sidebar.js');
+document.body.appendChild(script);
