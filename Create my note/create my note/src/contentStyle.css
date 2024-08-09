@@ -1,23 +1,37 @@
-#yt-notes-sidebar-toggle {
-    position: fixed;
-    right: 20px;
-    top: 50%;
-    z-index: 9999;
-    /* Add more styles as needed */
-  }
-  
-  #yt-notes-sidebar {
-    position: fixed;
-    right: -300px;
-    top: 0;
-    width: 300px;
-    height: 100%;
-    background: white;
-    transition: right 0.3s;
-    z-index: 9998;
-    /* Add more styles as needed */
-  }
-  
-  #yt-notes-sidebar.open {
-    right: 0;
-  }
+#yt-notes-sidebar-container {
+  position: fixed;
+  top: 0;
+  right: -300px; /* Changed from left to right */
+  width: 300px;
+  height: 100%;
+  background: #fff;
+  /* border-left: 1px solid #000000; */
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: right 0.3s ease;
+  z-index: 9999999;
+}
+
+#yt-notes-sidebar-container.visible {
+  right: 0;
+}
+
+#yt-notes-toggle-button {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 100px;
+  height: 30px;
+  background: #007bff;
+  color: white;
+  text-align: center;
+  line-height: 30px;
+  cursor: pointer;
+  z-index: 10000000;
+}
+
+#sidebar-content {
+  padding: 20px;
+  overflow-y: auto;
+  height: 100%;
+  box-sizing: border-box;
+}
