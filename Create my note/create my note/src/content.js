@@ -69,20 +69,45 @@ function editNote(noteElement, timestamp, currentContent) {
   editInput.rows = 3;
   editInput.className = 'edit-note-input';
 
+  const buttonContainer = document.createElement('div');
+  buttonContainer.className = 'edit-buttons';
+
   const saveBtn = document.createElement('button');
   saveBtn.textContent = 'Save';
   saveBtn.className = 'save-edit-btn';
 
+  const cancelBtn = document.createElement('button');
+  cancelBtn.textContent = 'Cancel';
+  cancelBtn.className = 'cancel-edit-btn';
+
+  buttonContainer.appendChild(saveBtn);
+  buttonContainer.appendChild(cancelBtn);
+
   contentElement.replaceWith(editInput);
-  noteElement.appendChild(saveBtn);
+  noteElement.appendChild(buttonContainer);
+
+  function restoreOriginalContent() {
+    const newContentElement = document.createElement('p');
+    newContentElement.className = 'note-content';
+    newContentElement.textContent = currentContent;
+    editInput.replaceWith(newContentElement);
+    buttonContainer.remove();
+  }
 
   saveBtn.addEventListener('click', () => {
     const newContent = editInput.value.trim();
     if (newContent) {
-      const newNoteElement = createNoteElement(timestamp, newContent);
-      noteElement.parentNode.replaceChild(newNoteElement, noteElement);
+      const newContentElement = document.createElement('p');
+      newContentElement.className = 'note-content';
+      newContentElement.textContent = newContent;
+      editInput.replaceWith(newContentElement);
+      buttonContainer.remove();
     }
   });
+
+  cancelBtn.addEventListener('click', restoreOriginalContent);
+
+  editInput.focus();
 }
 
 function deleteNote(noteElement) {
@@ -109,21 +134,29 @@ function convertTimestampToSeconds(timestamp) {
 function noteExistsForTimestamp(timestamp) {
   const notes = document.querySelectorAll('.note');
   for (let note of notes) {
-    const noteTimestamp = note.querySelector('.note-timestamp').textContent;
+    const noteTimestamp = note.querySelector('.note-timestamp .timestamp-link').textContent;
     if (noteTimestamp === timestamp) {
-      return true;
+      return {
+        element: note,
+        content: note.querySelector('.note-content').textContent,
+        timestampElement: note.querySelector('.note-timestamp')
+      };
     }
   }
-  return false;
+  return null;
 }
 
 function addNoteInput() {
   const timestamp = formatTime(getCurrentVideoTime());
 
    // Check if a note already exists for this timestamp
-   if (noteExistsForTimestamp(timestamp)) {
-    console.log('A note already exists for this timestamp');
-    return; // Exit the function if a note already exists
+   const existingNoteInfo = noteExistsForTimestamp(timestamp);
+
+   if (existingNoteInfo) {
+    // Trigger edit for existing note
+    editNote(existingNoteInfo.element, timestamp, existingNoteInfo.content);
+
+    return;
   }
 
   const noteInput = document.createElement('div');
@@ -190,16 +223,8 @@ function addSidebar() {
 
   // Add note button
   const addNoteBtn = document.getElementById('add-note-btn');
-  addNoteBtn.addEventListener('click', () => {
-    const timestamp = formatTime(getCurrentVideoTime());
-    if (noteExistsForTimestamp(timestamp)) {
-      // Provide visual feedback
-      addNoteBtn.classList.add('button-shake');
-      setTimeout(() => addNoteBtn.classList.remove('button-shake'), 500);
-    } else {
-      addNoteInput();
-    }
-  });
+  addNoteBtn.addEventListener('click', addNoteInput);
+
   console.log('Sidebar elements added');
 }
 
