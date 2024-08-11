@@ -1,6 +1,12 @@
 // content.js
 console.log('YouTube Notes content script loaded');
 
+function convertTimestampToSeconds(timestamp) {
+  const [hours, minutes, seconds] = timestamp.split(':').map(Number);
+  return hours * 3600 + minutes * 60 + seconds;
+}
+
+
 function getYouTubeVideoTitle() {
   const titleElement = document.querySelector('h1.title.style-scope.ytd-video-primary-info-renderer');
   return titleElement ? titleElement.textContent.trim() : 'YouTube Video';
@@ -309,6 +315,10 @@ function displayAllNotes() {
 
       const notesContent = videoNotesElement.querySelector('.video-notes-content');
       if (videoNotes.notes && videoNotes.notes.length > 0) {
+          // Sort notes by timestamp
+          videoNotes.notes.sort((a, b) => {
+            return convertTimestampToSeconds(a.timestamp) - convertTimestampToSeconds(b.timestamp);
+          });
         videoNotes.notes.forEach(note => {
           const noteElement = createNoteElement(videoId,note.timestamp, note.content);
            // Modify the edit button click event
@@ -352,8 +362,9 @@ function displayAllNotes() {
 
 
 function restoreCurrentVideoView() {
-  const sidebarMainContent = document.getElementById('sidebar-main-content');
+  const sidebarMainContent = document.getElementById('yt-notes-sidebar-container');
   if (sidebarMainContent) {
+    
     sidebarMainContent.innerHTML = createSidebarContent();
     const videoId = getYouTubeVideoId(location.href);
     loadNotesForVideo(videoId);
@@ -442,7 +453,7 @@ function updateSidebarForCurrentVideo(retryCount = 0) {
   }
   
   // Update sidebar content
-  const sidebarMainContent = document.getElementById('sidebar-main-content');
+  const sidebarMainContent = document.getElementById('yt-notes-sidebar-container');
 
   if (!sidebarMainContent) {
     console.log('Sidebar not found, attempting to create it');
@@ -614,3 +625,4 @@ function onUrlChange() {
     }
   }
 }
+
