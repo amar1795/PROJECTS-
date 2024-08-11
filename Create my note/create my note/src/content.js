@@ -28,6 +28,8 @@ function createSidebarContent() {
     </div>
     <div id="sidebar-right-column">
       <button id="hide-sidebar-button">Hide Sidebar</button>
+            <button id="all-notes-button">All Notes</button>
+
     </div>
   `;
 }
@@ -115,6 +117,117 @@ function deleteNote(noteElement) {
     noteElement.remove();
   }
 }
+
+function getAllNotes() {
+  // This is a placeholder. You should implement actual storage and retrieval.
+  // For now, we'll return mock data.
+  return [
+    {
+      title: "Video 1",
+      notes: [
+        { timestamp: "00:01:23", content: "Note 1 for Video 1" },
+        { timestamp: "00:02:34", content: "Note 2 for Video 1" }
+      ]
+    },
+    {
+      title: "Video 2",
+      notes: [
+        { timestamp: "00:00:45", content: "Note 1 for Video 2" },
+        { timestamp: "00:03:21", content: "Note 2 for Video 2" }
+      ]
+    }
+  ];
+}
+
+ // Toggle sidebar visibility
+ function toggleSidebar() {
+  sidebar.classList.toggle('visible');
+  toggleButton.style.display = sidebar.classList.contains('visible') ? 'none' : 'block';
+  
+  // Update video title when sidebar is opened
+  if (sidebar.classList.contains('visible')) {
+    const titleElement = document.getElementById('video-title');
+    if (titleElement) {
+      titleElement.textContent = getYouTubeVideoTitle();
+    }
+  }
+}
+
+function initializeSidebarEventListeners() {
+  const addNoteBtn = document.getElementById('add-note-btn');
+  if (addNoteBtn) {
+    addNoteBtn.addEventListener('click', addNoteInput);
+  }
+
+  const hideSidebarButton = document.getElementById('hide-sidebar-button');
+  if (hideSidebarButton) {
+    hideSidebarButton.addEventListener('click', toggleSidebar);
+  }
+
+  const allNotesButton = document.getElementById('all-notes-button');
+  if (allNotesButton) {
+    allNotesButton.addEventListener('click', displayAllNotes);
+  }
+
+  // Re-attach event listeners to existing notes
+  const notes = document.querySelectorAll('.note');
+  notes.forEach(note => {
+    const editBtn = note.querySelector('.edit-note-btn');
+    const deleteBtn = note.querySelector('.delete-note-btn');
+    const timestamp = note.querySelector('.note-timestamp .timestamp-link').textContent;
+    const content = note.querySelector('.note-content').textContent;
+
+    if (editBtn) {
+      editBtn.addEventListener('click', () => editNote(note, timestamp, content));
+    }
+    if (deleteBtn) {
+      deleteBtn.addEventListener('click', () => deleteNote(note));
+    }
+  });
+}
+
+function displayAllNotes() {
+  const allNotes = getAllNotes(); // We'll implement this function next
+  const sidebarMainContent = document.getElementById('sidebar-main-content');
+  const currentVideoContent = document.getElementById('sidebar-main-content').innerHTML;
+
+  sidebarMainContent.innerHTML = `
+    <h1>All Notes</h1>
+    <div id="all-notes-container"></div>
+    <button id="back-to-current-video">Back to Current Video</button>
+  `;
+
+  const allNotesContainer = document.getElementById('all-notes-container');
+  
+  allNotes.forEach(videoNotes => {
+    const videoNotesElement = document.createElement('div');
+    videoNotesElement.className = 'video-notes';
+    videoNotesElement.innerHTML = `
+      <h2 class="video-title">${videoNotes.title}</h2>
+      <div class="video-notes-content"></div>
+    `;
+
+    const notesContent = videoNotesElement.querySelector('.video-notes-content');
+    videoNotes.notes.forEach(note => {
+      const noteElement = createNoteElement(note.timestamp, note.content);
+      notesContent.appendChild(noteElement);
+    });
+
+    allNotesContainer.appendChild(videoNotesElement);
+  });
+
+  document.getElementById('back-to-current-video').addEventListener('click', () => {
+    restoreCurrentVideoView(currentVideoContent);
+
+  });
+}
+
+function restoreCurrentVideoView(content) {
+  const sidebarMainContent = document.getElementById('sidebar-main-content');
+  sidebarMainContent.innerHTML = content;
+  initializeSidebarEventListeners();
+}
+
 
 
 function seekToTimestamp(timestamp) {
@@ -217,6 +330,8 @@ function addSidebar() {
 
   toggleButton.addEventListener('click', toggleSidebar);
 
+
+
   // Hide sidebar button
   const hideSidebarButton = document.getElementById('hide-sidebar-button');
   hideSidebarButton.addEventListener('click', toggleSidebar);
@@ -224,6 +339,9 @@ function addSidebar() {
   // Add note button
   const addNoteBtn = document.getElementById('add-note-btn');
   addNoteBtn.addEventListener('click', addNoteInput);
+
+  const allNotesBtn = document.getElementById('all-notes-button');
+  allNotesBtn.addEventListener('click', displayAllNotes);
 
   console.log('Sidebar elements added');
 }

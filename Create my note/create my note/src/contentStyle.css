@@ -233,3 +233,35 @@
   border: 1px solid #ccc;
   border-radius: 3px;
 }
+
+#all-notes-button {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  padding: 10px 5px;
+  background: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.video-notes {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+.video-title {
+  font-size: 16px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+#back-to-current-video {
+  margin-top: 20px;
+  padding: 5px 10px;
+  background: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
