@@ -6,6 +6,16 @@ function getYouTubeVideoTitle() {
   return titleElement ? titleElement.textContent.trim() : 'YouTube Video';
 }
 
+document.addEventListener('yt-navigate-finish', () => {
+  console.log('YouTube navigation finished');
+  setTimeout(updateSidebarForCurrentVideo, 500); // 500ms delay
+});
+
+function getYouTubeVideoId(url) {
+  const urlParams = new URLSearchParams(new URL(url).search);
+  return urlParams.get('v');
+}
+
 function getCurrentVideoTime() {
   const video = document.querySelector('video');
   return video ? video.currentTime : 0;
@@ -34,9 +44,10 @@ function createSidebarContent() {
   `;
 }
 
-function createNoteElement(timestamp, note) {
+function createNoteElement(videoId, timestamp, note) {
   const noteElement = document.createElement('div');
   noteElement.className = 'note';
+  noteElement.dataset.videoId = videoId;
   noteElement.innerHTML = `
     <div class="note-header">
       <p class="note-timestamp"><a href="#" class="timestamp-link">${timestamp}</a></p>
@@ -55,16 +66,15 @@ function createNoteElement(timestamp, note) {
   });
 
   const editBtn = noteElement.querySelector('.edit-note-btn');
-  editBtn.addEventListener('click', () => editNote(noteElement, timestamp, note));
+  editBtn.addEventListener('click', () => editNote(noteElement, videoId, timestamp, note));
 
   const deleteBtn = noteElement.querySelector('.delete-note-btn');
-  deleteBtn.addEventListener('click', () => deleteNote(noteElement));
+  deleteBtn.addEventListener('click', () => deleteNote(noteElement, videoId, timestamp));
 
   return noteElement;
 }
 
-
-function editNote(noteElement, timestamp, currentContent) {
+function editNote(noteElement, videoId, timestamp, currentContent,callback) {
   const contentElement = noteElement.querySelector('.note-content');
   const editInput = document.createElement('textarea');
   editInput.value = currentContent;
@@ -104,6 +114,25 @@ function editNote(noteElement, timestamp, currentContent) {
       newContentElement.textContent = newContent;
       editInput.replaceWith(newContentElement);
       buttonContainer.remove();
+
+      // Update the note in storage
+      chrome.storage.sync.get('allNotes', function(data) {
+        let allNotes = data.allNotes || {};
+        if (allNotes[videoId] && allNotes[videoId].notes) {
+          const noteIndex = allNotes[videoId].notes.findIndex(n => n.timestamp === timestamp);
+          if (noteIndex !== -1) {
+            allNotes[videoId].notes[noteIndex].content = newContent;
+            chrome.storage.sync.set({ allNotes: allNotes }, function() {
+              console.log('Note updated for video:', videoId);
+              if (callback) callback(newContent);
+
+            });
+          }
+        }
+      });
+
+
+
     }
   });
 
@@ -112,9 +141,25 @@ function editNote(noteElement, timestamp, currentContent) {
   editInput.focus();
 }
 
-function deleteNote(noteElement) {
+function deleteNote(noteElement, videoId, timestamp) {
   if (confirm('Are you sure you want to delete this note?')) {
-    noteElement.remove();
+    chrome.storage.sync.get('allNotes', function(data) {
+      let allNotes = data.allNotes || {};
+      if (allNotes[videoId] && allNotes[videoId].notes) {
+        allNotes[videoId].notes = allNotes[videoId].notes.filter(n => n.timestamp !== timestamp);
+        chrome.storage.sync.set({ allNotes: allNotes }, function() {
+          console.log('Note deleted for video:', videoId);
+          noteElement.remove(); // Remove from UI
+          // If in "All Notes" view, refresh the display
+          if (document.getElementById('all-notes-container')) {
+            displayAllNotes();
+          } else {
+            // If in single video view, refresh notes for current video
+            loadNotesForVideo(videoId);
+          }
+        });
+      }
+    });
   }
 }
 
@@ -141,15 +186,22 @@ function getAllNotes() {
 
  // Toggle sidebar visibility
  function toggleSidebar() {
-  sidebar.classList.toggle('visible');
-  toggleButton.style.display = sidebar.classList.contains('visible') ? 'none' : 'block';
+  const sidebar = document.getElementById('yt-notes-sidebar-container');
+  const toggleButton = document.getElementById('yt-notes-toggle-button');
   
-  // Update video title when sidebar is opened
-  if (sidebar.classList.contains('visible')) {
-    const titleElement = document.getElementById('video-title');
-    if (titleElement) {
-      titleElement.textContent = getYouTubeVideoTitle();
+  if (sidebar && toggleButton) {
+    sidebar.classList.toggle('visible');
+    toggleButton.style.display = sidebar.classList.contains('visible') ? 'none' : 'block';
+    
+    // Update video title when sidebar is opened
+    if (sidebar.classList.contains('visible')) {
+      const titleElement = document.getElementById('video-title');
+      if (titleElement) {
+        titleElement.textContent = getYouTubeVideoTitle();
+      }
     }
+  } else {
+    console.log('Sidebar or toggle button not found');
   }
 }
 
@@ -176,58 +228,140 @@ function initializeSidebarEventListeners() {
     const deleteBtn = note.querySelector('.delete-note-btn');
     const timestamp = note.querySelector('.note-timestamp .timestamp-link').textContent;
     const content = note.querySelector('.note-content').textContent;
+    const videoId = note.dataset.videoId;
 
     if (editBtn) {
-      editBtn.addEventListener('click', () => editNote(note, timestamp, content));
+      editBtn.addEventListener('click', () => {
+        editNote(note, videoId, timestamp, content, (updatedContent) => {
+          note.querySelector('.note-content').textContent = updatedContent;
+        });
+      });
     }
     if (deleteBtn) {
-      deleteBtn.addEventListener('click', () => deleteNote(note));
+      deleteBtn.addEventListener('click', () => deleteNote(note, videoId, timestamp));
     }
   });
 }
 
+function deleteVideoNotes(videoId) {
+  if (confirm('Are you sure you want to delete all notes for this video?')) {
+    chrome.storage.sync.get('allNotes', function(data) {
+      let allNotes = data.allNotes || {};
+      if (allNotes[videoId]) {
+        delete allNotes[videoId];
+        chrome.storage.sync.set({ allNotes: allNotes }, function() {
+          console.log('All notes deleted for video:', videoId);
+          // Refresh the All Notes view
+          displayAllNotes();
+        });
+      }
+    });
+  }
+}
+
+function clearAllNotes() {
+  if (confirm('Are you sure you want to delete all notes for all videos? This action cannot be undone.')) {
+    chrome.storage.sync.set({ allNotes: {} }, function() {
+      console.log('All notes have been cleared');
+      // Refresh the All Notes view
+      displayAllNotes();
+      loadNotesForVideo(videoId);
+
+    });
+  }
+}
+
 function displayAllNotes() {
-  const allNotes = getAllNotes(); // We'll implement this function next
-  const sidebarMainContent = document.getElementById('sidebar-main-content');
   const currentVideoContent = document.getElementById('sidebar-main-content').innerHTML;
+  const sidebarMainContent = document.getElementById('sidebar-main-content');
+  
+  if (!sidebarMainContent) {
+    console.log('Sidebar main content not found');
+    return;
+  }
 
   sidebarMainContent.innerHTML = `
     <h1>All Notes</h1>
+        <button id="clear-all-notes">Clear All Notes</button>
+
     <div id="all-notes-container"></div>
     <button id="back-to-current-video">Back to Current Video</button>
   `;
 
   const allNotesContainer = document.getElementById('all-notes-container');
   
-  allNotes.forEach(videoNotes => {
-    const videoNotesElement = document.createElement('div');
-    videoNotesElement.className = 'video-notes';
-    videoNotesElement.innerHTML = `
-      <h2 class="video-title">${videoNotes.title}</h2>
+  chrome.storage.sync.get('allNotes', function(data) {
+    const allNotes = data.allNotes || {};
+     if (Object.keys(allNotes).length === 0) {
+      allNotesContainer.innerHTML = '<p>No notes found.</p>';
+    } else {
+    
+    Object.entries(allNotes).forEach(([videoId, videoNotes]) => {
+      const videoNotesElement = document.createElement('div');
+      videoNotesElement.className = 'video-notes';
+      videoNotesElement.innerHTML = `
+      <div class="video-title-container">
+        <h2 class="video-title">${videoNotes.title}</h2>
+        <button class="delete-video-notes" data-video-id="${videoId}">Delete</button>
+      </div>
       <div class="video-notes-content"></div>
     `;
 
-    const notesContent = videoNotesElement.querySelector('.video-notes-content');
-    videoNotes.notes.forEach(note => {
-      const noteElement = createNoteElement(note.timestamp, note.content);
-      notesContent.appendChild(noteElement);
-    });
+      const notesContent = videoNotesElement.querySelector('.video-notes-content');
+      if (videoNotes.notes && videoNotes.notes.length > 0) {
+        videoNotes.notes.forEach(note => {
+          const noteElement = createNoteElement(videoId,note.timestamp, note.content);
+           // Modify the edit button click event
+           const editBtn = noteElement.querySelector('.edit-note-btn');
+           editBtn.addEventListener('click', () => {
+             editNote(noteElement, videoId, note.timestamp, note.content, (updatedContent) => {
+               // Update the note content in the UI
+               noteElement.querySelector('.note-content').textContent = updatedContent;
+             });
+           });
+          notesContent.appendChild(noteElement);
+        });
+      } else {
+        notesContent.innerHTML = '<p>No notes for this video.</p>';
+      }
 
-    allNotesContainer.appendChild(videoNotesElement);
+      allNotesContainer.appendChild(videoNotesElement);
+    });
+  }
+      // Add event listeners for delete buttons
+      const deleteButtons = document.querySelectorAll('.delete-video-notes');
+      deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const videoId = this.getAttribute('data-video-id');
+          deleteVideoNotes(videoId);
+        });
+      });
+  
   });
+
+  
 
   document.getElementById('back-to-current-video').addEventListener('click', () => {
-    restoreCurrentVideoView(currentVideoContent);
-
+    restoreCurrentVideoView();
   });
+
+    // Add event listener for Clear All Notes button
+  document.getElementById('clear-all-notes').addEventListener('click', clearAllNotes);
+
 }
 
-function restoreCurrentVideoView(content) {
+
+function restoreCurrentVideoView() {
   const sidebarMainContent = document.getElementById('sidebar-main-content');
-  sidebarMainContent.innerHTML = content;
-  initializeSidebarEventListeners();
+  if (sidebarMainContent) {
+    sidebarMainContent.innerHTML = createSidebarContent();
+    const videoId = getYouTubeVideoId(location.href);
+    loadNotesForVideo(videoId);
+    initializeSidebarEventListeners();
+  } else {
+    console.log('Sidebar main content not found');
+  }
 }
-
 
 
 function seekToTimestamp(timestamp) {
@@ -261,14 +395,10 @@ function noteExistsForTimestamp(timestamp) {
 
 function addNoteInput() {
   const timestamp = formatTime(getCurrentVideoTime());
+  const existingNoteInfo = noteExistsForTimestamp(timestamp);
 
-   // Check if a note already exists for this timestamp
-   const existingNoteInfo = noteExistsForTimestamp(timestamp);
-
-   if (existingNoteInfo) {
-    // Trigger edit for existing note
-    editNote(existingNoteInfo.element, timestamp, existingNoteInfo.content);
-
+  if (existingNoteInfo) {
+    editNote(existingNoteInfo.element, getYouTubeVideoId(location.href), timestamp, existingNoteInfo.content);
     return;
   }
 
@@ -277,7 +407,7 @@ function addNoteInput() {
   noteInput.innerHTML = `
     <p class="note-timestamp">${timestamp}</p>
     <textarea class="note-content-input" rows="3"></textarea>
-    <button class="save-note-btn">Add to Note</button>
+    <button class="save-note-btn">Add Note</button>
   `;
 
   const notesContainer = document.getElementById('notes-container');
@@ -289,10 +419,12 @@ function addNoteInput() {
   saveBtn.addEventListener('click', () => {
     const noteContent = textarea.value.trim();
     if (noteContent) {
-      const noteElement = createNoteElement(timestamp, noteContent);
+      const videoId = getYouTubeVideoId(location.href);
+      const noteElement = createNoteElement(videoId, timestamp, noteContent);
       notesContainer.insertBefore(noteElement, noteInput);
-      notesContainer.removeChild(noteInput);
+      noteInput.remove();
       document.getElementById('add-note-btn').style.display = 'block';
+      saveCurrentNotes();
     }
   });
 
@@ -300,7 +432,80 @@ function addNoteInput() {
   document.getElementById('add-note-btn').style.display = 'none';
 }
 
+function updateSidebarForCurrentVideo(retryCount = 0) {
+  const videoId = getYouTubeVideoId(location.href);
+  const videoTitle = getYouTubeVideoTitle();
+  
+  if (!videoTitle && retryCount < 5) {
+    setTimeout(() => updateSidebarForCurrentVideo(retryCount + 1), 200);
+    return;
+  }
+  
+  // Update sidebar content
+  const sidebarMainContent = document.getElementById('sidebar-main-content');
+
+  if (!sidebarMainContent) {
+    console.log('Sidebar not found, attempting to create it');
+    addSidebar();
+    setTimeout(() => updateSidebarForCurrentVideo(retryCount + 1), 200);
+    return;
+  }
+  sidebarMainContent.innerHTML = createSidebarContent(videoTitle);
+
+  // Load notes for the current video
+  loadNotesForVideo(videoId);
+
+  // Reinitialize event listeners
+  initializeSidebarEventListeners();
+}
+
+function saveCurrentNotes() {
+  const videoId = getYouTubeVideoId(location.href);
+  const videoTitle = getYouTubeVideoTitle();
+  const notes = Array.from(document.querySelectorAll('.note')).map(note => ({
+    timestamp: note.querySelector('.note-timestamp .timestamp-link').textContent,
+    content: note.querySelector('.note-content').textContent
+  }));
+
+  chrome.storage.sync.get('allNotes', function(data) {
+    let allNotes = data.allNotes || {};
+    allNotes[videoId] = { title: videoTitle, notes: notes };
+    chrome.storage.sync.set({ allNotes: allNotes }, function() {
+      console.log('Notes saved for video:', videoId);
+    });
+  });
+}
+
+function loadNotesForVideo(videoId) {
+  chrome.storage.sync.get('allNotes', function(data) {
+    const allNotes = data.allNotes || {};
+    const videoNotes = allNotes[videoId];
+    
+    const notesContainer = document.getElementById('notes-container');
+    notesContainer.innerHTML = ''; // Clear existing notes
+    
+    if (videoNotes && videoNotes.notes) {
+      // Sort notes by timestamp
+      videoNotes.notes.sort((a, b) => {
+        return convertTimestampToSeconds(a.timestamp) - convertTimestampToSeconds(b.timestamp);
+      });
+
+      videoNotes.notes.forEach(note => {
+        const noteElement = createNoteElement(videoId, note.timestamp, note.content);
+        notesContainer.appendChild(noteElement);
+      });
+    }
+    console.log('Loaded notes for video:', videoId);
+  });
+}
+
 function addSidebar() {
+
+  if (document.getElementById('yt-notes-sidebar-container')) {
+    console.log('Sidebar already exists');
+    return;
+  }
+
   // Create the sidebar container
   const sidebar = document.createElement('div');
   sidebar.id = 'yt-notes-sidebar-container';
@@ -316,15 +521,22 @@ function addSidebar() {
 
   // Toggle sidebar visibility
   function toggleSidebar() {
-    sidebar.classList.toggle('visible');
-    toggleButton.style.display = sidebar.classList.contains('visible') ? 'none' : 'block';
+    const sidebar = document.getElementById('yt-notes-sidebar-container');
+    const toggleButton = document.getElementById('yt-notes-toggle-button');
     
-    // Update video title when sidebar is opened
-    if (sidebar.classList.contains('visible')) {
-      const titleElement = document.getElementById('video-title');
-      if (titleElement) {
-        titleElement.textContent = getYouTubeVideoTitle();
+    if (sidebar && toggleButton) {
+      sidebar.classList.toggle('visible');
+      toggleButton.style.display = sidebar.classList.contains('visible') ? 'none' : 'block';
+      
+      // Update video title when sidebar is opened
+      if (sidebar.classList.contains('visible')) {
+        const titleElement = document.getElementById('video-title');
+        if (titleElement) {
+          titleElement.textContent = getYouTubeVideoTitle();
+        }
       }
+    } else {
+      console.log('Sidebar or toggle button not found');
     }
   }
 
@@ -342,6 +554,19 @@ function addSidebar() {
 
   const allNotesBtn = document.getElementById('all-notes-button');
   allNotesBtn.addEventListener('click', displayAllNotes);
+
+  // Initialize sidebar content for the current video
+  updateSidebarForCurrentVideo();
+
+  // Set up MutationObserver to detect URL changes
+  let lastUrl = location.href; 
+  new MutationObserver(() => {
+    const url = location.href;
+    if (url !== lastUrl) {
+      lastUrl = url;
+      setTimeout(updateSidebarForCurrentVideo, 500); // 500ms delay
+    }
+  }).observe(document, {subtree: true, childList: true});
 
   console.log('Sidebar elements added');
 }

@@ -265,3 +265,40 @@
   border: none;
   cursor: pointer;
 }
+
+.video-title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.delete-video-notes {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  border-radius: 3px;
+}
+
+.delete-video-notes:hover {
+  background-color: #c82333;
+}
+
+
+#clear-all-notes {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+#clear-all-notes:hover {
+  background-color: #c82333;
+}
