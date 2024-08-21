@@ -16,6 +16,49 @@
   right: 0;
 }
 
+.video-title.selected {
+  font-weight: bold;
+  color: #007bff;
+}
+
+/* timeline css */
+
+.video-notes-timeline {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.video-title {
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.video-notes-count,
+.video-added-date {
+  font-size: 14px;
+  color: #666;
+  margin-right: 10px;
+}
+
+.delete-video-notes {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  border-radius: 3px;
+}
+
+.delete-video-notes:hover {
+  background-color: #c82333;
+}
+
+
 #yt-notes-toggle-button {
   position: fixed;
   top: 10px;
